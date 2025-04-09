@@ -36,14 +36,14 @@ class laporinventarisController extends Controller
         if ($laporan) {
             return response()->json($laporan);
         }
-        return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        return response()->json(['message' => 'Data tidak ditemukan']);
     }
 
     public function update(Request $request, $id)
     {
         $laporan = laporinventaris::find($id);
         if (!$laporan) {
-            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+            return response()->json(['message' => 'Data tidak ditemukan']);
         }
 
         $request->validate([
@@ -64,7 +64,7 @@ class laporinventarisController extends Controller
     {
         $laporan = laporinventaris::find($id);
         if (!$laporan) {
-            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+            return response()->json(['message' => 'Data tidak ditemukan']);
         }
 
         $laporan->delete();
