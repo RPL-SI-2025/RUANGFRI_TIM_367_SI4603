@@ -14,7 +14,7 @@ return new class extends Migration
         //
         // Create the 'ruangan' table
         Schema::create('ruangan', function (Blueprint $table) {
-            $table->id('id_ruangan');
+            $table->id();
             $table->foreignId('id_logistik')->unique();
             $table->string('nama_ruangan')->unique();
             $table->integer('kapasitas');
