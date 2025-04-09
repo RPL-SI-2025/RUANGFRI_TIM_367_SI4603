@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Inventaris;
 
 use Illuminate\Http\Request;
+use App\Models\Inventaris;
 
 class InventarisController extends Controller
 {
