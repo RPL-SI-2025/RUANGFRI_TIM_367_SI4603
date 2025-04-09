@@ -45,3 +45,4 @@ class InventarisController extends Controller
     }
 
 }
+
