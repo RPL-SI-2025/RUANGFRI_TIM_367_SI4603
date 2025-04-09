@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class KatalogRuanganController extends Controller
+class RuanganController extends Controller
     {
         public function index (Request $request)
         {
@@ -79,9 +79,27 @@ class KatalogRuanganController extends Controller
                 $validatedData['gambar'] = $imageUrl;
             }
 
-            KatalogRuangan::create($validatedData);
+            Ruangan::create($validatedData);
 
             return view('admin.katalog_ruangan.index')->with('success', 'Ruangan berhasil ditambahkan!');
+        }
+
+        public function admindelete($id)
+        {
+            $ruangan = Ruangan::find($id);
+
+            if(is_null($ruangan)) {
+                return redirect()->route('admin_katalog_ruangan.index')->with('error', 'Ruangan tidak ditemukan');
+            }
+
+            if ($ruangan->gambar) {
+                $gambarPath = str_replace('/storage/', 'public/', $ruangan->gambar);
+                Storage::delete($ruangan->gambar);
+            }
+
+            $ruangan->delete();
+
+            return redirect()->route('admin_katalog_ruangan.index')->with('success', 'Ruangan berhasil dihapus!');
         }
 
 
