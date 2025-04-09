@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Pelaporan;
 
 class PelaporanController extends Controller
 {
@@ -27,7 +28,7 @@ class PelaporanController extends Controller
         ]);
 
         Pelaporan::create($request->all());
-        return redirect()->route('pelaporan.index')->with('success', 'Laporan berhasil ditambahkan.');
+        return redirect()->route('pelaporan.index')->with('success', 'Data berhasil disimpan.');
     }
 
     public function edit(Pelaporan $pelaporan)
@@ -45,12 +46,14 @@ class PelaporanController extends Controller
         ]);
 
         $pelaporan->update($request->all());
-        return redirect()->route('pelaporan.index')->with('success', 'Laporan berhasil diperbarui.');
+        return redirect()->route('pelaporan.index')->with('success', 'Data berhasil diupdate.');
     }
 
     public function destroy(Pelaporan $pelaporan)
     {
         $pelaporan->delete();
-        return redirect()->route('pelaporan.index')->with('success', 'Laporan berhasil dihapus.');
+        return redirect()->route('pelaporan.index')->with('success', 'Data berhasil dihapus.');
     }
 }
+
+
