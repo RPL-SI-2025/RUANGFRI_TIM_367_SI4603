@@ -9,16 +9,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('inventaris', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('id_admin_logistik');
+            $table->id('id_inventaris');
+            $table->unsignedBigInteger('id_logistik');
             $table->string('nama_inventaris');
-            $table->text('deskripsi'); 
-            $table->integer('jumlah'); 
-            $table->boolean('tersedia')->default(true); 
+            $table->string('deskripsi');
+            $table->integer('jumlah');
             $table->enum('status', ['Tersedia', 'Tidak Tersedia']);
             $table->timestamps();
             
-            $table->foreign('id_admin_logistik')->references('id')->on('admin_logistik');
+            $table->foreign('id_logistik')->references('id_logistik')->on('admin_logistik');
         });
     }
 

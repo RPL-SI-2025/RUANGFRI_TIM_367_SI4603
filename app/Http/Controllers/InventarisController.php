@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Inventaris;
 
 use Illuminate\Http\Request;
 
@@ -8,7 +9,8 @@ class InventarisController extends Controller
 {
     public function index()
     {
-        return view('inventaris.index');
+        $inventaris = Inventaris::all(); // ambil semua data dari tabel
+        return view('inventaris.index', compact('inventaris'));
     }
 
     public function create()
@@ -23,7 +25,8 @@ class InventarisController extends Controller
 
     public function show($id)
     {
-        return view('inventaris.show', compact('id'));
+        $inventaris = Inventaris::findOrFail($id);
+        return view('inventaris.show', compact('inventaris'));
     }
 
     public function edit($id)
