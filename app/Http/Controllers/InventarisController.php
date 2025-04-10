@@ -73,3 +73,4 @@ class InventarisController extends Controller
 
 
 }
+
