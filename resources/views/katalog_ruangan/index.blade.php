@@ -15,5 +15,45 @@
                     <button class="btn btn-outline-secondary" type="submit">Search</button>
                 </div>
             </div>
+        </form>
+        </div>
+    </div>
+
+    <div class="card-body"
+        @if($ruangan->isEmpty())
+            <div class="alert alert-info">
+                Tidak ada data ruangan yang ditemukan.
+            </div>
+        @else
+            <div class="card-body">
+                @foreach($ruangans as $ruangan)
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        @if($ruangan->image)
+                            <img src="{{ asset('storage/' . $ruangan->image) }}" class="card-img-top" alt="{{ $ruangan->name }}" style="max-height: 200px; object-fit: cover;">
+                        @else
+                            <div class="card-img-top" style="height: 200px; bg-secondary text-white text-center d-flex aligh-items-center justify-content-center">
+                                Tidak ada gambar
+                            </div>
+                        @endif
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $ruangan->name }}</h5>
+                            <p class="card-text">
+                                <strong>Deskripsi:</strong> {{ $ruangan->description }}<br>
+                                <strong>Kapasitas:</strong> {{ruangan->kapasitas}} orang<br>
+                                <strong>Lokasi:</strong> {{ $ruangan->lokasi }}<br>
+                                <strong>Status:</strong>
+                                <span class="badge {{ $ruangan->status == 'Tersedia' ? 'bg-success' : 'bg-danger' }}">
+                                    {{ $ruangan->status }}
+                            </p>
+                            <a href="{{{ route('katalog_ruangan.show', $ruangan->id) }}}" class="btn btn-primary">Lihat Detail</a>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+</div>
 
 @endsection
