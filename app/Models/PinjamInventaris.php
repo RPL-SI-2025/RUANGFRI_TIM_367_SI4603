@@ -36,17 +36,12 @@ class PinjamInventaris extends Model
     // Helper untuk status
     public function getStatusTextAttribute()
     {
-        switch($this->status) {
-            case 0:
-                return 'Menunggu Persetujuan';
-            case 1:
-                return 'Disetujui';
-            case 2:
-                return 'Ditolak';
-            case 3:
-                return 'Selesai';
-            default:
-                return 'Unknown';
-        }
+        return match($this->status) {
+            0 => 'Menunggu Persetujuan',
+            1 => 'Disetujui',
+            2 => 'Ditolak',
+            3 => 'Selesai',
+            default => 'Unknown'
+        };
     }
 }
