@@ -45,3 +45,6 @@
     </tbody>
 </table>
 @endsection
+
+{{-- href="{{ route('admin.inventaris.edit', $item->id) }}"  --}}
+{{-- action="{{ route('admin.inventaris.destroy', $item->id) }}" --}}

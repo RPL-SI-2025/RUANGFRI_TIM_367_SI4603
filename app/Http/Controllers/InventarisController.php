@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Inventaris;
 
@@ -9,7 +10,7 @@ class InventarisController extends Controller
 {
     public function index()
     {
-        $inventaris = Inventaris::all(); // ambil semua data dari tabel
+        $inventaris = Inventaris::all();
         return view('admin.inventaris.index', compact('inventaris'));
     }
 
@@ -20,56 +21,41 @@ class InventarisController extends Controller
 
     public function store(Request $request)
     {
-        // Logic to store data
+        $request->validate([
+            'nama_inventaris' => 'required|string',
+            'deskripsi' => 'required|string',
+            'jumlah' => 'required|integer',
+            'status' => 'required|in:Tersedia,Tidak Tersedia',
+        ]);
+
+        Inventaris::create($request->all());
+
+        return redirect()->route('admin.inventaris.index')->with('success', 'Inventaris berhasil ditambahkan.');
     }
 
-    public function show($id)
+    public function edit(Inventaris $inventaris)
     {
-        $inventaris = Inventaris::findOrFail($id);
-        return view('inventaris.show', compact('inventaris'));
+        return view('admin.inventaris.edit', compact('inventaris'));
     }
 
-    public function edit($id)
-    {
-        $inventaris = Inventaris::findOrFail($id);
-        return view('inventaris.edit', compact('inventaris'));
-    }
-
-    public function update(Request $request, $id)
+    public function update(Request $request, Inventaris $inventaris)
     {
         $request->validate([
-            'nama_inventaris' => 'required',
-            'deskripsi' => 'required',
+            'nama_inventaris' => 'required|string',
+            'deskripsi' => 'required|string',
             'jumlah' => 'required|integer',
-            'status' => 'required',
-            'id_logistik' => 'required|integer',
+            'status' => 'required|in:Tersedia,Tidak Tersedia',
         ]);
-    
-        $inventaris = Inventaris::findOrFail($id);
+
         $inventaris->update($request->all());
-    
-        return redirect()->route('inventaris.index')->with('success', 'Data berhasil diupdate.');
+
+        return redirect()->route('admin.inventaris.index')->with('success', 'Inventaris berhasil diperbarui.');
     }
 
-    public function destroy($id)
+    public function destroy(Inventaris $inventaris)
     {
-        // Logic to delete data
+        $inventaris->delete();
+
+        return redirect()->route('admin.inventaris.index')->with('success', 'Inventaris berhasil dihapus.');
     }
-
-    public function mahasiswaIndex()
-    {
-        $inventaris = Inventaris::all(); // tampilkan semua, tidak hanya yang tersedia
-        return view('mahasiswa.inventaris.index', compact('inventaris'));
-    }
-
-    // Fungsi untuk Mahasiswa melihat detail satu inventaris
-    public function mahasiswaShow($id)
-    {
-        $inventaris = Inventaris::findOrFail($id);
-        return view('mahasiswa.inventaris.show', compact('inventaris'));
-    }
-
-
-
 }
-
