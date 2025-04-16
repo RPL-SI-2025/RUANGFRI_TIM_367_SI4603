@@ -61,7 +61,9 @@ class laporinventarisController extends Controller
             'datetime' => 'sometimes|required|date',
             'foto_awal' => 'nullable|string|max:255',
             'foto_akhir' => 'nullable|string|max:255',
-            'deskripsi' => 'nullable|string|max:255'
+            'deskripsi' => 'nullable|string|max:255',
+            'oleh'=> 'required',
+            'kepada'=> 'required',
         ]);
 
         $laporan->update($request->all());

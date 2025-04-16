@@ -82,3 +82,4 @@ Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval
 //Lapor Inventaris
 Route::get('/laporinventaris', [laporinventarisController::class, 'index'])->name('laporinventaris.index');
 
+

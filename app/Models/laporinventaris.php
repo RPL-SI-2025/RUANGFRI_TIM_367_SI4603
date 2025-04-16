@@ -15,7 +15,9 @@ class laporinventaris extends Model
         'datetime',
         'foto_awal',
         'foto_akhir',
-        'deskripsi'
+        'deskripsi',
+        'oleh',
+        'kepada'
     ];
 
     // Relasi ke Mahasiswa
