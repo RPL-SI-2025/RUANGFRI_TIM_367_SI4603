@@ -11,7 +11,7 @@ class laporinventarisController extends Controller
     public function index()
     {
         $laporan = laporinventaris::with(['mahasiswa', 'logistik'])->get();
-        return response()->json($laporan);
+        return view('laporinventaris.index', compact($laporan));
     }
 
     // Form input (jika pakai blade)
@@ -33,11 +33,8 @@ class laporinventarisController extends Controller
         ]);
 
         $laporan = laporinventaris::create($request->all());
-
-        return response()->json([
-            'message' => 'Laporan berhasil ditambahkan',
-            'data' => $laporan
-        ]);
+        return redirect()->route('laporinventaris.index')
+        ->with('success', 'Laporan berhasil ditambahkan');
     }
 
     // Tampilkan data laporan by ID + relasi
@@ -46,10 +43,10 @@ class laporinventarisController extends Controller
         $laporan = laporinventaris::with(['mahasiswa', 'logistik'])->find($id);
 
         if ($laporan) {
-            return response()->json($laporan);
+            return view('laporinventaris.show', compact($laporan));
         }
 
-        return response()->json(['message' => 'Data tidak ditemukan']);
+        return redirect()->back()->with('error', 'Data tidak ditemukan');
     }
 
     // Update data
@@ -58,7 +55,7 @@ class laporinventarisController extends Controller
         $laporan = laporinventaris::find($id);
 
         if (!$laporan) {
-            return response()->json(['message' => 'Data tidak ditemukan']);
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
         }
 
         $request->validate([
@@ -72,10 +69,8 @@ class laporinventarisController extends Controller
 
         $laporan->update($request->all());
 
-        return response()->json([
-            'message' => 'Data berhasil diperbarui',
-            'data' => $laporan
-        ]);
+        return redirect()->route('laporinventaris.index')
+        ->with('success', 'Data berhasil diperbarui');
     }
 
     // Hapus data
@@ -84,11 +79,12 @@ class laporinventarisController extends Controller
         $laporan = laporinventaris::find($id);
 
         if (!$laporan) {
-            return response()->json(['message' => 'Data tidak ditemukan']);
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
         }
 
         $laporan->delete();
 
-        return response()->json(['message' => 'Data berhasil dihapus']);
+        return redirect()->route('laporinventaris.index')
+        ->with('success', 'Data berhasil dihapus');
     }
 }
