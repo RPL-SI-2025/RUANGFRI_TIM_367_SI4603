@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('inventaris', function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('id_logistik')->nullable();
+=======
             $table->unsignedBigInteger('id_logistik');
+
             $table->string('nama_inventaris');
             $table->string('deskripsi');
             $table->integer('jumlah');

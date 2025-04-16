@@ -17,16 +17,12 @@
                 </div>
 
                 <div class="card-body">
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
+                    @if(session('success'))
+                        <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
+                    @if(session('error'))
+                        <div class="alert alert-danger">{{ session('error') }}</div>
                     @endif
 
                     @if($pending->count() > 0)
@@ -68,11 +64,11 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group" role="group">
-                                                    <a href="{{ route('pinjam-inventaris.show', $pinjam->id) }}" class="btn btn-sm btn-info text-white">
+                                                    <a href="{{ route('pinjam-inventaris.show', $pinjam->id_pinjam_inventaris) }}" class="btn btn-sm btn-info text-white">
                                                         <i class="fa fa-eye"></i> Detail
                                                     </a>
                                                     
-                                                    <form action="{{ route('pinjam-inventaris.update-status', $pinjam->id) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('pinjam-inventaris.update-status', $pinjam->id_pinjam_inventaris) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('PATCH')
                                                         <input type="hidden" name="status" value="1">
@@ -81,7 +77,7 @@
                                                         </button>
                                                     </form>
                                                     
-                                                    <form action="{{ route('pinjam-inventaris.update-status', $pinjam->id) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('pinjam-inventaris.update-status', $pinjam->id_pinjam_inventaris) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('PATCH')
                                                         <input type="hidden" name="status" value="2">
