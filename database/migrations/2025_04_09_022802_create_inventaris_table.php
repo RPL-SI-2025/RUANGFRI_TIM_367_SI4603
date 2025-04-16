@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id('id_inventaris');
             $table->unsignedBigInteger('id_logistik');
             $table->string('nama_inventaris');
-            $table->date('deskripsi');
-            $table->date('jumlah');
+            $table->string('deskripsi');
+            $table->integer('jumlah');
             $table->enum('status', ['Tersedia', 'Tidak Tersedia']);
             $table->timestamps();
             
@@ -31,4 +31,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('inventaris');
     }
+
 };
+

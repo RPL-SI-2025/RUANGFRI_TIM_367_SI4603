@@ -9,7 +9,7 @@ class CreatePinjamInventarisTable extends Migration
     public function up()
     {
         Schema::create('pinjam_inventaris', function (Blueprint $table) {
-            $table->id('id_pimjam_inventaris');
+            $table->id();
             $table->unsignedBigInteger('id_inventaris');
             $table->unsignedBigInteger('id_mahasiswa');
             $table->date('tanggal_pengajuan');
