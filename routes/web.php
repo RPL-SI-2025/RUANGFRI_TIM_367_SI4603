@@ -7,7 +7,8 @@ use App\Http\Controllers\ControllerMahasiswa;
 use App\Http\Controllers\ControllerRuangan;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\laporinventarisController;
-use App\Models\laporinventaris;
+use App\Models\laporinventaris; 
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -81,5 +82,6 @@ Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval
 
 //Lapor Inventaris
 Route::get('/laporinventaris', [laporinventarisController::class, 'index'])->name('laporinventaris.index');
+
 
 
