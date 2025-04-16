@@ -6,6 +6,8 @@ use App\Http\Controllers\PinjamInventarisController;
 use App\Http\Controllers\ControllerMahasiswa;
 use App\Http\Controllers\ControllerRuangan;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\laporinventarisController;
+use App\Models\laporinventaris;
 
 Route::get('/', function () {
     return view('welcome');
@@ -78,5 +80,5 @@ Route::patch('/pinjam-inventaris/{pinjamInventaris}/status', [PinjamInventarisCo
 Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
 
 //Lapor Inventaris
-
+Route::get('/laporinventaris', [laporinventarisController::class, 'index'])->name('laporinventaris.index');
 
