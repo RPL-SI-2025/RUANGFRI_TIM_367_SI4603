@@ -34,10 +34,10 @@ class CartController extends Controller
         $newQuantity = $request->jumlah;
         
         if (isset($cart[$itemId])) {
-            // If item already exists, add to its quantity
+            
             $newQuantity = $cart[$itemId]['jumlah'] + $request->jumlah;
             
-            // Check if new quantity exceeds available stock
+            
             if ($newQuantity > $inventaris->jumlah) {
                 return redirect()->back()->with('error', 'Total jumlah yang diminta melebihi stok yang tersedia.');
             }
@@ -60,7 +60,7 @@ class CartController extends Controller
         // Update cart dengan data yang lengkap
         $cart[$itemId] = $itemData;
         
-        // Update the cart in session
+        
         Session::put('cart', $cart);
         
         return redirect()->route('mahasiswa.inventaris.index')->with('success', 'Item berhasil ditambahkan ke keranjang.');
@@ -106,12 +106,12 @@ class CartController extends Controller
     if(isset($cart[$id])) {
         $inventaris = Inventaris::findOrFail($id);
         
-        // Check if requested quantity exceeds available stock
+        
         if ($request->jumlah > $inventaris->jumlah) {
             return redirect()->back()->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
         }
         
-        // Update quantity
+        
         $cart[$id]['jumlah'] = $request->jumlah;
         Session::put('cart', $cart);
         

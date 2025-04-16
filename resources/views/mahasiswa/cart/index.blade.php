@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('mahasiswa.layouts.app')
 
 @section('content')
 <div class="container py-4">
@@ -6,12 +6,14 @@
         <div class="col-md-10">
             <div class="card shadow-sm border-0 rounded-lg">
             <div class="card-header bg-white border-bottom-0 pt-4 pb-3">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="text-primary mb-0 fw-bold">
-                        <i class="fa fa-shopping-basket me-2"></i>Keranjang Peminjaman
-                    </h4>
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-3">
+                <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="text-primary mb-0 fw-bold">
+                            <i class="fa fa-shopping-basket me-2"></i>Keranjang Peminjaman
+                        </h4>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center">
+                    
+                    <div class="mt-4 d-flex justify-content-between align-items-center">
                         <h5 class="text-secondary mb-0">
                             <i class="fa fa-list me-2"></i>Daftar Inventaris
                         </h5>
