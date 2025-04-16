@@ -9,55 +9,40 @@ class PelaporanController extends Controller
 {
     public function index()
     {
-        $pelaporans = Pelaporan::all();
-        return view('pelaporan.index', compact('pelaporans'));
-    }
-
-    public function create()
-    {
-        return view('pelaporan.create');
+        return Pelaporan::all();
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'oleh' => 'required',
-            'kepada' => 'required',
-            'tanggal' => 'required|date',
-            'waktu' => 'required',
+        $validated = $request->validate([
+            'id_mahasiswa' => 'required|integer',
+            'id_logistik' => 'required|integer',
+            'datetime' => 'required|date',
+            'foto_awal' => 'nullable|string',
+            'foto_akhir' => 'nullable|string',
+            'deskripsi' => 'nullable|string',
+            'oleh' => 'required|string',
+            'kepada' => 'required|string',
         ]);
 
-        Pelaporan::create($request->all());
-
-        return redirect()->route('pelaporan.index')->with('success', 'Data berhasil disimpan.');
+        return Pelaporan::create($validated);
     }
 
-    public function edit($id)
+    public function show($id)
     {
-        $pelaporan = Pelaporan::findOrFail($id);
-        return view('pelaporan.edit', compact('pelaporan'));
+        return Pelaporan::findOrFail($id);
     }
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'oleh' => 'required',
-            'kepada' => 'required',
-            'tanggal' => 'required|date',
-            'waktu' => 'required',
-        ]);
-
         $pelaporan = Pelaporan::findOrFail($id);
         $pelaporan->update($request->all());
-
-        return redirect()->route('pelaporan.index')->with('success', 'Data berhasil diperbarui.');
+        return $pelaporan;
     }
 
     public function destroy($id)
     {
-        $pelaporan = Pelaporan::findOrFail($id);
-        $pelaporan->delete();
-
-        return redirect()->route('pelaporan.index')->with('success', 'Data berhasil dihapus.');
+        Pelaporan::destroy($id);
+        return response()->json(['message' => 'Deleted']);
     }
 }
