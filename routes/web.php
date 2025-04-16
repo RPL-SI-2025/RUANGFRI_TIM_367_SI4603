@@ -77,3 +77,6 @@ Route::patch('/pinjam-inventaris/{pinjamInventaris}/status', [PinjamInventarisCo
 // Admin approval interface
 Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
 
+//Lapor Inventaris
+
+
