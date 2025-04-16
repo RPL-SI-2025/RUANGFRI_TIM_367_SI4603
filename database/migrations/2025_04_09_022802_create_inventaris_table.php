@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('status', ['Tersedia', 'Tidak Tersedia']);
             $table->timestamps();
             
-            $table->foreign('id_logistik')->references('id_logistik')->on('admin_logistik');
+            $table->foreign('id_logistik')->references('id')->on('admin_logistik');
         });
     }
 
