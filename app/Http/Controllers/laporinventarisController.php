@@ -7,20 +7,19 @@ use Illuminate\Http\Request;
 
 class laporinventarisController extends Controller
 {
-    // Ambil semua laporan dengan relasi mahasiswa dan logistik
+   
     public function index()
     {
         $laporan = laporinventaris::with(['mahasiswa', 'logistik'])->get();
         return view('laporinventaris.index', compact($laporan));
     }
 
-    // Form input (jika pakai blade)
+   
     public function create()
     {
         return view('laporinventaris.create');
     }
 
-    // Simpan data baru
     public function store(Request $request)
     {
         $request->validate([
@@ -37,7 +36,6 @@ class laporinventarisController extends Controller
         ->with('success', 'Laporan berhasil ditambahkan');
     }
 
-    // Tampilkan data laporan by ID + relasi
     public function show($id)
     {
         $laporan = laporinventaris::with(['mahasiswa', 'logistik'])->find($id);
@@ -49,7 +47,6 @@ class laporinventarisController extends Controller
         return redirect()->back()->with('error', 'Data tidak ditemukan');
     }
 
-    // Update data
     public function update(Request $request, $id)
     {
         $laporan = laporinventaris::find($id);
@@ -73,7 +70,6 @@ class laporinventarisController extends Controller
         ->with('success', 'Data berhasil diperbarui');
     }
 
-    // Hapus data
     public function destroy($id)
     {
         $laporan = laporinventaris::find($id);
