@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Mahasiswa extends Authenticatable
 {
+
     use HasFactory, Notifiable;
 
     protected $table = 'mahasiswa';
@@ -51,3 +52,16 @@ class Mahasiswa extends Authenticatable
         return $this->hasMany(LaporInventaris::class, 'id_mahasiswa');
     }
 }
+=======
+    //protected $table = 'mahasiswa';
+protected $primaryKey = 'id';
+protected $fillable = [
+    'name',
+    'email',
+    'phone',
+    'address'
+];
+
+
+}
+
