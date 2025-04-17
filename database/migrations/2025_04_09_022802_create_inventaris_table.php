@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('id_logistik')->nullable();
-            $table->unsignedBigInteger('id_logistik');
-
             $table->string('nama_inventaris');
             $table->string('deskripsi');
             $table->integer('jumlah');
