@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Mahasiswa extends Authenticatable
 {
@@ -52,16 +53,16 @@ class Mahasiswa extends Authenticatable
         return $this->hasMany(LaporInventaris::class, 'id_mahasiswa');
     }
 }
-=======
-    //protected $table = 'mahasiswa';
-protected $primaryKey = 'id';
-protected $fillable = [
-    'name',
-    'email',
-    'phone',
-    'address'
-];
+
+    //protected $table = 'mahasiswa';?
+// protected $primaryKey = 'id';
+// protected $fillable = [
+//     'name',
+//     'email',
+//     'phone',
+//     'address'
+// ];
 
 
-}
 
+?>
