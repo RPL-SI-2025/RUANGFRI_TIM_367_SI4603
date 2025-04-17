@@ -22,12 +22,15 @@ Route::get('/ruangan/{id}', [RuanganController::class, 'show'])->name('katalog_r
 
 // Route ruangan untuk admin
 Route::get('/admin/ruangan', [RuanganController::class, 'adminindex'])->name('admin.katalog_ruangan.index');
-Route::get('/admin/ruangan/{id}', [RuanganController::class, 'adminshow'])->name('admin.katalog_ruangan.show');
 Route::get('/admin/ruangan/create', [RuanganController::class, 'admincreate'])->name('admin.katalog_ruangan.create');
+Route::get('/admin/invenruangantaris/{id}/edit', [RuanganController::class, 'adminedit'])->name('admin.katalog_ruangan.edit');
+Route::put('/admin/invenruangantaris/{id}/update', [RuanganController::class, 'adminupdate'])->name('admin.katalog_ruangan.update');
+Route::get('/admin/ruangan/{id}', [RuanganController::class, 'adminshow'])->name('admin.katalog_ruangan.show');
 Route::post('/admin/ruangan/store', [RuanganController::class, 'adminstore'])->name('admin.katalog_ruangan.store');
+Route::delete('/admin/ruangan/{id}', [RuanganController::class, 'admindestroy'])->name('admin.katalog_ruangan.destroy');
 
 // Admin Inventaris CRUD
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/inventaris', [InventarisController::class, 'index'])->name('inventaris.index');
     Route::post('/inventaris', [InventarisController::class, 'store'])->name('inventaris.store');
     Route::get('/inventaris/create', [InventarisController::class, 'create'])->name('inventaris.create');

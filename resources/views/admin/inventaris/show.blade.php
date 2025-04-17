@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title', 'Detail Inventaris')
 
@@ -13,7 +13,7 @@
 
         <p><strong>Jumlah:</strong> {{ $inventaris->jumlah }}</p>
 
-        <p><strong>Status:</strong> 
+        <p><strong>Status:</strong>
             @if($inventaris->status === 'Tersedia')
                 <span class="badge bg-success">Tersedia</span>
             @else
