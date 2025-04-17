@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PinjamInventarisController extends Controller
 {
-    // Admin view - all loan requests
+    // Permintaan peminjaman inventaris untuk admin
     public function index()
     {
         $peminjaman = PinjamInventaris::with(['inventaris', 'mahasiswa'])
@@ -22,7 +22,7 @@ class PinjamInventarisController extends Controller
         return view('admin.pinjam_inventaris.index', compact('peminjaman'));
     }
     
-    // Student view - their own loan requests
+    // Permintaan peminjaman inventaris untuk mahasiswa
     public function mahasiswaPinjaman()
     {
         $user = Auth::user();
@@ -40,7 +40,7 @@ class PinjamInventarisController extends Controller
         return view('mahasiswa.pinjam_inventaris.mahasiswa_index', compact('peminjaman'));
     }
 
-    // Create new loan request form
+    // Buat formulir permintaan pinjaman baru
     public function create()
     {
         $cartItems = Session::get('cart', []);
@@ -52,7 +52,7 @@ class PinjamInventarisController extends Controller
         return view('mahasiswa.pinjam_inventaris.create', compact('cartItems'));
     }
 
-    // Store new loan request
+    // Simpan permintaan pinjaman baru
     public function store(Request $request)
     {
         $request->validate([
@@ -76,7 +76,7 @@ class PinjamInventarisController extends Controller
             return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong!');
         }
         
-        // Handle file upload
+        // Menangani unggahan file
         $fileName = null;
         if ($request->hasFile('file_scan')) {
             $file = $request->file('file_scan');
@@ -84,7 +84,7 @@ class PinjamInventarisController extends Controller
             $filePath = $file->storeAs('uploads/file_scan', $fileName, 'public');
         }
         
-        // Save loans to database
+        // Simpan pinjaman
         foreach ($cartItems as $item) {
             PinjamInventaris::create([
                 'id_inventaris' => $item['id'],
@@ -98,7 +98,7 @@ class PinjamInventarisController extends Controller
             ]);
         }
         
-        // Clear cart after successful submission
+        // Kosongkan keranjang setelah pengiriman berhasil
         Session::forget('cart');
         
         return redirect()->route('pinjam-inventaris.mahasiswa')
