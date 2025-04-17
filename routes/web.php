@@ -14,8 +14,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-
 // Admin Inventaris CRUD
 Route::get('/admin/inventaris', [InventarisController::class, 'index'])->name('inventaris.index');
 Route::prefix('admin')->group(function () {
@@ -32,7 +30,6 @@ Route::prefix('mahasiswa')->group(function () {
     Route::get('/inventaris/{id}', [InventarisController::class, 'mahasiswaShow'])->name('mahasiswa.inventaris.show');
 });
 
-=======
 
 // Ruangan routes
 Route::controller(ControllerRuangan::class)->group(function () {

@@ -12,7 +12,7 @@ class Mahasiswa extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $table = 'mahasiswa';
-
+    protected $primaryKey = 'id';
     protected $fillable = [
         'nim',
         'nama_mahasiswa',
@@ -23,10 +23,10 @@ class Mahasiswa extends Authenticatable
     protected $hidden = ['password'];
 
     // Relasi ke pinjam ruangan
-    public function pinjamRuangan()
-    {
-        return $this->hasMany(PinjamRuangan::class, 'id_mahasiswa');
-    }
+    // public function pinjamRuangan()
+    // {
+    //     return $this->hasMany(PinjamRuangan::class, 'id_mahasiswa');
+    // }
 
     // Relasi ke pinjam inventaris
     public function pinjamInventaris()
@@ -35,16 +35,16 @@ class Mahasiswa extends Authenticatable
     }
 
     // Relasi ke status peminjaman
-    public function statusPeminjaman()
-    {
-        return $this->hasMany(StatusPeminjaman::class, 'id_mahasiswa');
-    }
+    // public function statusPeminjaman()
+    // {
+    //     return $this->hasMany(StatusPeminjaman::class, 'id_mahasiswa');
+    // }
 
-    // Relasi ke laporan ruangan
-    public function laporanRuangan()
-    {
-        return $this->hasMany(LaporanRuangan::class, 'id_mahasiswa');
-    }
+    // // Relasi ke laporan ruangan
+    // public function laporanRuangan()
+    // {
+    //     return $this->hasMany(LaporanRuangan::class, 'id_mahasiswa');
+    // }
 
     // Relasi ke lapor inventaris
     public function laporInventaris()
@@ -52,16 +52,8 @@ class Mahasiswa extends Authenticatable
         return $this->hasMany(LaporInventaris::class, 'id_mahasiswa');
     }
 }
-=======
-    //protected $table = 'mahasiswa';
-protected $primaryKey = 'id';
-protected $fillable = [
-    'name',
-    'email',
-    'phone',
-    'address'
-];
 
 
-}
+
+
 
