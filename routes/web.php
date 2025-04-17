@@ -6,6 +6,9 @@ use App\Http\Controllers\PinjamInventarisController;
 use App\Http\Controllers\ControllerMahasiswa;
 use App\Http\Controllers\ControllerRuangan;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\laporinventarisController;
+use App\Models\laporinventaris; 
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +31,19 @@ Route::prefix('mahasiswa')->group(function () {
     Route::get('/inventaris', [InventarisController::class, 'mahasiswaIndex'])->name('mahasiswa.inventaris.index');
     Route::get('/inventaris/{id}', [InventarisController::class, 'mahasiswaShow'])->name('mahasiswa.inventaris.show');
 });
+
+=======
+
+// Ruangan routes
+Route::controller(ControllerRuangan::class)->group(function () {
+    Route::get('/ruangan', 'index')->name('ruangan.index');
+    Route::get('/ruangan/create', 'create')->name('ruangan.create');
+    Route::post('/ruangan/store', 'store')->name('ruangan.store');
+    Route::get('/ruangan/{id}/edit', 'edit')->name('ruangan.edit');
+    Route::put('/ruangan/{id}', 'update')->name('ruangan.update');
+    Route::delete('/ruangan/{id}', 'destroy')->name('ruangan.destroy');
+});
+
 
 // // Ruangan routes
 // Route::controller(ControllerRuangan::class)->group(function () {
@@ -69,4 +85,9 @@ Route::patch('/pinjam-inventaris/{pinjamInventaris}/status', [PinjamInventarisCo
 
 // Admin approval interface
 Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
+
+//Lapor Inventaris
+Route::get('/laporinventaris', [laporinventarisController::class, 'index'])->name('laporinventaris.index');
+
+
 
