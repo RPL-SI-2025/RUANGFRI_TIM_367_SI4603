@@ -17,7 +17,7 @@
                     </p>
                     <div class="d-flex justify-content-between">
                         <!-- Make sure we're using the correct ID field from your model -->
-                        <a href="{{ route('mahasiswa.inventaris.show', $item->id) }}" class="btn btn-primary">Detail</a>
+                        <a href="{{ route('mahasiswa.katalog.inventaris.show', $item->id) }}" class="btn btn-primary">Detail</a>
                         
                         @if($item->status === 'Tersedia' && $item->jumlah > 0)
                         <form action="{{ route('cart.add') }}" method="POST">
