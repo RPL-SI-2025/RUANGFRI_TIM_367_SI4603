@@ -20,7 +20,10 @@ class Mahasiswa extends Authenticatable
         'password',
     ];
 
-    protected $hidden = ['password'];
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
     // Relasi ke pinjam ruangan
     // public function pinjamRuangan()

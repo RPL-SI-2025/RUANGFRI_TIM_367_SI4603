@@ -25,19 +25,18 @@ class PinjamInventarisController extends Controller
     // Permintaan peminjaman inventaris untuk mahasiswa
     public function mahasiswaPinjaman()
     {
-        $user = Auth::user();
-        $mahasiswa = Mahasiswa::where('email', $user->email)->first();
+        $mahasiswaId = Session::get('mahasiswa_id');
         
-        if (!$mahasiswa) {
-            return redirect()->back()->with('error', 'Akun Anda tidak terhubung dengan data mahasiswa.');
+        if (!$mahasiswaId) {
+            return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
         }
         
         $peminjaman = PinjamInventaris::with('inventaris')
-                    ->where('id_mahasiswa', $mahasiswa->id)
+                    ->where('id_mahasiswa', $mahasiswaId)
                     ->latest()
                     ->paginate(10);
                     
-        return view('mahasiswa.pinjam_inventaris.mahasiswa_index', compact('peminjaman'));
+        return view('mahasiswa.pinjam_inventaris.index', compact('peminjaman'));
     }
 
     // Buat formulir permintaan pinjaman baru
@@ -54,7 +53,7 @@ class PinjamInventarisController extends Controller
 
     // Simpan permintaan pinjaman baru
     public function store(Request $request)
-    {
+{
         $request->validate([
             'tanggal_pengajuan' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_pengajuan',
@@ -63,11 +62,10 @@ class PinjamInventarisController extends Controller
             'file_scan' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        $user = Auth::user();
-        $mahasiswa = Mahasiswa::where('email', $user->email)->first();
+        $mahasiswaId = Session::get('mahasiswa_id');
         
-        if (!$mahasiswa) {
-            return redirect()->back()->with('error', 'Akun Anda tidak terhubung dengan data mahasiswa.');
+        if (!$mahasiswaId) {
+            return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
         }
         
         $cartItems = Session::get('cart', []);
@@ -88,7 +86,7 @@ class PinjamInventarisController extends Controller
         foreach ($cartItems as $item) {
             PinjamInventaris::create([
                 'id_inventaris' => $item['id'],
-                'id_mahasiswa' => $mahasiswa->id,
+                'id_mahasiswa' => $mahasiswaId,
                 'tanggal_pengajuan' => $request->tanggal_pengajuan,
                 'tanggal_selesai' => $request->tanggal_selesai,
                 'waktu_mulai' => $request->waktu_mulai,
