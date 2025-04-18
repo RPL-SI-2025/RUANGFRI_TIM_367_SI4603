@@ -29,7 +29,7 @@ class CartController extends Controller
         
         $cart = Session::get('cart', []);
         
-        // Check if item already exists in cart
+        // Iki buat ngecek apa barang yang mau ditambah udah ada di cart apa durung
         $itemId = $inventaris->id;
         $newQuantity = $request->jumlah;
         
