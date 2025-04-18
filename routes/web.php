@@ -8,7 +8,7 @@ use App\Http\Controllers\ControllerRuangan;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\laporinventarisController;
 use App\Models\laporinventaris; 
-
+use App\Http\Controllers\MahasiswaAuthController;
 use App\Http\Controllers\AdminLogistikController;
 
 
@@ -18,25 +18,25 @@ Route::get('/', function () {
 
 // Admin Dashboard
 
-    Route::get('/admin/dashboard', [AdminLogistikController::class, 'index'])->name('admin.dashboard');
+Route::get('/admin/dashboard', [AdminLogistikController::class, 'index'])->name('admin.dashboard');
 
 
 
 
 
-use App\Http\Controllers\MahasiswaAuthController;
+
 
 
 
 // Admin Inventaris CRUD
 
-    Route::get('/admin/inventaris', [InventarisController::class, 'index'])->name('admin.inventaris.index');
-    Route::get('/admin/inventaris/create', [InventarisController::class, 'create'])->name('admin.inventaris.create');
-    Route::post('/admin/inventaris', [InventarisController::class, 'store'])->name('admin.inventaris.store');
-    Route::get('/admin/inventaris/{inventaris}/edit', [InventarisController::class, 'edit'])->name('admin.inventaris.edit');
-    Route::put('/admin/inventaris/{inventaris}', [InventarisController::class, 'update'])->name('admin.inventaris.update');
-    Route::delete('/admin/inventaris/{inventaris}', [InventarisController::class, 'destroy'])->name('admin.inventaris.destroy');
-    Route::get('/admin/inventaris/{inventaris}', [InventarisController::class, 'show'])->name('admin.inventaris.show');
+Route::get('/admin/inventaris', [InventarisController::class, 'index'])->name('admin.inventaris.index');
+Route::get('/admin/inventaris/create', [InventarisController::class, 'create'])->name('admin.inventaris.create');
+Route::post('/admin/inventaris', [InventarisController::class, 'store'])->name('admin.inventaris.store');
+Route::get('/admin/inventaris/{inventaris}/edit', [InventarisController::class, 'edit'])->name('admin.inventaris.edit');
+Route::put('/admin/inventaris/{inventaris}', [InventarisController::class, 'update'])->name('admin.inventaris.update');
+Route::delete('/admin/inventaris/{inventaris}', [InventarisController::class, 'destroy'])->name('admin.inventaris.destroy');
+Route::get('/admin/inventaris/{inventaris}', [InventarisController::class, 'show'])->name('admin.inventaris.show');
 
     
 
