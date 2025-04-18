@@ -32,8 +32,8 @@ class Inventaris extends Model
     }
 
     // Relasi ke laporan inventaris
-    public function laporan()
-    {
-        return $this->hasMany(LaporInventaris::class, 'id_inventaris');
-    }
+    // public function laporan()
+    // {
+    //     return $this->hasMany(LaporInventaris::class, 'id_inventaris');
+    // }
 }

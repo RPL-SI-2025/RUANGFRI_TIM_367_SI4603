@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('admin_logistik', function (Blueprint $table) {
-            $table->id("id_logistik");
+            $table->id();
             $table->string("nama");
             $table->string("email")->unique();
-            $table->string("password");
+            $table->string('password')->nullable();
+            $table->string("role")->default("admin");
             $table->timestamps();
-        });
+        }); 
     }
 
     /**
