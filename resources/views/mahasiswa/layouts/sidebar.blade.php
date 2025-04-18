@@ -6,7 +6,6 @@
             <div class="text-white-50 small">Fakultas Rekayasa Industri</div>
         </div>
     </div>
-    
     <ul class="nav flex-column mt-4">
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center {{ request()->is('mahasiswa/katalog*') ? 'active' : '' }}" 
@@ -45,11 +44,11 @@
         </li>
 
         <li class="nav-item mt-3">
-            <a class="nav-link text-danger">
-                <i class="fas fa-sign-out-alt"></i> Keluar
-            </a>
-            <form id="logout-form">
+            <form action="{{ route('mahasiswa.logout') }}" method="POST" id="logout-form">
                 @csrf
+                <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();" class="nav-link text-danger">
+                    <i class="fas fa-sign-out-alt"></i> Keluar
+                </a>
             </form>
         </li>
     </ul>
