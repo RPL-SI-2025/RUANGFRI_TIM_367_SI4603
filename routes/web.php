@@ -8,6 +8,7 @@ use App\Http\Controllers\ControllerRuangan;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\laporinventarisController;
 use App\Models\laporinventaris; 
+use App\Http\Controllers\AdminLogistikController;
 
 
 Route::get('/', function () {
