@@ -26,8 +26,8 @@ Route::delete('/admin/inventaris/{id}', [InventarisController::class, 'destroy']
 
 // Mahasiswa Inventaris View
 Route::prefix('mahasiswa')->group(function () {
-    Route::get('/inventaris', [InventarisController::class, 'mahasiswaIndex'])->name('mahasiswa.inventaris.index');
-    Route::get('/inventaris/{id}', [InventarisController::class, 'mahasiswaShow'])->name('mahasiswa.inventaris.show');
+    Route::get('/inventaris', [InventarisController::class, 'mahasiswaIndex'])->name('mahasiswa.katalog.inventaris.index');
+    Route::get('/inventaris/{id}', [InventarisController::class, 'mahasiswaShow'])->name('mahasiswa.katalog.inventaris.show');
 });
 
 
