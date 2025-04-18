@@ -12,21 +12,24 @@ use Illuminate\Support\Facades\Auth;
 
 class PinjamInventarisController extends Controller
 {
+    // Permintaan peminjaman inventaris untuk admin
     public function index()
     {
-        // admin piye: ngeli semua peminjaman
-        $peminjaman = PinjamInventaris::with(['inventaris', 'mahasiswa'])->latest()->paginate(10);
-        return view('pinjam_inventaris.index', compact('peminjaman'));
+        $peminjaman = PinjamInventaris::with(['inventaris', 'mahasiswa'])
+                        ->latest()
+                        ->paginate(10);
+                        
+        return view('admin.pinjam_inventaris.index', compact('peminjaman'));
     }
     
+    // Permintaan peminjaman inventaris untuk mahasiswa
     public function mahasiswaPinjaman()
     {
-        // mahasiwa piye : ngeli peminjaman yang dia buat
         $user = Auth::user();
         $mahasiswa = Mahasiswa::where('email', $user->email)->first();
         
         if (!$mahasiswa) {
-            return redirect()->back()->with('error', 'Account not linked to any student record');
+            return redirect()->back()->with('error', 'Akun Anda tidak terhubung dengan data mahasiswa.');
         }
         
         $peminjaman = PinjamInventaris::with('inventaris')
@@ -34,21 +37,22 @@ class PinjamInventarisController extends Controller
                     ->latest()
                     ->paginate(10);
                     
-        return view('pinjam_inventaris.mahasiswa_index', compact('peminjaman'));
+        return view('mahasiswa.pinjam_inventaris.mahasiswa_index', compact('peminjaman'));
     }
 
+    // Buat formulir permintaan pinjaman baru
     public function create()
     {
-
         $cartItems = Session::get('cart', []);
         
         if(empty($cartItems)) {
-            return redirect()->route('cart.index')->with('error', 'Your cart is empty!');
+            return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong!');
         }
         
-        return view('pinjam_inventaris.create', compact('cartItems'));
+        return view('mahasiswa.pinjam_inventaris.create', compact('cartItems'));
     }
 
+    // Simpan permintaan pinjaman baru
     public function store(Request $request)
     {
         $request->validate([
@@ -63,16 +67,16 @@ class PinjamInventarisController extends Controller
         $mahasiswa = Mahasiswa::where('email', $user->email)->first();
         
         if (!$mahasiswa) {
-            return redirect()->back()->with('error', 'Account not linked to any student record');
+            return redirect()->back()->with('error', 'Akun Anda tidak terhubung dengan data mahasiswa.');
         }
         
         $cartItems = Session::get('cart', []);
         
         if(empty($cartItems)) {
-            return redirect()->route('cart.index')->with('error', 'Your cart is empty!');
+            return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong!');
         }
         
-        // menangani file upload
+        // Menangani unggahan file
         $fileName = null;
         if ($request->hasFile('file_scan')) {
             $file = $request->file('file_scan');
@@ -80,7 +84,7 @@ class PinjamInventarisController extends Controller
             $filePath = $file->storeAs('uploads/file_scan', $fileName, 'public');
         }
         
-        // Simpan data peminjaman ke database
+        // Simpan pinjaman
         foreach ($cartItems as $item) {
             PinjamInventaris::create([
                 'id_inventaris' => $item['id'],
@@ -90,22 +94,24 @@ class PinjamInventarisController extends Controller
                 'waktu_mulai' => $request->waktu_mulai,
                 'waktu_selesai' => $request->waktu_selesai,
                 'file_scan' => $fileName,
-                'status' => 0 // tandanye menunggu persetujuan
+                'status' => 0 // Waiting for approval
             ]);
         }
         
-        // menghapus cart setelah peminjaman
+        // Kosongkan keranjang setelah pengiriman berhasil
         Session::forget('cart');
         
         return redirect()->route('pinjam-inventaris.mahasiswa')
             ->with('success', 'Pengajuan peminjaman inventaris berhasil ditambahkan.');
     }
 
+    // Show loan request details
     public function show(PinjamInventaris $pinjamInventaris)
     {
-        return view('pinjam_inventaris.show', compact('pinjamInventaris'));
+        return view('mahasiswa.pinjam_inventaris.show', compact('pinjamInventaris'));
     }
 
+    // Update loan request status
     public function updateStatus(Request $request, PinjamInventaris $pinjamInventaris)
     {
         $request->validate([
@@ -115,11 +121,18 @@ class PinjamInventarisController extends Controller
         $pinjamInventaris->status = $request->status;
         $pinjamInventaris->save();
         
-        return redirect()->route('pinjam-inventaris.index')
-            ->with('success', 'Status peminjaman inventaris berhasil diperbarui.');
+        $statusText = match($request->status) {
+            0 => 'menunggu persetujuan',
+            1 => 'disetujui',
+            2 => 'ditolak',
+            3 => 'selesai',
+            default => 'diperbarui'
+        };
+        
+        return back()->with('success', "Status peminjaman berhasil $statusText.");
     }
     
-    // interface admin untuk ngeli peminjaman yang pending
+    // Admin approval interface
     public function adminApproval()
     {
         $pending = PinjamInventaris::with(['inventaris', 'mahasiswa'])
@@ -127,6 +140,20 @@ class PinjamInventarisController extends Controller
                 ->latest()
                 ->paginate(10);
                 
-        return view('pinjam_inventaris.admin_approval', compact('pending'));
+        return view('admin.pinjam_inventaris.admin_approval', compact('pending'));
+    }
+    
+    // Delete loan request
+    public function destroy(PinjamInventaris $pinjamInventaris)
+    {
+        // Delete file if exists
+        if ($pinjamInventaris->file_scan) {
+            Storage::disk('public')->delete('uploads/file_scan/' . $pinjamInventaris->file_scan);
+        }
+        
+        $pinjamInventaris->delete();
+        
+        return redirect()->route('pinjam-inventaris.mahasiswa')
+            ->with('success', 'Pengajuan peminjaman berhasil dihapus.');
     }
 }
