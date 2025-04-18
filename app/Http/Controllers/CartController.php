@@ -63,7 +63,7 @@ class CartController extends Controller
         
         Session::put('cart', $cart);
         
-        return redirect()->route('mahasiswa.inventaris.index')->with('success', 'Item berhasil ditambahkan ke keranjang.');
+        return redirect()->route('mahasiswa.katalog.inventaris.index')->with('success', 'Item berhasil ditambahkan ke keranjang.');
     }
     
     public function remove($id)

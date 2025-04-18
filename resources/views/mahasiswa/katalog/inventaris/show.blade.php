@@ -37,6 +37,6 @@
         @endif
     </div>
 
-    <a href="{{ route('mahasiswa.inventaris.index') }}" class="btn btn-link mt-3">← Kembali ke Katalog</a>
+    <a href="{{ route('mahasiswa.katalog.inventaris.index') }}" class="btn btn-link mt-3">← Kembali ke Katalog</a>
 </div>
 @endsection
