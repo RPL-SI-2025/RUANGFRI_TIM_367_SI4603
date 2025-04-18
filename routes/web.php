@@ -31,6 +31,8 @@ Route::get('/', function () {
     Route::delete('/admin/inventaris/{inventaris}', [InventarisController::class, 'destroy'])->name('admin.inventaris.destroy');
     Route::get('/admin/inventaris/{inventaris}', [InventarisController::class, 'show'])->name('admin.inventaris.show');
 
+    
+
 
 
 // Mahasiswa Inventaris View
@@ -38,7 +40,7 @@ Route::prefix('mahasiswa')->group(function () {
     Route::get('/inventaris', [InventarisController::class, 'mahasiswaIndex'])->name('mahasiswa.inventaris.index');
     Route::get('/inventaris/{id}', [InventarisController::class, 'mahasiswaShow'])->name('mahasiswa.inventaris.show');
 });
-=======
+
 // Ruangan routes
 Route::controller(ControllerRuangan::class)->group(function () {
     Route::get('/ruangan', 'index')->name('ruangan.index');
@@ -49,24 +51,25 @@ Route::controller(ControllerRuangan::class)->group(function () {
     Route::delete('/ruangan/{id}', 'destroy')->name('ruangan.destroy');
 });
 
-// Mahasiswa routes
-Route::controller(ControllerMahasiswa::class)->group(function () {
-    Route::get('/mahasiswa', 'index')->name('mahasiswa.index');
-    Route::get('/mahasiswa/create', 'create')->name('mahasiswa.create');
-    Route::post('/mahasiswa/store', 'store')->name('mahasiswa.store');
-    Route::get('/mahasiswa/{id}/edit', 'edit')->name('mahasiswa.edit');
-    Route::put('/mahasiswa/{id}', 'update')->name('mahasiswa.update');
-    Route::delete('/mahasiswa/{id}', 'destroy')->name('mahasiswa.destroy');
-});
+// // Ruangan routes
+// Route::controller(ControllerRuangan::class)->group(function () {
+//     Route::get('/ruangan', 'index')->name('ruangan.index');
+//     Route::get('/ruangan/create', 'create')->name('ruangan.create');
+//     Route::post('/ruangan/store', 'store')->name('ruangan.store');
+//     Route::get('/ruangan/{id}/edit', 'edit')->name('ruangan.edit');
+//     Route::put('/ruangan/{id}', 'update')->name('ruangan.update');
+//     Route::delete('/ruangan/{id}', 'destroy')->name('ruangan.destroy');
+// });
 
-// Inventaris routes
-Route::get('/inventaris', [InventarisController::class, 'index'])->name('inventaris.index');
-Route::get('/inventaris/create', [InventarisController::class, 'create'])->name('inventaris.create');
-Route::post('/inventaris', [InventarisController::class, 'store'])->name('inventaris.store');
-Route::get('/inventaris/{id}', [InventarisController::class, 'show'])->name('inventaris.show');
-Route::get('/inventaris/{id}/edit', [InventarisController::class, 'edit'])->name('inventaris.edit');
-Route::put('/inventaris/{id}', [InventarisController::class, 'update'])->name('inventaris.update');
-Route::delete('/inventaris/{id}', [InventarisController::class, 'destroy'])->name('inventaris.destroy');
+// // Mahasiswa routes
+// Route::controller(ControllerMahasiswa::class)->group(function () {
+//     Route::get('/mahasiswa', 'index')->name('mahasiswa.index');
+//     Route::get('/mahasiswa/create', 'create')->name('mahasiswa.create');
+//     Route::post('/mahasiswa/store', 'store')->name('mahasiswa.store');
+//     Route::get('/mahasiswa/{id}/edit', 'edit')->name('mahasiswa.edit');
+//     Route::put('/mahasiswa/{id}', 'update')->name('mahasiswa.update');
+//     Route::delete('/mahasiswa/{id}', 'destroy')->name('mahasiswa.destroy');
+// });
 
 
 // Cart routes
