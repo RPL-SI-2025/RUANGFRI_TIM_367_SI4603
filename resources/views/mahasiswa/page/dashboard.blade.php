@@ -3,7 +3,7 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Dashboard</h2>
-        <a href="{{ route('pinjam-inventaris.create') }}" class="btn btn-primary">
+        <a href="{{ route('mahasiswa.peminjaman.pinjam-inventaris.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Tambah Peminjaman
         </a>
     </div>

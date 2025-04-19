@@ -20,14 +20,6 @@ Route::get('/', function () {
 
 Route::get('/admin/dashboard', [AdminLogistikController::class, 'index'])->name('admin.dashboard');
 
-
-
-
-
-
-
-
-
 // Admin Inventaris CRUD
 
 Route::get('/admin/inventaris', [InventarisController::class, 'index'])->name('admin.inventaris.index');
@@ -74,6 +66,8 @@ Route::controller(ControllerRuangan::class)->group(function () {
 
 // Admin approval interface
 Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
+Route::patch('/pinjam-inventaris/{pinjamInventaris}/update-status', [PinjamInventarisController::class, 'updateStatus'])->name('pinjam-inventaris.update-status');
+Route::delete('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'destroy'])->name('pinjam-inventaris.destroy');
 
 //Lapor Inventaris
 Route::get('/laporinventaris', [laporinventarisController::class, 'index'])->name('laporinventaris.index');
@@ -110,10 +104,10 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
     // Peminjaman routes for mahasiswa
-    Route::get('/pinjam-inventaris', [PinjamInventarisController::class, 'index'])->name('pinjam-inventaris.index');
-    Route::get('/pinjam-inventaris/mahasiswa', [PinjamInventarisController::class, 'mahasiswaPinjaman'])->name('pinjam-inventaris.mahasiswa');
-    Route::get('/pinjam-inventaris/create', [PinjamInventarisController::class, 'create'])->name('pinjam-inventaris.create');
+    Route::get('/pinjam-inventaris', [PinjamInventarisController::class, 'mahasiswaIndex'])->name('mahasiswa.peminjaman.pinjam-inventaris.index');
+    Route::get('/pinjam-inventaris/create', [PinjamInventarisController::class, 'create'])->name('mahasiswa.peminjaman.pinjam-inventaris.create');
     Route::post('/pinjam-inventaris', [PinjamInventarisController::class, 'store'])->name('pinjam-inventaris.store');
-    Route::get('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'show'])->name('pinjam-inventaris.show');
-    Route::delete('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'destroy'])->name('pinjam-inventaris.destroy');
+    Route::get('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'show'])->name('mahasiswa.peminjaman.pinjam-inventaris.show');
+    Route::get('/pinjam-inventaris/{pinjamInventaris}/edit', [PinjamInventarisController::class, 'edit'])->name('mahasiswa.peminjaman.pinjam-inventaris.edit');
+    Route::put('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'update'])->name('pinjam-inventaris.update');
 });
