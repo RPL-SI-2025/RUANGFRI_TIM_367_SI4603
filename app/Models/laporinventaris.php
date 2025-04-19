@@ -32,5 +32,3 @@ class laporinventaris extends Model
         return $this->belongsTo(AdminLogistik::class, 'id_logistik');
     }
 }
-
-

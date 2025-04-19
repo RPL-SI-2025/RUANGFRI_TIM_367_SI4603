@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 
 class laporinventarisController extends Controller
 {
-   
+
     public function index()
     {
         $laporan = laporinventaris::with(['mahasiswa', 'logistik'])->get();
         return view('laporinventaris.index', compact($laporan));
     }
 
-   
+
     public function create()
     {
         return view('laporinventaris.create');
