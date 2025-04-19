@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\laporinventaris;
+use Illuminate\Http\Request;
 
 class laporinventarisController extends Controller
 {
+
     public function index()
     {
-        $laporan = laporinventaris::all();
-        return response()->json($laporan);
+        $laporan = laporinventaris::with(['mahasiswa', 'logistik'])->get();
+        return view('laporinventaris.index', compact($laporan));
+    }
+
+
+    public function create()
+    {
+        return view('laporinventaris.create');
     }
 
     public function store(Request $request)
@@ -26,24 +32,27 @@ class laporinventarisController extends Controller
         ]);
 
         $laporan = laporinventaris::create($request->all());
-
-        return response()->json(['message' => 'Laporan berhasil ditambahkan', 'data' => $laporan]);
+        return redirect()->route('laporinventaris.index')
+        ->with('success', 'Laporan berhasil ditambahkan');
     }
 
     public function show($id)
     {
-        $laporan = laporinventaris::find($id);
+        $laporan = laporinventaris::with(['mahasiswa', 'logistik'])->find($id);
+
         if ($laporan) {
-            return response()->json($laporan);
+            return view('laporinventaris.show', compact($laporan));
         }
-        return response()->json(['message' => 'Data tidak ditemukan']);
+
+        return redirect()->back()->with('error', 'Data tidak ditemukan');
     }
 
     public function update(Request $request, $id)
     {
         $laporan = laporinventaris::find($id);
+
         if (!$laporan) {
-            return response()->json(['message' => 'Data tidak ditemukan']);
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
         }
 
         $request->validate([
@@ -52,22 +61,28 @@ class laporinventarisController extends Controller
             'datetime' => 'sometimes|required|date',
             'foto_awal' => 'nullable|string|max:255',
             'foto_akhir' => 'nullable|string|max:255',
-            'deskripsi' => 'nullable|string|max:255'
+            'deskripsi' => 'nullable|string|max:255',
+            'oleh'=> 'required',
+            'kepada'=> 'required',
         ]);
 
         $laporan->update($request->all());
 
-        return response()->json(['message' => 'Data berhasil diperbarui', 'data' => $laporan]);
+        return redirect()->route('laporinventaris.index')
+        ->with('success', 'Data berhasil diperbarui');
     }
 
     public function destroy($id)
     {
         $laporan = laporinventaris::find($id);
+
         if (!$laporan) {
-            return response()->json(['message' => 'Data tidak ditemukan']);
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
         }
 
         $laporan->delete();
-        return response()->json(['message' => 'Data berhasil dihapus']);
+
+        return redirect()->route('laporinventaris.index')
+        ->with('success', 'Data berhasil dihapus');
     }
 }

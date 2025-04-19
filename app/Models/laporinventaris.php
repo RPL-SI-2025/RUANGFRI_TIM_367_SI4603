@@ -7,38 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 class laporinventaris extends Model
 {
     protected $table = 'laporinventaris';
-
     protected $primaryKey = 'id';
 
-    protected $fillable = ['id_logistik', 'id_mahasiswa', 'datetime', 'foto_awal', 'foto_akhir', 'deskripsi'];
+    protected $fillable = [
+        'id_logistik',
+        'id_mahasiswa',
+        'datetime',
+        'foto_awal',
+        'foto_akhir',
+        'deskripsi',
+        'oleh',
+        'kepada'
+    ];
 
-
-    public static function getData($nim, $password)
+    // Relasi ke Mahasiswa
+    public function mahasiswa()
     {
-        return self::join('mahasiswa', 'laporinventaris.id_mahasiswa', '=', 'mahasiswa.id')
-                    ->where('mahasiswa.nim', $nim)
-                    ->where('mahasiswa.password', $password)
-                    ->select('laporinventaris.*', 'mahasiswa.nama as nama_mahasiswa')
-                    ->get();
+        return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa');
     }
 
-
-    public static function updateData($id, $data)
+    // Relasi ke AdminLogistik
+    public function logistik()
     {
-        $laporan = self::find($id);
-        if ($laporan) {
-            $laporan->update([
-                'id_logistik'  => $data['id_logistik'] ?? $laporan->id_logistik,
-                'id_mahasiswa' => $data['id_mahasiswa'] ?? $laporan->id_mahasiswa,
-                'datetime'     => $data['datetime'] ?? $laporan->datetime,
-                'foto_awal'    => $data['foto_awal'] ?? $laporan->foto_awal,
-                'foto_akhir'   => $data['foto_akhir'] ?? $laporan->foto_akhir,
-                'deskripsi'    => $data['deskripsi'] ?? $laporan->deskripsi,
-            ]);
-            return true;
-        }
-        return false;
+        return $this->belongsTo(AdminLogistik::class, 'id_logistik');
     }
 }
-
-

@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('nama_inventaris');
             $table->string('deskripsi');
             $table->integer('jumlah');
-            $table->enum('status', ['Tersedia', 'Tidak Tersedia']);
+            $table->enum('status', ['Tersedia', 'Tidak Tersedia'])->default('Tersedia');
             $table->timestamps();
-            
-            $table->foreign('id_logistik')->references('id_logistik')->on('admin_logistik');
+        
+            $table->foreign('id_logistik')->references('id')->on('admin_logistik');
         });
     }
 
