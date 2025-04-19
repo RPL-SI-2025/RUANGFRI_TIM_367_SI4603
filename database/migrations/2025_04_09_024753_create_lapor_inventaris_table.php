@@ -19,6 +19,10 @@ return new class extends Migration
                 $table->string('foto_awal');
                 $table->string('foto_akhir');
                 $table->string('deskripsi');
+
+                $table->string('oleh');
+                $table->string('kepada');
+
                 $table->timestamps();
         });
     }

@@ -17,7 +17,7 @@ class MahasiswaSeeder extends Seeder
             'nim' => '123456789',
             'nama_mahasiswa' => 'mahasiswa',
             'email' => 'mahasiswa@gmail.com',
-            'password' => Hash::make('password'), 
+            'password' => Hash::make('1234'), 
             'created_at' => now(),
             'updated_at' => now()
         ]);
