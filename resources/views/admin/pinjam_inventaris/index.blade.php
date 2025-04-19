@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.admin')
 
 @section('content')
 <div class="container">
@@ -9,9 +9,6 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <h5>Semua Peminjaman Inventaris</h5>
                         <div>
-                            <a href="{{ route('admin.approval') }}" class="btn btn-warning">
-                                <i class="fa fa-clock"></i> Menunggu Persetujuan
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -73,60 +70,70 @@
                                             <span class="badge {{ $badgeClass }}">{{ $pinjam->status_text }}</span>
                                         </td>
                                         <td>
-                                            <!-- Delete Modal -->
-                                            <div class="modal fade" id="deleteModal{{ $pinjam->id }}" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            Apakah Anda yakin ingin menghapus data peminjaman inventaris ini?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                            <form action="{{ route('pinjam-inventaris.destroy', $pinjam->id) }}" method="POST">
+                                            <div class="d-flex gap-2">
+                                                <!-- Detail Button -->
+                                                <a href="{{ route('pinjam-inventaris.show', $pinjam->id) }}" class="btn btn-sm btn-info text-white">
+                                                    <i class="fa fa-eye"></i> Detail
+                                                </a>
+                                                
+                                                <!-- Actions Dropdown -->
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-primary dropdown-toggle" type="button" id="actionMenu{{ $pinjam->id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fa fa-cog"></i> Tindakan
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="actionMenu{{ $pinjam->id }}">
+                                                        @if($pinjam->status == 0)
+                                                        <li>
+                                                            <form action="{{ route('pinjam-inventaris.update-status', $pinjam->id) }}" method="POST" class="d-inline">
                                                                 @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-danger">Hapus</button>
+                                                                @method('PATCH')
+                                                                <input type="hidden" name="status" value="1">
+                                                                <button type="submit" class="dropdown-item text-success" onclick="return confirm('Apakah Anda yakin ingin menyetujui peminjaman ini?')">
+                                                                    <i class="fa fa-check me-2"></i> Setujui
+                                                                </button>
                                                             </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- Status Modal -->
-                                            <div class="modal fade" id="statusModal{{ $pinjam->id }}" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="statusModalLabel">Update Status Peminjaman</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <form action="{{ route('pinjam-inventaris.update-status', $pinjam->id) }}" method="POST">
-                                                            @csrf
-                                                            @method('PATCH')
-                                                            <div class="modal-body">
-                                                                <div class="mb-3">
-                                                                    <label for="status" class="form-label">Status</label>
-                                                                    <select class="form-select" id="status" name="status" required>
-                                                                        <option value="0" {{ $pinjam->status == 0 ? 'selected' : '' }}>Menunggu Persetujuan</option>
-                                                                        <option value="1" {{ $pinjam->status == 1 ? 'selected' : '' }}>Disetujui</option>
-                                                                        <option value="2" {{ $pinjam->status == 2 ? 'selected' : '' }}>Ditolak</option>
-                                                                        <option value="3" {{ $pinjam->status == 3 ? 'selected' : '' }}>Selesai</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                                <button type="submit" class="btn btn-primary">Simpan</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
+                                                        </li>
+                                                        <li>
+                                                            <form action="{{ route('pinjam-inventaris.update-status', $pinjam->id) }}" method="POST" class="d-inline">
+                                                                @csrf
+                                                                @method('PATCH')
+                                                                <input type="hidden" name="status" value="2">
+                                                                <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Apakah Anda yakin ingin menolak peminjaman ini?')">
+                                                                    <i class="fa fa-times me-2"></i> Tolak
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                        @endif
+                                                        
+                                                        @if($pinjam->status == 1)
+                                                        <li>
+                                                            <form action="{{ route('pinjam-inventaris.update-status', $pinjam->id) }}" method="POST" class="d-inline">
+                                                                @csrf
+                                                                @method('PATCH')
+                                                                <input type="hidden" name="status" value="3">
+                                                                <button type="submit" class="dropdown-item text-primary" onclick="return confirm('Apakah Anda yakin peminjaman ini telah selesai?')">
+                                                                    <i class="fa fa-check-circle me-2"></i> Selesai
+                                                                </button>
+                                                            </form>
+                                                        </li>
+                                                        @endif
+                                                        
+                                                        <li>
+                                                            <button type="button" class="dropdown-item text-secondary" data-bs-toggle="modal" data-bs-target="#statusModal{{ $pinjam->id }}">
+                                                                <i class="fa fa-edit me-2"></i> Ubah Status
+                                                            </button>
+                                                        </li>
+                                                        <li><hr class="dropdown-divider"></li>
+                                                        <li>
+                                                            <button type="button" class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $pinjam->id }}">
+                                                                <i class="fa fa-trash me-2"></i> Hapus
+                                                            </button>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </td>
+
                                     </tr>
                                 @empty
                                     <tr>
