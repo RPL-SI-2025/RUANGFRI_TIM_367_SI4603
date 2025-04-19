@@ -9,9 +9,10 @@
     <style>
         .sidebar {
             min-height: 100vh;
-            background-color: #343a40;
+            background-color: #198754;
             color: white;
         }
+        
         .sidebar .nav-link {
             color: rgba(255,255,255,.75);
         }
@@ -32,15 +33,36 @@
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-2 sidebar p-3">
-                <h3 class="text-center">Inventaris</h3>
+                <h3 class="text-center">Ruang FRI</h3>
                 <hr>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->is('pinjam-inventaris*') ? 'active' : '' }}" href="{{ route('pinjam-inventaris.index') }}">
-                            <i class="fas fa-clipboard-list me-2"></i> Peminjaman
+                        <a class="nav-link" data-bs-toggle="collapse" href="#ruanganMenu" role="button" aria-expanded="false" aria-controls="ruanganMenu">
+                            <i class="fas fa-door-open me-2"></i> Ruangan
                         </a>
+                        <div class="collapse ms-3" id="ruanganMenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item"><a class="nav-link" href="#">Katalog</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#">Peminjaman</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#">Pelaporan</a></li>
+                            </ul>
+                        </div>
                     </li>
-                    <!-- Tambahkan menu lain sesuai kebutuhan -->
+
+                    <!-- Menu Inventaris -->
+                    <li class="nav-item mt-2">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#inventarisMenu" role="button" aria-expanded="false" aria-controls="inventarisMenu">
+                            <i class="fas fa-clipboard-list me-2"></i> Inventaris
+                        </a>
+                        <div class="collapse ms-3" id="inventarisMenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item"><a class="nav-link" href="#">Katalog</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#">Peminjaman</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#">Pelaporan</a></li>
+                            </ul>
+                        </div>
+                    </li>
+
                 </ul>
             </div>
 
