@@ -7,6 +7,7 @@ use App\Http\Controllers\ControllerMahasiswa;
 use App\Http\Controllers\ControllerRuangan;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AdminLogistikController;
+use App\Http\Controllers\PelaporanController;
 
 
 
@@ -134,3 +135,7 @@ Route::patch('/pinjam-inventaris/{pinjamInventaris}/status', [PinjamInventarisCo
 
 // Admin approval interface
 Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
+
+// Pelaporan Ruangan
+
+Route::resource('pelaporans', PelaporanController::class);

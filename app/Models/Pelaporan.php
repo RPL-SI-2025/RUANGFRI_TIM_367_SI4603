@@ -2,20 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Pelaporan extends Model
 {
-    protected $primaryKey = 'id_lapor_ruangan';
+    use HasFactory;
 
     protected $fillable = [
-    'id_mahasiswa',
-    'id_logistik',
-    'datetime',
-    'foto_awal',
-    'foto_akhir',
-    'deskripsi',
-    'oleh',
-    'kepada'
+        'id_mahasiswa',
+        'id_logistik',
+        'datetime',
+        'deskripsi',
+        'oleh',
+        'kepada',
+        'foto_awal',
+        'foto_akhir',
     ];
 }
