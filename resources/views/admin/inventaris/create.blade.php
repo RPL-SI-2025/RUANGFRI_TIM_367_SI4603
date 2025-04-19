@@ -8,8 +8,14 @@
         <h5 class="mb-0">Tambah Inventaris</h5>
     </div>
     <div class="card-body">
-        <form action="{{ route('admin.inventaris.store') }}" method="POST">
+        <form action="{{ route('admin.inventaris.store') }}" enctype="multipart/form-data" method="POST">
             @csrf
+
+            <div class="mb-3">
+                <label for="gambar_inventaris" class="form-label">Gambar</label>
+                <input type="file" class="form-control" name="gambar_inventaris" accept="image/*" required>
+            </div>
+            
 
             <div class="mb-3">
                 <label for="nama_inventaris" class="form-label">Nama Inventaris</label>

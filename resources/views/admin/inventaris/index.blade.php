@@ -16,6 +16,7 @@
     <thead>
         <tr>
             <th>No</th>
+            <th>Foto</th>
             <th>Nama Inventaris</th>
             <th>Deskripsi</th>
             <th>Jumlah</th>
@@ -27,6 +28,15 @@
         @foreach ($inventaris as $item)
         <tr>
             <td>{{ $loop->iteration }}</td>
+            <td>
+                @if ($item->gambar_inventaris)
+                <img src="{{ asset('storage/inventaris/' . $item->gambar_inventaris) }}" alt="{{ $item->nama_inventaris }}" width="100">
+            @else
+                Tidak ada gambar
+            @endif
+            
+            </td>
+            
             <td>{{ $item->nama_inventaris }}</td>
             <td>{{ $item->deskripsi }}</td>
             <td>{{ $item->jumlah }}</td>

@@ -12,11 +12,11 @@ class Inventaris extends Model
     protected $table = 'inventaris';
 
     protected $fillable = [
-        'id_logistik',
         'nama_inventaris',
         'deskripsi',
         'jumlah',
         'status',
+        'gambar_inventaris',
     ];
 
     // Relasi ke AdminLogistik
