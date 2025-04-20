@@ -40,7 +40,7 @@
                     <button class="btn btn-sm btn-danger">Hapus</button>
                 </form>
             </td>
-            
+ 
         </tr>
         @endforeach
     </tbody>

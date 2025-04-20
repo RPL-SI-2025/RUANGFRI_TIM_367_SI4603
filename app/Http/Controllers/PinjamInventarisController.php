@@ -146,12 +146,13 @@ class PinjamInventarisController extends Controller
                 ->with('error', 'Anda tidak memiliki akses untuk mengubah peminjaman ini.');
         }
         
-        // If status is already approved or completed, don't allow updating
+        // jikane status peminjaman sudah disetujui atau selesai
         if (in_array($pinjamInventaris->status, [1, 3])) {
             return redirect()->route('pinjam-inventaris.mahasiswa')
                 ->with('error', 'Peminjaman yang sudah disetujui atau selesai tidak dapat diubah.');
         }
-        
+
+        //validasi input
         $request->validate([
             'tanggal_pengajuan' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_pengajuan',
@@ -160,7 +161,8 @@ class PinjamInventarisController extends Controller
             'file_scan' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
         
-
+        // Menangani unggahan file
+        // jika ada file baru yang diunggah, hapus file lama
         if ($request->hasFile('file_scan')) {
 
             if ($pinjamInventaris->file_scan) {
@@ -174,6 +176,7 @@ class PinjamInventarisController extends Controller
             $pinjamInventaris->file_scan = $fileName;
         }
         
+        // Update pinjaman
         $pinjamInventaris->tanggal_pengajuan = $request->tanggal_pengajuan;
         $pinjamInventaris->tanggal_selesai = $request->tanggal_selesai;
         $pinjamInventaris->waktu_mulai = $request->waktu_mulai;
@@ -220,7 +223,7 @@ class PinjamInventarisController extends Controller
     // Admin approval interface
     public function adminIndex()
     {
-        $peminjaman = PinjamInventaris::with(['admin,mahasiswa'])
+        $peminjaman = PinjamInventaris::with(['inventaris', 'mahasiswa'])
                         ->latest()
                         ->paginate(10);
                         
@@ -234,6 +237,10 @@ class PinjamInventarisController extends Controller
                 ->paginate(10);
                 
         return view('admin.pinjam_inventaris.admin_approval', compact('pending'));
+    }
+    public function adminShow(PinjamInventaris $pinjamInventaris)
+    {
+        return view('admin.pinjam_inventaris.show', compact('pinjamInventaris'));
     }
     
 

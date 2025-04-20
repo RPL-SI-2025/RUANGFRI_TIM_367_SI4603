@@ -66,6 +66,8 @@ Route::controller(ControllerRuangan::class)->group(function () {
 
 // Admin approval interface
 Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
+Route::get('/admin/daftar peminjaman', [PinjamInventarisController::class, 'adminIndex'])->name('pinjam-inventaris.index');
+Route::get('/admin/peminjaman/{pinjamInventaris}', [PinjamInventarisController::class, 'adminShow'])->name('pinjam-inventaris.show');
 Route::patch('/pinjam-inventaris/{pinjamInventaris}/update-status', [PinjamInventarisController::class, 'updateStatus'])->name('pinjam-inventaris.update-status');
 Route::delete('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'destroy'])->name('pinjam-inventaris.destroy');
 
