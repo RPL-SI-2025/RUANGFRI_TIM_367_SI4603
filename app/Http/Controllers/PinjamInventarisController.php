@@ -21,12 +21,12 @@ class PinjamInventarisController extends Controller
             return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
         }
         
-        $peminjaman = PinjamInventaris::with('inventaris')
+        $pinjamInventaris = PinjamInventaris::with('inventaris')
                     ->where('id_mahasiswa', $mahasiswaId)
                     ->latest()
                     ->paginate(10);
                     
-        return view('mahasiswa.peminjaman.pinjam_inventaris.index', compact('peminjaman'));
+        return view('mahasiswa.peminjaman.pinjam_inventaris.index', compact('pinjamInventaris'));
     }
     
     // Permintaan peminjaman inventaris untuk mahasiswa
@@ -38,12 +38,12 @@ class PinjamInventarisController extends Controller
             return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
         }
         
-        $peminjaman = PinjamInventaris::with('inventaris')
+        $pinjamInventaris = PinjamInventaris::with('inventaris')
                     ->where('id_mahasiswa', $mahasiswaId)
                     ->latest()
                     ->paginate(10);
                     
-        return view('mahasiswa.peminjaman.pinjam_inventaris.index', compact('peminjaman'));
+        return view('mahasiswa.peminjaman.pinjam_inventaris.index', compact('pinjamInventaris'));
     }
 
     // Buat formulir permintaan pinjaman baru
@@ -60,7 +60,7 @@ class PinjamInventarisController extends Controller
 
     // Simpan permintaan pinjaman baru
     public function store(Request $request)
-{
+    {
         $request->validate([
             'tanggal_pengajuan' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_pengajuan',
@@ -81,7 +81,7 @@ class PinjamInventarisController extends Controller
             return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong!');
         }
         
-        // Menangani unggahan file
+        // Handle file upload once for all items
         $fileName = null;
         if ($request->hasFile('file_scan')) {
             $file = $request->file('file_scan');
@@ -89,10 +89,12 @@ class PinjamInventarisController extends Controller
             $filePath = $file->storeAs('uploads/file_scan', $fileName, 'public');
         }
         
-        // Simpan pinjaman
+        // menambahkan peminjaman inventaris
         foreach ($cartItems as $item) {
+
             PinjamInventaris::create([
                 'id_inventaris' => $item['id'],
+                'jumlah_pinjam' => $item['jumlah'],
                 'id_mahasiswa' => $mahasiswaId,
                 'tanggal_pengajuan' => $request->tanggal_pengajuan,
                 'tanggal_selesai' => $request->tanggal_selesai,
@@ -103,18 +105,26 @@ class PinjamInventarisController extends Controller
             ]);
         }
         
-        // Kosongkan keranjang setelah pengiriman berhasil
+        // Clear cart after successful submission
         Session::forget('cart');
         
         return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
             ->with('success', 'Pengajuan peminjaman inventaris berhasil ditambahkan.');
     }
 
-    // Show loan request details
+ 
     public function show(PinjamInventaris $pinjamInventaris)
-    {
-        return view('mahasiswa.peminjaman.pinjam_inventaris.show', compact('pinjamInventaris'));
+{
+    $mahasiswaId = Session::get('mahasiswa_id');
+    
+    if ($pinjamInventaris->id_mahasiswa != $mahasiswaId) {
+        return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
+            ->with('error', 'Anda tidak diizinkan melihat peminjaman ini.');
     }
+    
+    return view('mahasiswa.peminjaman.pinjam_inventaris.show', compact('pinjamInventaris'));
+    }
+
 
     public function edit(PinjamInventaris $pinjamInventaris)
     {
@@ -138,65 +148,64 @@ class PinjamInventarisController extends Controller
 
     public function update(Request $request, PinjamInventaris $pinjamInventaris)
     {
-
-        $mahasiswaId = Session::get('mahasiswa_id');
-        
-        if (!$mahasiswaId || $pinjamInventaris->id_mahasiswa != $mahasiswaId) {
-            return redirect()->route('pinjam-inventaris.mahasiswa')
-                ->with('error', 'Anda tidak memiliki akses untuk mengubah peminjaman ini.');
-        }
-        
-        // jikane status peminjaman sudah disetujui atau selesai
-        if (in_array($pinjamInventaris->status, [1, 3])) {
-            return redirect()->route('pinjam-inventaris.mahasiswa')
-                ->with('error', 'Peminjaman yang sudah disetujui atau selesai tidak dapat diubah.');
-        }
-
-        //validasi input
-        $request->validate([
-            'tanggal_pengajuan' => 'required|date',
-            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_pengajuan',
-            'waktu_mulai' => 'required',
-            'waktu_selesai' => 'required',
-            'file_scan' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        ]);
-        
-        // Menangani unggahan file
-        // jika ada file baru yang diunggah, hapus file lama
-        if ($request->hasFile('file_scan')) {
-
-            if ($pinjamInventaris->file_scan) {
-                Storage::disk('public')->delete('uploads/file_scan/' . $pinjamInventaris->file_scan);
-            }
-            
-            $file = $request->file('file_scan');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('uploads/file_scan', $fileName, 'public');
-            
-            $pinjamInventaris->file_scan = $fileName;
-        }
-        
-        // Update pinjaman
-        $pinjamInventaris->tanggal_pengajuan = $request->tanggal_pengajuan;
-        $pinjamInventaris->tanggal_selesai = $request->tanggal_selesai;
-        $pinjamInventaris->waktu_mulai = $request->waktu_mulai;
-        $pinjamInventaris->waktu_selesai = $request->waktu_selesai;
-        $pinjamInventaris->save();
-        
-        return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
-            ->with('success', 'Pengajuan peminjaman berhasil diperbarui.');
+    $mahasiswaId = Session::get('mahasiswa_id');
+    
+    if (!$mahasiswaId || $pinjamInventaris->id_mahasiswa != $mahasiswaId) {
+        return redirect()->route('pinjam-inventaris.mahasiswa')
+            ->with('error', 'Anda tidak memiliki akses untuk mengubah peminjaman ini.');
     }
-    public function destroy(PinjamInventaris $pinjamInventaris)
-    {
-        // Delete file if exists
+    
+    // jikane status peminjaman sudah disetujui atau selesai
+    if (in_array($pinjamInventaris->status, [1, 3])) {
+        return redirect()->route('pinjam-inventaris.mahasiswa')
+            ->with('error', 'Peminjaman yang sudah disetujui atau selesai tidak dapat diubah.');
+    }
+
+    //validasi input
+    $request->validate([
+        'tanggal_pengajuan' => 'required|date',
+        'tanggal_selesai' => 'required|date|after_or_equal:tanggal_pengajuan',
+        'waktu_mulai' => 'required',
+        'waktu_selesai' => 'required',
+        'file_scan' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'inventaris' => 'required|array',
+        'inventaris.*.jumlah' => 'required|integer|min:1',
+    ]);
+    
+    // Menangani unggahan file
+    // jika ada file baru yang diunggah, hapus file lama
+    if ($request->hasFile('file_scan')) {
         if ($pinjamInventaris->file_scan) {
             Storage::disk('public')->delete('uploads/file_scan/' . $pinjamInventaris->file_scan);
         }
         
-        $pinjamInventaris->delete();
+        $file = $request->file('file_scan');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $file->storeAs('uploads/file_scan', $fileName, 'public');
         
-        return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
-            ->with('success', 'Pengajuan peminjaman berhasil dihapus.');
+        $pinjamInventaris->file_scan = $fileName;
+    }
+    
+    // Update pinjaman
+    $pinjamInventaris->tanggal_pengajuan = $request->tanggal_pengajuan;
+    $pinjamInventaris->tanggal_selesai = $request->tanggal_selesai;
+    $pinjamInventaris->waktu_mulai = $request->waktu_mulai;
+    $pinjamInventaris->waktu_selesai = $request->waktu_selesai;
+    $pinjamInventaris->save();
+    
+    // Update quantity for each related item
+    if ($request->has('inventaris')) {
+        foreach ($request->inventaris as $id => $data) {
+            $pinjamItem = PinjamInventaris::find($id);
+            if ($pinjamItem && $pinjamItem->id_mahasiswa == $mahasiswaId) {
+                $pinjamItem->jumlah_pinjam = $data['jumlah'];
+                $pinjamItem->save();
+            }
+        }
+    }
+    
+    return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
+        ->with('success', 'Pengajuan peminjaman berhasil diperbarui.');
     }
     
     // Update loan request status
@@ -225,23 +234,72 @@ class PinjamInventarisController extends Controller
     {
         $peminjaman = PinjamInventaris::with(['inventaris', 'mahasiswa'])
                         ->latest()
-                        ->paginate(10);
+                        ->get();
                         
-        return view('admin.pinjam_inventaris.index', compact('peminjaman'));
+        // Group peminjaman by tanggal_pengajuan, tanggal_selesai, waktu_mulai, waktu_selesai, file_scan, and id_mahasiswa
+        $groupedPeminjaman = $peminjaman->groupBy(function($item) {
+            return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                  $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan . '-' . $item->id_mahasiswa;
+        });
+        
+        // Convert to paginated collection
+        $perPage = 10;
+        $currentPage = request()->input('page', 1);
+        $pagedData = $groupedPeminjaman->forPage($currentPage, $perPage);
+        
+        $paginatedGroupedPeminjaman = new \Illuminate\Pagination\LengthAwarePaginator(
+            $pagedData,
+            $groupedPeminjaman->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+                        
+        return view('admin.pinjam_inventaris.index', compact('paginatedGroupedPeminjaman'));
     }
+    
     public function adminApproval()
     {
-        $pending = PinjamInventaris::with(['inventaris', 'mahasiswa'])
+        $pendingRequests = PinjamInventaris::with(['inventaris', 'mahasiswa'])
                 ->where('status', 0)
                 ->latest()
-                ->paginate(10);
+                ->get();
                 
-        return view('admin.pinjam_inventaris.admin_approval', compact('pending'));
+        // Group pending requests by the same criteria
+        $groupedPending = $pendingRequests->groupBy(function($item) {
+            return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                  $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan . '-' . $item->id_mahasiswa;
+        });
+        
+        // Convert to paginated collection
+        $perPage = 10;
+        $currentPage = request()->input('page', 1);
+        $pagedData = $groupedPending->forPage($currentPage, $perPage);
+        
+        $paginatedGroupedPending = new \Illuminate\Pagination\LengthAwarePaginator(
+            $pagedData,
+            $groupedPending->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+                
+        return view('admin.pinjam_inventaris.admin_approval', compact('paginatedGroupedPending'));
     }
+
     public function adminShow(PinjamInventaris $pinjamInventaris)
-    {
-        return view('admin.pinjam_inventaris.show', compact('pinjamInventaris'));
-    }
+{
+    $relatedItems = PinjamInventaris::where('tanggal_pengajuan', $pinjamInventaris->tanggal_pengajuan)
+        ->where('tanggal_selesai', $pinjamInventaris->tanggal_selesai)
+        ->where('waktu_mulai', $pinjamInventaris->waktu_mulai)
+        ->where('waktu_selesai', $pinjamInventaris->waktu_selesai)
+        ->where('file_scan', $pinjamInventaris->file_scan)
+        ->where('id_mahasiswa', $pinjamInventaris->id_mahasiswa)
+        ->with(['inventaris', 'mahasiswa'])
+        ->get();
+        
+    return view('admin.pinjam_inventaris.show', compact('pinjamInventaris', 'relatedItems'));
+}
     
 
 }
