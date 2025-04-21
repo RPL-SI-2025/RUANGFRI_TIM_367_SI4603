@@ -103,7 +103,12 @@ Route::prefix('admin')->group(function () {
 
 //Lapor Inventaris
 Route::get('/laporinventaris', [laporinventarisController::class, 'index'])->name('laporinventaris.index');
-
+Route::get('/laporinventaris/create', [laporinventarisController::class, 'create'])->name('admin.laporinventaris.create');
+Route::post('/laporinventaris', [laporinventarisController::class, 'store'])->name('admin.laporinventaris.store');
+Route::get('/laporinventaris/{lapor_inventaris}/edit', [laporinventarisController::class, 'edit'])->name('admin.laporinventaris.edit');
+Route::put('/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'update'])->name('admin.laporinventaris.update');
+Route::delete('/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'destroy'])->name('admin.laporinventaris.destroy');
+Route::get('/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'show'])->name('admin.laporinventaris.show');
 
 
 Route::get('/mahasiswa/login', [App\Http\Controllers\MahasiswaAuthController::class, 'showLoginForm'])->name('mahasiswa.login');

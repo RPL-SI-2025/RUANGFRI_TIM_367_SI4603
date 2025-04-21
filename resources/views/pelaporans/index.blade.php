@@ -39,6 +39,7 @@
                         <button type="submit" onclick="return confirm('Hapus data ini?')">Hapus</button>
                     </form>
                 </td>
+            
             </tr>
             @endforeach
         </tbody>
