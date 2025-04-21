@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('admin.layouts.admin')
 
 @section('title', 'Data Inventaris')
 
@@ -32,16 +32,18 @@
             <td>{{ $item->jumlah }}</td>
             <td>{{ $item->status }}</td>
             <td>
-                <a class="btn btn-sm btn-warning">Edit</a>
-                <form  method="POST" class="d-inline"
+                <a href="{{ route('admin.inventaris.edit', $item) }}" class="btn btn-sm btn-warning">Edit</a>
+                <form action="{{ route('admin.inventaris.destroy', $item) }}" method="POST" class="d-inline"
                       onsubmit="return confirm('Yakin ingin menghapus?')">
                     @csrf
                     @method('DELETE')
                     <button class="btn btn-sm btn-danger">Hapus</button>
                 </form>
             </td>
+ 
         </tr>
         @endforeach
     </tbody>
 </table>
 @endsection
+

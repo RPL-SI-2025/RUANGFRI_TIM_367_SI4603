@@ -17,7 +17,7 @@
                         <h5 class="text-secondary mb-0">
                             <i class="fa fa-list me-2"></i>Daftar Inventaris
                         </h5>
-                        <a href="{{ route('mahasiswa.inventaris.index') }}" class="btn btn-primary rounded-pill px-4">
+                        <a href="{{ route('mahasiswa.katalog.inventaris.index') }}" class="btn btn-primary rounded-pill px-4">
                             <i class="fa fa-plus me-1"></i> Tambah Inventaris
                         </a>
                     </div>
@@ -92,7 +92,7 @@
                                 <i class="fa fa-shopping-cart fa-4x text-muted"></i>
                             </div>
                             <h5 class="text-muted mb-4">Keranjang Anda masih kosong</h5>
-                            <a href="{{ route('mahasiswa.inventaris.index') }}" class="btn btn-primary rounded-pill px-4">
+                            <a href="{{ route('mahasiswa.katalog.inventaris.index') }}" class="btn btn-primary rounded-pill px-4">
                                 <i class="fa fa-plus me-1"></i> Pilih Inventaris
                             </a>
                         </div>

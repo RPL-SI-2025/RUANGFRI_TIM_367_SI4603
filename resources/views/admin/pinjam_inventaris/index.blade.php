@@ -1,96 +1,81 @@
-@extends('layouts.app')
+@extends('admin.layouts.admin')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5>Semua Peminjaman Inventaris</h5>
-                        <div>
-                            <a href="{{ route('admin.approval') }}" class="btn btn-warning">
-                                <i class="fa fa-clock"></i> Menunggu Persetujuan
-                            </a>
-                        </div>
-                    </div>
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Daftar Peminjaman Inventaris</h6>
+        </div>
+        <div class="card-body">
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
                 </div>
-
-                <div class="card-body">
-                    @if(session('success'))
-                        <div class="alert alert-success">{{ session('success') }}</div>
-                    @endif
-
-                    @if(session('error'))
-                        <div class="alert alert-danger">{{ session('error') }}</div>
-                    @endif
-
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>No</th>
-                                    <th>Inventaris</th>
-                                    <th>Peminjam</th>
-                                    <th>Tanggal</th>
-                                    <th>Waktu</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($peminjaman as $index => $pinjam)
-                                    <tr>
-                                        <td>{{ $index + $peminjaman->firstItem() }}</td>
-                                        <td>{{ $pinjam->inventaris->nama_inventaris ?? 'N/A' }}</td>
-                                        <td>{{ $pinjam->mahasiswa->nama ?? 'N/A' }} ({{ $pinjam->mahasiswa->nim ?? 'N/A' }})</td>
-                                        <td>
-                                            {{ \Carbon\Carbon::parse($pinjam->tanggal_pengajuan)->format('d-m-Y') }} s/d
-                                            {{ \Carbon\Carbon::parse($pinjam->tanggal_selesai)->format('d-m-Y') }}
-                                        </td>
-                                        <td>
-                                            {{ \Carbon\Carbon::parse($pinjam->waktu_mulai)->format('H:i') }} - 
-                                            {{ \Carbon\Carbon::parse($pinjam->waktu_selesai)->format('H:i') }}
-                                        </td>
-                                        <td>
-                                            @php
-                                                $badgeClass = '';
-                                                switch($pinjam->status) {
-                                                    case 0:
-                                                        $badgeClass = 'bg-warning';
-                                                        break;
-                                                    case 1:
-                                                        $badgeClass = 'bg-success';
-                                                        break;
-                                                    case 2:
-                                                        $badgeClass = 'bg-danger';
-                                                        break;
-                                                    case 3:
-                                                        $badgeClass = 'bg-info';
-                                                        break;
-                                                }
-                                            @endphp
-                                            <span class="badge {{ $badgeClass }}">{{ $pinjam->status_text }}</span>
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('pinjam-inventaris.show', $pinjam->id_pinjam_inventaris) }}" class="btn btn-sm btn-info text-white">
-                                                <i class="fa fa-eye"></i> Detail
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="7" class="text-center">Tidak ada data peminjaman inventaris</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="d-flex justify-content-center mt-3">
-                        {{ $peminjaman->links() }}
-                    </div>
-                </div>
+            @endif
+            
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Mahasiswa</th>
+                            <th>Tanggal Pengajuan</th>
+                            <th>Tanggal Selesai</th>
+                            <th>Item yang Dipinjam</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                            <th>Tanggal Dibuat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($paginatedGroupedPeminjaman as $key => $group)
+                            @php 
+                                $firstItem = $group->first(); 
+                            @endphp
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $firstItem->mahasiswa->nama_mahasiswa ?? 'Tidak ditemukan' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($firstItem->tanggal_pengajuan)->format('d-m-Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($firstItem->tanggal_selesai)->format('d-m-Y') }}</td>
+                                <td>
+                                    <ul>
+                                        @foreach($group as $pinjam)
+                                            <li>{{ $pinjam->inventaris->nama_inventaris ?? 'Inventaris tidak ditemukan' }} ({{ $pinjam->jumlah_pinjam }})</li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+                                <td>
+                                    @php
+                                        $statusClass = match($firstItem->status) {
+                                            0 => 'warning',
+                                            1 => 'success',
+                                            2 => 'danger',
+                                            3 => 'info',
+                                            default => 'secondary'
+                                        };
+                                        $statusText = match($firstItem->status) {
+                                            0 => 'Menunggu Persetujuan',
+                                            1 => 'Disetujui',
+                                            2 => 'Ditolak',
+                                            3 => 'Selesai',
+                                            default => 'Tidak Diketahui'
+                                        };
+                                    @endphp
+                                    <span class="badge bg-{{ $statusClass }}">{{ $statusText }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{ route('admin.pinjam-inventaris.show', $firstItem->id) }}" class="btn btn-sm btn-info">Detail</a>
+                                </td>
+                                <td>{{ \Carbon\Carbon::parse($firstItem->created_at)->format('d-m-Y H:i') }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center mt-4">
+                {{ $paginatedGroupedPeminjaman->links() }}
             </div>
         </div>
     </div>

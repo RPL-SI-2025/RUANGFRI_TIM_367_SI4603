@@ -29,7 +29,7 @@ class CartController extends Controller
         
         $cart = Session::get('cart', []);
         
-        // Check if item already exists in cart
+        // Iki buat ngecek apa barang yang mau ditambah udah ada di cart apa durung
         $itemId = $inventaris->id;
         $newQuantity = $request->jumlah;
         
@@ -63,7 +63,7 @@ class CartController extends Controller
         
         Session::put('cart', $cart);
         
-        return redirect()->route('mahasiswa.inventaris.index')->with('success', 'Item berhasil ditambahkan ke keranjang.');
+        return redirect()->route('mahasiswa.katalog.inventaris.index')->with('success', 'Item berhasil ditambahkan ke keranjang.');
     }
     
     public function remove($id)
@@ -92,7 +92,7 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong.');
         }
         
-        return redirect()->route('pinjam-inventaris.create');
+        return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.create');
     }
 
     public function update(Request $request, $id)
