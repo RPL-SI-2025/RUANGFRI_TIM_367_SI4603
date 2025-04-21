@@ -35,7 +35,7 @@ Route::prefix('mahasiswa')->group(function () {
     Route::get('/inventaris/{id}', [InventarisController::class, 'mahasiswaShow'])->name('mahasiswa.inventaris.show');
 });
 
-=======
+
 
 // Ruangan routes
 Route::controller(ControllerRuangan::class)->group(function () {
