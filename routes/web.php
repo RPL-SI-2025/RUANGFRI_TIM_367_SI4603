@@ -80,7 +80,6 @@ Route::controller(ControllerRuangan::class)->group(function () {
 // });
 
 // Admin approval interface
-<<<<<<< HEAD
 Route::prefix('admin')->group(function () {
     // Admin Dashboard
     Route::get('/dashboard', [AdminLogistikController::class, 'index'])->name('admin.dashboard');
@@ -143,7 +142,6 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::get('/pinjam-inventaris/{pinjamInventaris}/edit', [PinjamInventarisController::class, 'edit'])->name('mahasiswa.peminjaman.pinjam-inventaris.edit');
     Route::put('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'update'])->name('pinjam-inventaris.update');
 });
-=======
 Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
 
 // Pelaporan Ruangan
