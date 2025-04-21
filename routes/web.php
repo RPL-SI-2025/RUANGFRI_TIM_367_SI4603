@@ -34,7 +34,7 @@ Route::prefix('mahasiswa')->group(function () {
     Route::get('/inventaris', [InventarisController::class, 'mahasiswaIndex'])->name('mahasiswa.inventaris.index');
     Route::get('/inventaris/{id}', [InventarisController::class, 'mahasiswaShow'])->name('mahasiswa.inventaris.show');
 });
-<<<<<<< HEAD
+
 =======
 
 // Ruangan routes
@@ -46,7 +46,6 @@ Route::controller(ControllerRuangan::class)->group(function () {
     Route::put('/ruangan/{id}', 'update')->name('ruangan.update');
     Route::delete('/ruangan/{id}', 'destroy')->name('ruangan.destroy');
 });
->>>>>>> 0273c8b5091bfdc9361e83b8f9747848a580978f
 
 
 // Ruangan routes
