@@ -10,6 +10,7 @@ use App\Http\Controllers\laporinventarisController;
 use App\Models\laporinventaris; 
 use App\Http\Controllers\MahasiswaAuthController;
 use App\Http\Controllers\AdminLogistikController;
+use App\Http\Controllers\PelaporanController;
 
 
 Route::get('/', function () {
@@ -33,6 +34,19 @@ Route::prefix('mahasiswa')->group(function () {
     Route::get('/inventaris', [InventarisController::class, 'mahasiswaIndex'])->name('mahasiswa.inventaris.index');
     Route::get('/inventaris/{id}', [InventarisController::class, 'mahasiswaShow'])->name('mahasiswa.inventaris.show');
 });
+<<<<<<< HEAD
+=======
+
+// Ruangan routes
+Route::controller(ControllerRuangan::class)->group(function () {
+    Route::get('/ruangan', 'index')->name('ruangan.index');
+    Route::get('/ruangan/create', 'create')->name('ruangan.create');
+    Route::post('/ruangan/store', 'store')->name('ruangan.store');
+    Route::get('/ruangan/{id}/edit', 'edit')->name('ruangan.edit');
+    Route::put('/ruangan/{id}', 'update')->name('ruangan.update');
+    Route::delete('/ruangan/{id}', 'destroy')->name('ruangan.destroy');
+});
+>>>>>>> 0273c8b5091bfdc9361e83b8f9747848a580978f
 
 
 // Ruangan routes
@@ -66,6 +80,7 @@ Route::controller(ControllerRuangan::class)->group(function () {
 // });
 
 // Admin approval interface
+<<<<<<< HEAD
 Route::prefix('admin')->group(function () {
     // Admin Dashboard
     Route::get('/dashboard', [AdminLogistikController::class, 'index'])->name('admin.dashboard');
@@ -128,3 +143,10 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::get('/pinjam-inventaris/{pinjamInventaris}/edit', [PinjamInventarisController::class, 'edit'])->name('mahasiswa.peminjaman.pinjam-inventaris.edit');
     Route::put('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'update'])->name('pinjam-inventaris.update');
 });
+=======
+Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
+
+// Pelaporan Ruangan
+
+Route::resource('pelaporans', PelaporanController::class);
+
