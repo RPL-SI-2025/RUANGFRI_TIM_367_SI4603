@@ -56,23 +56,6 @@ class Mahasiswa extends Authenticatable
         return $this->hasMany(LaporInventaris::class, 'id_mahasiswa');
     }
 }
-<<<<<<< HEAD
 
-    //protected $table = 'mahasiswa';?
-// protected $primaryKey = 'id';
-// protected $fillable = [
-//     'name',
-//     'email',
-//     'phone',
-//     'address'
-// ];
-
-
-=======
-
-
-
-
->>>>>>> b958ef0b62d06cd3198156ac1b5750fe7d5bae47
 
 ?>
