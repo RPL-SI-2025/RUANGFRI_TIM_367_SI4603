@@ -13,25 +13,8 @@ use App\Http\Controllers\AdminLogistikController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('mahasiswa.auth.login');
 });
-
-// Admin Dashboard
-
-Route::get('/admin/dashboard', [AdminLogistikController::class, 'index'])->name('admin.dashboard');
-
-// Admin Inventaris CRUD
-
-Route::get('/admin/inventaris', [InventarisController::class, 'index'])->name('admin.inventaris.index');
-Route::get('/admin/inventaris/create', [InventarisController::class, 'create'])->name('admin.inventaris.create');
-Route::post('/admin/inventaris', [InventarisController::class, 'store'])->name('admin.inventaris.store');
-Route::get('/admin/inventaris/{inventaris}/edit', [InventarisController::class, 'edit'])->name('admin.inventaris.edit');
-Route::put('/admin/inventaris/{inventaris}', [InventarisController::class, 'update'])->name('admin.inventaris.update');
-Route::delete('/admin/inventaris/{inventaris}', [InventarisController::class, 'destroy'])->name('admin.inventaris.destroy');
-Route::get('/admin/inventaris/{inventaris}', [InventarisController::class, 'show'])->name('admin.inventaris.show');
-
-    
-
 
 // Ruangan routes
 Route::controller(ControllerRuangan::class)->group(function () {
@@ -42,7 +25,6 @@ Route::controller(ControllerRuangan::class)->group(function () {
     Route::put('/ruangan/{id}', 'update')->name('ruangan.update');
     Route::delete('/ruangan/{id}', 'destroy')->name('ruangan.destroy');
 });
-
 
 // // Ruangan routes
 // Route::controller(ControllerRuangan::class)->group(function () {
@@ -65,14 +47,30 @@ Route::controller(ControllerRuangan::class)->group(function () {
 // });
 
 // Admin approval interface
-Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
-Route::patch('/pinjam-inventaris/{pinjamInventaris}/update-status', [PinjamInventarisController::class, 'updateStatus'])->name('pinjam-inventaris.update-status');
-Route::delete('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'destroy'])->name('pinjam-inventaris.destroy');
+Route::prefix('admin')->group(function () {
+    // Admin Dashboard
+    Route::get('/dashboard', [AdminLogistikController::class, 'index'])->name('admin.dashboard');
+
+    // Admin Inventaris CRUD
+    Route::get('/inventaris', [InventarisController::class, 'index'])->name('admin.inventaris.index');
+    Route::get('/inventaris/create', [InventarisController::class, 'create'])->name('admin.inventaris.create');
+    Route::post('/inventaris', [InventarisController::class, 'store'])->name('admin.inventaris.store');
+    Route::get('/inventaris/{inventaris}/edit', [InventarisController::class, 'edit'])->name('admin.inventaris.edit');
+    Route::put('/inventaris/{inventaris}', [InventarisController::class, 'update'])->name('admin.inventaris.update');
+    Route::delete('/inventaris/{inventaris}', [InventarisController::class, 'destroy'])->name('admin.inventaris.destroy');
+    Route::get('/inventaris/{inventaris}', [InventarisController::class, 'show'])->name('admin.inventaris.show');
+
+    Route::get('/pinjam-inventaris', [PinjamInventarisController::class, 'adminIndex'])->name('admin.pinjam-inventaris.index');
+    Route::get('/pinjam-inventaris/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.pinjam-inventaris.approval');
+    Route::get('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'adminShow'])->name('admin.pinjam-inventaris.show');
+    Route::patch('/pinjam-inventaris/{pinjamInventaris}/update-status', [PinjamInventarisController::class, 'updateStatus'])->name('pinjam-inventaris.update-status');
+    Route::delete('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'destroy'])->name('pinjam-inventaris.destroy');
+    Route::put('/pinjam-inventaris/{pinjamInventaris}/update-status', [PinjamInventarisController::class, 'updateStatus'])->name('pinjam-inventaris.update-status');
+});
+
 
 //Lapor Inventaris
 Route::get('/laporinventaris', [laporinventarisController::class, 'index'])->name('laporinventaris.index');
-
-
 
 
 

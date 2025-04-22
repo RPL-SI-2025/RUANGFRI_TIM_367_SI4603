@@ -1,107 +1,80 @@
-@extends('layouts.app')
+
+@extends('admin.layouts.admin')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5>Daftar Pengajuan Peminjaman Inventaris yang Menunggu Persetujuan</h5>
-                        <div>
-                            <a href="{{ route('pinjam-inventaris.index') }}" class="btn btn-secondary">
-                                <i class="fa fa-list"></i> Semua Peminjaman
-                            </a>
-                        </div>
-                    </div>
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Permintaan Peminjaman Menunggu Persetujuan</h6>
+        </div>
+        <div class="card-body">
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
                 </div>
-
-                <div class="card-body">
-                    @if(session('success'))
-                        <div class="alert alert-success">{{ session('success') }}</div>
-                    @endif
-
-                    @if(session('error'))
-                        <div class="alert alert-danger">{{ session('error') }}</div>
-                    @endif
-
-                    @if($pending->count() > 0)
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Inventaris</th>
-                                        <th>Peminjam</th>
-                                        <th>Tanggal Pengajuan</th>
-                                        <th>Tanggal Selesai</th>
-                                        <th>Waktu</th>
-                                        <th>File</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($pending as $index => $pinjam)
-                                        <tr>
-                                            <td>{{ $index + $pending->firstItem() }}</td>
-                                            <td>{{ $pinjam->inventaris->nama_inventaris ?? 'N/A' }}</td>
-                                            <td>{{ $pinjam->mahasiswa->nama ?? 'N/A' }} ({{ $pinjam->mahasiswa->nim ?? 'N/A' }})</td>
-                                            <td>{{ \Carbon\Carbon::parse($pinjam->tanggal_pengajuan)->format('d-m-Y') }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($pinjam->tanggal_selesai)->format('d-m-Y') }}</td>
-                                            <td>
-                                                {{ \Carbon\Carbon::parse($pinjam->waktu_mulai)->format('H:i') }} - 
-                                                {{ \Carbon\Carbon::parse($pinjam->waktu_selesai)->format('H:i') }}
-                                            </td>
-                                            <td>
-                                                @if($pinjam->file_scan)
-                                                    <a href="{{ asset('storage/uploads/file_scan/' . $pinjam->file_scan) }}" 
-                                                       target="_blank" class="btn btn-sm btn-secondary">
-                                                        <i class="fa fa-file"></i> Lihat File
-                                                    </a>
-                                                @else
-                                                    <span class="badge bg-secondary">Tidak ada file</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <div class="btn-group" role="group">
-                                                    <a href="{{ route('pinjam-inventaris.show', $pinjam->id_pinjam_inventaris) }}" class="btn btn-sm btn-info text-white">
-                                                        <i class="fa fa-eye"></i> Detail
-                                                    </a>
-                                                    
-                                                    <form action="{{ route('pinjam-inventaris.update-status', $pinjam->id_pinjam_inventaris) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <input type="hidden" name="status" value="1">
-                                                        <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Apakah Anda yakin ingin menyetujui peminjaman ini?')">
-                                                            <i class="fa fa-check"></i> Setujui
-                                                        </button>
-                                                    </form>
-                                                    
-                                                    <form action="{{ route('pinjam-inventaris.update-status', $pinjam->id_pinjam_inventaris) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <input type="hidden" name="status" value="2">
-                                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menolak peminjaman ini?')">
-                                                            <i class="fa fa-times"></i> Tolak
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                        <div class="d-flex justify-content-center mt-3">
-                            {{ $pending->links() }}
-                        </div>
-                    @else
-                        <div class="alert alert-info text-center">
-                            Tidak ada pengajuan peminjaman yang menunggu persetujuan.
-                        </div>
-                    @endif
-                </div>
+            @endif
+            
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Mahasiswa</th>
+                            <th>Tanggal Pengajuan</th>
+                            <th>Tanggal Selesai</th>
+                            <th>Item yang Dipinjam</th>
+                            <th>Waktu</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($paginatedGroupedPending as $key => $group)
+                            @php 
+                                $firstItem = $group->first(); 
+                            @endphp
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $firstItem->mahasiswa->nama_mahasiswa ?? 'Tidak ditemukan' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($firstItem->tanggal_pengajuan)->format('d-m-Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($firstItem->tanggal_selesai)->format('d-m-Y') }}</td>
+                                <td>
+                                    <ul>
+                                        @foreach($group as $pinjam)
+                                            <li>{{ $pinjam->inventaris->nama_inventaris ?? 'Inventaris tidak ditemukan' }} ({{ $pinjam->jumlah_pinjam }})</li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+                                <td>{{ $firstItem->waktu_mulai }} - {{ $firstItem->waktu_selesai }}</td>
+                                <td>
+                                    <a href="{{ route('admin.pinjam-inventaris.show', $firstItem->id) }}" class="btn btn-sm btn-info">Detail</a>
+                                    
+                                    <form action="{{ route('pinjam-inventaris.update-status', $firstItem->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="status" value="1">
+                                        <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Setujui permintaan peminjaman ini?')">Setujui</button>
+                                    </form>
+                                    
+                                    <form action="{{ route('pinjam-inventaris.update-status', $firstItem->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="status" value="2">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tolak permintaan peminjaman ini?')">Tolak</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="text-center">Tidak ada permintaan peminjaman yang menunggu persetujuan</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center mt-4">
+                {{ $paginatedGroupedPending->links() }}
             </div>
         </div>
     </div>
