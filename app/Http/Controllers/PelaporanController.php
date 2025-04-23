@@ -13,7 +13,7 @@ class PelaporanController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth'); // Ensure user is authenticated
+        $this->middleware('auth'); 
     }
 
     public function index()
@@ -40,14 +40,14 @@ class PelaporanController extends Controller
             'foto_akhir' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // Check if id_logistik exists
+       
         if (!AdminLogistik::where('id', $data['id_logistik'])->exists()) {
             throw ValidationException::withMessages([
                 'id_logistik' => 'Data tidak tersedia di database',
             ]);
         }
 
-        // Automatically set id_mahasiswa to authenticated user's ID
+        
         $data['id_mahasiswa'] = Auth::id();
 
         if ($request->hasFile('foto_awal')) {
@@ -96,7 +96,7 @@ class PelaporanController extends Controller
             'foto_akhir' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // Check if id_logistik exists if provided
+        
         if (isset($data['id_logistik']) && !AdminLogistik::where('id', $data['id_logistik'])->exists()) {
             throw ValidationException::withMessages([
                 'id_logistik' => 'Data tidak tersedia di database',
