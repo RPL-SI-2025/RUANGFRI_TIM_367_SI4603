@@ -8,24 +8,27 @@ use App\Models\AdminLogistik;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class PelaporanController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth'); 
-    }
 
     public function index()
     {
+        $mahasiswaId = Session::get('mahasiswa_id');
+        
+        if (!$mahasiswaId) {
+            return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
         $pelaporans = Pelaporan::where('id_mahasiswa', Auth::id())->get();
-        return view('mahasiswa.lapor_ruang.index', compact('pelaporans'));
+        return view('mahasiswa.pelaporan.lapor_ruang.index', compact('pelaporans'));
     }
 
     public function create()
     {
-        $logistiks = AdminLogistik::all();
-        return view('mahasiswa.lapor_ruang.create', compact('logistiks'));
+        return view('mahasiswa.pelaporan.lapor_ruang.create');
+
     }
 
     public function store(Request $request)

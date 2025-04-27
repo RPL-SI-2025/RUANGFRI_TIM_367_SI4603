@@ -14,7 +14,7 @@ use App\Http\Controllers\PelaporanController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('mahasiswa.auth.login');
 });
 
 
@@ -146,9 +146,13 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::get('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'show'])->name('mahasiswa.peminjaman.pinjam-inventaris.show');
     Route::get('/pinjam-inventaris/{pinjamInventaris}/edit', [PinjamInventarisController::class, 'edit'])->name('mahasiswa.peminjaman.pinjam-inventaris.edit');
     Route::put('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'update'])->name('pinjam-inventaris.update');
+
+    //Pelaporan ruangan mahasiswa
+    Route::get('/pelaporan', [PelaporanController::class, 'Index'])->name('mahasiswa.pelaporan.lapor_ruang.index');
+    Route::get('/pelaporan', [PelaporanController::class, 'create'])->name('mahasiswa.pelaporan.lapor_ruang.create');
+    // Route::resource('pelaporans', PelaporanController::class);
 });
 Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
 
 // Pelaporan Ruangan
 
-Route::resource('pelaporans', PelaporanController::class);
