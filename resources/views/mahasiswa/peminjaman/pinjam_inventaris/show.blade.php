@@ -97,7 +97,7 @@
     </div>
     
     <div class="mt-3">
-        <a href="{{ route('mahasiswa.peminjaman.pinjam-inventaris.index') }}" class="btn btn-secondary">Kembali</a>
+        <a href="{{ route('pinjam-inventaris.index') }}" class="btn btn-secondary">Kembali</a>
     </div>
 </div>
 @endsection

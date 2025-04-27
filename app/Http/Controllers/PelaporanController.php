@@ -19,13 +19,13 @@ class PelaporanController extends Controller
     public function index()
     {
         $pelaporans = Pelaporan::where('id_mahasiswa', Auth::id())->get();
-        return view('pelaporans.index', compact('pelaporans'));
+        return view('mahasiswa.lapor_ruang.index', compact('pelaporans'));
     }
 
     public function create()
     {
         $logistiks = AdminLogistik::all();
-        return view('pelaporans.create', compact('logistiks'));
+        return view('mahasiswa.lapor_ruang.create', compact('logistiks'));
     }
 
     public function store(Request $request)
@@ -68,7 +68,7 @@ class PelaporanController extends Controller
         $pelaporan = Pelaporan::where('id_lapor_ruangan', $id)
             ->where('id_mahasiswa', Auth::id())
             ->firstOrFail();
-        return view('pelaporans.show', compact('pelaporan'));
+        return view('mahasiswa.lapor_ruang.show', compact('pelaporan'));
     }
 
     public function edit($id)
@@ -77,7 +77,7 @@ class PelaporanController extends Controller
             ->where('id_mahasiswa', Auth::id())
             ->firstOrFail();
         $logistiks = AdminLogistik::all();
-        return view('pelaporans.edit', compact('pelaporan', 'logistiks'));
+        return view('mahasiswa.lapor_ruang.edit', compact('pelaporan', 'logistiks'));
     }
 
     public function update(Request $request, $id)
