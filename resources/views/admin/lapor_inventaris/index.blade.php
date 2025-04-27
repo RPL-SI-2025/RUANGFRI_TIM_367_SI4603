@@ -37,8 +37,8 @@
                     @endif
                 </td>
                 <td>
-                    <a href="{{ route('admin.laporinventaris.show', $lapor->id_lapor_inventaris) }}" class="btn btn-primary" style="margin-bottom:5px;">Lihat</a>
-                    <form method="POST" action="{{ route('admin.laporinventaris.destroy', $lapor->id_lapor_inventaris) }}" style="display:inline;">
+                    <a href="{{ route('admin.lapor_inventaris.show', $lapor->id_lapor_inventaris) }}" class="btn btn-primary" style="margin-bottom:5px;">Lihat</a>
+                    <form method="POST" action="{{ route('admin.lapor_inventaris.destroy', $lapor->id_lapor_inventaris) }}" style="display:inline;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" onclick="return confirm('Hapus data ini?')" class="btn btn-danger">Hapus</button>

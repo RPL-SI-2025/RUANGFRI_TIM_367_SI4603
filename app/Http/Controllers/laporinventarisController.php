@@ -11,13 +11,13 @@ class laporinventarisController extends Controller
     public function index()
     {
         $laporan = laporinventaris::with(['mahasiswa', 'logistik'])->get();
-        return view('laporinventaris.index', compact($laporan));
+        return view('lapor_inventaris.index', compact($laporan));
     }
 
    
     public function create()
     {
-        return view('laporinventaris.create');
+        return view('lapor_inventaris.create');
     }
 
     public function store(Request $request)
@@ -32,7 +32,7 @@ class laporinventarisController extends Controller
         ]);
 
         $laporan = laporinventaris::create($request->all());
-        return redirect()->route('laporinventaris.index')
+        return redirect()->route('lapor_inventaris.index')
         ->with('success', 'Laporan berhasil ditambahkan');
     }
 
@@ -68,7 +68,7 @@ class laporinventarisController extends Controller
 
         $laporan->update($request->all());
 
-        return redirect()->route('laporinventaris.index')
+        return redirect()->route('lapor_inventaris.index')
         ->with('success', 'Data berhasil diperbarui');
     }
 
@@ -82,7 +82,7 @@ class laporinventarisController extends Controller
 
         $laporan->delete();
 
-        return redirect()->route('laporinventaris.index')
+        return redirect()->route('lapor_inventaris.index')
         ->with('success', 'Data berhasil dihapus');
     }
 }
