@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class laporinventaris extends Model
 {
     protected $table = 'lapor_inventaris';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'id_lapor_inventaris';
 
     protected $fillable = [
+        'id_lapor_inventaris',
         'id_logistik',
         'id_mahasiswa',
         'datetime',

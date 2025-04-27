@@ -3,8 +3,13 @@
 @section('content')
 <div class="container">
     <h2>Daftar Pelaporan Inventaris</h2>
+    <div class="d-flex justify-content-between mb-3">
+    <a href="{{ route('admin.lapor_inventaris.create') }}" class="btn btn-success">Tambah lapor Inventaris</a>
+   </div>
+    
     <table border="1" cellpadding="10" cellspacing="0" style="width:100%; text-align:center;">
-        <thead>
+    <table class="table table-bordered">
+    <thead>
             <tr>
                 <th>ID</th>
                 <th>Oleh</th>

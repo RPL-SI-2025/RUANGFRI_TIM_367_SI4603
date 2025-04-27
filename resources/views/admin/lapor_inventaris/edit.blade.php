@@ -3,7 +3,13 @@
 @section('title', 'lapor Inventaris')
 
 @section('content')
-<form method="POST" action="{{ route('laporinventaris.update', $lapor->id_lapor_inventaris) }}" enctype="multipart/form-data">
+<div class="card">
+    <div class="card-header bg-warning text-white">
+        <h5 class="mb-0">Edit Lapor Inventaris</h5>
+    </div>
+    <div class="card-body">
+        
+<form method="POST" action="{{ route('admin.lapor_inventaris.update', $lapor->id_lapor_inventaris) }}" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -44,7 +50,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Update</button>
-    <a href="{{ route('laporinventaris.index') }}" class="btn btn-secondary">Kembali</a>
+    <a href="{{ route('admin.lapor_inventaris.index') }}" class="btn btn-secondary">Kembali</a>
 </form>
 @endsection
 
