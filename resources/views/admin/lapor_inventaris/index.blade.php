@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h2>Daftar Pelaporan Inventaris</h2>
-    <table border="1" cellpadding="10">
+    <table border="1" cellpadding="10" cellspacing="0" style="width:100%; text-align:center;">
         <thead>
             <tr>
                 <th>ID</th>
@@ -25,23 +25,25 @@
                 <td>
                     @if($lapor->foto_awal)
                         <img src="{{ asset('storage/' . $lapor->foto_awal) }}" width="100">
+                    @else
+                        Tidak Ada
                     @endif
                 </td>
                 <td>
                     @if($lapor->foto_akhir)
                         <img src="{{ asset('storage/' . $lapor->foto_akhir) }}" width="100">
+                    @else
+                        Tidak Ada
                     @endif
                 </td>
                 <td>
-                    <form method="POST" action="{{ route('pelaporans.destroy', $lapor->id) }}">
+                    <a href="{{ route('admin.laporinventaris.show', $lapor->id_lapor_inventaris) }}" class="btn btn-primary" style="margin-bottom:5px;">Lihat</a>
+                    <form method="POST" action="{{ route('admin.laporinventaris.destroy', $lapor->id_lapor_inventaris) }}" style="display:inline;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" onclick="return confirm('Hapus data ini?')">Hapus</button>
+                        <button type="submit" onclick="return confirm('Hapus data ini?')" class="btn btn-danger">Hapus</button>
                     </form>
                 </td>
-                <a href="{{ route('laporinventarisController.show', $lapor->id) }}"></a>
-                
-
             </tr>
             @endforeach
         </tbody>
