@@ -11,7 +11,7 @@ class laporinventarisController extends Controller
     public function index()
     {
         $laporan = laporinventaris::with(['mahasiswa', 'logistik'])->get();
-        return view('lapor_inventaris.index', compact($laporan));
+        return view('admin.lapor_inventaris.index', compact('laporan'));
     }
 
    
@@ -41,7 +41,7 @@ class laporinventarisController extends Controller
         $laporan = laporinventaris::with(['mahasiswa', 'logistik'])->find($id);
 
         if ($laporan) {
-            return view('laporinventaris.show', compact($laporan));
+            return view('lapor_inventaris.show', compact('laporan'));
         }
 
         return redirect()->back()->with('error', 'Data tidak ditemukan');

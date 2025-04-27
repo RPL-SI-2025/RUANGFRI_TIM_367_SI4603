@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.admin')
 
 @section('content')
 <div class="container">
@@ -16,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($laporinventaris as $lapor)
+            @foreach($laporan as $lapor)
             <tr>
                 <td>{{ $lapor->id_lapor_inventaris }}</td>
                 <td>{{ $lapor->oleh }}</td>
