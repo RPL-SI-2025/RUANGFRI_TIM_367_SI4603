@@ -3,11 +3,6 @@
 @section('title', 'Lapor Inventaris')
 
 @section('content')
-<div class="card">
-    <div class="card-header bg-success text-white">
-        <h5 class="mb-0">Tambah Lapor Inventaris</h5>
-    </div>
-    <div class="card-body">
         <form method="POST" action="{{ route('admin.lapor_inventaris.store') }}" enctype="multipart/form-data">
             @csrf
 
