@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('inventaris', function (Blueprint $table) {
-            $table->id('id_inventaris');
+            $table->id();
             $table->unsignedBigInteger('id_logistik')->nullable();
             $table->string('nama_inventaris');
             $table->string('deskripsi');
             $table->integer('jumlah');
-            $table->enum('status', ['Tersedia', 'Tidak Tersedia']);
+            $table->enum('status', ['Tersedia', 'Tidak Tersedia'])->default('Tersedia');
             $table->timestamps();
             
             $table->foreign('id_logistik')->references('id')->on('admin_logistik');

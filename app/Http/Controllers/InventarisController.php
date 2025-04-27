@@ -58,4 +58,18 @@ class InventarisController extends Controller
 
         return redirect()->route('admin.inventaris.index')->with('success', 'Inventaris berhasil dihapus.');
     }
+
+    // Add this method for mahasiswa to view inventory items
+    public function mahasiswaIndex()
+    {
+        $inventaris = Inventaris::all(); // tampilkan semua, tidak hanya yang tersedia
+        return view('mahasiswa.katalog.inventaris.index', compact('inventaris'));
+    }
+
+    // Fungsi untuk Mahasiswa melihat detail satu inventaris
+    public function mahasiswaShow($id)
+    {
+        $inventaris = Inventaris::findOrFail($id);
+        return view('mahasiswa.katalog.inventaris.show', compact('inventaris'));
+    }
 }

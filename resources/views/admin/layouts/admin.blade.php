@@ -81,7 +81,7 @@
                     <div class="collapse ms-3" id="inventarisMenu">
                         <ul class="nav flex-column">
                             <li><a class="nav-link" href="{{ route('admin.inventaris.index') }}">📦 Data Inventaris</a></li>
-                                <li><a class="nav-link" {{-- href="{{ route('approval.inventaris') }}" --}}>✅ Approval Inventaris</a></li>
+                                <li><a class="nav-link" href="{{ route('admin.pinjam-inventaris.index') }}" >✅ Approval Inventaris</a></li>
                                 <li><a class="nav-link" {{-- href="{{ route('laporan.inventaris') }}" --}}>📋 Laporan Inventaris</a></li>
                                 <li><a class="nav-link" {{-- href="{{ route('riwayat.inventaris') }}" --}}>🗓️ Riwayat Peminjaman Inventaris</a></li>
                         </ul>

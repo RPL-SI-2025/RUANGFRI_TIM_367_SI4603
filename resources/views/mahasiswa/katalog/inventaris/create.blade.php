@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('mahasiswa.layouts.app')
 
 @section('content')
 <div class="container">
@@ -15,10 +15,8 @@
                 </div>
 
                 <div class="card-body">
-                    @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
+                    @if(session('error'))
+                        <div class="alert alert-danger">{{ session('error') }}</div>
                     @endif
 
                     <h6 class="mb-4">Item yang akan dipinjam:</h6>

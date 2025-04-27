@@ -1,0 +1,93 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.login-container {
+    max-width: 500px;
+    margin: 100px auto;
+}
+.card {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+.card-header {
+    background-color: white;
+    border-bottom: 0;
+    text-align: center;
+    border-radius: 15px 15px 0 0 !important;
+    padding: 25px 20px 15px;
+}
+.card-header h3 {
+    color: #3498db;
+    font-weight: 700;
+}
+.form-control {
+    border-radius: 8px;
+    padding: 10px 15px;
+    border: 1px solid #e2e8f0;
+}
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+    border-color: #3498db;
+}
+.input-group-text {
+    background-color: #f8f9fa;
+    border: 1px solid #e2e8f0;
+    color: #3498db;
+}
+.btn {
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);
+}
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
+}
+.alert {
+    border-radius: 10px;
+    border: none;
+}
+.brand-logo {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+}
+.register-link {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+}
+.register-link:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+.login-icon {
+    font-size: 24px;
+    color: #3498db;
+    margin-right: 10px;
+}
+.form-label {
+    font-weight: 500;
+    color: #4a5568;
+    margin-bottom: 8px;
+}
+.input-group {
+    margin-bottom: 5px;
+}
+.card-footer {
+    background-color: white;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 0 0 15px 15px;
+    padding: 20px;
+}
