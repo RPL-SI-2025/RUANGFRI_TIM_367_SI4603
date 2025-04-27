@@ -91,7 +91,7 @@ class laporinventarisController extends Controller
 
         $laporan->delete();
 
-        return redirect()->route('lapor_inventaris.index')
+        return redirect()->route('admin.lapor_inventaris.index')
         ->with('success', 'Data berhasil dihapus');
     }
 }
