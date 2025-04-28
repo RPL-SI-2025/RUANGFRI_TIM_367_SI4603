@@ -23,7 +23,7 @@ class laporinventarisController extends Controller
             return view('mahasiswa.pelaporan.lapor_inventaris.index', compact('laporan'));
         }
 
-   
+
     public function create()
     {
         $logistiks = AdminLogistik::all(); // Ambil semua data Admin Logistik

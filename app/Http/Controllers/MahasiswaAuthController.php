@@ -37,13 +37,13 @@ class MahasiswaAuthController extends Controller
         ]);
 
         Auth::guard('mahasiswa')->login($mahasiswa);
-        
+
         Session::put('mahasiswa_id', $mahasiswa->id);
         Session::put('mahasiswa_name', $mahasiswa->nama_mahasiswa);
         Session::put('mahasiswa_nim', $mahasiswa->nim);
         Session::put('mahasiswa_email', $mahasiswa->email);
         Session::put('is_logged_in', true);
-        
+
         return redirect()->route('mahasiswa.dashboard')
             ->with('success', 'Akun berhasil dibuat! Selamat datang di Sistem Peminjaman Inventaris.');
     }
@@ -61,14 +61,14 @@ class MahasiswaAuthController extends Controller
 
         if (Auth::guard('mahasiswa')->attempt($credentials)) {
             $request->session()->regenerate();
-            
+
             $mahasiswa = Auth::guard('mahasiswa')->user();
             Session::put('mahasiswa_id', $mahasiswa->id);
             Session::put('mahasiswa_name', $mahasiswa->nama_mahasiswa);
             Session::put('mahasiswa_nim', $mahasiswa->nim);
             Session::put('mahasiswa_email', $mahasiswa->email);
             Session::put('is_logged_in', true);
-            
+
             return redirect()->intended('/mahasiswa/dashboard');
         }
 
@@ -81,7 +81,7 @@ class MahasiswaAuthController extends Controller
     {
         Session::forget(['mahasiswa_id', 'mahasiswa_name', 'mahasiswa_email', 'mahasiswa_nim', 'is_logged_in']);
         Session::flush();
-        
+
         return redirect()->route('mahasiswa.login');
     }
 }
