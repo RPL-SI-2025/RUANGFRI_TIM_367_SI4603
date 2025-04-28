@@ -1,18 +1,20 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\InventarisController;
-use App\Http\Controllers\PinjamInventarisController;
-use App\Http\Controllers\ControllerMahasiswa;
-use App\Http\Controllers\RuanganController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\laporinventarisController;
-use App\Models\laporinventaris;
-
-use App\Http\Controllers\MahasiswaAuthController;
 use App\Http\Controllers\AdminLogistikController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\ControllerMahasiswa;
+use App\Http\Controllers\InventarisController;
+use App\Http\Controllers\laporinventarisController;
+use App\Http\Controllers\MahasiswaAuthController;
 use App\Http\Controllers\PelaporanController;
+use App\Http\Controllers\PinjamInventarisController;
+use App\Http\Controllers\ProfileController;
+
+use App\Http\Controllers\RuanganController;
+use App\Models\laporinventaris;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 
 
 Route::get('/', function () {
@@ -76,7 +78,7 @@ Route::controller(InventarisController::class)->group(function () {
     Route::delete('/admin/inventaris/{inventaris}', [InventarisController::class, 'destroy'])->name('admin.inventaris.destroy');
     Route::get('/admin/inventaris/{inventaris}', [InventarisController::class, 'show'])->name('admin.inventaris.show');
 });
-    
+
 
 
 // Ruangan routes
