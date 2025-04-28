@@ -16,7 +16,7 @@ use App\Http\Controllers\PelaporanController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('mahasiswa.auth.login');
 });
 
 
@@ -67,6 +67,16 @@ Route::controller(RuanganController::class)->prefix('ruangan')->name('ruangan.')
     Route::put('/{id}', 'update')->name('update');
     Route::delete('/{id}', 'destroy')->name('destroy');
 });
+Route::controller(InventarisController::class)->group(function () {
+    Route::get('/admin/inventaris', [InventarisController::class, 'index'])->name('admin.inventaris.index');
+    Route::get('/admin/inventaris/create', [InventarisController::class, 'create'])->name('admin.inventaris.create');
+    Route::post('/admin/inventaris', [InventarisController::class, 'store'])->name('admin.inventaris.store');
+    Route::get('/admin/inventaris/{inventaris}/edit', [InventarisController::class, 'edit'])->name('admin.inventaris.edit');
+    Route::put('/admin/inventaris/{inventaris}', [InventarisController::class, 'update'])->name('admin.inventaris.update');
+    Route::delete('/admin/inventaris/{inventaris}', [InventarisController::class, 'destroy'])->name('admin.inventaris.destroy');
+    Route::get('/admin/inventaris/{inventaris}', [InventarisController::class, 'show'])->name('admin.inventaris.show');
+});
+    
 
 
 // Ruangan routes
