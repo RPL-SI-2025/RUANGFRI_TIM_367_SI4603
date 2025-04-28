@@ -2,90 +2,105 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Edit Peminjaman Inventaris</h5>
-                    <a href="{{ route('mahasiswa.peminjaman.pinjam-inventaris.index') }}" class="btn btn-sm btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Kembali
-                    </a>
+    <div class="card">
+        <div class="card-header">
+            <h2>Edit Peminjaman Inventaris</h2>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('pinjam-inventaris.update', $pinjamInventaris->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                
+                <div class="row mb-3">
+                    <div class="col-md-4"><strong>Tanggal Pengajuan:</strong></div>
+                    <div class="col-md-8">
+                        <input type="date" name="tanggal_pengajuan" class="form-control" value="{{ $pinjamInventaris->tanggal_pengajuan }}" required>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <form action="{{ route('pinjam-inventaris.update', $pinjamInventaris->id) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Inventaris</label>
-                            <input type="text" class="form-control" value="{{ $pinjamInventaris->inventaris->nama_inventaris }}" readonly>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="tanggal_pengajuan" class="form-label">Tanggal Pengajuan</label>
-                                <input type="date" class="form-control @error('tanggal_pengajuan') is-invalid @enderror" 
-                                    id="tanggal_pengajuan" name="tanggal_pengajuan" 
-                                    value="{{ old('tanggal_pengajuan', date('Y-m-d', strtotime($pinjamInventaris->tanggal_pengajuan))) }}" required>
-                                @error('tanggal_pengajuan')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label for="tanggal_selesai" class="form-label">Tanggal Selesai</label>
-                                <input type="date" class="form-control @error('tanggal_selesai') is-invalid @enderror" 
-                                    id="tanggal_selesai" name="tanggal_selesai" 
-                                    value="{{ old('tanggal_selesai', date('Y-m-d', strtotime($pinjamInventaris->tanggal_selesai))) }}" required>
-                                @error('tanggal_selesai')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="waktu_mulai" class="form-label">Waktu Mulai</label>
-                                <input type="time" class="form-control @error('waktu_mulai') is-invalid @enderror" 
-                                    id="waktu_mulai" name="waktu_mulai" 
-                                    value="{{ old('waktu_mulai', date('H:i', strtotime($pinjamInventaris->waktu_mulai))) }}" required>
-                                @error('waktu_mulai')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label for="waktu_selesai" class="form-label">Waktu Selesai</label>
-                                <input type="time" class="form-control @error('waktu_selesai') is-invalid @enderror" 
-                                    id="waktu_selesai" name="waktu_selesai" 
-                                    value="{{ old('waktu_selesai', date('H:i', strtotime($pinjamInventaris->waktu_selesai))) }}" required>
-                                @error('waktu_selesai')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="file_scan" class="form-label">File Scan (Opsional)</label>
-                            @if($pinjamInventaris->file_scan)
-                                <div class="mb-2">
-                                    <span class="text-muted">File saat ini:</span> {{ $pinjamInventaris->file_scan }}
-                                </div>
-                            @endif
-                            <input type="file" class="form-control @error('file_scan') is-invalid @enderror" 
-                                id="file_scan" name="file_scan">
-                            <small class="text-muted">Format: PDF, JPG, JPEG, PNG (maks 2MB)</small>
-                            @error('file_scan')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                        </div>
-                    </form>
+                
+                <div class="row mb-3">
+                    <div class="col-md-4"><strong>Tanggal Selesai:</strong></div>
+                    <div class="col-md-8">
+                        <input type="date" name="tanggal_selesai" class="form-control" value="{{ $pinjamInventaris->tanggal_selesai }}" required>
+                    </div>
                 </div>
-            </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-4"><strong>Waktu Mulai:</strong></div>
+                    <div class="col-md-8">
+                        <input type="time" name="waktu_mulai" class="form-control" value="{{ $pinjamInventaris->waktu_mulai }}" required>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-4"><strong>Waktu Selesai:</strong></div>
+                    <div class="col-md-8">
+                        <input type="time" name="waktu_selesai" class="form-control" value="{{ $pinjamInventaris->waktu_selesai }}" required>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-4"><strong>File Scan:</strong></div>
+                    <div class="col-md-8">
+                        @if($pinjamInventaris->file_scan)
+                            <div class="mb-2">
+                                <a href="{{ asset('storage/uploads/file_scan/' . $pinjamInventaris->file_scan) }}" target="_blank" class="btn btn-sm btn-primary">Lihat File</a>
+                            </div>
+                        @endif
+                        <input type="file" name="file_scan" class="form-control">
+                        <small class="text-muted">Biarkan kosong jika tidak ingin mengubah file</small>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-4"><strong>Inventaris yang Dipinjam:</strong></div>
+                    <div class="col-md-8">
+                        @php
+                            // Find related inventory items from the same request
+                            $relatedItems = \App\Models\PinjamInventaris::where('tanggal_pengajuan', $pinjamInventaris->tanggal_pengajuan)
+                                ->where('tanggal_selesai', $pinjamInventaris->tanggal_selesai)
+                                ->where('waktu_mulai', $pinjamInventaris->waktu_mulai)
+                                ->where('waktu_selesai', $pinjamInventaris->waktu_selesai)
+                                ->where('file_scan', $pinjamInventaris->file_scan)
+                                ->where('id_mahasiswa', $pinjamInventaris->id_mahasiswa)
+                                ->get();
+                        @endphp
+                        
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Inventaris</th>
+                                    <th>Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($relatedItems as $index => $item)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>
+                                            <input type="text" class="form-control-plaintext" 
+                                                value="{{ $item->inventaris->nama_inventaris ?? 'Inventaris tidak ditemukan' }}" 
+                                                readonly>
+                                            <input type="hidden" name="inventaris[{{ $item->id }}][id]" value="{{ $item->id_inventaris }}">
+                                        </td>
+                                        <td>
+                                            <input type="number" name="inventaris[{{ $item->id }}][jumlah]" 
+                                                class="form-control" value="{{ $item->jumlah_pinjam ?? 1 }}" 
+                                                min="1" max="{{ $item->inventaris->jumlah ?? 1 }}" required>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    <a href="{{ route('mahasiswa.peminjaman.pinjam-inventaris.show', $pinjamInventaris->id) }}" class="btn btn-secondary">Batal</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>

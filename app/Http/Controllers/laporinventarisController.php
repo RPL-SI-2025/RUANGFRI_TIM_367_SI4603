@@ -11,15 +11,25 @@ class laporinventarisController extends Controller
     public function index()
     {
         $laporan = laporinventaris::with(['mahasiswa', 'logistik'])->get();
-        return view('laporinventaris.index', compact($laporan));
+        return view('admin.lapor_inventaris.index', compact('laporan'));
     }
 
 
     public function create()
     {
-        return view('laporinventaris.create');
+        return view('admin.lapor_inventaris.create');
     }
 
+    public function edit($id)
+    {
+        $laporan = laporinventaris::find($id);
+
+        if (!$laporan) {
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
+        }
+
+        return view('admin.lapor_inventaris.edit', compact('laporan'));
+    }
     public function store(Request $request)
     {
         $request->validate([
@@ -31,9 +41,8 @@ class laporinventarisController extends Controller
             'deskripsi' => 'nullable|string|max:255'
         ]);
 
-        $laporan = laporinventaris::create($request->all());
-        return redirect()->route('laporinventaris.index')
-        ->with('success', 'Laporan berhasil ditambahkan');
+        laporInventaris::create($request->all());
+        return redirect()->route('admin.lapor_inventaris.index')->with('success', 'Laporan berhasil ditambahkan');
     }
 
     public function show($id)
@@ -41,15 +50,15 @@ class laporinventarisController extends Controller
         $laporan = laporinventaris::with(['mahasiswa', 'logistik'])->find($id);
 
         if ($laporan) {
-            return view('laporinventaris.show', compact($laporan));
+            return view('admin.lapor_inventaris.show', compact('laporan'));
         }
 
         return redirect()->back()->with('error', 'Data tidak ditemukan');
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id_lapor_inventaris)
     {
-        $laporan = laporinventaris::find($id);
+        $laporan = laporinventaris::find($id_lapor_inventaris);
 
         if (!$laporan) {
             return redirect()->back()->with('error', 'Data tidak ditemukan');
@@ -68,7 +77,7 @@ class laporinventarisController extends Controller
 
         $laporan->update($request->all());
 
-        return redirect()->route('laporinventaris.index')
+        return redirect()->route('admin.lapor_inventaris.index')
         ->with('success', 'Data berhasil diperbarui');
     }
 
@@ -82,7 +91,7 @@ class laporinventarisController extends Controller
 
         $laporan->delete();
 
-        return redirect()->route('laporinventaris.index')
+        return redirect()->route('admin.lapor_inventaris.index')
         ->with('success', 'Data berhasil dihapus');
     }
 }
