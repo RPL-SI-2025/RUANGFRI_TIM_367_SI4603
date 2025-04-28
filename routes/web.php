@@ -99,11 +99,41 @@ Route::post('/email/verification-notification', function (Request $request) {
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 
+Auth::routes(['verify' => true]);
+
+Route::middleware(['auth:mahasiswa'])->group(function () {
+    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('profile/update', [ProfileController::class, 'updateProfile'])->name('mahasiswa.profile.update');
+    Route::patch('profile/update-password', [ProfileController::class, 'updatePassword'])->name('mahasiswa.profile.update-password');
+    Route::delete('profile/delete', [ProfileController::class, 'destroy'])->name('mahasiswa.profile.delete');
+});
+// Email verification routes
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/dashboard'); // Redirect after successful verification
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('status', 'verification-link-sent');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+
 Route::get('/mahasiswa/login', [App\Http\Controllers\MahasiswaAuthController::class, 'showLoginForm'])->name('mahasiswa.login');
 Route::post('/mahasiswa/login', [App\Http\Controllers\MahasiswaAuthController::class, 'login'])->name('mahasiswa.login.submit');
 Route::post('/mahasiswa/logout', [App\Http\Controllers\MahasiswaAuthController::class, 'logout'])->name('mahasiswa.logout');
 Route::get('/mahasiswa/register', [App\Http\Controllers\MahasiswaAuthController::class, 'showRegistrationForm'])->name('mahasiswa.register');
 Route::post('/mahasiswa/register', [App\Http\Controllers\MahasiswaAuthController::class, 'register'])->name('mahasiswa.register.submit');
+Route::middleware(['auth:mahasiswa'])->group(function () {
+    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('profile/update', [ProfileController::class, 'updateProfile'])->name('mahasiswa.profile.update');
+    Route::patch('profile/update-password', [ProfileController::class, 'updatePassword'])->name('mahasiswa.profile.update-password');
+    Route::delete('profile/delete', [ProfileController::class, 'destroy'])->name('mahasiswa.profile.delete');
+});
 
 
 Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasiswa')->group(function() {

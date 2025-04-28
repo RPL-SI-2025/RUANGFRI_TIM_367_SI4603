@@ -1,29 +1,47 @@
 @extends('mahasiswa.layouts.app')
 
 @section('content')
-    <div>
-        <h2 class="font-bold text-2xl text-gray-800 dark:text-gray-200 leading-tight text-center">
-            {{ __('Profile') }}
-        </h2>
-        <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-blue-200 bg-opacity-20 shadow sm:rounded-md p-2">
-                <div class="max-w-xl">
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="mb-4 text-primary">
+                <i class="fas fa-user-circle me-2"></i>Pengaturan Profil
+            </h2>
+
+            @if (session('status'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>{{ session('status') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title mb-0 fw-bold">Informasi Profil</h5>
+                </div>
+                <div class="card-body">
                     @include('profile.partials.update-profile-information-form')
                 </div>
             </div>
 
-            <div class="p-4 sm:p-8 bg-blue-200 bg-opacity-20 shadow shadow sm:rounded-md p-2">
-                <div class="max-w-xl">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title mb-0 fw-bold">Update Password</h5>
+                </div>
+                <div class="card-body">
                     @include('profile.partials.update-password-form')
                 </div>
             </div>
 
-            <div class="p-4 sm:p-8 bg-blue-200 bg-opacity-20 shadow shadow sm:rounded-md p-2">
-                <div class="max-w-xl">
+            <div class="card shadow-sm border-danger mb-4">
+                <div class="card-header bg-white py-3 border-danger">
+                    <h5 class="card-title mb-0 fw-bold text-danger">Hapus Akun</h5>
+                </div>
+                <div class="card-body">
                     @include('profile.partials.delete-user-form')
                 </div>
             </div>
         </div>
     </div>
+</div>
 @endsection
