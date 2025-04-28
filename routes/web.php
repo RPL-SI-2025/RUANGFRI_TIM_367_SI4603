@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\PinjamInventarisController;
 use App\Http\Controllers\ControllerMahasiswa;
-use App\Http\Controllers\ControllerRuangan;
+use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\laporinventarisController;
-use App\Models\laporinventaris; 
+use App\Models\laporinventaris;
 
 use App\Http\Controllers\MahasiswaAuthController;
 use App\Http\Controllers\AdminLogistikController;
@@ -17,13 +18,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Admin Dashboard
 
+// Admin Dashboard
 Route::get('/admin/dashboard', [AdminLogistikController::class, 'index'])->name('admin.dashboard');
 
-// Admin Inventaris CRUD
 
-
+// CRUD Inventaris (Admin)
 Route::get('/admin/inventaris', [InventarisController::class, 'index'])->name('admin.inventaris.index');
 Route::get('/admin/inventaris/create', [InventarisController::class, 'create'])->name('admin.inventaris.create');
 Route::post('/admin/inventaris', [InventarisController::class, 'store'])->name('admin.inventaris.store');
@@ -32,38 +32,25 @@ Route::put('/admin/inventaris/{inventaris}', [InventarisController::class, 'upda
 Route::delete('/admin/inventaris/{inventaris}', [InventarisController::class, 'destroy'])->name('admin.inventaris.destroy');
 Route::get('/admin/inventaris/{inventaris}', [InventarisController::class, 'show'])->name('admin.inventaris.show');
 
-
-Route::get('/admin/inventaris', [InventarisController::class, 'index'])->name('admin.inventaris.index');
-Route::get('/admin/inventaris/create', [InventarisController::class, 'create'])->name('admin.inventaris.create');
-Route::post('/admin/inventaris', [InventarisController::class, 'store'])->name('admin.inventaris.store');
-Route::get('/admin/inventaris/{inventaris}/edit', [InventarisController::class, 'edit'])->name('admin.inventaris.edit');
-Route::put('/admin/inventaris/{inventaris}', [InventarisController::class, 'update'])->name('admin.inventaris.update');
-Route::delete('/admin/inventaris/{inventaris}', [InventarisController::class, 'destroy'])->name('admin.inventaris.destroy');
-Route::get('/admin/inventaris/{inventaris}', [InventarisController::class, 'show'])->name('admin.inventaris.show');
-
-    
+//CRUD Ruangan (Admin)
+Route::get('/admin/ruangan', [RuanganController::class, 'index'])->name('admin.katalog_ruangan.index');
+Route::get('/admin/ruangan/create', [RuanganController::class, 'create'])->name('katalog_admin.ruangan.create');
+Route::post('/admin/ruangan/store', [RuanganController::class, 'store'])->name('admin.katalog_ruangan.store');
+Route::get('/admin/ruangan/{id}/edit', [RuanganController::class, 'edit'])->name('admin.katalog_ruangan.edit');
+Route::put('/admin/ruangan/{id}', [RuanganControllern::class, 'update'])->name('admin.katalog_ruangan.update');
+Route::delete('/admin/ruangan/{id}', [RuanganController::class, 'destroy'])->name('admin.katalog_ruangan.destroy');
 
 
-// Ruangan routes
-Route::controller(ControllerRuangan::class)->group(function () {
-    Route::get('/ruangan', 'index')->name('ruangan.index');
-    Route::get('/ruangan/create', 'create')->name('ruangan.create');
-    Route::post('/ruangan/store', 'store')->name('ruangan.store');
-    Route::get('/ruangan/{id}/edit', 'edit')->name('ruangan.edit');
-    Route::put('/ruangan/{id}', 'update')->name('ruangan.update');
-    Route::delete('/ruangan/{id}', 'destroy')->name('ruangan.destroy');
+// Ruangan
+Route::controller(RuanganController::class)->prefix('ruangan')->name('ruangan.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/create', 'create')->name('create');
+    Route::post('/store', 'store')->name('store');
+    Route::get('/{id}/edit', 'edit')->name('edit');
+    Route::put('/{id}', 'update')->name('update');
+    Route::delete('/{id}', 'destroy')->name('destroy');
 });
 
-
-// // Ruangan routes
-// Route::controller(ControllerRuangan::class)->group(function () {
-//     Route::get('/ruangan', 'index')->name('ruangan.index');
-//     Route::get('/ruangan/create', 'create')->name('ruangan.create');
-//     Route::post('/ruangan/store', 'store')->name('ruangan.store');
-//     Route::get('/ruangan/{id}/edit', 'edit')->name('ruangan.edit');
-//     Route::put('/ruangan/{id}', 'update')->name('ruangan.update');
-//     Route::delete('/ruangan/{id}', 'destroy')->name('ruangan.destroy');
-// });
 
 // // Mahasiswa routes
 // Route::controller(ControllerMahasiswa::class)->group(function () {
@@ -75,87 +62,67 @@ Route::controller(ControllerRuangan::class)->group(function () {
 //     Route::delete('/mahasiswa/{id}', 'destroy')->name('mahasiswa.destroy');
 // });
 
-// Admin approval interface
-Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
-Route::patch('/pinjam-inventaris/{pinjamInventaris}/update-status', [PinjamInventarisController::class, 'updateStatus'])->name('pinjam-inventaris.update-status');
-Route::delete('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'destroy'])->name('pinjam-inventaris.destroy');
+
+// AApproval Peminjaman Inventaris (Admin)
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/approval', [PinjamInventarisController::class, 'adminApproval'])->name('approval');
+    Route::patch('/pinjam-inventaris/{pinjamInventaris}/update-status', [PinjamInventarisController::class, 'updateStatus'])->name('pinjam-inventaris.update-status');
+    Route::delete('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'destroy'])->name('pinjam-inventaris.destroy');
+});
 
 //Lapor Inventaris
 Route::get('/laporinventaris', [laporinventarisController::class, 'index'])->name('laporinventaris.index');
 
 
 
-
-
-
-Route::get('/mahasiswa/login', [App\Http\Controllers\MahasiswaAuthController::class, 'showLoginForm'])->name('mahasiswa.login');
-Route::post('/mahasiswa/login', [App\Http\Controllers\MahasiswaAuthController::class, 'login'])->name('mahasiswa.login.submit');
-Route::post('/mahasiswa/logout', [App\Http\Controllers\MahasiswaAuthController::class, 'logout'])->name('mahasiswa.logout');
-
-Route::get('/mahasiswa/register', [App\Http\Controllers\MahasiswaAuthController::class, 'showRegistrationForm'])->name('mahasiswa.register');
-Route::post('/mahasiswa/register', [App\Http\Controllers\MahasiswaAuthController::class, 'register'])->name('mahasiswa.register.submit');
-
-
-Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasiswa')->group(function() {
-    Route::get('/dashboard', function() {
-        return view('mahasiswa.page.dashboard');
-    })->name('mahasiswa.dashboard');
-
-    // Mahasiswa Inventaris View 
-    Route::prefix('mahasiswa')->group(function () {
-        Route::get('/inventaris', [InventarisController::class, 'mahasiswaIndex'])->name('mahasiswa.katalog.inventaris.index');
-        Route::get('/inventaris/{id}', [InventarisController::class, 'mahasiswaShow'])->name('mahasiswa.katalog.inventaris.show');
-    });
-    
-    // Cart routes
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-    Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::put('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-    Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
-    Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-
-
-
-
-
-
-
-Route::get('/mahasiswa/login', [App\Http\Controllers\MahasiswaAuthController::class, 'showLoginForm'])->name('mahasiswa.login');
-Route::post('/mahasiswa/login', [App\Http\Controllers\MahasiswaAuthController::class, 'login'])->name('mahasiswa.login.submit');
-Route::post('/mahasiswa/logout', [App\Http\Controllers\MahasiswaAuthController::class, 'logout'])->name('mahasiswa.logout');
-
-Route::get('/mahasiswa/register', [App\Http\Controllers\MahasiswaAuthController::class, 'showRegistrationForm'])->name('mahasiswa.register');
-Route::post('/mahasiswa/register', [App\Http\Controllers\MahasiswaAuthController::class, 'register'])->name('mahasiswa.register.submit');
-
-
-Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasiswa')->group(function() {
-    Route::get('/dashboard', function() {
-        return view('mahasiswa.page.dashboard');
-    })->name('mahasiswa.dashboard');
-
-    // Mahasiswa Inventaris View
-    Route::prefix('mahasiswa')->group(function () {
-        Route::get('/inventaris', [InventarisController::class, 'mahasiswaIndex'])->name('mahasiswa.katalog.inventaris.index');
-        Route::get('/inventaris/{id}', [InventarisController::class, 'mahasiswaShow'])->name('mahasiswa.katalog.inventaris.show');
-    });
-
-    // Cart routes
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-    Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::put('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-    Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
-    Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-
-
-    // Peminjaman routes for mahasiswa
-    Route::get('/pinjam-inventaris', [PinjamInventarisController::class, 'mahasiswaIndex'])->name('mahasiswa.peminjaman.pinjam-inventaris.index');
-    Route::get('/pinjam-inventaris/create', [PinjamInventarisController::class, 'create'])->name('mahasiswa.peminjaman.pinjam-inventaris.create');
-    Route::post('/pinjam-inventaris', [PinjamInventarisController::class, 'store'])->name('pinjam-inventaris.store');
-    Route::get('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'show'])->name('mahasiswa.peminjaman.pinjam-inventaris.show');
-    Route::get('/pinjam-inventaris/{pinjamInventaris}/edit', [PinjamInventarisController::class, 'edit'])->name('mahasiswa.peminjaman.pinjam-inventaris.edit');
-    Route::put('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'update'])->name('pinjam-inventaris.update');
-
+// Auth Mahasiswa
+Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
+    Route::get('/login', [MahasiswaAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [MahasiswaAuthController::class, 'login'])->name('login.submit');
+    Route::post('/logout', [MahasiswaAuthController::class, 'logout'])->name('logout');
+    Route::get('/register', [MahasiswaAuthController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [MahasiswaAuthController::class, 'register'])->name('register.submit');
 });
 
+Route::middleware(['mahasiswa.auth'])->group(function () {
+    Route::get('/mahasiswa/profile/edit', [ProfileController::class, 'edit'])->name('mahasiswa.profile.edit');
+    Route::patch('/mahasiswa/profile/update', [ProfileController::class, 'updateProfile'])->name('mahasiswa.profile.update');
+    Route::patch('/mahasiswa/profile/update-password', [ProfileController::class, 'updatePassword'])->name('mahasiswa.profile.update-password');
+    Route::delete('/mahasiswa/profile/delete', [ProfileController::class, 'destroy'])->name('mahasiswa.profile.delete');
+});
+
+
+// Routes khusus Mahasiswa (dengan middleware)
+Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('mahasiswa.page.dashboard');
+    })->name('dashboard');
+
+    // Katalog Inventaris untuk Mahasiswa
+    Route::prefix('inventaris')->name('katalog.inventaris.')->group(function () {
+        Route::get('/', [InventarisController::class, 'mahasiswaIndex'])->name('index');
+        Route::get('/{id}', [InventarisController::class, 'mahasiswaShow'])->name('show');
+    });
+
+    // Peminjaman Inventaris untuk Mahasiswa
+    Route::prefix('peminjaman')->name('peminjaman.')->group(function () {
+        Route::get('/pinjam-inventaris', [PinjamInventarisController::class, 'index'])->name('pinjam-inventaris.index');
+        Route::post('/pinjam-inventaris', [PinjamInventarisController::class, 'store'])->name('pinjam-inventaris.store');
+    });
+
+    // Katalog Ruangan untuk Mahasiswa
+    Route::prefix('ruangan')->name('katalog_ruangan.')->group(function () {
+        Route::get('/', [RuanganController::class, 'index'])->name('index');
+        Route::get('/{id}', [RuanganController::class, 'show'])->name('show');
+    });
+
+    // Keranjang / Cart
+    Route::prefix('cart')->name('cart.')->group(function () {
+        Route::get('/', [CartController::class, 'index'])->name('index');
+        Route::post('/add', [CartController::class, 'add'])->name('add');
+        Route::post('/remove/{id}', [CartController::class, 'remove'])->name('remove');
+        Route::put('/update/{id}', [CartController::class, 'update'])->name('update');
+        Route::post('/clear', [CartController::class, 'clear'])->name('clear');
+        Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
+    });
+});

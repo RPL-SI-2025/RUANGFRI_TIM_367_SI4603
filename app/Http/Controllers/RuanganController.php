@@ -21,7 +21,7 @@ class RuanganController extends Controller
         }
 
         $ruangans = $query->orderBy('nama_ruangan')->get();
-        return view('katalog_ruangan.index', compact('ruangans'));
+        return view('mahasiswa.katalog_ruangan.index', compact('ruangans'));
     }
 
     public function show($id)
@@ -30,7 +30,7 @@ class RuanganController extends Controller
         if (is_null($ruangan)) {
             return redirect()->route('admin.katalog_ruangan.index')->with('error', 'Ruangan tidak ditemukan');
         }
-        return view('katalog_ruangan.show', compact('ruangan'));
+        return view('mahasiswakatalog_ruangan.show', compact('ruangan'));
     }
 
 

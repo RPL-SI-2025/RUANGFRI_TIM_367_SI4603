@@ -22,7 +22,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($ruangans as $item)
+        @forelse ($ruangans as $item)
         <tr>
             <td>{{ $loop->iteration }}</td>
             <td>{{ $item->nama_ruangan }}</td>
@@ -47,7 +47,11 @@
                 </form>
             </td>
         </tr>
-        @endforeach
+        @empty
+        <tr>
+            <td colspan="8" class="text-center">Belum ada ruangan</td>
+        </tr>
+        @endforelse
     </tbody>
 </table>
 @endsection
