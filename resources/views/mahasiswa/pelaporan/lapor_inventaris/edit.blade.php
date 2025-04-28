@@ -1,4 +1,4 @@
-@extends('admin.layouts.admin')
+@extends('mahasiswa.layouts.mahasiswa')
 
 @section('title', 'lapor Inventaris')
 
@@ -9,7 +9,7 @@
     </div>
     <div class="card-body">
         
-<form method="POST" action="{{ route('admin.lapor_inventaris.update', $lapor->id_lapor_inventaris) }}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('mahasiswa.lapor_inventaris.update', $lapor->id_lapor_inventaris) }}" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -50,7 +50,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Update</button>
-    <a href="{{ route('admin.lapor_inventaris.index') }}" class="btn btn-secondary">Kembali</a>
+    <a href="{{ route('mahasiswa.lapor_inventaris.index') }}" class="btn btn-secondary">Kembali</a>
 </form>
 @endsection
 

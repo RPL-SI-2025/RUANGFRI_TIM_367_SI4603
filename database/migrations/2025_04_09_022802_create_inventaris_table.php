@@ -12,15 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('inventaris', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_inventaris');
             $table->unsignedBigInteger('id_logistik')->nullable();
-            $table->string('gambar_inventaris')->nullable();
             $table->string('nama_inventaris');
             $table->string('deskripsi');
             $table->integer('jumlah');
             $table->enum('status', ['Tersedia', 'Tidak Tersedia'])->default('Tersedia');
             $table->timestamps();
-    
+            
             $table->foreign('id_logistik')->references('id')->on('admin_logistik');
         });
     }
@@ -34,4 +33,3 @@ return new class extends Migration
     }
 
 };
-

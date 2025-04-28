@@ -18,18 +18,17 @@ Route::get('/', function () {
 });
 
 
+//Lapor Inventaris
+Route::get('admin/laporinventaris', [laporinventarisController::class, 'index'])->name('admin.lapor_inventaris.index');
+Route::get('admin/laporinventaris/{lapor_inventaris}/create', [laporinventarisController::class, 'create'])->name('admin.lapor_inventaris.create');
+Route::post('admin/laporinventaris', [laporinventarisController::class, 'store'])->name('admin.lapor_inventaris.store');
+Route::get('admin/laporinventaris/{lapor_inventaris}/edit', [laporinventarisController::class, 'edit'])->name('admin.lapor_inventaris.edit');
+Route::put('admin/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'update'])->name('admin.lapor_inventaris.update');
+Route::delete('admin/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'destroy'])->name('admin.lapor_inventaris.destroy');
+Route::get('admin/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'show'])->name('admin.lapor_inventaris.show');
+
 
 // Admin Inventaris CRUD
-Route::controller(InventarisController::class)->group(function () {
-    Route::get('/admin/inventaris', [InventarisController::class, 'index'])->name('admin.inventaris.index');
-    Route::get('/admin/inventaris/create', [InventarisController::class, 'create'])->name('admin.inventaris.create');
-    Route::post('/admin/inventaris', [InventarisController::class, 'store'])->name('admin.inventaris.store');
-    Route::get('/admin/inventaris/{inventaris}/edit', [InventarisController::class, 'edit'])->name('admin.inventaris.edit');
-    Route::put('/admin/inventaris/{inventaris}', [InventarisController::class, 'update'])->name('admin.inventaris.update');
-    Route::delete('/admin/inventaris/{inventaris}', [InventarisController::class, 'destroy'])->name('admin.inventaris.destroy');
-    Route::get('/admin/inventaris/{inventaris}', [InventarisController::class, 'show'])->name('admin.inventaris.show');
-});
-    
 Route::get('/admin/inventaris', [InventarisController::class, 'index'])->name('inventaris.index');
 Route::prefix('admin')->group(function () {
     Route::post('/inventaris', [InventarisController::class, 'store'])->name('inventaris.store');
@@ -113,7 +112,7 @@ Route::prefix('admin')->group(function () {
 
 //Lapor Inventaris
 Route::get('admin/laporinventaris', [laporinventarisController::class, 'index'])->name('admin.lapor_inventaris.index');
-Route::get('admin/laporinventaris/{lapor_inventaris}/create', [laporinventarisController::class, 'create'])->name('admin.lapor_inventaris.create');
+Route::get('admin/laporinventaris/create', [laporinventarisController::class, 'create'])->name('admin.lapor_inventaris.create');
 Route::post('admin/laporinventaris', [laporinventarisController::class, 'store'])->name('admin.lapor_inventaris.store');
 Route::get('admin/laporinventaris/{lapor_inventaris}/edit', [laporinventarisController::class, 'edit'])->name('admin.lapor_inventaris.edit');
 Route::put('admin/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'update'])->name('admin.lapor_inventaris.update');
@@ -156,10 +155,22 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::get('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'show'])->name('mahasiswa.peminjaman.pinjam-inventaris.show');
     Route::get('/pinjam-inventaris/{pinjamInventaris}/edit', [PinjamInventarisController::class, 'edit'])->name('mahasiswa.peminjaman.pinjam-inventaris.edit');
     Route::put('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'update'])->name('pinjam-inventaris.update');
+
+    //Pelaporan ruangan mahasiswa
+    Route::get('mahasiswa/pelaporan', [PelaporanController::class, 'index'])->name('mahasiswa.pelaporan.lapor_ruang.index');
+    Route::get('mahasiswa/pelaporan/create', [PelaporanController::class, 'create'])->name('mahasiswa.pelaporan.lapor_ruang.create');
+    Route::post('mahasiswa/pelaporan', [PelaporanController::class, 'store'])->name('mahasiswa.pelaporan.lapor_ruang.store');
+    Route::get('mahasiswa/pelaporan/{lapor_ruang}', [PelaporanController::class, 'show'])->name('mahasiswa.pelaporan.lapor_ruang.show');
+    Route::get('mahasiswa/pelaporan/{lapor_ruang}/edit', [PelaporanController::class, 'edit'])->name('mahasiswa.pelaporan.lapor_ruang.edit');
+    Route::put('mahasiswa/pelaporan/{lapor_ruang}', [PelaporanController::class, 'update'])->name('mahasiswa.pelaporan.lapor_ruang.update');
+     //Route::resource('pelaporans', PelaporanController::class);
+
+    Route::get('mahasiswa/laporinventaris', [laporinventarisController::class, 'index'])->name('mahasiswa.lapor_inventaris.index');
+    Route::get('mahasiswa/laporinventaris/{lapor_inventaris}/create', [laporinventarisController::class, 'create'])->name('mahasiswa.lapor_inventaris.create');
+    Route::post('mahasiswa/laporinventaris', [laporinventarisController::class, 'store'])->name('mahasiswa.lapor_inventaris.store');
+    Route::get('mahasiswa/laporinventaris/{lapor_inventaris}/edit', [laporinventarisController::class, 'edit'])->name('mahasiswa.lapor_inventaris.edit');
+    Route::put('mahasiswa/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'update'])->name('mahasiswa.lapor_inventaris.update');
+    Route::delete('mahasiswa/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'destroy'])->name('mahasiswa.lapor_inventaris.destroy');
+    Route::get('mahasiswa/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'show'])->name('mahasiswa.lapor_inventaris.show');
 });
 Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
-
-// Pelaporan Ruangan
-
-Route::resource('pelaporans', PelaporanController::class);
-

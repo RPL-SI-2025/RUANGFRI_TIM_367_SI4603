@@ -34,7 +34,7 @@
     </div>
 
     <div class="mb-3">
-        <label>Foto Awal (Kosongkan jika tidak diganti)</label><br>
+        <label>Foto Awal</label><br>
         @if($lapor->foto_awal)
             <img src="{{ asset('storage/' . $lapor->foto_awal) }}" width="100"><br>
         @endif
@@ -42,7 +42,7 @@
     </div>
 
     <div class="mb-3">
-        <label>Foto Akhir (Kosongkan jika tidak diganti)</label><br>
+        <label>Foto Akhir</label><br>
         @if($lapor->foto_akhir)
             <img src="{{ asset('storage/' . $lapor->foto_akhir) }}" width="100"><br>
         @endif

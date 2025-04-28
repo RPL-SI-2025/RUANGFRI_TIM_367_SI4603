@@ -37,7 +37,7 @@
             </div>
 
             <button type="submit" class="btn btn-success">Simpan</button>
-            <a href="{{ route('admin.lapor_inventaris.index') }}" class="btn btn-secondary">Kembali</a>
+            <a href="{{ route('mahasiswa.lapor_inventaris.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
 </div>

@@ -1,4 +1,4 @@
-@extends('admin.layouts.admin')
+@extends('mahasiswa.layouts.mahasiswa')
 
 @section('content')
 <div class="container">
@@ -41,7 +41,7 @@
                     @endif
                 </td>
                 <td>
-                    <a href="{{ route('admin.lapor_inventaris.show', $lapor->id_lapor_inventaris) }}" class="btn btn-primary" style="margin-bottom:5px;">Lihat</a>
+                    <a href="{{ route('mahasiswa.lapor_inventaris.show', $lapor->id_lapor_inventaris) }}" class="btn btn-primary" style="margin-bottom:5px;">Lihat</a>
                     <form method="POST" action="{{ route('admin.lapor_inventaris.destroy', $lapor->id_lapor_inventaris) }}" style="display:inline;">
                         @csrf
                         @method('DELETE')
