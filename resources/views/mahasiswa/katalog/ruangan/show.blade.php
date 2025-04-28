@@ -18,13 +18,13 @@
                 <p class="mt-2 text-lg leading-8 text-gray-600 mb-5">{{ $ruangan->status }}</p>
 
                 <!-- Button to add to cart or checkout -->
-                <form method="POST" action="{{ route('cart.add') }}" id="addToCartForm" class="mt-4 flex gap-4 bottom-0 left-0 right-0">
+                <form method="POST" action="{{ route('mahasiswa.cart.ruangan.add') }}" id="addToCartForm" class="mt-4 flex gap-4 bottom-0 left-0 right-0">
                     @csrf
-                    <input type="hidden" name="ruangan_id" value="{{ $ruangan->id }}">
+                    <input type="hidden" name="id_ruangan" value="{{ $ruangan->id }}">
                     <button type="submit" id="addToCartButton" class="w-full bg-white text-red-500 border border-red-500 font-semibold py-2 rounded shadow-md hover:bg-red-500 hover:text-white transform hover:scale-105 transition">
                         Add to Cart
                     </button>
-                    <a href="{{ route('checkout.index') }}" class="w-full text-center bg-red-500 text-white font-semibold py-2 rounded shadow-md hover:bg-red-600 transform hover:scale-105 transition">
+                    <a href="{{ route('mahasiswa.cart.ruangan.checkout') }}" class="w-full text-center bg-red-500 text-white font-semibold py-2 rounded shadow-md hover:bg-red-600 transform hover:scale-105 transition">
                         Checkout
                     </a>
                 </form>

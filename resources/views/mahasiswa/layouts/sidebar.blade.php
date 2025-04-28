@@ -67,6 +67,15 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('mahasiswa/cart*') ? 'active' : '' }}" href="{{ route('mahasiswa.cart.ruangan.index') }}">
+                <i class="fas fa-shopping-basket"></i> Keranjang Ruangan
+                @if(isset($cartCount) && $cartCount > 0)
+                <span class="notification-badge">{{ $cartCount }}</span>
+                @endif
+            </a>
+        </li>
+
         <li class="nav-item mt-3">
             <form action="{{ route('mahasiswa.logout') }}" method="POST" id="logout-form">
                 @csrf

@@ -13,36 +13,37 @@ class CartController extends Controller
         $cartItems = Session::get('cart', []);
         return view('mahasiswa.cart.index', compact('cartItems'));
     }
-    
+
     public function add(Request $request)
     {
+
         $request->validate([
             'id_inventaris' => 'required|exists:inventaris,id',
             'jumlah' => 'required|integer|min:1'
         ]);
-        
+
         $inventaris = Inventaris::findOrFail($request->id_inventaris);
-        
+
         if ($inventaris->jumlah < $request->jumlah) {
             return redirect()->back()->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
         }
-        
+
         $cart = Session::get('cart', []);
-        
+
         // Iki buat ngecek apa barang yang mau ditambah udah ada di cart apa durung
         $itemId = $inventaris->id;
         $newQuantity = $request->jumlah;
-        
+
         if (isset($cart[$itemId])) {
-            
+
             $newQuantity = $cart[$itemId]['jumlah'] + $request->jumlah;
-            
-            
+
+
             if ($newQuantity > $inventaris->jumlah) {
                 return redirect()->back()->with('error', 'Total jumlah yang diminta melebihi stok yang tersedia.');
             }
         }
-        
+
         // Simpan semua data yang dibutuhkan dalam dictionary
         $itemData = [
             'id' => $inventaris->id,
@@ -56,42 +57,42 @@ class CartController extends Controller
             'gambar' => $inventaris->gambar,
             'timestamp' => now()->toDateTimeString(),
         ];
-        
+
         // Update cart dengan data yang lengkap
         $cart[$itemId] = $itemData;
-        
-        
+
+
         Session::put('cart', $cart);
-        
+
         return redirect()->route('mahasiswa.katalog.inventaris.index')->with('success', 'Item berhasil ditambahkan ke keranjang.');
     }
-    
+
     public function remove($id)
     {
         $cart = Session::get('cart', []);
-        
+
         if(isset($cart[$id])) {
             unset($cart[$id]);
             Session::put('cart', $cart);
         }
-        
+
         return redirect()->route('cart.index')->with('success', 'Item berhasil dihapus dari keranjang.');
     }
-    
+
     public function clear()
     {
         Session::forget('cart');
         return redirect()->route('cart.index')->with('success', 'Keranjang berhasil dikosongkan.');
     }
-    
+
     public function checkout()
     {
         $cartItems = Session::get('cart', []);
-        
+
         if(empty($cartItems)) {
             return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong.');
         }
-        
+
         return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.create');
     }
 
@@ -100,24 +101,24 @@ class CartController extends Controller
     $request->validate([
         'jumlah' => 'required|integer|min:1'
     ]);
-    
+
     $cart = Session::get('cart', []);
-    
+
     if(isset($cart[$id])) {
         $inventaris = Inventaris::findOrFail($id);
-        
-        
+
+
         if ($request->jumlah > $inventaris->jumlah) {
             return redirect()->back()->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
         }
-        
-        
+
+
         $cart[$id]['jumlah'] = $request->jumlah;
         Session::put('cart', $cart);
-        
+
         return redirect()->route('cart.index')->with('success', 'Jumlah item berhasil diperbarui.');
     }
-    
+
     return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan dalam keranjang.');
 }
 }

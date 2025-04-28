@@ -2,18 +2,20 @@
 
 use App\Http\Controllers\AdminLogistikController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CartRuanganController;
 use App\Http\Controllers\ControllerMahasiswa;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\laporinventarisController;
 use App\Http\Controllers\MahasiswaAuthController;
 use App\Http\Controllers\PelaporanController;
 use App\Http\Controllers\PinjamInventarisController;
-use App\Http\Controllers\ProfileController;
 
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RuanganController;
 use App\Models\laporinventaris;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -203,7 +205,7 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     });
 
     //Katalog Ruangan untuk Mahasiswa
-    // routes/web.php
+    // routes/web.phpz
 
 
         Route::get('mahasiswa/katalog/ruangan', [RuanganController::class, 'mahasiswaIndex'])->name('katalog.ruangan.index');
@@ -226,7 +228,16 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
         Route::put('/update/{id}', [CartController::class, 'update'])->name('update');
         Route::post('/clear', [CartController::class, 'clear'])->name('clear');
         Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
+
+        Route::get('/ruangan', [CartRuanganController::class, 'index'])->name('ruangan.index');
+        Route::post('/ruangan/add', [CartRuanganController::class, 'add'])->name('ruangan.add');
+        Route::post('/ruangan/remove/{id}', [CartRuanganController::class, 'remove'])->name('ruangan.remove');
+        Route::post('/ruangan/update/{id}', [CartRuanganController::class, 'update'])->name('ruangan.update');
+        Route::post('ruangan/clear', [CartRuanganController::class, 'clear'])->name('ruangan.clear');
+        Route::post('/ruangan/checkout', [CartRuanganController::class, 'checkout'])->name('ruangan.checkout');
     });
+
+
 });
 
     // Peminjaman routes for mahasiswa
