@@ -103,7 +103,7 @@ Route::prefix('admin')->group(function () {
 
 //Lapor Inventaris
 Route::get('admin/laporinventaris', [laporinventarisController::class, 'index'])->name('admin.lapor_inventaris.index');
-Route::get('admin/laporinventaris/create', [laporinventarisController::class, 'create'])->name('admin.lapor_inventaris.create');
+Route::get('admin/laporinventaris/{lapor_inventaris}/create', [laporinventarisController::class, 'create'])->name('admin.lapor_inventaris.create');
 Route::post('admin/laporinventaris', [laporinventarisController::class, 'store'])->name('admin.lapor_inventaris.store');
 Route::get('admin/laporinventaris/{lapor_inventaris}/edit', [laporinventarisController::class, 'edit'])->name('admin.lapor_inventaris.edit');
 Route::put('admin/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'update'])->name('admin.lapor_inventaris.update');

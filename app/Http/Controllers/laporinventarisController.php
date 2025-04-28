@@ -36,8 +36,8 @@ class laporinventarisController extends Controller
             'id_logistik' => 'required|integer',
             'id_mahasiswa' => 'required|integer',
             'datetime' => 'required|date',
-            'foto_awal' => 'nullable|string|max:255',
-            'foto_akhir' => 'nullable|string|max:255',
+            'foto_awal' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'foto_akhir' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'deskripsi' => 'nullable|string|max:255'
         ]);
 
@@ -68,8 +68,8 @@ class laporinventarisController extends Controller
             'id_logistik' => 'sometimes|required|integer',
             'id_mahasiswa' => 'sometimes|required|integer',
             'datetime' => 'sometimes|required|date',
-            'foto_awal' => 'nullable|string|max:255',
-            'foto_akhir' => 'nullable|string|max:255',
+            'foto_awal' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'foto_akhir' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'deskripsi' => 'nullable|string|max:255',
             'oleh'=> 'required',
             'kepada'=> 'required',
