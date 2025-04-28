@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Ruangan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-
 class CartRuanganController extends Controller
 {
     // Display items in the cart
@@ -18,9 +17,9 @@ class CartRuanganController extends Controller
     // Add item (ruangan) to the cart
     public function add(Request $request)
     {
+        
         $request->validate([
             'id_ruangan' => 'required|exists:ruangan,id',
-            'jumlah' => 'required|integer|min:1',
         ]);
 
         $ruangan = Ruangan::findOrFail($request->id_ruangan);
