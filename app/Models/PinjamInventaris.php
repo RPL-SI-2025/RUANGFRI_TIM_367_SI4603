@@ -42,6 +42,7 @@ class PinjamInventaris extends Model
             1 => 'Disetujui',
             2 => 'Ditolak',
             3 => 'Selesai',
+            4 => 'Dibatalkan',
             default => 'Unknown'
         };
     }

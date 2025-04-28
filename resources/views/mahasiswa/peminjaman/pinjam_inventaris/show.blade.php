@@ -33,6 +33,10 @@
                         <span class="badge bg-success">Disetujui</span>
                     @elseif($pinjamInventaris->status == 2)
                         <span class="badge bg-danger">Ditolak</span>
+                    @elseif($pinjamInventaris->status == 3)
+                        <span class="badge bg-info">Selesai</span>
+                    @elseif ($pinjamInventaris->status == 4)
+                        <span class="badge bg-secondary">Dibatalkan</span>
                     @endif
                 </div>
             </div>

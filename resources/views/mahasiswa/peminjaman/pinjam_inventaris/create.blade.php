@@ -124,7 +124,7 @@
                             </div>
 
                             <div class="form-group mb-5">
-                                <label for="file_scan" class="form-label fw-medium">File Scan (Opsional)</label>
+                                <label for="file_scan" class="form-label fw-medium">File Scan </label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light border-end-0">
                                         <i class="fa fa-file-pdf-o text-primary"></i>

@@ -53,6 +53,8 @@
                                     <span class="badge bg-danger">Ditolak</span>
                                 @elseif($group->first()->status == 3)
                                     <span class="badge bg-info">Selesai</span>
+                                @elseif ($group->first()->status == 4)
+                                    <span class="badge bg-secondary">Dibatalkan</span>
                                 @endif
                             </td>
                             <td>
