@@ -88,28 +88,35 @@ class RuanganController extends Controller
         return view('admin.katalog_ruangan.create');
     }
 
-    public function store()
-    {
-        $validatedData = request()->validate([
-            'nama_ruangan' => 'required|unique:ruangan,nama_ruangan',
-            'kapasitas' => 'required|integer|min:10|max:40',
-            'fasilitas' => 'required|string',
-            'lokasi' => 'required|string',
-            'status' => 'required|in:Tersedia,Tidak Tersedia',
-            'gambar' => 'nullable|image|max:2048',
-        ]);
+    public function store(Request $request)
+{
+    $validatedData = $request->validate([
+        'nama_ruangan' => 'required|unique:ruangan,nama_ruangan',
+        'kapasitas'    => 'required|integer|min:10|max:40',
+        'fasilitas'    => 'required|string',
+        'lokasi'       => 'required|string',
+        'status'       => 'required|in:Tersedia,Tidak Tersedia',
+        'gambar'       => 'nullable|image|max:2048',
+    ]);
 
-        if (request()->hasFile('gambar')) {
-            $image = request()->file('gambar');
-            $imageName = Str::random(10) . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('public/katalog_ruangan', $imageName);
-            $validatedData['gambar'] = Storage::url($imagePath);
-        }
+    if ($request->hasFile('gambar')) {
+        $file     = $request->file('gambar');
+        $filename = time() . '_' . $file->getClientOriginalName();
 
-        Ruangan::create($validatedData);
+        Storage::disk('public')->makeDirectory('katalog_ruangan');
+        Storage::disk('public')->putFileAs('katalog_ruangan', $file, $filename);
 
-        return redirect()->route('admin.katalog_ruangan.index')->with('success', 'Ruangan berhasil ditambahkan!');
+        // Simpan hanya nama file, nanti di view dipanggil via asset('storage/…')
+        $validatedData['gambar'] = $filename;
     }
+
+    Ruangan::create($validatedData);
+
+    return redirect()
+        ->route('admin.katalog_ruangan.index')
+        ->with('success', 'Ruangan berhasil ditambahkan!');
+}
+
 
     public function edit($id)
     {
