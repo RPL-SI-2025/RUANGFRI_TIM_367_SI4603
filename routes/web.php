@@ -20,7 +20,6 @@ Route::get('/', function () {
 });
 
 
-<<<<<<< HEAD
 // Admin Dashboard
 Route::get('/admin/dashboard', [AdminLogistikController::class, 'index'])->name('admin.dashboard');
 
@@ -36,12 +35,11 @@ Route::get('/admin/inventaris/{inventaris}', [InventarisController::class, 'show
 
 //CRUD Ruangan (Admin)
 Route::get('/admin/ruangan', [RuanganController::class, 'index'])->name('admin.katalog_ruangan.index');
-Route::get('/admin/ruangan/create', [RuanganController::class, 'create'])->name('katalog_admin.ruangan.create');
+Route::get('/admin/ruangan/create', [RuanganController::class, 'create'])->name('admin.katalog_ruangan.create');
 Route::post('/admin/ruangan/store', [RuanganController::class, 'store'])->name('admin.katalog_ruangan.store');
 Route::get('/admin/ruangan/{id}/edit', [RuanganController::class, 'edit'])->name('admin.katalog_ruangan.edit');
-Route::put('/admin/ruangan/{id}', [RuanganControllern::class, 'update'])->name('admin.katalog_ruangan.update');
+Route::put('/admin/ruangan/{id}', [RuanganController::class, 'update'])->name('admin.katalog_ruangan.update');
 Route::delete('/admin/ruangan/{id}', [RuanganController::class, 'destroy'])->name('admin.katalog_ruangan.destroy');
-=======
 
 // Admin Inventaris CRUD
 Route::get('/admin/inventaris', [InventarisController::class, 'index'])->name('inventaris.index');
@@ -59,8 +57,6 @@ Route::prefix('mahasiswa')->group(function () {
     Route::get('/inventaris/{id}', [InventarisController::class, 'mahasiswaShow'])->name('mahasiswa.inventaris.show');
 });
 
->>>>>>> 56c9520b61852dcf7931cbed02a6ec1281959ee9
-
 
 // Ruangan
 Route::controller(RuanganController::class)->prefix('ruangan')->name('ruangan.')->group(function () {
@@ -73,17 +69,15 @@ Route::controller(RuanganController::class)->prefix('ruangan')->name('ruangan.')
 });
 
 
-<<<<<<< HEAD
-=======
 // Ruangan routes
-Route::controller(ControllerRuangan::class)->group(function () {
-    Route::get('/ruangan', 'index')->name('ruangan.index');
-    Route::get('/ruangan/create', 'create')->name('ruangan.create');
-    Route::post('/ruangan/store', 'store')->name('ruangan.store');
-    Route::get('/ruangan/{id}/edit', 'edit')->name('ruangan.edit');
-    Route::put('/ruangan/{id}', 'update')->name('ruangan.update');
-    Route::delete('/ruangan/{id}', 'destroy')->name('ruangan.destroy');
-});
+// Route::controller(ControllerRuangan::class)->group(function () {
+//     Route::get('/ruangan', 'index')->name('ruangan.index');
+//     Route::get('/ruangan/create', 'create')->name('ruangan.create');
+//     Route::post('/ruangan/store', 'store')->name('ruangan.store');
+//     Route::get('/ruangan/{id}/edit', 'edit')->name('ruangan.edit');
+//     Route::put('/ruangan/{id}', 'update')->name('ruangan.update');
+//     Route::delete('/ruangan/{id}', 'destroy')->name('ruangan.destroy');
+// });
 
 // // Ruangan routes
 // Route::controller(ControllerRuangan::class)->group(function () {
@@ -95,7 +89,6 @@ Route::controller(ControllerRuangan::class)->group(function () {
 //     Route::delete('/ruangan/{id}', 'destroy')->name('ruangan.destroy');
 // });
 
->>>>>>> 56c9520b61852dcf7931cbed02a6ec1281959ee9
 // // Mahasiswa routes
 // Route::controller(ControllerMahasiswa::class)->group(function () {
 //     Route::get('/mahasiswa', 'index')->name('mahasiswa.index');
@@ -106,7 +99,6 @@ Route::controller(ControllerRuangan::class)->group(function () {
 //     Route::delete('/mahasiswa/{id}', 'destroy')->name('mahasiswa.destroy');
 // });
 
-<<<<<<< HEAD
 
 // AApproval Peminjaman Inventaris (Admin)
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -114,7 +106,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::patch('/pinjam-inventaris/{pinjamInventaris}/update-status', [PinjamInventarisController::class, 'updateStatus'])->name('pinjam-inventaris.update-status');
     Route::delete('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'destroy'])->name('pinjam-inventaris.destroy');
 });
-=======
+
 // Admin approval interface
 Route::prefix('admin')->group(function () {
     // Admin Dashboard
@@ -137,7 +129,6 @@ Route::prefix('admin')->group(function () {
     Route::put('/pinjam-inventaris/{pinjamInventaris}/update-status', [PinjamInventarisController::class, 'updateStatus'])->name('pinjam-inventaris.update-status');
 });
 
->>>>>>> 56c9520b61852dcf7931cbed02a6ec1281959ee9
 
 //Lapor Inventaris
 Route::get('admin/laporinventaris', [laporinventarisController::class, 'index'])->name('admin.lapor_inventaris.index');
@@ -157,11 +148,13 @@ Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
     Route::post('/register', [MahasiswaAuthController::class, 'register'])->name('register.submit');
 });
 
-Route::middleware(['mahasiswa.auth'])->group(function () {
-    Route::get('/mahasiswa/profile/edit', [ProfileController::class, 'edit'])->name('mahasiswa.profile.edit');
-    Route::patch('/mahasiswa/profile/update', [ProfileController::class, 'updateProfile'])->name('mahasiswa.profile.update');
-    Route::patch('/mahasiswa/profile/update-password', [ProfileController::class, 'updatePassword'])->name('mahasiswa.profile.update-password');
-    Route::delete('/mahasiswa/profile/delete', [ProfileController::class, 'destroy'])->name('mahasiswa.profile.delete');
+Auth::routes(['verify' => true]);
+
+Route::middleware(['auth:mahasiswa'])->group(function () {
+    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('profile/update', [ProfileController::class, 'updateProfile'])->name('mahasiswa.profile.update');
+    Route::patch('profile/update-password', [ProfileController::class, 'updatePassword'])->name('mahasiswa.profile.update-password');
+    Route::delete('profile/delete', [ProfileController::class, 'destroy'])->name('mahasiswa.profile.delete');
 });
 
 
@@ -177,18 +170,27 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
         Route::get('/{id}', [InventarisController::class, 'mahasiswaShow'])->name('show');
     });
 
-<<<<<<< HEAD
     // Peminjaman Inventaris untuk Mahasiswa
     Route::prefix('peminjaman')->name('peminjaman.')->group(function () {
         Route::get('/pinjam-inventaris', [PinjamInventarisController::class, 'index'])->name('pinjam-inventaris.index');
         Route::post('/pinjam-inventaris', [PinjamInventarisController::class, 'store'])->name('pinjam-inventaris.store');
     });
 
-    // Katalog Ruangan untuk Mahasiswa
-    Route::prefix('ruangan')->name('katalog_ruangan.')->group(function () {
-        Route::get('/', [RuanganController::class, 'index'])->name('index');
-        Route::get('/{id}', [RuanganController::class, 'show'])->name('show');
-    });
+    //Katalog Ruangan untuk Mahasiswa
+    // routes/web.php
+
+
+        Route::get('mahasiswa/katalog/ruangan', [RuanganController::class, 'mahasiswaIndex'])->name('katalog.ruangan.index');
+        Route::get('mahasiswa/katalog/ruangan/{id}', [RuanganController::class, 'mahasiswaShow'])->name('katalog.ruangan.show');
+
+
+
+
+
+    // Route::prefix('ruangan')->name('mahasiswa.katalog.ruangan.')->group(function () {
+    //     Route::get('/', [RuanganController::class, 'mahasiswaindex'])->name('index');
+    //     Route::get('/{id}', [RuanganController::class, 'mahasiswashow'])->name('show');
+    // });
 
     // Keranjang / Cart
     Route::prefix('cart')->name('cart.')->group(function () {
@@ -200,7 +202,7 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
         Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
     });
 });
-=======
+
     // Peminjaman routes for mahasiswa
     Route::get('/pinjam-inventaris', [PinjamInventarisController::class, 'mahasiswaIndex'])->name('mahasiswa.peminjaman.pinjam-inventaris.index');
     Route::get('/pinjam-inventaris/create', [PinjamInventarisController::class, 'create'])->name('mahasiswa.peminjaman.pinjam-inventaris.create');
@@ -208,11 +210,9 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::get('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'show'])->name('mahasiswa.peminjaman.pinjam-inventaris.show');
     Route::get('/pinjam-inventaris/{pinjamInventaris}/edit', [PinjamInventarisController::class, 'edit'])->name('mahasiswa.peminjaman.pinjam-inventaris.edit');
     Route::put('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'update'])->name('pinjam-inventaris.update');
-});
+
 Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
 
 // Pelaporan Ruangan
 
 Route::resource('pelaporans', PelaporanController::class);
-
->>>>>>> 56c9520b61852dcf7931cbed02a6ec1281959ee9

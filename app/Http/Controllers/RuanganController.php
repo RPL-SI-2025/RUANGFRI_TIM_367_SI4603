@@ -7,10 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
+
 class RuanganController extends Controller
 {
-
-    public function index(Request $request)
+    // Tampilkan daftar ruangan
+    public function mahasiswaIndex(Request $request)
     {
         $query = Ruangan::query();
 
@@ -21,20 +22,45 @@ class RuanganController extends Controller
         }
 
         $ruangans = $query->orderBy('nama_ruangan')->get();
-        return view('mahasiswa.katalog_ruangan.index', compact('ruangans'));
+        return view('mahasiswa.katalog.ruangan.index', compact('ruangans'));
     }
 
-    public function show($id)
+    // Tampilkan detail satu ruangan
+    public function mahasiswaShow($id)
     {
-        $ruangan = Ruangan::find($id);
-        if (is_null($ruangan)) {
-            return redirect()->route('admin.katalog_ruangan.index')->with('error', 'Ruangan tidak ditemukan');
-        }
-        return view('mahasiswakatalog_ruangan.show', compact('ruangan'));
+        $ruangan = Ruangan::findOrFail($id);
+        return view('mahasiswa.katalog.ruangan.show', compact('ruangan'));
     }
 
 
-    public function adminindex(Request $request)
+
+
+
+    // public function mahasiswaindex(Request $request)
+    // {
+    //     $query = Ruangan::query();
+
+    //     if ($request->filled('search')) {
+    //         $search = $request->search;
+    //         $query->where('nama_ruangan', 'like', "%{$search}%")
+    //               ->orWhere('lokasi', 'like', "%{$search}%");
+    //     }
+
+    //     $ruangans = $query->orderBy('nama_ruangan')->get();
+    //     return view('mahasiswa.katalog.ruangan.index', compact('ruangans'));
+    // }
+
+    // public function mahasiswashow($id)
+    // {
+    //     $ruangan = Ruangan::find($id);
+    //     if (is_null($ruangan)) {
+    //         return redirect()->route('admin.katalog_ruangan.index')->with('error', 'Ruangan tidak ditemukan');
+    //     }
+    //     return view('mahasiswa.katalog.ruangan.show', compact('ruangan'));
+    // }
+
+
+    public function index(Request $request)
     {
         $query = Ruangan::query();
 
@@ -48,7 +74,7 @@ class RuanganController extends Controller
         return view('admin.katalog_ruangan.index', compact('ruangans'));
     }
 
-    public function adminshow($id)
+    public function show($id)
     {
         $ruangan = Ruangan::find($id);
         if (is_null($ruangan)) {
@@ -57,12 +83,12 @@ class RuanganController extends Controller
         return view('admin.katalog_ruangan.show', compact('ruangan'));
     }
 
-    public function admincreate()
+    public function create()
     {
         return view('admin.katalog_ruangan.create');
     }
 
-    public function adminstore()
+    public function store()
     {
         $validatedData = request()->validate([
             'nama_ruangan' => 'required|unique:ruangan,nama_ruangan',
@@ -85,7 +111,7 @@ class RuanganController extends Controller
         return redirect()->route('admin.katalog_ruangan.index')->with('success', 'Ruangan berhasil ditambahkan!');
     }
 
-    public function adminedit($id)
+    public function edit($id)
     {
         $ruangan = Ruangan::find($id);
 
@@ -96,7 +122,7 @@ class RuanganController extends Controller
         return view('admin.katalog_ruangan.edit', compact('ruangan'));
     }
 
-    public function adminupdate(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $ruangan = Ruangan::find($id);
 
@@ -131,7 +157,7 @@ class RuanganController extends Controller
     }
 
 
-    public function admindestroy($id)
+    public function destroy($id)
     {
         $ruangan = Ruangan::find($id);
 

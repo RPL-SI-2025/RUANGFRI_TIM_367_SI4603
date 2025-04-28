@@ -28,7 +28,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link py-2 {{ request()->is('mahasiswa/katalog/ruangan*') ? 'active' : '' }}"
-                           href="{{ route('mahasiswa.katalog_ruangan.index') }}">
+                           href="{{ route('mahasiswa.katalog.ruangan.index') }}">
                             <i class="fas fa-building fa-sm"></i>
                             <span class="ms-2">Katalog Ruangan</span>
                         </a>

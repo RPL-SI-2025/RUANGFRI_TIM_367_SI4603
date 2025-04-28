@@ -57,4 +57,44 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'nama_mahasiswa' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:mahasiswa,email,' . Auth::guard('mahasiswa')->id(),
+        ]);
+
+        $mahasiswa = Auth::guard('mahasiswa')->user();
+        $mahasiswa->nama_mahasiswa = $request->nama_mahasiswa;
+        $mahasiswa->email = $request->email;
+        $mahasiswa->save();
+
+        return redirect()->route('profile.edit')->with('status', 'Profil berhasil diperbarui!');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $mahasiswa = Auth::guard('mahasiswa')->user();
+
+        if (!Hash::check($request->current_password, $mahasiswa->password)) {
+            return back()->withErrors(['current_password' => 'Password saat ini tidak valid.']);
+        }
+
+        $mahasiswa->password = Hash::make($request->password);
+        $mahasiswa->save();
+
+        return redirect()->route('profile.edit')->with('status', 'Password berhasil diperbarui!');
+    }
+
+    public function showProfile()
+    {
+        $mahasiswa = Auth::guard('mahasiswa')->user();
+        return view('profile.show', compact('mahasiswa'));
+    }
 }

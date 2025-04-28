@@ -4,7 +4,7 @@
     <div class="bg-white min-h-screen flex justify-center items-center pb-20">
         <div class="bg-white p-6 rounded-lg flex flex-col md:flex-row w-full max-w-7xl">
             <div class="flex flex-col w-full md:w-1/2">
-                
+
                 <img id="mainImage" src="{{ $ruangan->gambar }}" alt="{{ $ruangan->nama_ruangan }}" class="w-full h-[500px] rounded-xl shadow-xl object-cover mb-4" />
             </div>
             <div class="w-full md:w-1/2 bg-white text-red-700 rounded-lg p-6 ml-0 md:ml-8">
