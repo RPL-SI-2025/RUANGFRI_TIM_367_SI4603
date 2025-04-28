@@ -58,14 +58,15 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    public function updateProfile(Request $request)
+     public function updateProfile(Request $request)
     {
+        $mahasiswa = Auth::guard('mahasiswa')->user();
+
         $request->validate([
             'nama_mahasiswa' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:mahasiswa,email,' . Auth::guard('mahasiswa')->id(),
+            'email' => 'required|string|email|max:255|unique:mahasiswa,email,' . $mahasiswa->id,
         ]);
 
-        $mahasiswa = Auth::guard('mahasiswa')->user();
         $mahasiswa->nama_mahasiswa = $request->nama_mahasiswa;
         $mahasiswa->email = $request->email;
         $mahasiswa->save();
