@@ -60,6 +60,29 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center {{ request()->is('mahasiswa/pelaporan*') ? 'active' : '' }}" 
+               href="#pelaporanSubmenu" 
+               data-bs-toggle="collapse" 
+               aria-expanded="{{ request()->is('mahasiswa/pelaporan*') ? 'true' : 'false' }}">
+                <div>
+                    <i class="fas fa-book"></i> Pelaporan Peminjaman
+                </div>
+                <i class="fas fa-chevron-down small"></i>
+            </a>
+            <div class="collapse {{ request()->is('mahasiswa/pelaporan*') ? 'show' : '' }}" id="pelaporanSubmenu">
+                <ul class="nav flex-column ms-3 mt-1">
+                    <li class="nav-item">
+                        <a class="nav-link py-2 {{ request()->is('mahasiswa/pelaporan/lapor_ruangan*') ? 'active' : '' }}" 
+                           href="{{ route('mahasiswa.pelaporan.lapor_ruang.index') }}">
+                            <i class="fas fa-tools fa-sm"></i>
+                            <span class="ms-2">Pelaporan Ruangan</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
         <li class="nav-item mt-3">
             <form action="{{ route('mahasiswa.logout') }}" method="POST" id="logout-form">
                 @csrf

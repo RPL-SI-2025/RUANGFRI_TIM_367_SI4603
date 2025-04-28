@@ -108,7 +108,7 @@ class PinjamInventarisController extends Controller
         // Clear cart after successful submission
         Session::forget('cart');
         
-        return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
+        return redirect()->route('pinjam-inventaris.index')
             ->with('success', 'Pengajuan peminjaman inventaris berhasil ditambahkan.');
     }
 
@@ -118,7 +118,7 @@ class PinjamInventarisController extends Controller
     $mahasiswaId = Session::get('mahasiswa_id');
     
     if ($pinjamInventaris->id_mahasiswa != $mahasiswaId) {
-        return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
+        return redirect()->route('pinjam-inventaris.index')
             ->with('error', 'Anda tidak diizinkan melihat peminjaman ini.');
     }
     
@@ -204,7 +204,7 @@ class PinjamInventarisController extends Controller
         }
     }
     
-    return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
+    return redirect()->route('pinjam-inventaris.index')
         ->with('success', 'Pengajuan peminjaman berhasil diperbarui.');
     }
     
