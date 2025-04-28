@@ -58,7 +58,16 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('mahasiswa.peminjaman.pinjam-inventaris.show', $group->first()->id) }}" class="btn btn-info">Detail</a>
+                                <a href="{{ route('mahasiswa.peminjaman.pinjam-inventaris.show', $group->first()->id) }}" class="btn btn-info btn-sm">
+                                    <i class="fas fa-eye"></i> Detail
+                                </a>
+                                
+                                @if($group->first()->status == 1) {{-- Only show the "Selesai" button if status is approved (1) --}}
+                                    <a href="{{ route('mahasiswa.pelaporan.lapor_inventaris.create', ['id_peminjaman' => $group->first()->id]) }}" 
+                                    class="btn btn-success btn-sm">
+                                        <i class="fas fa-check-circle"></i> Selesai
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                     @endforeach
