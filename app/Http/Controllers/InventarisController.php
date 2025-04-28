@@ -24,10 +24,14 @@ class InventarisController extends Controller
 {
     $data = $request->validate([
         'gambar_inventaris' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'nama_inventaris'   => 'required|string',
+        'nama_inventaris'   => 'required|string|unique:inventaris,nama_inventaris',
         'deskripsi'         => 'required|string',
         'jumlah'            => 'required|integer',
         'status'            => 'required|in:Tersedia,Tidak Tersedia',
+    ], [
+        'nama_inventaris.unique' => 'inventaris sudah ada.',
+        'gambar_inventaris.required' => 'Gambar inventaris wajib diunggah.',
+        'jumlah.integer' => 'Jumlah harus berupa angka.',
     ]);
 
     Storage::disk('public')->makeDirectory('inventaris');
