@@ -108,7 +108,7 @@ class PinjamInventarisController extends Controller
         // Clear cart after successful submission
         Session::forget('cart');
         
-        return redirect()->route('pinjam-inventaris.index')
+        return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
             ->with('success', 'Pengajuan peminjaman inventaris berhasil ditambahkan.');
     }
 

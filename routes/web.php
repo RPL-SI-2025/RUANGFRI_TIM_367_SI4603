@@ -167,19 +167,14 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::put('mahasiswa/pelaporan/{lapor_ruang}', [PelaporanController::class, 'update'])->name('mahasiswa.pelaporan.lapor_ruang.update');
      //Route::resource('pelaporans', PelaporanController::class);
 
-});
-Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
-
-
-
-
-    Route::get('mahasiswa/laporinventaris', [laporinventarisController::class, 'index'])->name('mahasiswa.lapor_inventaris.index');
-    Route::get('mahasiswa/laporinventaris/{lapor_inventaris}/create', [laporinventarisController::class, 'create'])->name('mahasiswa.lapor_inventaris.create');
-    Route::post('mahasiswa/laporinventaris', [laporinventarisController::class, 'store'])->name('mahasiswa.lapor_inventaris.store');
+    Route::get('mahasiswa/laporinventaris', [laporinventarisController::class, 'index'])->name('mahasiswa.pelaporan.lapor_inventaris.index');
+    Route::get('mahasiswa/laporinventaris/create', [laporinventarisController::class, 'create'])->name('mahasiswa.pelaporan.lapor_inventaris.create');
+    Route::post('mahasiswa/laporinventaris', [laporinventarisController::class, 'store'])->name('mahasiswa.pelaporan.lapor_inventaris.store');
     Route::get('mahasiswa/laporinventaris/{lapor_inventaris}/edit', [laporinventarisController::class, 'edit'])->name('mahasiswa.lapor_inventaris.edit');
     Route::put('mahasiswa/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'update'])->name('mahasiswa.lapor_inventaris.update');
     Route::delete('mahasiswa/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'destroy'])->name('mahasiswa.lapor_inventaris.destroy');
     Route::get('mahasiswa/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'show'])->name('mahasiswa.lapor_inventaris.show');
 });
+
 Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
 

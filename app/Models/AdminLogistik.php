@@ -22,4 +22,10 @@ class AdminLogistik extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function laporInventaris()
+    {
+        return $this->hasMany(LaporInventaris::class, 'id_logistik');
+    }
+
 }
