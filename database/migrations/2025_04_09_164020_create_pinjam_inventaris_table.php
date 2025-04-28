@@ -21,7 +21,7 @@ class CreatePinjamInventarisTable extends Migration
             $table->integer('status')->default(0); // 0: Menunggu Persetujuan, 1: Disetujui, 2: Ditolak, 3: Selesai
             $table->timestamps();
             
-            $table->foreign('id_inventaris')->references('id_inventaris')->on('inventaris');
+            $table->foreign('id_inventaris')->references('id')->on('inventaris');
             $table->foreign('id_mahasiswa')->references('id')->on('mahasiswa');
         });
     }
