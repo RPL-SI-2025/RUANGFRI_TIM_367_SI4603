@@ -165,16 +165,7 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::get('mahasiswa/pelaporan/{lapor_ruang}', [PelaporanController::class, 'show'])->name('mahasiswa.pelaporan.lapor_ruang.show');
     Route::get('mahasiswa/pelaporan/{lapor_ruang}/edit', [PelaporanController::class, 'edit'])->name('mahasiswa.pelaporan.lapor_ruang.edit');
     Route::put('mahasiswa/pelaporan/{lapor_ruang}', [PelaporanController::class, 'update'])->name('mahasiswa.pelaporan.lapor_ruang.update');
-
-    //Pelporan ruangan Admin
     
-     //Route::resource('pelaporans', PelaporanController::class);
-
-});
-Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
-Route::get('admin/pelaporan', [PelaporanController::class, 'adminIndex'])->name('mahasiswa.pelaporan.lapor_ruang.index');
-
-
 
     Route::get('mahasiswa/laporinventaris', [laporinventarisController::class, 'index'])->name('mahasiswa.lapor_inventaris.index');
     Route::get('mahasiswa/laporinventaris/{lapor_inventaris}/create', [laporinventarisController::class, 'create'])->name('mahasiswa.lapor_inventaris.create');
@@ -183,6 +174,11 @@ Route::get('admin/pelaporan', [PelaporanController::class, 'adminIndex'])->name(
     Route::put('mahasiswa/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'update'])->name('mahasiswa.lapor_inventaris.update');
     Route::delete('mahasiswa/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'destroy'])->name('mahasiswa.lapor_inventaris.destroy');
     Route::get('mahasiswa/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'show'])->name('mahasiswa.lapor_inventaris.show');
+
+    
+
 });
 Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
+
+
 
