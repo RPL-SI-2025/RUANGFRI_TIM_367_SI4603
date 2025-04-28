@@ -9,7 +9,7 @@
             <small class="text-muted">Selamat datang, {{ Session::get('mahasiswa_name') }}</small>
         </div>
     </div>
-
+    
     <div class="d-flex align-items-center">
 
         <div class="position-relative me-3">
@@ -23,7 +23,7 @@
                 @endif
             </a>
         </div>
-
+        
         <div class="user-dropdown dropdown">
             <a class="dropdown-toggle d-flex align-items-center text-decoration-none" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="user-avatar">{{ substr(Session::get('mahasiswa_name') ?? 'MA', 0, 2) }}</div>
@@ -43,7 +43,8 @@
                     </div>
                 </li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item py-2" href="{{ route('profile.edit') }}"><i class="fas fa-user-circle me-2 text-primary"></i> Profil Saya</a></li>
+                <li><a class="dropdown-item py-2" href="#"><i class="fas fa-user-circle me-2 text-primary"></i> Profil Saya</a></li>
+                <li><a class="dropdown-item py-2" href="#"><i class="fas fa-cog me-2 text-primary"></i> Pengaturan</a></li>
                 <li><a class="dropdown-item py-2" href="#"><i class="fas fa-question-circle me-2 text-primary"></i> Bantuan</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li>

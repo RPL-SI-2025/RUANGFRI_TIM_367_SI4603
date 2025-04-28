@@ -10,15 +10,11 @@
         .sidebar {
             height: 100vh;
             position: fixed;
-            background-color: #1aa678;
         }
         main {
             margin-left: 16.6%;
         }
-        .navbar {
-            background-color: #1aa678;
-        }
-    </style
+    </style>
 </head>
 <body>
 
@@ -27,11 +23,11 @@
             <a class="navbar-brand fw-bold d-flex align-items-center" href="{{ route('admin.dashboard') }}">
                 <i class="bi bi-speedometer2 me-2"></i> Admin Panel
             </a>
-
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
+    
             <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
                 <ul class="navbar-nav align-items-center">
                     <li class="nav-item me-3">
@@ -48,7 +44,7 @@
             </div>
         </div>
     </nav>
-
+    
 
 <div class="container-fluid">
     <div class="row">
@@ -58,9 +54,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('admin.dashboard') }}"><i class="bi bi-house-door"></i> Dashboard</a>
                 </li>
-                {{-- <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link" href="#"><i class="bi bi-person"></i> Profile</a>
-                </li> --}}
+                </li>
 
                 <!-- Manajemen Ruangan -->
                 <li class="nav-item">
@@ -69,7 +65,7 @@
                     </a>
                     <div class="collapse ms-3" id="ruanganMenu">
                         <ul class="nav flex-column">
-                            <li><a class="nav-link" href="{{ route('admin.katalog_ruangan.index') }}">📁 Data Ruangan</a></li>
+                            <li><a class="nav-link" {{-- href="{{ route('ruangan.index') }}" --}}>📁 Data Ruangan</a></li>
                             <li><a class="nav-link" {{-- href="{{ route('approval.ruangan') }}" --}}>✅ Approval Ruangan</a></li>
                             <li><a class="nav-link" {{-- href="{{ route('laporan.ruangan') }}" --}}>📋 Laporan Ruangan</a></li>
                             <li><a class="nav-link" {{-- href="{{ route('riwayat.peminjaman') }}" --}}>🗓️ Riwayat Peminjaman Ruangan</a></li>
