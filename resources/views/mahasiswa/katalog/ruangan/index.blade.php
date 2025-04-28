@@ -19,7 +19,8 @@
                         <a href="{{ route('mahasiswa.katalog.ruangan.show', $item->id) }}"
                            class="btn btn-primary">Lihat Detail</a>
                         @if($item->status === 'Tersedia')
-                        <form action="{{ route('mahasiswa.cart.add') }}" method="POST">
+
+                        <form action="{{ route('mahasiswa.cart.ruangan.add') }}" method="POST">
                             @csrf
                             <input type="hidden" name="id_ruangan" value="{{ $item->id }}">
                             <button class="btn btn-success">

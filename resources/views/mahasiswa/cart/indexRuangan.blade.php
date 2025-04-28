@@ -5,11 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card shadow-sm border-0 rounded-lg">
-            <div class="card-header bg-white border-bottom-0 pt-4 pb-3">
-            <div class="card-header bg-white border-bottom-0 pt-4 pb-3">
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="card-header bg-white border-bottom-0 pt-4 pb-3">
+                    <div class="d-flex justify-content-between align-items-center">
                         <h4 class="text-primary mb-0 fw-bold">
-                            <i class="fa fa-shopping-basket me-2"></i>Keranjang Peminjaman
+                            <i class="fa fa-door-open me-2"></i>Keranjang Peminjaman Ruangan
                         </h4>
                     </div>
 
@@ -17,6 +16,9 @@
                         <h5 class="text-secondary mb-0">
                             <i class="fa fa-list me-2"></i>Daftar Ruangan
                         </h5>
+                        <a href="{{ route('mahasiswa.katalog.ruangan.index') }}" class="btn btn-primary rounded-pill px-4">
+                            <i class="fa fa-plus me-1"></i> Pilih Ruangan
+                        </a>
                     </div>
                 </div>
 
@@ -38,25 +40,26 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td class="fw-medium">{{ $item['nama_ruangan'] }}</td>
                                             <td>
-                                                <form action="{{ route('mahasiswa.cart.update', $id) }}" method="POST" class="d-flex align-items-center">
+                                                <form action="{{ route('mahasiswa.cart.ruangan.update', $id) }}" method="POST" class="d-flex align-items-center">
                                                     @csrf
                                                     @method('PUT')
                                                     <div class="input-group input-group-sm" style="width: 140px;">
-                                                        <input type="number" name="jumlah" value="{{ $item['jumlah'] }}"
-                                                            {{-- min="1" max="{{ $item['stok_tersedia'] }}" class="form-control" --}}
-                                                            aria-label="Quantity">
+                                                        {{-- <input type="number" name="jumlah" value="{{ $item['jumlah'] }}"
+                                                            min="1" max="{{ $item['kapasitas'] }}" class="form-control"
+                                                            aria-label="Jumlah"> --}}
                                                         <button type="submit" class="btn btn-outline-primary">
                                                             <i class="fa fa-refresh"></i>
                                                         </button>
                                                     </div>
-                                                    {{-- <small class="text-muted ms-2">Max: {{ $item['stok_tersedia'] }}</small> --}}
+                                                    <small class="text-muted ms-2">Max: {{ $item['kapasitas'] }}</small>
                                                 </form>
                                             </td>
                                             <td>
                                                 <form action="{{ route('mahasiswa.cart.ruangan.remove', $id) }}" method="POST" class="d-inline">
                                                     @csrf
+                                                    @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill"
-                                                        onclick="return confirm('Yakin ingin menghapus item ini?')">
+                                                        onclick="return confirm('Yakin ingin menghapus ruangan ini?')">
                                                         <i class="fa fa-trash me-1"></i> Hapus
                                                     </button>
                                                 </form>
@@ -71,7 +74,7 @@
                             <form action="{{ route('mahasiswa.cart.ruangan.clear') }}" method="POST" class="d-inline">
                                 @csrf
                                 <button type="submit" class="btn btn-outline-secondary rounded-pill"
-                                onclick="return confirm('Yakin ingin mengosongkan keranjang?')">
+                                    onclick="return confirm('Yakin ingin mengosongkan keranjang ruangan?')">
                                     <i class="fa fa-trash me-1"></i> Kosongkan Keranjang
                                 </button>
                             </form>
@@ -86,9 +89,9 @@
                     @else
                         <div class="text-center py-5">
                             <div class="mb-3">
-                                <i class="fa fa-shopping-cart fa-4x text-muted"></i>
+                                <i class="fa fa-door-closed fa-4x text-muted"></i>
                             </div>
-                            <h5 class="text-muted mb-4">Keranjang Anda masih kosong</h5>
+                            <h5 class="text-muted mb-4">Keranjang ruangan Anda masih kosong</h5>
                             <a href="{{ route('mahasiswa.katalog.ruangan.index') }}" class="btn btn-primary rounded-pill px-4">
                                 <i class="fa fa-plus me-1"></i> Pilih Ruangan
                             </a>

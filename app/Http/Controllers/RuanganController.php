@@ -181,4 +181,6 @@ class RuanganController extends Controller
 
         return redirect()->route('admin.katalog_ruangan.index')->with('success', 'Ruangan berhasil dihapus!');
     }
+
+
 }
