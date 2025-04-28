@@ -1,56 +1,53 @@
 @extends('admin.layouts.admin')
 
+@section('title', 'Daftar Laporan Inventaris')
+
 @section('content')
 <div class="container">
-    <h2>Daftar Pelaporan Inventaris</h2>
+    <h2 class="mb-4">Daftar Laporan Inventaris</h2>
     
-   </div>
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
     
-    <table border="1" cellpadding="10" cellspacing="0" style="width:100%; text-align:center;">
-    <table class="table table-bordered">
-    <thead>
-            <tr>
-                <th>ID</th>
-                <th>Oleh</th>
-                <th>Kepada</th>
-                <th>Deskripsi</th>
-                <th>Foto Awal</th>
-                <th>Foto Akhir</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($laporan as $lapor)
-            <tr>
-                <td>{{ $lapor->id_lapor_inventaris }}</td>
-                <td>{{ $lapor->oleh }}</td>
-                <td>{{ $lapor->kepada }}</td>
-                <td>{{ $lapor->deskripsi }}</td>
-                <td>
-                    @if($lapor->foto_awal)
-                        <img src="{{ asset('storage/' . $lapor->foto_awal) }}" width="100">
-                    @else
-                        Tidak Ada
-                    @endif
-                </td>
-                <td>
-                    @if($lapor->foto_akhir)
-                        <img src="{{ asset('storage/' . $lapor->foto_akhir) }}" width="100">
-                    @else
-                        Tidak Ada
-                    @endif
-                </td>
-                <td>
-                    <a href="{{ route('admin.lapor_inventaris.show', $lapor->id_lapor_inventaris) }}" class="btn btn-primary" style="margin-bottom:5px;">Lihat</a>
-                    <form method="POST" action="{{ route('admin.lapor_inventaris.destroy', $lapor->id_lapor_inventaris) }}" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" onclick="return confirm('Hapus data ini?')" class="btn btn-danger">Hapus</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tanggal</th>
+                            <th>Mahasiswa</th>
+                            <th>Deskripsi</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($laporan as $item)
+                        <tr>
+                            <td>{{ $item->id_lapor_inventaris }}</td>
+                            <td>{{ \Carbon\Carbon::parse($item->datetime)->format('d/m/Y H:i') }}</td>
+                            <td>{{ $item->mahasiswa->nama_mahasiswa ?? 'N/A' }}</td>
+                            <td>{{ \Str::limit($item->deskripsi, 50) }}</td>
+                            <td>
+                                <!-- Admin hanya bisa melihat detail -->
+                                <a href="{{ route('admin.lapor_inventaris.show', $item->id_lapor_inventaris) }}" class="btn btn-info btn-sm">
+                                    <i class="bi bi-eye"></i> Detail
+                                </a>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="5" class="text-center">Tidak ada data laporan</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
