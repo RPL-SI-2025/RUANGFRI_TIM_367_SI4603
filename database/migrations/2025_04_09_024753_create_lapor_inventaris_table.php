@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('lapor_inventaris', function (Blueprint $table) {
             $table->id('id_lapor_inventaris');
-                $table->integer('id_logistik');
-                $table->integer('id_mahasiswa')->unique();
+                $table->unsignedBigInteger('id_logistik');
+                $table->unsignedBigInteger('id_mahasiswa');;
                 $table->date('datetime');
                 $table->string('foto_awal');
                 $table->string('foto_akhir');
@@ -22,6 +22,8 @@ return new class extends Migration
                 $table->string('oleh');
                 $table->string('kepada');
                 $table->timestamps();
+                $table->foreign('id_logistik')->references('id')->on('admin_logistik');
+                $table->foreign('id_mahasiswa')->references('id')->on('mahasiswa');
         });
     }
 
