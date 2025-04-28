@@ -43,7 +43,7 @@
                     </div>
                 </li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item py-2" href="#"><i class="fas fa-user-circle me-2 text-primary"></i> Profil Saya</a></li>
+                <li><a class="dropdown-item py-2" href="{{ route('profile.edit') }}"><i class="fas fa-user-circle me-2 text-primary"></i> Profil Saya</a></li>
                 <li><a class="dropdown-item py-2" href="#"><i class="fas fa-cog me-2 text-primary"></i> Pengaturan</a></li>
                 <li><a class="dropdown-item py-2" href="#"><i class="fas fa-question-circle me-2 text-primary"></i> Bantuan</a></li>
                 <li><hr class="dropdown-divider"></li>
