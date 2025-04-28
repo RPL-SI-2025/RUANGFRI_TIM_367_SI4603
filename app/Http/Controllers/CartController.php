@@ -92,7 +92,7 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong.');
         }
         
-        return redirect()->route('pinjam-inventaris.create');
+        return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.create');
     }
 
     public function update(Request $request, $id)

@@ -30,9 +30,26 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link">
-                <i class="fas fa-box-open"></i> Daftar Peminjaman
+            <a class="nav-link d-flex justify-content-between align-items-center {{ request()->is('mahasiswa/peminjaman*') ? 'active' : '' }}" 
+               href="#peminjamanSubmenu" 
+               data-bs-toggle="collapse" 
+               aria-expanded="{{ request()->is('mahasiswa/peminjaman*') ? 'true' : 'false' }}">
+                <div>
+                    <i class="fas fa-book"></i> Daftar Peminjaman
+                </div>
+                <i class="fas fa-chevron-down small"></i>
             </a>
+            <div class="collapse {{ request()->is('mahasiswa/peminjaman*') ? 'show' : '' }}" id="peminjamanSubmenu">
+                <ul class="nav flex-column ms-3 mt-1">
+                    <li class="nav-item">
+                        <a class="nav-link py-2 {{ request()->is('mahasiswa/peminjaman/pinjam_inventaris*') ? 'active' : '' }}" 
+                           href="{{ route('mahasiswa.peminjaman.pinjam-inventaris.index') }}">
+                            <i class="fas fa-tools fa-sm"></i>
+                            <span class="ms-2">Peminjaman Inventaris</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->is('mahasiswa/cart*') ? 'active' : '' }}" href="{{ route('cart.index') }}">

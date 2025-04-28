@@ -16,17 +16,17 @@ class AdminLogistikController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   
+    {
         // $totalRuangan = Ruangan::count();
         // $ruanganTersedia = Ruangan::where('status', 'Tersedia')->count();
         // $ruanganTidakTersedia = Ruangan::where('status', 'Tidak Tersedia')->count();
-        
+
         // $totalInventaris = Inventaris::count();
         // $inventarisTersedia = Inventaris::where('status', 'Tersedia')->count();
         // $inventarisTidakTersedia = Inventaris::where('status', 'Tidak Tersedia')->count();
-        
 
-        
+
+
         // $jumlahApprovalPending = StatusPeminjaman::where('status_approval', 'menunggu')->count();
         // $jumlahLaporan = LaporInventaris::count() + LaporanRuangan::count();
 

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('jumlah');
             $table->enum('status', ['Tersedia', 'Tidak Tersedia'])->default('Tersedia');
             $table->timestamps();
-        
+    
             $table->foreign('id_logistik')->references('id')->on('admin_logistik');
         });
     }
