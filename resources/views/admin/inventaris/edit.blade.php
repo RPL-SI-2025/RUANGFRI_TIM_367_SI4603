@@ -8,9 +8,20 @@
         <h5 class="mb-0">Edit Inventaris</h5>
     </div>
     <div class="card-body">
-        <form action="{{ route('admin.inventaris.update', $inventaris->id) }}" method="POST">
+        <form action="{{ route('admin.inventaris.update', $inventaris->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+
+            <div class="mb-3">
+                <label for="gambar_inventaris" class="form-label">Gambar</label>
+                <input type="file" class="form-control" name="gambar_inventaris" accept="image/*">
+                
+                @if ($inventaris->gambar_inventaris)
+                    <div class="mt-2">
+                        <img src="{{ asset('storage/inventaris/' . $inventaris->gambar_inventaris) }}" alt="Gambar Inventaris" width="150">
+                    </div>
+                @endif
+            </div>
 
             <div class="mb-3">
                 <label for="nama_inventaris" class="form-label">Nama Inventaris</label>
