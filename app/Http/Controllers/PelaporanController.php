@@ -63,7 +63,7 @@ class PelaporanController extends Controller
 
         $pelaporan = Pelaporan::create($data);
 
-        return redirect()->route('pelaporans.index')->with('success', 'Laporan created successfully');
+        return redirect()->route('mahasiswa.pelaporan.lapor_ruang.index')->with('success', 'Laporan created successfully');
     }
 
     public function show($id)
@@ -71,7 +71,7 @@ class PelaporanController extends Controller
         $pelaporan = Pelaporan::where('id_lapor_ruangan', $id)
             ->where('id_mahasiswa', Auth::id())
             ->firstOrFail();
-        return view('mahasiswa.lapor_ruang.show', compact('pelaporan'));
+        return view('mahasiswa.pelaporan.lapor_ruang.show', compact('pelaporan'));
     }
 
     public function edit($id)
@@ -80,7 +80,7 @@ class PelaporanController extends Controller
             ->where('id_mahasiswa', Auth::id())
             ->firstOrFail();
         $logistiks = AdminLogistik::all();
-        return view('mahasiswa.lapor_ruang.edit', compact('pelaporan', 'logistiks'));
+        return view('mahasiswa.pelaporan.lapor_ruang.edit', compact('pelaporan', 'logistiks'));
     }
 
     public function update(Request $request, $id)
@@ -122,7 +122,7 @@ class PelaporanController extends Controller
 
         $pelaporan->update($data);
 
-        return redirect()->route('pelaporans.index')->with('success', 'Laporan updated successfully');
+        return redirect()->route('mahasiswa.pelaporan.lapor_ruang.index')->with('success', 'Laporan updated successfully');
     }
 
     public function destroy($id)
@@ -141,6 +141,6 @@ class PelaporanController extends Controller
 
         $pelaporan->delete();
 
-        return redirect()->route('pelaporans.index')->with('success', 'Laporan deleted successfully');
+        return redirect()->route('mahasiswa.pelaporan.lapor_ruang.index')->with('success', 'Laporan deleted successfully');
     }
 }

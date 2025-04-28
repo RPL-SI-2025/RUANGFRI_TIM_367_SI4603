@@ -4,7 +4,7 @@
 <div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="text-primary">Daftar Laporan Peminjaman Ruangan</h1>
-        <a href="{{ route('pelaporans.create') }}" class="btn btn-primary shadow-sm">
+        <a href="{{ route('mahasiswa.pelaporan.lapor_ruang.create') }}" class="btn btn-primary shadow-sm">
             <i class="fas fa-plus me-2"></i>Buat Laporan Baru
         </a>
     </div>

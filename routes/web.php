@@ -148,11 +148,14 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::put('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'update'])->name('pinjam-inventaris.update');
 
     //Pelaporan ruangan mahasiswa
-    Route::get('/pelaporan', [PelaporanController::class, 'Index'])->name('mahasiswa.pelaporan.lapor_ruang.index');
-    Route::get('/pelaporan', [PelaporanController::class, 'create'])->name('mahasiswa.pelaporan.lapor_ruang.create');
-    // Route::resource('pelaporans', PelaporanController::class);
+    Route::get('mahasiswa/pelaporan', [PelaporanController::class, 'index'])->name('mahasiswa.pelaporan.lapor_ruang.index');
+    Route::get('mahasiswa/pelaporan/create', [PelaporanController::class, 'create'])->name('mahasiswa.pelaporan.lapor_ruang.create');
+    Route::post('mahasiswa/pelaporan', [PelaporanController::class, 'store'])->name('mahasiswa.pelaporan.lapor_ruang.store');
+    Route::get('mahasiswa/pelaporan/{lapor_ruang}', [PelaporanController::class, 'show'])->name('mahasiswa.pelaporan.lapor_ruang.show');
+    Route::get('mahasiswa/pelaporan/{lapor_ruang}/edit', [PelaporanController::class, 'edit'])->name('mahasiswa.pelaporan.lapor_ruang.edit');
+    Route::put('mahasiswa/pelaporan/{lapor_ruang}', [PelaporanController::class, 'update'])->name('mahasiswa.pelaporan.lapor_ruang.update');
+     //Route::resource('pelaporans', PelaporanController::class);
 });
 Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
 
-// Pelaporan Ruangan
 

@@ -22,6 +22,9 @@ return new class extends Migration
             $table->string('lokasi');
             $table->string('status')->default('tersedia');
             $table->timestamps();
+
+            $table->foreign('id_logistik')->references('id')->on('admin_logistik');
+
         });
     }
 
