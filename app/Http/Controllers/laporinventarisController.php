@@ -11,17 +11,17 @@ use Illuminate\Support\Facades\Session;
 class laporinventarisController extends Controller
 {
    
-    public function index()
-    {
-        $mahasiswaId = Session::get('mahasiswa_id');
-        
-        if (!$mahasiswaId) {
-            return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
-        }
+        public function index()
+        {
+            $mahasiswaId = Session::get('mahasiswa_id');
+            
+            if (!$mahasiswaId) {
+                return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
+            }
 
-        $laporan = LaporInventaris::with(['mahasiswa', 'logistik'])->get();
-        return view('mahasiswa.pelaporan.lapor_inventaris.index', compact('laporan'));
-    }
+            $laporan = LaporInventaris::with(['mahasiswa', 'logistik'])->get();
+            return view('mahasiswa.pelaporan.lapor_inventaris.index', compact('laporan'));
+        }
 
    
     public function create()

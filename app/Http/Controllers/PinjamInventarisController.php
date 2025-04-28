@@ -118,7 +118,7 @@ class PinjamInventarisController extends Controller
     $mahasiswaId = Session::get('mahasiswa_id');
     
     if ($pinjamInventaris->id_mahasiswa != $mahasiswaId) {
-        return redirect()->route('pinjam-inventaris.index')
+        return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
             ->with('error', 'Anda tidak diizinkan melihat peminjaman ini.');
     }
     

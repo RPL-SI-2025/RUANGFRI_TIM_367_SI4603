@@ -27,17 +27,25 @@
             <h5 class="mb-0">Form Pelaporan</h5>
         </div>
         <div class="card-body">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('mahasiswa.pelaporan.lapor_inventaris.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <!-- Hidden Inputs -->
                 <input type="hidden" name="id_mahasiswa" value="{{ Auth::guard('mahasiswa')->user()->id }}">
-                <input type="hidden" name="kepada" id="kepada">
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="oleh" class="form-label">Dikembalikan Oleh</label>
-                        <input type="text" class="form-control @error('oleh') is-invalid @enderror" id="oleh" name="oleh" value="{{ old('oleh') }}" required>
+                        <input type="text" id="oleh" name="oleh" class="form-control @error('oleh') is-invalid @enderror" value="{{ old('oleh') }}" required>
                         @error('oleh')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -45,8 +53,8 @@
 
                     <div class="col-md-6 mb-3">
                         <label for="id_logistik" class="form-label">Dikembalikan Kepada</label>
-                        <select class="form-control @error('id_logistik') is-invalid @enderror" id="id_logistik" name="id_logistik" required>
-                            <option value="">Pilih Admin Logistik</option>
+                        <select id="id_logistik" name="id_logistik" class="form-select @error('id_logistik') is-invalid @enderror" required>
+                            <option value="">-- Pilih Admin Logistik --</option>
                             @foreach($logistiks as $logistik)
                                 <option value="{{ $logistik->id }}">{{ $logistik->nama }}</option>
                             @endforeach
@@ -57,9 +65,22 @@
                     </div>
                 </div>
 
+                <!-- <div class="mb-3">
+                    <label for="kepada" class="form-label">Nama Admin Logistik</label>
+                    <select id="kepada" name="kepada" class="form-select @error('kepada') is-invalid @enderror" required>
+                        <option value="">-- Pilih Nama Admin Logistik --</option>
+                        @foreach($logistiks as $logistik)
+                            <option value="{{ $logistik->nama }}">{{ $logistik->nama }}</option>
+                        @endforeach
+                    </select>
+                    @error('kepada')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div> -->
+
                 <div class="mb-3">
                     <label for="datetime" class="form-label">Tanggal Pengembalian</label>
-                    <input type="datetime-local" class="form-control @error('datetime') is-invalid @enderror" id="datetime" name="datetime" value="{{ old('datetime') }}" required>
+                    <input type="datetime-local" id="datetime" name="datetime" class="form-control @error('datetime') is-invalid @enderror" value="{{ old('datetime') }}" required>
                     @error('datetime')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -68,7 +89,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="foto_awal" class="form-label">Foto Awal Peminjaman (PNG)</label>
-                        <input type="file" class="form-control @error('foto_awal') is-invalid @enderror" id="foto_awal" name="foto_awal" accept="image/png" required>
+                        <input type="file" id="foto_awal" name="foto_awal" accept="image/png" class="form-control @error('foto_awal') is-invalid @enderror" required>
                         @error('foto_awal')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -76,7 +97,7 @@
 
                     <div class="col-md-6 mb-3">
                         <label for="foto_akhir" class="form-label">Foto Akhir Peminjaman (PNG)</label>
-                        <input type="file" class="form-control @error('foto_akhir') is-invalid @enderror" id="foto_akhir" name="foto_akhir" accept="image/png" required>
+                        <input type="file" id="foto_akhir" name="foto_akhir" accept="image/png" class="form-control @error('foto_akhir') is-invalid @enderror" required>
                         @error('foto_akhir')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -85,7 +106,7 @@
 
                 <div class="mb-3">
                     <label for="deskripsi" class="form-label">Deskripsi</label>
-                    <textarea class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" name="deskripsi" rows="5" required>{{ old('deskripsi') }}</textarea>
+                    <textarea id="deskripsi" name="deskripsi" rows="5" class="form-control @error('deskripsi') is-invalid @enderror" required>{{ old('deskripsi') }}</textarea>
                     @error('deskripsi')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -93,10 +114,10 @@
 
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary shadow-sm">
-                        <i class="fas fa-save me-2"></i>Simpan Laporan
+                        <i class="fas fa-save me-2"></i> Simpan Laporan
                     </button>
                     <a href="{{ route('mahasiswa.pelaporan.lapor_inventaris.index') }}" class="btn btn-secondary shadow-sm">
-                        <i class="fas fa-arrow-left me-2"></i>Batal
+                        <i class="fas fa-arrow-left me-2"></i> Batal
                     </a>
                 </div>
             </form>
@@ -118,16 +139,4 @@
         font-size: 1rem;
     }
 </style>
-@endsection
-
-@section('scripts')
-<script>
-    const selectLogistik = document.getElementById('id_logistik');
-    const inputKepada = document.getElementById('kepada');
-
-    selectLogistik.addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        inputKepada.value = selectedOption.text; // Ambil nama admin logistik
-    });
-</script>
 @endsection
