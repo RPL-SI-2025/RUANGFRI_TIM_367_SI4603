@@ -143,4 +143,32 @@ class PelaporanController extends Controller
 
         return redirect()->route('mahasiswa.pelaporan.lapor_ruang.index')->with('success', 'Laporan deleted successfully');
     }
+
+    // admin
+    public function adminIndex(Request $request)
+    {
+        
+        $pelaporans = Pelaporan::with(['mahasiswa', 'logistik'])
+            ->latest('datetime') 
+            ->get();
+
+        
+        $groupedPelaporans = $pelaporans->groupBy(function ($item) {
+            return $item->datetime . '-' . $item->oleh . '-' . $item->kepada . '-' . 
+                   $item->foto_awal . '-' . $item->foto_akhir . '-' . $item->id_mahasiswa;
+        });
+
+        
+        $perPage = 10;
+        $currentPage = request()->input('page', 1);
+        $pagedData = $groupedPelaporans->forPage($currentPage, $perPage);
+
+        $paginatedGroupedPelaporans = new \Illuminate\Pagination\LengthAwarePaginator(
+            $pagedData,
+            $groupedPelaporans->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+    }
 }
