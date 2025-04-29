@@ -70,6 +70,11 @@ Route::prefix('admin')->group(function () {
     Route::put('/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'update'])->name('admin.lapor_inventaris.update');
     Route::delete('/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'destroy'])->name('admin.lapor_inventaris.destroy');
     Route::get('/laporinventaris/{lapor_inventaris}', [laporinventarisController::class, 'show'])->name('admin.lapor_inventaris.show');
+    
+
+    Route::get('/lapor-ruangan', [PelaporanController::class, 'index'])->name('admin.lapor_ruangan.index');
+    Route::get('/lapor-ruangan/{id}', [PelaporanController::class, 'show'])->name('admin.lapor_ruangan.show');
+    Route::put('/lapor-ruangan/{id}', [PelaporanController::class, 'update'])->name('admin.lapor_ruangan.update');
 
     Route::get('/ruangan', [RuanganController::class, 'index'])->name('admin.katalog_ruangan.index');
     Route::get('/ruangan/create', [RuanganController::class, 'create'])->name('admin.katalog_ruangan.create');
@@ -80,31 +85,6 @@ Route::prefix('admin')->group(function () {
 });
 
 
-//Lapor Inventaris
-
-
-Auth::routes(['verify' => true]);
-
-Route::middleware(['auth:mahasiswa'])->group(function () {
-    Route::get('profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('profile/update', [ProfileController::class, 'updateProfile'])->name('mahasiswa.profile.update');
-    Route::patch('profile/update-password', [ProfileController::class, 'updatePassword'])->name('mahasiswa.profile.update-password');
-    Route::delete('profile/delete', [ProfileController::class, 'destroy'])->name('mahasiswa.profile.delete');
-});
-// Email verification routes
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
-
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect('/dashboard'); // Redirect after successful verification
-})->middleware(['auth', 'signed'])->name('verification.verify');
-
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-    return back()->with('status', 'verification-link-sent');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 
 Auth::routes(['verify' => true]);
@@ -195,6 +175,13 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::get('/pelaporan/lapor-inventaris/{id}/edit', [laporinventarisController::class, 'mahasiswaEdit'])->name('mahasiswa.pelaporan.lapor_inventaris.edit');
     Route::put('/pelaporan/lapor-inventaris/{id}', [laporinventarisController::class, 'mahasiswaUpdate'])->name('mahasiswa.pelaporan.lapor_inventaris.update');
     Route::get('/pelaporan/lapor-inventaris/{id}', [laporinventarisController::class, 'mahasiswaShow'])->name('mahasiswa.pelaporan.lapor_inventaris.show');
+
+    Route::get('/pelaporan/lapor-ruangan', [PelaporanController::class, 'mahasiswaIndex'])->name('mahasiswa.pelaporan.lapor_ruangan.index');
+    Route::get('/pelaporan/lapor-ruangan/create', [PelaporanController::class, 'mahasiswaCreate'])->name('mahasiswa.pelaporan.lapor_ruangan.create');
+    Route::post('/pelaporan/lapor-ruangan', [PelaporanController::class, 'mahasiswaStore'])->name('mahasiswa.pelaporan.lapor_ruangan.store');
+    Route::get('/pelaporan/lapor-ruangan/{id}/edit', [PelaporanController::class, 'mahasiswaEdit'])->name('mahasiswa.pelaporan.lapor_ruangan.edit');
+    Route::put('/pelaporan/lapor-ruangan/{id}', [PelaporanController::class, 'mahasiswaUpdate'])->name('mahasiswa.pelaporan.lapor_ruangan.update');
+    Route::get('/pelaporan/lapor-ruangan/{id}', [PelaporanController::class, 'mahasiswaShow'])->name('mahasiswa.pelaporan.lapor_ruangan.show');
 
 
 });

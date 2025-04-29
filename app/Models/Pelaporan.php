@@ -9,14 +9,32 @@ class Pelaporan extends Model
 {
     use HasFactory;
 
+    protected $table = 'pelaporans';
+    protected $primaryKey = 'id_lapor_ruangan';
+
     protected $fillable = [
-        'id_mahasiswa',
         'id_logistik',
+        'id_mahasiswa',
+        'id_ruangan', 
         'datetime',
-        'deskripsi',
-        'oleh',
-        'kepada',
         'foto_awal',
         'foto_akhir',
+        'deskripsi',
+        'oleh',
+        'kepada'
     ];
+
+    public function mahasiswa()
+    {
+        return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa');
+    }
+
+    public function logistik()
+    {
+        return $this->belongsTo(AdminLogistik::class, 'id_logistik');
+    }
+    public function ruangan()
+    {
+        return $this->belongsTo(\App\Models\Ruangan::class, 'id_ruangan');
+    }
 }

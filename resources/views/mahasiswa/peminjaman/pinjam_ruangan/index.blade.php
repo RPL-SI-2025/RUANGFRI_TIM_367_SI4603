@@ -88,9 +88,9 @@
                                                     </button>
                                                 </form>
                                             @endif
-                                            @if($item->status == 1 && !$item->laporan)
+                                            @if($item->status == 1)
                                                 <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.create', ['id' => $item->id]) }}" 
-                                                   class="btn btn-sm btn-outline-warning">
+                                                class="btn btn-sm btn-outline-warning">
                                                     <i class="fa fa-flag"></i> Lapor
                                                 </a>
                                             @endif

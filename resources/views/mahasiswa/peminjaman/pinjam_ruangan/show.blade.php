@@ -127,15 +127,22 @@
                     </div>
                     @endif
                     
-                    @if($pinjamRuangan->status == 1 && !$pinjamRuangan->laporan)
+                    @if($pinjamRuangan->status == 1)
+                    @php
+                        $existingReport = \App\Models\Pelaporan::where('id_mahasiswa', Session::get('mahasiswa_id'))
+                            ->where('datetime', '>=', \Carbon\Carbon::parse($pinjamRuangan->updated_at)->format('Y-m-d'))
+                            ->exists();
+                    @endphp
+                    
+                    @if(!$existingReport)
                     <div class="d-flex justify-content-end mt-4 pt-3 border-top">
                         <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.create', ['id' => $pinjamRuangan->id]) }}" 
-                           class="btn btn-warning">
+                        class="btn btn-warning">
                             <i class="fa fa-flag me-1"></i> Buat Laporan
                         </a>
                     </div>
                     @endif
-                </div>
+                @endif
             </div>
         </div>
     </div>

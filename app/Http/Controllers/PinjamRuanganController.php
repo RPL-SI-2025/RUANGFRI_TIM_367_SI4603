@@ -38,7 +38,7 @@ class PinjamRuanganController extends Controller
             return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')->with('error', 'Keranjang ruangan Anda kosong!');
         }
         
-        return view('mahasiswa.peminjaman.pinjam_ruangan.index', compact('cartItems'));
+        return view('mahasiswa.peminjaman.pinjam_ruangan.create', compact('cartItems'));
     }
     
     // Simpan permintaan pinjam ruangan baru
@@ -59,10 +59,11 @@ class PinjamRuanganController extends Controller
             return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
         }
         
-        $cartItems = Session::get('ruangan_cart', []);
+        $cartItems = Session::get('cart_ruangan', []);
         
         if(empty($cartItems)) {
-            return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')->with('error', 'Keranjang ruangan Anda kosong!');
+            return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')
+                ->with('error', 'Keranjang ruangan Anda kosong!');
         }
         
         // Handle file upload once for all ruangan
@@ -89,7 +90,7 @@ class PinjamRuanganController extends Controller
         }
         
         // Bersihkan keranjang setelah berhasil submit
-        Session::forget('ruangan_cart');
+        Session::forget('cart_ruangan');
         
         return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
             ->with('success', 'Pengajuan peminjaman ruangan berhasil ditambahkan.');

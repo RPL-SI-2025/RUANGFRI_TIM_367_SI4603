@@ -66,8 +66,8 @@
                     <div class="collapse ms-3" id="ruanganMenu">
                         <ul class="nav flex-column">
                             <li><a class="nav-link" href="{{ route('admin.katalog_ruangan.index') }}" >📁 Data Ruangan</a></li>
-                            <li><a class="nav-link" {{-- href="{{ route('approval.ruangan') }}" --}}>✅ Approval Ruangan</a></li>
-                            <li><a class="nav-link" {{-- href="{{ route('laporan.ruangan') }}" --}}>📋 Laporan Ruangan</a></li>
+                            <li><a class="nav-link"  href="{{ route('admin.pinjam-ruangan.index') }}" >✅ Approval Ruangan</a></li>
+                            <li><a class="nav-link"  href="{{ route('admin.lapor_ruangan.index') }}" >📋 Laporan Ruangan</a></li>
                             <li><a class="nav-link" {{-- href="{{ route('riwayat.peminjaman') }}" --}}>🗓️ Riwayat Peminjaman Ruangan</a></li>
                         </ul>
                     </div>

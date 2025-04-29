@@ -38,7 +38,7 @@ class PinjamRuangan extends Model
     // Relationship to laporan (if exists)
     public function laporan()
     {
-        return $this->hasOne(LaporRuangan::class, 'id_peminjaman', 'id');
+        return $this->hasOne(Pelaporan::class, 'id_peminjaman', 'id');
     }
     
     // Helper for status text
