@@ -11,7 +11,7 @@ class CartController extends Controller
     public function index()
     {
         $cartItems = Session::get('cart', []);
-        return view('mahasiswa.cart.index', compact('cartItems'));
+        return view('mahasiswa.cart.keranjang_inventaris.index', compact('cartItems'));
     }
     
     public function add(Request $request)

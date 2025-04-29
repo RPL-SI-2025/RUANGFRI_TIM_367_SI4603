@@ -8,9 +8,9 @@
                 <div class="card-header bg-white border-bottom-0 pt-4 pb-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <h4 class="text-primary mb-0 fw-bold">
-                            <i class="fa fa-file-text me-2"></i>Pengajuan Peminjaman
+                            <i class="fa fa-file-text me-2"></i>Pengajuan Peminjaman Ruangan
                         </h4>
-                        <a href="{{ route('mahasiswa.cart.keranjang_inventaris.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
+                        <a href="{{ route('mahasiswa.cart.keranjang_ruangan.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
                             <i class="fa fa-arrow-left me-1"></i> Kembali ke Keranjang
                         </a>
                     </div>
@@ -25,23 +25,25 @@
 
                     <div class="mb-4">
                         <h5 class="text-secondary fw-bold mb-3">
-                            <i class="fa fa-list-alt me-2"></i>Daftar Item
+                            <i class="fa fa-list-alt me-2"></i>Daftar Ruangan
                         </h5>
                         <div class="table-responsive">
                             <table class="table table-hover border">
                                 <thead class="table-light">
                                     <tr>
                                         <th class="py-3">No</th>
-                                        <th class="py-3">Nama Inventaris</th>
-                                        <th class="py-3">Jumlah</th>
+                                        <th class="py-3">Nama Ruangan</th>
+                                        <th class="py-3">Kapasitas</th>
+                                        <th class="py-3">Lokasi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($cartItems as $id => $item)
                                         <tr class="align-middle">
                                             <td>{{ $loop->iteration }}</td>
-                                            <td class="fw-medium">{{ $item['nama_inventaris'] }}</td>
-                                            <td>{{ $item['jumlah'] }}</td>
+                                            <td class="fw-medium">{{ $item['nama_ruangan'] }}</td>
+                                            <td>{{ $item['kapasitas'] }} orang</td>
+                                            <td>{{ $item['lokasi'] }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -54,7 +56,7 @@
                             <i class="fa fa-calendar me-2"></i>Informasi Pengajuan
                         </h5>
                         
-                        <form action="{{ route('pinjam-inventaris.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('pinjam-ruangan.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             
                             <div class="row mb-4">
@@ -123,6 +125,20 @@
                                 </div>
                             </div>
 
+                            <div class="form-group mb-4">
+                                <label for="tujuan_peminjaman" class="form-label fw-medium">Tujuan Peminjaman</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fa fa-info-circle text-primary"></i>
+                                    </span>
+                                    <textarea class="form-control @error('tujuan_peminjaman') is-invalid @enderror border-start-0" 
+                                        id="tujuan_peminjaman" name="tujuan_peminjaman" rows="3" required>{{ old('tujuan_peminjaman') }}</textarea>
+                                </div>
+                                @error('tujuan_peminjaman')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
                             <div class="form-group mb-5">
                                 <label for="file_scan" class="form-label fw-medium">File Scan (Opsional)</label>
                                 <div class="input-group">
@@ -142,7 +158,7 @@
 
                             <div class="d-flex justify-content-end mt-5 pt-3 border-top">
                                 <button type="submit" class="btn btn-success rounded-pill px-5">
-                                    <i class="fa fa-paper-plane me-2"></i> Ajukan Peminjaman
+                                    <i class="fa fa-paper-plane me-2"></i> Ajukan Peminjaman Ruangan
                                 </button>
                             </div>
                         </form>

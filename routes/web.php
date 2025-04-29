@@ -10,12 +10,15 @@ use App\Http\Controllers\laporinventarisController;
 use App\Models\laporinventaris; 
 use App\Http\Controllers\MahasiswaAuthController;
 use App\Http\Controllers\AdminLogistikController;
+use App\Http\Controllers\RuanganCartController;
 use App\Http\Controllers\PelaporanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PinjamRuanganController;
 use App\Http\Middleware\MahasiswaAuth;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
+ 
 
 
 
@@ -54,6 +57,11 @@ Route::prefix('admin')->group(function () {
     Route::patch('/pinjam-inventaris/{pinjamInventaris}/update-status', [PinjamInventarisController::class, 'updateStatus'])->name('pinjam-inventaris.update-status');
     Route::delete('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'destroy'])->name('pinjam-inventaris.destroy');
     Route::put('/pinjam-inventaris/{pinjamInventaris}/update-status', [PinjamInventarisController::class, 'updateStatus'])->name('pinjam-inventaris.update-status');
+
+    Route::get('/pinjam-ruangan', [PinjamRuanganController::class, 'adminIndex'])->name('admin.pinjam-ruangan.index');
+    Route::get('/pinjam-ruangan/approval', [PinjamRuanganController::class, 'adminApproval'])->name('admin.pinjam-ruangan.approval');
+    Route::get('/pinjam-ruangan/{pinjamRuangan}', [PinjamRuanganController::class, 'adminShow'])->name('admin.pinjam-ruangan.show');
+    Route::put('/pinjam-ruangan/{pinjamRuangan}/update-status', [PinjamRuanganController::class, 'updateStatus'])->name('pinjam-ruangan.update-status');
 
     Route::get('/laporinventaris', [laporinventarisController::class, 'index'])->name('admin.lapor_inventaris.index');
     Route::get('/laporinventaris/create', [laporinventarisController::class, 'create'])->name('admin.lapor_inventaris.create');
@@ -145,15 +153,25 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::prefix('mahasiswa')->group(function () {
         Route::get('/inventaris', [InventarisController::class, 'mahasiswaIndex'])->name('mahasiswa.katalog.inventaris.index');
         Route::get('/inventaris/{id}', [InventarisController::class, 'mahasiswaShow'])->name('mahasiswa.katalog.inventaris.show');
+
+        Route::get('/ruangan', [RuanganController::class, 'mahasiswaIndex'])->name('mahasiswa.katalog.ruangan.index');
+        Route::get('/ruangan/{id}', [RuanganController::class, 'mahasiswaShow'])->name('mahasiswa.katalog.ruangan.show');
     });
     
     // Cart routes
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::get('/cart', [CartController::class, 'index'])->name('mahasiswa.cart.keranjang_inventaris.index');
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
     Route::put('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+
+    Route::get('/ruangan-cart', [RuanganCartController::class, 'index'])->name('mahasiswa.cart.keranjang_ruangan.index');
+    Route::post('/ruangan-cart/add', [RuanganCartController::class, 'add'])->name('mahasiswa.cart.keranjang_ruangan.add');
+    Route::post('/ruangan-cart/remove/{key}', [RuanganCartController::class, 'remove'])->name('mahasiswa.cart.keranjang_ruangan.remove');
+    Route::put('/ruangan-cart/update/{key}', [RuanganCartController::class, 'update'])->name('mahasiswa.cart.keranjang_ruangan.update');
+    Route::post('/ruangan-cart/clear', [RuanganCartController::class, 'clear'])->name('mahasiswa.cart.keranjang_ruangan.clear');
+    Route::post('/ruangan-cart/checkout', [RuanganCartController::class, 'checkout'])->name('mahasiswa.cart.keranjang_ruangan.checkout');
 
     // Peminjaman routes for mahasiswa
     Route::get('/pinjam-inventaris', [PinjamInventarisController::class, 'mahasiswaIndex'])->name('mahasiswa.peminjaman.pinjam-inventaris.index');
@@ -162,6 +180,14 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::get('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'show'])->name('mahasiswa.peminjaman.pinjam-inventaris.show');
     Route::get('/pinjam-inventaris/{pinjamInventaris}/edit', [PinjamInventarisController::class, 'edit'])->name('mahasiswa.peminjaman.pinjam-inventaris.edit');
     Route::put('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'update'])->name('pinjam-inventaris.update');
+
+    Route::get('/pinjam-ruangan', [PinjamRuanganController::class, 'mahasiswaIndex'])->name('mahasiswa.peminjaman.pinjam-ruangan.index');
+    Route::get('/pinjam-ruangan/create', [PinjamRuanganController::class, 'create'])->name('mahasiswa.peminjaman.pinjam-ruangan.create');
+    Route::post('/pinjam-ruangan', [PinjamRuanganController::class, 'store'])->name('pinjam-ruangan.store');
+    Route::get('/pinjam-ruangan/{pinjamRuangan}', [PinjamRuanganController::class, 'show'])->name('mahasiswa.peminjaman.pinjam-ruangan.show');
+    Route::get('/pinjam-ruangan/{pinjamRuangan}/edit', [PinjamRuanganController::class, 'edit'])->name('mahasiswa.peminjaman.pinjam-ruangan.edit');
+    Route::put('/pinjam-ruangan/{pinjamRuangan}', [PinjamRuanganController::class, 'update'])->name('pinjam-ruangan.update');
+    Route::put('/pinjam-ruangan/{pinjamRuangan}/cancel', [PinjamRuanganController::class, 'cancel'])->name('mahasiswa.peminjaman.pinjam-ruangan.cancel');
 
     Route::get('/pelaporan/lapor-inventaris', [laporinventarisController::class, 'mahasiswaIndex'])->name('mahasiswa.pelaporan.lapor_inventaris.index');
     Route::get('/pelaporan/lapor-inventaris/create', [laporinventarisController::class, 'mahasiswaCreate'])->name('mahasiswa.pelaporan.lapor_inventaris.create');

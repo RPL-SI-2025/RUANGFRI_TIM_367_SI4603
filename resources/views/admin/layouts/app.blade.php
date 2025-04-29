@@ -36,7 +36,7 @@
                 <hr>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->is('pinjam-inventaris*') ? 'active' : '' }}" href="{{ route('pinjam-inventaris.index') }}">
+                        <a class="nav-link {{ request()->is('pinjam-inventaris*') ? 'active' : '' }}" href="{{ route('mahasiswa.peminjaman.pinjam-inventaris.index') }}">
                             <i class="fas fa-clipboard-list me-2"></i> Peminjaman
                         </a>
                     </li>
