@@ -1,56 +1,74 @@
-@extends('mahasiswa.layouts.mahasiswa')
+@extends('mahasiswa.layouts.app')
 
 @section('content')
-<div class="container">
-    <h2>Daftar Pelaporan Inventaris</h2>
+<div class="container py-4">
+    <h4 class="mb-4">
+        <i class="fas fa-clipboard-list me-2"></i>Daftar Laporan Inventaris
+    </h4>
     
-   </div>
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     
-    <table border="1" cellpadding="10" cellspacing="0" style="width:100%; text-align:center;">
-    <table class="table table-bordered">
-    <thead>
-            <tr>
-                <th>ID</th>
-                <th>Oleh</th>
-                <th>Kepada</th>
-                <th>Deskripsi</th>
-                <th>Foto Awal</th>
-                <th>Foto Akhir</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($laporan as $lapor)
-            <tr>
-                <td>{{ $lapor->id_lapor_inventaris }}</td>
-                <td>{{ $lapor->oleh }}</td>
-                <td>{{ $lapor->kepada }}</td>
-                <td>{{ $lapor->deskripsi }}</td>
-                <td>
-                    @if($lapor->foto_awal)
-                        <img src="{{ asset('storage/' . $lapor->foto_awal) }}" width="100">
-                    @else
-                        Tidak Ada
-                    @endif
-                </td>
-                <td>
-                    @if($lapor->foto_akhir)
-                        <img src="{{ asset('storage/' . $lapor->foto_akhir) }}" width="100">
-                    @else
-                        Tidak Ada
-                    @endif
-                </td>
-                <td>
-                    <a href="{{ route('mahasiswa.lapor_inventaris.show', $lapor->id_lapor_inventaris) }}" class="btn btn-primary" style="margin-bottom:5px;">Lihat</a>
-                    <form method="POST" action="{{ route('admin.lapor_inventaris.destroy', $lapor->id_lapor_inventaris) }}" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" onclick="return confirm('Hapus data ini?')" class="btn btn-danger">Hapus</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    
+    @if(count($laporan) > 0)
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>No</th>
+                                <th>Tanggal</th>
+                                <th>Deskripsi</th>
+                                <th>Admin Logistik</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($laporan as $item)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item->datetime)->format('d/m/Y') }}</td>
+                                    <td>{{ \Str::limit($item->deskripsi, 50) }}</td>
+                                    <td>{{ $item->logistik->nama ?? 'N/A' }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ route('mahasiswa.pelaporan.lapor_inventaris.show', $item->id_lapor_inventaris) }}" class="btn btn-info btn-sm">
+                                            <i class="fas fa-eye"></i> Detail
+                                        </a>
+                                        <a href="{{ route('mahasiswa.pelaporan.lapor_inventaris.edit', $item->id_lapor_inventaris) }}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    @else
+        <div class="card shadow-sm border-0">
+            <div class="card-body py-5 text-center">
+                <div class="py-4">
+                    <i class="fas fa-clipboard fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">Belum ada laporan inventaris</h5>
+                    <p class="text-muted">Laporan akan muncul saat Anda menyelesaikan peminjaman inventaris.</p>
+                    <a href="{{ route('mahasiswa.peminjaman.pinjam-inventaris.index') }}" class="btn btn-primary mt-2">
+                        <i class="fas fa-arrow-left me-2"></i> Kembali ke Daftar Peminjaman
+                    </a>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>
 @endsection

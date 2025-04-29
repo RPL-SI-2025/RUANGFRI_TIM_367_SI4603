@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
-        // Create the 'ruangan' table
         Schema::create('ruangan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_logistik')->unique();
-            $table->string('nama_ruangan')->unique();
+            $table->string('nama_ruangan');
             $table->integer('kapasitas');
-            $table->string('fasilitas');
+            $table->text('fasilitas');
             $table->string('lokasi');
-            $table->string('status')->default('tersedia');
+            $table->enum('status', ['Tersedia', 'Tidak Tersedia']);
+            $table->string('gambar')->nullable();
             $table->timestamps();
 
             $table->foreign('id_logistik')->references('id')->on('admin_logistik');
@@ -33,8 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
-        // Drop the 'ruangan' table
         Schema::dropIfExists('ruangan');
     }
 };

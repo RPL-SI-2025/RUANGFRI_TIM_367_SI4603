@@ -300,6 +300,39 @@ class PinjamInventarisController extends Controller
         
     return view('admin.pinjam_inventaris.show', compact('pinjamInventaris', 'relatedItems'));
 }
-    
+
+    // Add this method to your PinjamInventarisController class
+    public function destroy(PinjamInventaris $pinjamInventaris)
+    {
+        $mahasiswaId = Session::get('mahasiswa_id');
+        
+        // Check if the authenticated user owns this request
+        if (!$mahasiswaId || $pinjamInventaris->id_mahasiswa != $mahasiswaId) {
+            return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
+                ->with('error', 'Anda tidak memiliki akses untuk membatalkan peminjaman ini.');
+        }
+        
+        // Check if the status is already approved or completed
+        if (in_array($pinjamInventaris->status, [1, 3])) {
+            return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
+                ->with('error', 'Peminjaman yang sudah disetujui atau selesai tidak dapat dibatalkan.');
+        }
+        
+        // Update status to cancelled (let's use status 4 for cancelled)
+        $pinjamInventaris->status = 4;
+        $pinjamInventaris->save();
+        
+        // Find and update all related items with the same details
+        PinjamInventaris::where('tanggal_pengajuan', $pinjamInventaris->tanggal_pengajuan)
+            ->where('tanggal_selesai', $pinjamInventaris->tanggal_selesai)
+            ->where('waktu_mulai', $pinjamInventaris->waktu_mulai)
+            ->where('waktu_selesai', $pinjamInventaris->waktu_selesai)
+            ->where('file_scan', $pinjamInventaris->file_scan)
+            ->where('id_mahasiswa', $pinjamInventaris->id_mahasiswa)
+            ->update(['status' => 4]);
+        
+        return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
+            ->with('success', 'Peminjaman berhasil dibatalkan.');
+    }
 
 }
