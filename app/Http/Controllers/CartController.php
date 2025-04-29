@@ -11,7 +11,7 @@ class CartController extends Controller
     public function index()
     {
         $cartItems = Session::get('cart', []);
-        return view('mahasiswa.cart.index', compact('cartItems'));
+        return view('mahasiswa.cart.keranjang_inventaris.index', compact('cartItems'));
     }
     
     public function add(Request $request)
@@ -75,13 +75,13 @@ class CartController extends Controller
             Session::put('cart', $cart);
         }
         
-        return redirect()->route('cart.index')->with('success', 'Item berhasil dihapus dari keranjang.');
+        return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')->with('success', 'Item berhasil dihapus dari keranjang.');
     }
     
     public function clear()
     {
         Session::forget('cart');
-        return redirect()->route('cart.index')->with('success', 'Keranjang berhasil dikosongkan.');
+        return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')->with('success', 'Keranjang berhasil dikosongkan.');
     }
     
     public function checkout()
@@ -89,7 +89,7 @@ class CartController extends Controller
         $cartItems = Session::get('cart', []);
         
         if(empty($cartItems)) {
-            return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong.');
+            return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')->with('error', 'Keranjang Anda kosong.');
         }
         
         return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.create');
@@ -115,9 +115,9 @@ class CartController extends Controller
         $cart[$id]['jumlah'] = $request->jumlah;
         Session::put('cart', $cart);
         
-        return redirect()->route('cart.index')->with('success', 'Jumlah item berhasil diperbarui.');
+        return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')->with('success', 'Jumlah item berhasil diperbarui.');
     }
     
-    return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan dalam keranjang.');
+    return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')->with('error', 'Item tidak ditemukan dalam keranjang.');
 }
 }

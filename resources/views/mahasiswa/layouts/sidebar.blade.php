@@ -28,6 +28,17 @@
                     </li>
                 </ul>
             </div>
+            <div class="collapse {{ request()->is('mahasiswa/katalog*') ? 'show' : '' }}" id="katalogSubmenu">
+                <ul class="nav flex-column ms-3 mt-1">
+                    <li class="nav-item">
+                        <a class="nav-link py-2 {{ request()->is('mahasiswa/katalog/ruangan*') ? 'active' : '' }}" 
+                           href="{{ route('mahasiswa.katalog.ruangan.index') }}">
+                            <i class="fas fa-tools fa-sm"></i>
+                            <span class="ms-2">Katalog Ruangan</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </li>
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center {{ request()->is('mahasiswa/peminjaman*') ? 'active' : '' }}" 
@@ -46,6 +57,17 @@
                            href="{{ route('mahasiswa.peminjaman.pinjam-inventaris.index') }}">
                             <i class="fas fa-tools fa-sm"></i>
                             <span class="ms-2">Peminjaman Inventaris</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="collapse {{ request()->is('mahasiswa/peminjaman*') ? 'show' : '' }}" id="peminjamanSubmenu">
+                <ul class="nav flex-column ms-3 mt-1">
+                    <li class="nav-item">
+                        <a class="nav-link py-2 {{ request()->is('mahasiswa/peminjaman/pinjam_ruangan*') ? 'active' : '' }}" 
+                           href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.index') }}">
+                            <i class="fas fa-tools fa-sm"></i>
+                            <span class="ms-2">Peminjaman Ruangan</span>
                         </a>
                     </li>
                 </ul>
@@ -72,14 +94,50 @@
                     </li>
                 </ul>
             </div>
+            <div class="collapse {{ request()->is('mahasiswa/pelaporan*') ? 'show' : '' }}" id="pelaporanSubmenu">
+                <ul class="nav flex-column ms-3 mt-1">
+                    <li class="nav-item">
+                        <a class="nav-link py-2 {{ request()->is('mahasiswa/pelaporan/lapor_ruangan*') ? 'active' : '' }}" 
+                           href="{{ route('mahasiswa.pelaporan.lapor_ruangan.index') }}">
+                            <i class="fas fa-tools fa-sm"></i>
+                            <span class="ms-2">Pelaporan Ruangan</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ request()->is('mahasiswa/cart*') ? 'active' : '' }}" href="{{ route('cart.index') }}">
-                <i class="fas fa-shopping-basket"></i> Keranjang
-                @if(isset($cartCount) && $cartCount > 0)
-                <span class="notification-badge">{{ $cartCount }}</span>
-                @endif
+            <a class="nav-link d-flex justify-content-between align-items-center {{ request()->is('mahasiswa/cart*') ? 'active' : '' }}" 
+               href="#cartSubmenu" 
+               data-bs-toggle="collapse" 
+               aria-expanded="{{ request()->is('mahasiswa/cart*') ? 'true' : 'false' }}">
+                <div>
+                    <i class="fas fa-book"></i> Keranjang
+                </div>
+                <i class="fas fa-chevron-down small"></i>
             </a>
+            <div class="collapse {{ request()->is('mahasiswa/cart*') ? 'show' : '' }}" id="cartSubmenu">
+                <ul class="nav flex-column ms-3 mt-1">
+                    <li class="nav-item">
+                        <a class="nav-link py-2 {{ request()->is('mahasiswa/cart/keranjang_inventaris*') ? 'active' : '' }}" 
+                           href="{{ route('mahasiswa.cart.keranjang_inventaris.index') }}">
+                            <i class="fas fa-tools fa-sm"></i>
+                            <span class="ms-2">Keranjang Inventaris</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="collapse {{ request()->is('mahasiswa/cart*') ? 'show' : '' }}" id="cartSubmenu">
+                <ul class="nav flex-column ms-3 mt-1">
+                    <li class="nav-item">
+                        <a class="nav-link py-2 {{ request()->is('mahasiswa/cart/keranjang_ruangan*') ? 'active' : '' }}" 
+                           href="{{ route('mahasiswa.cart.keranjang_ruangan.index') }}">
+                            <i class="fas fa-tools fa-sm"></i>
+                            <span class="ms-2">Keranjang Ruangan</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </li>
 
         <li class="nav-item mt-3">

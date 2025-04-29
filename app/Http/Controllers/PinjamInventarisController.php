@@ -52,7 +52,7 @@ class PinjamInventarisController extends Controller
         $cartItems = Session::get('cart', []);
         
         if(empty($cartItems)) {
-            return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong!');
+            return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')->with('error', 'Keranjang Anda kosong!');
         }
         
         return view('mahasiswa.peminjaman.pinjam_inventaris.create', compact('cartItems'));
@@ -78,7 +78,7 @@ class PinjamInventarisController extends Controller
         $cartItems = Session::get('cart', []);
         
         if(empty($cartItems)) {
-            return redirect()->route('cart.index')->with('error', 'Keranjang Anda kosong!');
+            return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')->with('error', 'Keranjang Anda kosong!');
         }
         
         // Handle file upload once for all items

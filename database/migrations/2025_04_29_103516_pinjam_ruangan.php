@@ -4,30 +4,31 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePinjamInventarisTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
-        Schema::create('pinjam_inventaris', function (Blueprint $table) {
+        Schema::create('pinjam_ruangan', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_inventaris');
-            $table->integer('jumlah_pinjam')->default(1); 
+            $table->unsignedBigInteger('id_ruangan');
             $table->unsignedBigInteger('id_mahasiswa');
             $table->date('tanggal_pengajuan');
             $table->date('tanggal_selesai');
             $table->time('waktu_mulai');
             $table->time('waktu_selesai');
+            $table->text('tujuan_peminjaman');
             $table->string('file_scan', 255)->nullable();
-            $table->integer('status')->default(0); // 0: Menunggu Persetujuan, 1: Disetujui, 2: Ditolak, 3: Selesai
+            $table->integer('status')->default(0); // 0: Menunggu Persetujuan, 1: Disetujui, 2: Ditolak, 3: Selesai, 4: Dibatalkan
+            $table->text('catatan')->nullable();
             $table->timestamps();
             
-            $table->foreign('id_inventaris')->references('id')->on('inventaris');
+            $table->foreign('id_ruangan')->references('id')->on('ruangan');
             $table->foreign('id_mahasiswa')->references('id')->on('mahasiswa');
         });
     }
 
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('pinjam_inventaris'); 
+        Schema::dropIfExists('pinjam_ruangan');
     }
-}
+};
