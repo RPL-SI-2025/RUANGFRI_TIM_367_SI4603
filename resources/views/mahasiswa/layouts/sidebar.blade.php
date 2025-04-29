@@ -72,6 +72,19 @@
                     </li>
                 </ul>
             </div>
+
+            <div class="collapse {{ request()->is('mahasiswa/pelaporan*') ? 'show' : '' }}" id="pelaporanSubmenu">
+                <ul class="nav flex-column ms-3 mt-1">
+                    <li class="nav-item">
+                        <a class="nav-link py-2 {{ request()->is('mahasiswa/pelaporan/lapor_ruangan*') ? 'active' : '' }}" 
+                           href="{{ route('mahasiswa.pelaporan.lapor_ruang.index') }}">
+                            <i class="fas fa-tools fa-sm"></i>
+                            <span class="ms-2">Pelaporan Ruangan</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
         </li>
         <li class="nav-item">
             <a class="nav-link {{ request()->is('mahasiswa/cart*') ? 'active' : '' }}" href="{{ route('cart.index') }}">
