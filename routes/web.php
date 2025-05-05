@@ -82,6 +82,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/ruangan/{id}/edit', [RuanganController::class, 'edit'])->name('admin.katalog_ruangan.edit');
     Route::put('/ruangan/{id}', [RuanganController::class, 'update'])->name('admin.katalog_ruangan.update');
     Route::delete('/ruangan/{id}', [RuanganController::class, 'destroy'])->name('admin.katalog_ruangan.destroy');
+
+ 
 });
 
 
@@ -185,9 +187,3 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
 
 
 });
-Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
-
-// Pelaporan Ruangan
-
-Route::get('/lapor-inventaris', [laporinventarisController::class, 'index'])->name('admin.lapor_inventaris.index');
-Route::get('/lapor-inventaris/{id}', [laporinventarisController::class, 'show'])->name('admin.lapor_inventaris.show');
