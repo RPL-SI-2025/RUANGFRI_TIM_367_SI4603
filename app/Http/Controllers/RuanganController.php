@@ -92,7 +92,7 @@ class RuanganController extends Controller
 {
     $validatedData = $request->validate([
         'nama_ruangan' => 'required|unique:ruangan,nama_ruangan',
-        'kapasitas'    => 'required|integer|min:10|max:40',
+        'kapasitas'    => 'required|integer|min:10|max:300',
         'fasilitas'    => 'required|string',
         'lokasi'       => 'required|string',
         'status'       => 'required|in:Tersedia,Tidak Tersedia',
