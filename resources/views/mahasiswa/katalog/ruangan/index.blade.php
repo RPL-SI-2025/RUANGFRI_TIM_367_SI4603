@@ -7,7 +7,8 @@
         @foreach($ruangans as $item)
         <div class="col-md-4 mb-4">
             <div class="card h-100">
-                <img src="{{ $item->gambar ?? asset('images/default-room.jpg') }}" class="card-img-top" alt="{{ $item->nama_ruangan }}">
+            <img src="{{ $item->gambar ? asset('storage/katalog_ruangan/' . $item->gambar) : asset('images/default-room.jpg') }}" 
+                class="card-img-top" alt="{{ $item->nama_ruangan }}" style="height: 200px; object-fit: cover;">
                 <div class="card-body">
                     <h5 class="card-title">{{ $item->nama_ruangan }}</h5>
                     <p class="card-text">{{ Str::limit($item->deskripsi, 100) }}</p>

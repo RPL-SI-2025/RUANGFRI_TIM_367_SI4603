@@ -43,7 +43,7 @@
             <div class="mb-3">
                 <label for="gambar" class="form-label">Gambar Ruangan</label><br>
                 @if ($ruangan->gambar)
-                    <img src="{{ asset('storage/' . $ruangan->gambar) }}" alt="Gambar Saat Ini" width="120" class="mb-2 d-block">
+                    <img src="{{ asset('storage/katalog_ruangan/' . $ruangan->gambar) }}" alt="{{ $ruangan->nama_ruangan }}">
                 @endif
                 <input type="file" class="form-control" name="gambar">
                 <small class="text-muted">Biarkan kosong jika tidak ingin mengubah gambar</small>
