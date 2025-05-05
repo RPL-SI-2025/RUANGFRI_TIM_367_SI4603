@@ -68,7 +68,6 @@ Route::prefix('mahasiswa')->group(function () {
     Route::get('/inventaris/{id}', [InventarisController::class, 'mahasiswaShow'])->name('mahasiswa.inventaris.show');
 });
 
-=========
 Route::controller(InventarisController::class)->group(function () {
     Route::get('/admin/inventaris', [InventarisController::class, 'index'])->name('admin.inventaris.index');
     Route::get('/admin/inventaris/create', [InventarisController::class, 'create'])->name('admin.inventaris.create');
@@ -79,7 +78,7 @@ Route::controller(InventarisController::class)->group(function () {
     Route::get('/admin/inventaris/{inventaris}', [InventarisController::class, 'show'])->name('admin.inventaris.show');
 });
     
->>>>>>>>> Temporary merge branch 2
+
 
 
 // Ruangan routes
@@ -237,7 +236,7 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::get('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'show'])->name('mahasiswa.peminjaman.pinjam-inventaris.show');
     Route::get('/pinjam-inventaris/{pinjamInventaris}/edit', [PinjamInventarisController::class, 'edit'])->name('mahasiswa.peminjaman.pinjam-inventaris.edit');
     Route::put('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'update'])->name('pinjam-inventaris.update');
-});
+
 Route::get('/admin/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.approval');
 
 // Pelaporan Ruangan

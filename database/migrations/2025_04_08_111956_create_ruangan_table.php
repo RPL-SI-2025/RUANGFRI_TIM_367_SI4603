@@ -19,11 +19,14 @@ return new class extends Migration
             $table->string('lokasi');
             $table->enum('status', ['Tersedia', 'Tidak Tersedia']);
             $table->string('gambar')->nullable();
+            $table->unsignedBigInteger('id'); 
             $table->timestamps();
-
+        
+            // Foreign key
             $table->foreign('id_logistik')->references('id')->on('admin_logistik');
-
         });
+        
+      
     }
 
     /**
