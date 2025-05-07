@@ -17,47 +17,34 @@
                             <i class="fa fa-list me-2"></i>Daftar Ruangan
                         </h5>
                         <a href="{{ route('mahasiswa.katalog.ruangan.index') }}" class="btn btn-primary rounded-pill px-4">
-                            <i class="fa fa-plus me-1"></i> Pilih Ruangan
+                            <i class="fa fa-plus me-1"></i> Tambah Ruangan
                         </a>
                     </div>
                 </div>
 
                 <div class="card-body px-4">
-                    @if(count($cartItems) > 0)
+                    @if(!empty($cartRuangan) && count($cartRuangan) > 0)
                         <div class="table-responsive">
                             <table class="table table-hover">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="py-3">No</th>
-                                        <th class="py-3">Nama Ruangan</th>
-                                        <th class="py-3">Jumlah</th>
-                                        <th class="py-3">Aksi</th>
+                                        <th>No</th>
+                                        <th>Nama Ruangan</th>
+                                        <th>Lokasi</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($cartItems as $id => $item)
+                                    @foreach($cartRuangan as $id => $room)
                                         <tr class="align-middle">
                                             <td>{{ $loop->iteration }}</td>
-                                            <td class="fw-medium">{{ $item['nama_ruangan'] }}</td>
+                                            <td>{{ $room['nama_ruangan'] }}</td>
+                                            <td>{{ $room['lokasi'] }}</td>
+                                            <td>{{ $room['tanggal_mulai'] }}</td>
+                                            <td>{{ $room['tanggal_selesai'] }}</td>
                                             <td>
-                                                <form action="{{ route('mahasiswa.cart.ruangan.update', $id) }}" method="POST" class="d-flex align-items-center">
+                                                <form action="{{ route('cart-ruangan.remove', $id) }}" method="POST" class="d-inline">
                                                     @csrf
-                                                    @method('PUT')
-                                                    <div class="input-group input-group-sm" style="width: 140px;">
-                                                        {{-- <input type="number" name="jumlah" value="{{ $item['jumlah'] }}"
-                                                            min="1" max="{{ $item['kapasitas'] }}" class="form-control"
-                                                            aria-label="Jumlah"> --}}
-                                                        <button type="submit" class="btn btn-outline-primary">
-                                                            <i class="fa fa-refresh"></i>
-                                                        </button>
-                                                    </div>
-                                                    <small class="text-muted ms-2">Max: {{ $item['kapasitas'] }}</small>
-                                                </form>
-                                            </td>
-                                            <td>
-                                                <form action="{{ route('mahasiswa.cart.ruangan.remove', $id) }}" method="POST" class="d-inline">
-                                                    @csrf
-                                                    @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill"
                                                         onclick="return confirm('Yakin ingin menghapus ruangan ini?')">
                                                         <i class="fa fa-trash me-1"></i> Hapus
@@ -71,15 +58,15 @@
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
-                            <form action="{{ route('mahasiswa.cart.ruangan.clear') }}" method="POST" class="d-inline">
+                            <form action="{{ route('cart-ruangan.clear') }}" method="POST" class="d-inline">
                                 @csrf
                                 <button type="submit" class="btn btn-outline-secondary rounded-pill"
-                                    onclick="return confirm('Yakin ingin mengosongkan keranjang ruangan?')">
+                                onclick="return confirm('Yakin ingin mengosongkan keranjang ruangan?')">
                                     <i class="fa fa-trash me-1"></i> Kosongkan Keranjang
                                 </button>
                             </form>
 
-                            <form action="{{ route('mahasiswa.cart.ruangan.checkout') }}" method="POST">
+                            <form action="{{ route('cart-ruangan.checkout') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-success rounded-pill px-4">
                                     <i class="fa fa-check-circle me-1"></i> Proses Peminjaman
@@ -89,7 +76,7 @@
                     @else
                         <div class="text-center py-5">
                             <div class="mb-3">
-                                <i class="fa fa-door-closed fa-4x text-muted"></i>
+                                <i class="fa fa-shopping-cart fa-4x text-muted"></i>
                             </div>
                             <h5 class="text-muted mb-4">Keranjang ruangan Anda masih kosong</h5>
                             <a href="{{ route('mahasiswa.katalog.ruangan.index') }}" class="btn btn-primary rounded-pill px-4">

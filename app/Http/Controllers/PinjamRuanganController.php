@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\PinjamRuangan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class PinjamRuanganController extends Controller
 {
@@ -12,7 +13,13 @@ class PinjamRuanganController extends Controller
     // Function to show the form for creating a new resource
     public function create()
     {
-        return view('pinjamruangan.create');
+        $cartItems = Session::get('cart', []);
+
+        if(empty($cartItems)) {
+            return redirect()->route('mahasiswa.cart.ruangan.index')->with('error', 'Keranjang Anda kosong!');
+        }
+
+        return view('mahasiswa.peminjaman.Ruangan.create', compact('cartItems'));
     }
     public function store(Request $request)
     {
@@ -87,7 +94,17 @@ class PinjamRuanganController extends Controller
     public function index()
     {
         // Get all PinjamRuangan records
-        $pinjamRuangan = PinjamRuangan::all();
-        return view('pinjamruangan.index', compact('pinjamRuangan'));
+        $mahasiswaId = Session::get('mahasiswa_id');
+
+        if (!$mahasiswaId) {
+            return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        $pinjamRuangan = PinjamRuangan::with('inventaris')
+                    ->where('id_mahasiswa', $mahasiswaId)
+                    ->latest()
+                    ->paginate(10);
+
+        return view('mahasiswa.peminjaman.ruangan.index', compact('pinjamRuangan'));
     }
 }
