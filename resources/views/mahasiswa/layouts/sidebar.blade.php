@@ -13,7 +13,7 @@
                data-bs-toggle="collapse" 
                aria-expanded="{{ request()->is('mahasiswa/katalog*') ? 'true' : 'false' }}">
                 <div>
-                    <i class="fas fa-book"></i> Katalog
+                    <i class="fas fa-th-list"></i> Katalog
                 </div>
                 <i class="fas fa-chevron-down small"></i>
             </a>
@@ -22,7 +22,7 @@
                     <li class="nav-item">
                         <a class="nav-link py-2 {{ request()->is('mahasiswa/katalog/inventaris*') ? 'active' : '' }}" 
                            href="{{ route('mahasiswa.katalog.inventaris.index') }}">
-                            <i class="fas fa-tools fa-sm"></i>
+                            <i class="fas fa-boxes fa-sm"></i>
                             <span class="ms-2">Katalog Inventaris</span>
                         </a>
                     </li>
@@ -33,7 +33,7 @@
                     <li class="nav-item">
                         <a class="nav-link py-2 {{ request()->is('mahasiswa/katalog/ruangan*') ? 'active' : '' }}" 
                            href="{{ route('mahasiswa.katalog.ruangan.index') }}">
-                            <i class="fas fa-tools fa-sm"></i>
+                            <i class="fas fa-door-open fa-sm"></i>
                             <span class="ms-2">Katalog Ruangan</span>
                         </a>
                     </li>
@@ -46,7 +46,7 @@
                data-bs-toggle="collapse" 
                aria-expanded="{{ request()->is('mahasiswa/peminjaman*') ? 'true' : 'false' }}">
                 <div>
-                    <i class="fas fa-book"></i> Daftar Peminjaman
+                    <i class="fas fa-clipboard-list"></i> Daftar Peminjaman
                 </div>
                 <i class="fas fa-chevron-down small"></i>
             </a>
@@ -55,7 +55,7 @@
                     <li class="nav-item">
                         <a class="nav-link py-2 {{ request()->is('mahasiswa/peminjaman/pinjam_inventaris*') ? 'active' : '' }}" 
                            href="{{ route('mahasiswa.peminjaman.pinjam-inventaris.index') }}">
-                            <i class="fas fa-tools fa-sm"></i>
+                            <i class="fas fa-box-open fa-sm"></i>
                             <span class="ms-2">Peminjaman Inventaris</span>
                         </a>
                     </li>
@@ -66,7 +66,7 @@
                     <li class="nav-item">
                         <a class="nav-link py-2 {{ request()->is('mahasiswa/peminjaman/pinjam_ruangan*') ? 'active' : '' }}" 
                            href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.index') }}">
-                            <i class="fas fa-tools fa-sm"></i>
+                            <i class="fas fa-building fa-sm"></i>
                             <span class="ms-2">Peminjaman Ruangan</span>
                         </a>
                     </li>
@@ -79,7 +79,7 @@
                data-bs-toggle="collapse" 
                aria-expanded="{{ request()->is('mahasiswa/pelaporan*') ? 'true' : 'false' }}">
                 <div>
-                    <i class="fas fa-book"></i> Daftar Pelaporan
+                    <i class="fas fa-exclamation-circle"></i> Daftar Pelaporan
                 </div>
                 <i class="fas fa-chevron-down small"></i>
             </a>
@@ -88,7 +88,7 @@
                     <li class="nav-item">
                         <a class="nav-link py-2 {{ request()->is('mahasiswa/pelaporan/lapor_inventaris*') ? 'active' : '' }}" 
                            href="{{ route('mahasiswa.pelaporan.lapor_inventaris.index') }}">
-                            <i class="fas fa-tools fa-sm"></i>
+                            <i class="fas fa-toolbox fa-sm"></i>
                             <span class="ms-2">Pelaporan Inventaris</span>
                         </a>
                     </li>
@@ -99,7 +99,7 @@
                     <li class="nav-item">
                         <a class="nav-link py-2 {{ request()->is('mahasiswa/pelaporan/lapor_ruangan*') ? 'active' : '' }}" 
                            href="{{ route('mahasiswa.pelaporan.lapor_ruangan.index') }}">
-                            <i class="fas fa-tools fa-sm"></i>
+                            <i class="fas fa-door-closed fa-sm"></i>
                             <span class="ms-2">Pelaporan Ruangan</span>
                         </a>
                     </li>
@@ -112,7 +112,7 @@
                data-bs-toggle="collapse" 
                aria-expanded="{{ request()->is('mahasiswa/cart*') ? 'true' : 'false' }}">
                 <div>
-                    <i class="fas fa-book"></i> Keranjang
+                    <i class="fas fa-shopping-cart"></i> Keranjang
                 </div>
                 <i class="fas fa-chevron-down small"></i>
             </a>
@@ -121,7 +121,7 @@
                     <li class="nav-item">
                         <a class="nav-link py-2 {{ request()->is('mahasiswa/cart/keranjang_inventaris*') ? 'active' : '' }}" 
                            href="{{ route('mahasiswa.cart.keranjang_inventaris.index') }}">
-                            <i class="fas fa-tools fa-sm"></i>
+                            <i class="fas fa-cart-plus fa-sm"></i>
                             <span class="ms-2">Keranjang Inventaris</span>
                         </a>
                     </li>
@@ -132,7 +132,7 @@
                     <li class="nav-item">
                         <a class="nav-link py-2 {{ request()->is('mahasiswa/cart/keranjang_ruangan*') ? 'active' : '' }}" 
                            href="{{ route('mahasiswa.cart.keranjang_ruangan.index') }}">
-                            <i class="fas fa-tools fa-sm"></i>
+                            <i class="fas fa-calendar-plus fa-sm"></i>
                             <span class="ms-2">Keranjang Ruangan</span>
                         </a>
                     </li>

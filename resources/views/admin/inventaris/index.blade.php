@@ -30,7 +30,7 @@
             <td>{{ $loop->iteration }}</td>
             <td>
                 @if ($item->gambar_inventaris)
-                <img src="{{ asset('storage/inventaris/' . $item->gambar_inventaris) }}" alt="{{ $item->nama_inventaris }}" width="100">
+                <img src="{{ asset('storage/katalog_inventaris/' . $item->gambar_inventaris) }}" alt="{{ $item->nama_inventaris }}" width="100">
             @else
                 Tidak ada gambar
             @endif

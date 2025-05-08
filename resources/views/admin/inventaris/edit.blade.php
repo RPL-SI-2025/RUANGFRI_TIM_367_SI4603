@@ -18,7 +18,7 @@
                 
                 @if ($inventaris->gambar_inventaris)
                     <div class="mt-2">
-                        <img src="{{ asset('storage/inventaris/' . $inventaris->gambar_inventaris) }}" alt="Gambar Inventaris" width="150">
+                        <img src="{{ asset('storage/katalog_inventaris/' . $inventaris->gambar_inventaris) }}" alt="Gambar Inventaris" width="150">
                     </div>
                 @endif
             </div>

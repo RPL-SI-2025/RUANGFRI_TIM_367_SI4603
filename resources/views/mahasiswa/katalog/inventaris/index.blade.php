@@ -9,7 +9,7 @@
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 @if($item->gambar_inventaris)
-                <img src="{{ asset('storage/inventaris/' . $item->gambar_inventaris) }}" class="card-img-top" alt="{{ $item->nama_inventaris }}">
+                <img src="{{ asset('storage/katalog_inventaris/' . $item->gambar_inventaris) }}" class="card-img-top" alt="{{ $item->nama_inventaris }}">
                 @else
                 <img src="{{ asset('images/default-image.png') }}" class="card-img-top" alt="Default Image">
                 @endif

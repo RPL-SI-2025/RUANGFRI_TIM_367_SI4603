@@ -4,9 +4,6 @@
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Laporan Ruangan</h1>
-        <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.create') }}" class="btn btn-primary btn-sm">
-            <i class="fas fa-plus"></i> Buat Laporan Baru
-        </a>
     </div>
 
     @if(session('success'))
@@ -68,7 +65,7 @@
                 </div>
             @else
                 <div class="text-center py-5">
-                    <img src="{{ asset('img/empty-data.svg') }}" alt="Data Kosong" class="img-fluid mb-3" style="max-height: 150px;">
+                    <i class="fas fa-clipboard fa-3x text-muted mb-3"></i>
                     <h5 class="text-muted">Belum ada laporan ruangan</h5>
                     <p class="text-muted">Buat laporan baru dengan mengklik tombol "Buat Laporan Baru" di atas.</p>
                     <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.create') }}" class="btn btn-primary mt-2">

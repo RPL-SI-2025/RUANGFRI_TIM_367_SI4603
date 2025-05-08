@@ -16,9 +16,6 @@
                         <h5 class="text-secondary mb-0">
                             <i class="fa fa-building me-2"></i>Daftar Ruangan
                         </h5>
-                        <a href="{{ route('mahasiswa.katalog.ruangan.index') }}" class="btn btn-primary rounded-pill px-4">
-                            <i class="fa fa-plus me-1"></i> Tambah Ruangan
-                        </a>
                     </div>
                 </div>
 

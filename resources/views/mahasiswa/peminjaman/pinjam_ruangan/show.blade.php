@@ -18,33 +18,65 @@
                     <h5 class="mb-0 fw-bold">Informasi Ruangan</h5>
                 </div>
                 <div class="card-body">
-                    <div class="row mb-4">
-                        <div class="col-md-4 mb-3 mb-md-0">
-                            @if($pinjamRuangan->ruangan->gambar)
-                                <img src="{{ asset('storage/'.$pinjamRuangan->ruangan->gambar) }}" 
-                                     class="img-fluid rounded" alt="{{ $pinjamRuangan->ruangan->nama_ruangan }}">
-                            @else
-                                <div class="bg-light rounded text-center py-5">
-                                    <i class="fa fa-building-o text-muted" style="font-size: 3rem;"></i>
-                                    <p class="text-muted mt-2">Tidak ada gambar</p>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-hover border">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Ruangan</th>
+                                    <th>Kapasitas</th>
+                                    <th>Lokasi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($relatedRooms as $index => $room)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td class="fw-medium">{{ $room->ruangan->nama_ruangan }}</td>
+                                        <td>{{ $room->ruangan->kapasitas }} orang</td>
+                                        <td>{{ $room->ruangan->lokasi }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="row">
+                        @foreach($relatedRooms as $room)
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100 border shadow-sm">
+                                    <div class="card-header bg-light">
+                                        <h6 class="mb-0">{{ $room->ruangan->nama_ruangan }}</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            @if($room->ruangan->gambar)
+                                                <img src="{{ asset('storage/katalog_ruangan/'.$room->ruangan->gambar) }}" 
+                                                    class="img-fluid rounded w-100" style="height: 200px; object-fit: cover;" 
+                                                    alt="{{ $room->ruangan->nama_ruangan }}">
+                                            @else
+                                                <div class="bg-light rounded text-center py-5">
+                                                    <i class="fa fa-building-o text-muted" style="font-size: 3rem;"></i>
+                                                    <p class="text-muted mt-2">Tidak ada gambar</p>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-4 text-muted">Kapasitas</div>
+                                            <div class="col-md-8 fw-medium">{{ $room->ruangan->kapasitas }} orang</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-4 text-muted">Lokasi</div>
+                                            <div class="col-md-8 fw-medium">{{ $room->ruangan->lokasi }}</div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 text-muted">Fasilitas</div>
+                                            <div class="col-md-8">{{ $room->ruangan->fasilitas }}</div>
+                                        </div>
+                                    </div>
                                 </div>
-                            @endif
-                        </div>
-                        <div class="col-md-8">
-                            <h5 class="text-primary mb-3">{{ $pinjamRuangan->ruangan->nama_ruangan }}</h5>
-                            <div class="row mb-2">
-                                <div class="col-md-4 text-muted">Kapasitas</div>
-                                <div class="col-md-8 fw-medium">{{ $pinjamRuangan->ruangan->kapasitas }} orang</div>
                             </div>
-                            <div class="row mb-2">
-                                <div class="col-md-4 text-muted">Lokasi</div>
-                                <div class="col-md-8 fw-medium">{{ $pinjamRuangan->ruangan->lokasi }}</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4 text-muted">Fasilitas</div>
-                                <div class="col-md-8">{{ $pinjamRuangan->ruangan->fasilitas }}</div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

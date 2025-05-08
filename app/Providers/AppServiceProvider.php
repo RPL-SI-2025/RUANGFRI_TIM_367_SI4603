@@ -28,8 +28,13 @@ class AppServiceProvider extends ServiceProvider
             // Map route patterns to titles
             $titleMap = [
                 'mahasiswa.katalog.inventaris' => 'Katalog Inventaris',
+                'mahasiswa.katalog.ruangan' => 'Katalog Ruangan',
+                'mahasiswa.peminjaman.pinjam-inventaris' => 'Peminjaman Inventaris',
+                'mahasiswa.peminjaman.pinjam-ruangan' => 'Peminjaman Ruangan',
+                'mahasiswa.pelaporan.lapor_inventaris' => 'Pelaporan Inventaris',
+                'mahasiswa.pelaporan.lapor_ruangan' => 'Pelaporan Ruangan',
+                'profile' => 'Profil Saya',
                 'cart' => 'Keranjang Peminjaman',
-                'pinjam-inventaris' => 'Peminjaman Inventaris',
                 'mahasiswa.dashboard' => 'Dashboard',
             ];
             
