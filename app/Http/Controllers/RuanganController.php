@@ -147,15 +147,18 @@ class RuanganController extends Controller
         ]);
 
         if ($request->hasFile('gambar')) {
-            if ($ruangan->gambar) {
-                $gambarLama = str_replace('/storage/', 'public/', $ruangan->gambar);
-                Storage::delete($gambarLama);
-            }
 
-            $image = $request->file('gambar');
-            $imageName = Str::random(10) . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('public/katalog_ruangan', $imageName);
-            $validatedData['gambar'] = Storage::url($imagePath);
+            if ($ruangan->gambar) {
+                Storage::disk('public')->delete('katalog_ruangan/' . $ruangan->gambar);
+            }
+        
+            $file = $request->file('gambar');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            
+            Storage::disk('public')->makeDirectory('katalog_ruangan');
+            Storage::disk('public')->putFileAs('katalog_ruangan', $file, $filename);
+            
+            $validatedData['gambar'] = $filename;
         }
 
         $ruangan->update($validatedData);
