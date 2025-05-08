@@ -98,16 +98,26 @@ class PinjamRuanganController extends Controller
 
     // Tampilkan detail peminjaman ruangan
     public function show(PinjamRuangan $pinjamRuangan)
-    {
-        $mahasiswaId = Session::get('mahasiswa_id');
-        
-        if ($pinjamRuangan->id_mahasiswa != $mahasiswaId) {
-            return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
-                ->with('error', 'Anda tidak diizinkan melihat peminjaman ini.');
+        {
+            $mahasiswaId = Session::get('mahasiswa_id');
+            
+            if ($pinjamRuangan->id_mahasiswa != $mahasiswaId) {
+                return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
+                    ->with('error', 'Anda tidak diizinkan melihat peminjaman ini.');
+            }
+            
+
+            $relatedRooms = PinjamRuangan::where('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan)
+                ->where('tanggal_selesai', $pinjamRuangan->tanggal_selesai)
+                ->where('waktu_mulai', $pinjamRuangan->waktu_mulai)
+                ->where('waktu_selesai', $pinjamRuangan->waktu_selesai)
+                ->where('file_scan', $pinjamRuangan->file_scan)
+                ->where('id_mahasiswa', $mahasiswaId)
+                ->with('ruangan')
+                ->get();
+            
+            return view('mahasiswa.peminjaman.pinjam_ruangan.show', compact('pinjamRuangan', 'relatedRooms'));
         }
-        
-        return view('mahasiswa.peminjaman.pinjam_ruangan.show', compact('pinjamRuangan'));
-    }
 
     // Form edit peminjaman ruangan
     public function edit(PinjamRuangan $pinjamRuangan)

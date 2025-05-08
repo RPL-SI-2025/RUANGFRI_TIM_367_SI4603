@@ -33,35 +33,54 @@
                         <thead class="table-light">
                             <tr>
                                 <th class="px-3 py-3">No</th>
-                                <th class="px-3 py-3">Nama Ruangan</th>
                                 <th class="px-3 py-3">Tanggal</th>
+                                <th class="px-3 py-3">Daftar Ruangan</th>
                                 <th class="px-3 py-3">Waktu</th>
                                 <th class="px-3 py-3">Status</th>
                                 <th class="px-3 py-3 text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($pinjamRuangan as $item)
+                            @php 
+                                // Group reservations by similar booking details
+                                $groupedPinjam = $pinjamRuangan->groupBy(function($item) {
+                                    return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                                        $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
+                                });
+                                $i = 1;
+                            @endphp
+
+                            @foreach($groupedPinjam as $group)
+                                @php
+                                    $firstItem = $group->first();
+                                @endphp
                                 <tr>
-                                    <td class="px-3 py-3">{{ $loop->iteration }}</td>
-                                    <td class="px-3 py-3 fw-medium">{{ $item->ruangan->nama_ruangan }}</td>
+                                    <td class="px-3 py-3">{{ $i++ }}</td>
                                     <td class="px-3 py-3">
-                                        {{ \Carbon\Carbon::parse($item->tanggal_pengajuan)->format('d M Y') }}
+                                        {{ \Carbon\Carbon::parse($firstItem->tanggal_pengajuan)->format('d M Y') }}
                                         <span class="text-muted"> s/d </span>
-                                        {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}
+                                        {{ \Carbon\Carbon::parse($firstItem->tanggal_selesai)->format('d M Y') }}
+                                    </td>
+                                    <td >
+                                        <ul >
+                                            @foreach($group as $item)
+                                                <li>{{ $item->ruangan->nama_ruangan ?? 'Ruangan tidak ditemukan' }}</li>
+            
+                                            @endforeach
+                                        </ul>
                                     </td>
                                     <td class="px-3 py-3">
-                                        {{ \Carbon\Carbon::parse($item->waktu_mulai)->format('H:i') }} - 
-                                        {{ \Carbon\Carbon::parse($item->waktu_selesai)->format('H:i') }}
+                                        {{ \Carbon\Carbon::parse($firstItem->waktu_mulai)->format('H:i') }} - 
+                                        {{ \Carbon\Carbon::parse($firstItem->waktu_selesai)->format('H:i') }}
                                     </td>
                                     <td class="px-3 py-3">
-                                        @if($item->status == 0)
+                                        @if($firstItem->status == 0)
                                             <span class="badge bg-warning text-dark">Menunggu</span>
-                                        @elseif($item->status == 1)
+                                        @elseif($firstItem->status == 1)
                                             <span class="badge bg-success">Disetujui</span>
-                                        @elseif($item->status == 2)
+                                        @elseif($firstItem->status == 2)
                                             <span class="badge bg-danger">Ditolak</span>
-                                        @elseif($item->status == 3)
+                                        @elseif($firstItem->status == 3)
                                             <span class="badge bg-info">Selesai</span>
                                         @else
                                             <span class="badge bg-secondary">Dibatalkan</span>
@@ -69,16 +88,16 @@
                                     </td>
                                     <td class="px-3 py-3 text-center">
                                         <div class="btn-group">
-                                            <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.show', $item->id) }}" 
+                                            <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.show', $firstItem->id) }}" 
                                                class="btn btn-sm btn-outline-primary">
                                                 <i class="fa fa-eye"></i>
                                             </a>
-                                            @if($item->status == 0)
-                                                <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.edit', $item->id) }}" 
+                                            @if($firstItem->status == 0)
+                                                <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.edit', $firstItem->id) }}" 
                                                    class="btn btn-sm btn-outline-success">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
-                                                <form action="{{ route('mahasiswa.peminjaman.pinjam-ruangan.cancel', $item->id) }}" 
+                                                <form action="{{ route('mahasiswa.peminjaman.pinjam-ruangan.cancel', $firstItem->id) }}" 
                                                       method="POST" class="d-inline" 
                                                       onsubmit="return confirm('Apakah Anda yakin ingin membatalkan peminjaman ini?')">
                                                     @csrf
@@ -88,8 +107,8 @@
                                                     </button>
                                                 </form>
                                             @endif
-                                            @if($item->status == 1)
-                                                <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.create', ['id' => $item->id]) }}" 
+                                            @if($firstItem->status == 1)
+                                                <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.create', ['id' => $firstItem->id]) }}" 
                                                 class="btn btn-sm btn-outline-warning">
                                                     <i class="fa fa-flag"></i> Lapor
                                                 </a>
@@ -100,9 +119,6 @@
                             @endforeach
                         </tbody>
                     </table>
-                </div>
-                <div class="px-3 py-3">
-                    {{ $pinjamRuangan->links() }}
                 </div>
             @else
                 <div class="text-center py-5">

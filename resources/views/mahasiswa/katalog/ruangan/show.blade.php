@@ -1,34 +1,85 @@
 @extends('mahasiswa.layouts.app')
 
 @section('content')
-    <div class="bg-white min-h-screen flex justify-center items-center pb-20">
-        <div class="bg-white p-6 rounded-lg flex flex-col md:flex-row w-full max-w-7xl">
-            <div class="flex flex-col w-full md:w-1/2">
-
-                <img id="mainImage" src="{{ $ruangan->gambar }}" alt="{{ $ruangan->nama_ruangan }}" class="w-full h-[500px] rounded-xl shadow-xl object-cover mb-4" />
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="text-primary mb-0 fw-bold">
+                    <i class="fa fa-building me-2"></i>Detail Ruangan
+                </h4>
+                <a href="{{ route('mahasiswa.katalog.ruangan.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
+                    <i class="fa fa-arrow-left me-1"></i> Kembali
+                </a>
             </div>
-            <div class="w-full md:w-1/2 bg-white text-red-700 rounded-lg p-6 ml-0 md:ml-8">
-                <p class="mt-2 font-semibold text-red-500 mb-3">{{ $ruangan->lokasi }}</p>
-                <h3 class="text-2xl font-bold text-gray-900">{{ $ruangan->nama_ruangan }}</h3>
-                <p class="mt-2 font-semibold">Fasilitas:</p>
-                <p class="mt-2 text-lg leading-8 text-gray-600 mb-5">{{ $ruangan->fasilitas }}</p>
-                <p class="mt-2 font-semibold">Kapasitas:</p>
-                <p class="mt-2 text-lg leading-8 text-gray-600 mb-5">{{ $ruangan->kapasitas }} orang</p>
-                <p class="mt-2 font-semibold">Status:</p>
-                <p class="mt-2 text-lg leading-8 text-gray-600 mb-5">{{ $ruangan->status }}</p>
 
-                <!-- Button to add to cart or checkout -->
-                <form method="POST" action="{{ route('cart.add') }}" id="addToCartForm" class="mt-4 flex gap-4 bottom-0 left-0 right-0">
-                    @csrf
-                    <input type="hidden" name="ruangan_id" value="{{ $ruangan->id }}">
-                    <button type="submit" id="addToCartButton" class="w-full bg-white text-red-500 border border-red-500 font-semibold py-2 rounded shadow-md hover:bg-red-500 hover:text-white transform hover:scale-105 transition">
-                        Add to Cart
-                    </button>
-                    <a href="{{ route('checkout.index') }}" class="w-full text-center bg-red-500 text-white font-semibold py-2 rounded shadow-md hover:bg-red-600 transform hover:scale-105 transition">
-                        Checkout
-                    </a>
-                </form>
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-0">
+                    <div class="row g-0">
+                        <div class="col-md-5">
+                            @if($ruangan->gambar)
+                                <img src="{{ asset('storage/katalog_ruangan/' . $ruangan->gambar) }}" 
+                                     class="img-fluid rounded-start h-100 w-100 object-cover" 
+                                     alt="{{ $ruangan->nama_ruangan }}" 
+                                     style="object-fit: cover; max-height: 400px;">
+                            @else
+                                <div class="bg-light h-100 d-flex justify-content-center align-items-center">
+                                    <i class="fa fa-building-o text-muted" style="font-size: 5rem;"></i>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body">
+                                <h4 class="card-title text-primary fw-bold mb-3">{{ $ruangan->nama_ruangan }}</h4>
+                                
+                                <div class="mb-3">
+                                    <span class="badge bg-secondary rounded-pill me-2">
+                                        <i class="fa fa-map-marker me-1"></i> {{ $ruangan->lokasi }}
+                                    </span>
+                                    <span class="badge bg-info rounded-pill">
+                                        <i class="fa fa-users me-1"></i> {{ $ruangan->kapasitas }} orang
+                                    </span>
+                                </div>
+                                
+                                <h6 class="fw-bold text-secondary mt-4 mb-2">Fasilitas:</h6>
+                                <p class="card-text text-muted">{{ $ruangan->fasilitas }}</p>
+                                
+                                <h6 class="fw-bold text-secondary mt-4 mb-2">Status:</h6>
+                                @if($ruangan->status == 'Tersedia')
+                                    <span class="badge bg-success">Tersedia</span>
+                                @else
+                                    <span class="badge bg-danger">Tidak Tersedia</span>
+                                @endif
+                                
+                                @if($ruangan->status == 'Tersedia')
+                                    <form action="{{ route('mahasiswa.cart.keranjang_ruangan.add') }}" method="POST" class="mt-4">
+                                        @csrf
+                                        <input type="hidden" name="id_ruangan" value="{{ $ruangan->id }}">
+                                        <input type="hidden" name="tanggal_booking" value="{{ date('Y-m-d') }}">
+                                        <input type="hidden" name="waktu_mulai" value="08:00:00">
+                                        <input type="hidden" name="waktu_selesai" value="10:00:00">
+                                        
+                                        <div class="d-flex mt-4">
+                                            <button type="submit" class="btn btn-outline-primary rounded-pill me-2 flex-grow-1">
+                                                <i class="fa fa-cart-plus me-1"></i> Tambah ke Keranjang
+                                            </button>
+                                            <a href="{{ route('mahasiswa.cart.keranjang_ruangan.index') }}" class="btn btn-primary rounded-pill flex-grow-1">
+                                                <i class="fa fa-shopping-basket me-1"></i> Lihat Keranjang
+                                            </a>
+                                        </div>
+                                    </form>
+                                @else
+                                    <div class="alert alert-warning mt-4">
+                                        <i class="fa fa-exclamation-circle me-2"></i> 
+                                        Ruangan ini sedang tidak tersedia untuk peminjaman
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
- @endsection
+</div>
+@endsection
