@@ -34,11 +34,11 @@ class InventarisController extends Controller
         'jumlah.integer' => 'Jumlah harus berupa angka.',
     ]);
 
-    Storage::disk('public')->makeDirectory('inventaris');
+    Storage::disk('public')->makeDirectory('katalog_inventaris');
 
     $file     = $request->file('gambar_inventaris');
     $filename = time() . '_' . $file->getClientOriginalName();
-    Storage::disk('public')->putFileAs('inventaris', $file, $filename);
+    Storage::disk('public')->putFileAs('katalog_inventaris', $file, $filename);
 
     $data['gambar_inventaris'] = $filename;
 
@@ -70,12 +70,12 @@ class InventarisController extends Controller
             $file     = $request->file('gambar_inventaris');
             $filename = time() . '_' . $file->getClientOriginalName();
     
-            Storage::disk('public')->makeDirectory('inventaris');
+            Storage::disk('public')->makeDirectory('katalog_inventaris');
     
-            Storage::disk('public')->putFileAs('inventaris', $file, $filename);
+            Storage::disk('public')->putFileAs('katalog_inventaris', $file, $filename);
     
             if ($inventaris->gambar_inventaris) {
-                Storage::disk('public')->delete('inventaris/' . $inventaris->gambar_inventaris);
+                Storage::disk('public')->delete('katalog_inventaris/' . $inventaris->gambar_inventaris);
             }
     
             $data['gambar_inventaris'] = $filename;
@@ -93,7 +93,7 @@ class InventarisController extends Controller
     public function destroy(Inventaris $inventaris)
     {
         if ($inventaris->gambar_inventaris) {
-            Storage::disk('public')->delete('inventaris/' . $inventaris->gambar_inventaris);
+            Storage::disk('public')->delete('katalog_inventaris/' . $inventaris->gambar_inventaris);
         }
     
         $inventaris->delete();

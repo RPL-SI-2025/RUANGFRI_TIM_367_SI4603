@@ -81,7 +81,7 @@ class PinjamInventarisController extends Controller
             return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')->with('error', 'Keranjang Anda kosong!');
         }
         
-        // Handle file upload once for all items
+
         $fileName = null;
         if ($request->hasFile('file_scan')) {
             $file = $request->file('file_scan');

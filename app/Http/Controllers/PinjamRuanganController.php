@@ -176,6 +176,8 @@ class PinjamRuanganController extends Controller
             $file->storeAs('uploads/file_scan', $fileName, 'public');
             
             $pinjamRuangan->file_scan = $fileName;
+            
+            $pinjamRuangan->save();
         }
         
         // Dapatkan semua booking terkait dengan detail yang sama
@@ -195,6 +197,7 @@ class PinjamRuanganController extends Controller
             $booking->waktu_selesai = $request->waktu_selesai;
             $booking->tujuan_peminjaman = $request->tujuan_peminjaman;
             
+
             if ($request->hasFile('file_scan')) {
                 $booking->file_scan = $fileName;
             }

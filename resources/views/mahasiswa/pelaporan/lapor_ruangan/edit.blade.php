@@ -123,41 +123,7 @@
                             @error('deskripsi')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
-                        </div>
-
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="oleh" class="form-label fw-medium">Pelapor <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light border-end-0">
-                                            <i class="fas fa-user text-primary"></i>
-                                        </span>
-                                        <input type="text" class="form-control @error('oleh') is-invalid @enderror border-start-0" 
-                                            id="oleh" name="oleh" value="{{ old('oleh') ?? $laporan->oleh }}" required>
-                                    </div>
-                                    @error('oleh')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="kepada" class="form-label fw-medium">Dilaporkan Kepada <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-light border-end-0">
-                                            <i class="fas fa-user-tie text-primary"></i>
-                                        </span>
-                                        <input type="text" class="form-control @error('kepada') is-invalid @enderror border-start-0" 
-                                            id="kepada" name="kepada" value="{{ old('kepada') ?? $laporan->kepada }}" required>
-                                    </div>
-                                    @error('kepada')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        
+                        </div>             
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <div class="form-group mb-3">

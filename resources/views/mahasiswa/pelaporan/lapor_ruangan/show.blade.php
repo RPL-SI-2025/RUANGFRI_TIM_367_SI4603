@@ -100,9 +100,6 @@
                         <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.edit', $laporan->id_lapor_ruangan) }}" class="btn btn-warning rounded-pill px-4 me-2">
                             <i class="fas fa-edit me-2"></i> Edit Laporan
                         </a>
-                        <button type="button" class="btn btn-danger rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                            <i class="fas fa-trash me-2"></i> Hapus Laporan
-                        </button>
                     </div>
 
                 </div>
