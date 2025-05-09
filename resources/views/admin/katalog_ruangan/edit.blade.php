@@ -9,7 +9,7 @@
     </div>
     <div class="card-body">
         <form action="{{ route('admin.katalog_ruangan.update', $ruangan->id) }}" method="POST" enctype="multipart/form-data">
-            @csrf
+            @csrf 
             @method('PUT')
 
             <div class="mb-3">

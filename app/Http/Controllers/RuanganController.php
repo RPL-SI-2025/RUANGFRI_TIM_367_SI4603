@@ -99,6 +99,7 @@ class RuanganController extends Controller
         'gambar'       => 'nullable|image|max:2048',
     ]);
 
+
     if ($request->hasFile('gambar')) {
         $file     = $request->file('gambar');
         $filename = time() . '_' . $file->getClientOriginalName();
@@ -109,6 +110,7 @@ class RuanganController extends Controller
         // Simpan hanya nama file, nanti di view dipanggil via asset('storage/…')
         $validatedData['gambar'] = $filename;
     }
+
 
     Ruangan::create($validatedData);
 
@@ -131,15 +133,16 @@ class RuanganController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->all(), $id);
         $ruangan = Ruangan::find($id);
+        // dd($ruangan);
 
         if (is_null($ruangan)) {
             return redirect()->route('admin.katalog_ruangan.index')->with('error', 'Ruangan tidak ditemukan');
         }
-
         $validatedData = $request->validate([
             'nama_ruangan' => 'required|unique:ruangan,nama_ruangan,' . $id . ',id',
-            'kapasitas' => 'required|integer|min:10|max:40',
+            'kapasitas' => 'required|integer|min:10|max:300',
             'fasilitas' => 'required|string',
             'lokasi' => 'required|string',
             'status' => 'required|in:Tersedia,Tidak Tersedia',
@@ -151,19 +154,21 @@ class RuanganController extends Controller
             if ($ruangan->gambar) {
                 Storage::disk('public')->delete('katalog_ruangan/' . $ruangan->gambar);
             }
-        
+
             $file = $request->file('gambar');
             $filename = time() . '_' . $file->getClientOriginalName();
-            
+
             Storage::disk('public')->makeDirectory('katalog_ruangan');
             Storage::disk('public')->putFileAs('katalog_ruangan', $file, $filename);
-            
+
             $validatedData['gambar'] = $filename;
         }
 
         $ruangan->update($validatedData);
 
-        return redirect()->route('admin.katalog_ruangan.index')->with('success', 'Ruangan berhasil diperbarui!');
+        return redirect()
+        ->route('admin.katalog_ruangan.index')
+        ->with('success', 'Ruangan berhasil diperbarui!');
     }
 
 
