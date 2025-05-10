@@ -9,7 +9,7 @@
     </div>
     <div class="card-body">
         <form action="{{ route('admin.katalog_ruangan.update', $ruangan->id) }}" method="POST" enctype="multipart/form-data">
-            @csrf 
+            @csrf
             @method('PUT')
 
             <div class="mb-3">
@@ -20,6 +20,9 @@
             <div class="mb-3">
                 <label for="kapasitas" class="form-label">Kapasitas</label>
                 <input type="number" class="form-control" name="kapasitas" value="{{ $ruangan->kapasitas }}" required>
+                @error('kapasitas')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
