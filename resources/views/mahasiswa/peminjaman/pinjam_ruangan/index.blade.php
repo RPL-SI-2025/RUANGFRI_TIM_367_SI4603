@@ -42,7 +42,7 @@
                         </thead>
                         <tbody>
                             @php 
-                                // Group reservations by similar booking details
+
                                 $groupedPinjam = $pinjamRuangan->groupBy(function($item) {
                                     return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
                                         $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;

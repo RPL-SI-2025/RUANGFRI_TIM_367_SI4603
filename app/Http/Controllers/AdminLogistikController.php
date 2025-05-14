@@ -17,29 +17,29 @@ class AdminLogistikController extends Controller
      */
     public function index()
     {
-        // $totalRuangan = Ruangan::count();
-        // $ruanganTersedia = Ruangan::where('status', 'Tersedia')->count();
-        // $ruanganTidakTersedia = Ruangan::where('status', 'Tidak Tersedia')->count();
-
-        // $totalInventaris = Inventaris::count();
-        // $inventarisTersedia = Inventaris::where('status', 'Tersedia')->count();
-        // $inventarisTidakTersedia = Inventaris::where('status', 'Tidak Tersedia')->count();
 
 
 
-        // $jumlahApprovalPending = StatusPeminjaman::where('status_approval', 'menunggu')->count();
-        // $jumlahLaporan = LaporInventaris::count() + LaporanRuangan::count();
 
-        // return view('admin.dashboard', compact(
-        //     'totalRuangan',
-        //     'ruanganTersedia',
-        //     'ruanganTidakTersedia',
-        //     'totalInventaris',
-        //     'inventarisTersedia',
-        //     'inventarisTidakTersedia',
-        //     'jumlahApprovalPending',
-        //     'jumlahLaporan'
-        // ));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         return view('admin.dashboard');
     }
@@ -49,7 +49,7 @@ class AdminLogistikController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -57,7 +57,7 @@ class AdminLogistikController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -65,7 +65,7 @@ class AdminLogistikController extends Controller
      */
     public function show(string $id)
     {
-        //
+
     }
 
     /**
@@ -73,7 +73,7 @@ class AdminLogistikController extends Controller
      */
     public function edit(string $id)
     {
-        //
+
     }
 
     /**
@@ -81,7 +81,7 @@ class AdminLogistikController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
     }
 
     /**
@@ -89,6 +89,6 @@ class AdminLogistikController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+
     }
 }

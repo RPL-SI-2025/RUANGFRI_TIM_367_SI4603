@@ -40,7 +40,7 @@ class PinjamInventaris extends Model
         return $this->hasOne(laporinventaris::class, 'id_pinjam_inventaris', 'id');
     }
     
-    // Helper untuk status
+
     public function getStatusTextAttribute()
     {
         return match($this->status) {
