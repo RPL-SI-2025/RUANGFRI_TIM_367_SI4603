@@ -255,9 +255,9 @@ public function historyShow($id)
             'foto_akhir' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
         
-        // Update foto awal jika ada
+
         if ($request->hasFile('foto_awal')) {
-            // Hapus foto lama jika ada
+
             if ($laporan->foto_awal) {
                 Storage::disk('public')->delete($laporan->foto_awal);
             }
@@ -267,9 +267,9 @@ public function historyShow($id)
             $laporan->foto_awal = $fotoAwal->storeAs('foto_laporan', $fotoAwalFilename, 'public');
         }
         
-        // Update foto akhir jika ada
+
         if ($request->hasFile('foto_akhir')) {
-            // Hapus foto lama jika ada
+
             if ($laporan->foto_akhir) {
                 Storage::disk('public')->delete($laporan->foto_akhir);
             }

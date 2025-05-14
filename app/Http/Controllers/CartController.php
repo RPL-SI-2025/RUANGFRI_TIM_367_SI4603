@@ -29,7 +29,7 @@ class CartController extends Controller
         
         $cart = Session::get('cart', []);
         
-        // Iki buat ngecek apa barang yang mau ditambah udah ada di cart apa durung
+
         $itemId = $inventaris->id;
         $newQuantity = $request->jumlah;
         
@@ -43,7 +43,7 @@ class CartController extends Controller
             }
         }
         
-        // Simpan semua data yang dibutuhkan dalam dictionary
+
         $itemData = [
             'id' => $inventaris->id,
             'nama_inventaris' => $inventaris->nama_inventaris,
@@ -57,7 +57,7 @@ class CartController extends Controller
             'timestamp' => now()->toDateTimeString(),
         ];
         
-        // Update cart dengan data yang lengkap
+
         $cart[$itemId] = $itemData;
         
         

@@ -11,7 +11,7 @@ class InventarisSeeder extends Seeder
 {
     public function run()
     {
-        // Cek apakah tabel admin_logistik ada dan berisi data
+
         if (Schema::hasTable('admin_logistik')) {
             try {
                 $admin = DB::table('admin_logistik')->first();

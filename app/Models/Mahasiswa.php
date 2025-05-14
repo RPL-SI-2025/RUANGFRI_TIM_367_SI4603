@@ -26,31 +26,16 @@ class Mahasiswa extends Authenticatable
         'remember_token',
     ];
 
-    // Relasi ke pinjam ruangan
-    // public function pinjamRuangan()
-    // {
-    //     return $this->hasMany(PinjamRuangan::class, 'id_mahasiswa');
-    // }
 
-    // Relasi ke pinjam inventaris
+
+
     public function pinjamInventaris()
     {
         return $this->hasMany(PinjamInventaris::class, 'id_mahasiswa');
     }
 
-    // Relasi ke status peminjaman
-    // public function statusPeminjaman()
-    // {
-    //     return $this->hasMany(StatusPeminjaman::class, 'id_mahasiswa');
-    // }
 
-    // // Relasi ke laporan ruangan
-    // public function laporanRuangan()
-    // {
-    //     return $this->hasMany(LaporanRuangan::class, 'id_mahasiswa');
-    // }
 
-    // Relasi ke lapor inventaris
     public function laporInventaris()
     {
         return $this->hasMany(LaporInventaris::class, 'id_mahasiswa');

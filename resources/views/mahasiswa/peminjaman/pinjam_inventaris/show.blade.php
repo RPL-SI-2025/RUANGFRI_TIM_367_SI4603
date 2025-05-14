@@ -29,7 +29,7 @@
                             </thead>
                             <tbody>
                                 @php
-                                    // Find related inventory items from the same request
+
                                     $relatedItems = \App\Models\PinjamInventaris::where('tanggal_pengajuan', $pinjamInventaris->tanggal_pengajuan)
                                         ->where('tanggal_selesai', $pinjamInventaris->tanggal_selesai)
                                         ->where('waktu_mulai', $pinjamInventaris->waktu_mulai)

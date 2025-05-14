@@ -42,7 +42,7 @@
                         </thead>
                         <tbody>
                             @php 
-                                // Group peminjaman by tanggal_pengajuan, tanggal_selesai, waktu_mulai, waktu_selesai, file_scan
+
                                 $groupedPinjam = $pinjamInventaris->groupBy(function($item) {
                                     return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
                                           $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;

@@ -25,17 +25,17 @@ class RuanganCartController extends Controller
         
         $ruangan = Ruangan::findOrFail($request->id_ruangan);
         
-        // Check if room is available
+
         if ($ruangan->status != 'Tersedia') {
             return redirect()->back()->with('error', 'Ruangan tidak tersedia untuk peminjaman.');
         }
         
         $cart = Session::get('cart_ruangan', []);
         
-        // Create a unique key for the ruangan booking
+
         $itemKey = $ruangan->id . '_' . $request->tanggal_booking . '_' . $request->waktu_mulai . '_' . $request->waktu_selesai;
         
-        // Check if the same room is already booked for the requested time
+
         foreach ($cart as $key => $item) {
             if ($item['id'] == $ruangan->id && 
                 $item['tanggal_booking'] == $request->tanggal_booking &&
@@ -44,7 +44,7 @@ class RuanganCartController extends Controller
             }
         }
         
-        // Prepare item data
+
         $itemData = [
             'id' => $ruangan->id,
             'nama_ruangan' => $ruangan->nama_ruangan,
@@ -58,7 +58,7 @@ class RuanganCartController extends Controller
             'timestamp' => now()->toDateTimeString(),
         ];
         
-        // Add to cart
+
         $cart[$itemKey] = $itemData;
         Session::put('cart_ruangan', $cart);
         
@@ -86,7 +86,7 @@ class RuanganCartController extends Controller
     public function checkout()
     {
         $cartItems = Session::get('cart_ruangan', []);
-        // dd($cartItems);
+
         if(empty($cartItems)) {
             return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')
                             ->with('error', 'Keranjang ruangan Anda kosong.');
@@ -113,7 +113,7 @@ class RuanganCartController extends Controller
                 return redirect()->back()->with('error', 'Ruangan tidak tersedia untuk peminjaman.');
             }
             
-            // Check for time conflicts with other items in cart
+
             $newKey = $ruanganId . '_' . $request->tanggal_booking . '_' . $request->waktu_mulai . '_' . $request->waktu_selesai;
             
             foreach ($cart as $existingKey => $item) {
@@ -124,17 +124,17 @@ class RuanganCartController extends Controller
                 }
             }
             
-            // Remove old item
+
             $itemData = $cart[$key];
             unset($cart[$key]);
             
-            // Update with new data
+
             $itemData['tanggal_booking'] = $request->tanggal_booking;
             $itemData['waktu_mulai'] = $request->waktu_mulai;
             $itemData['waktu_selesai'] = $request->waktu_selesai;
             $itemData['timestamp'] = now()->toDateTimeString();
             
-            // Add back with new key
+
             $cart[$newKey] = $itemData;
             Session::put('cart_ruangan', $cart);
             

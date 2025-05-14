@@ -67,7 +67,7 @@ class HistoryController extends Controller
                     ->with('error', 'Laporan tidak ditemukan atau Anda tidak memiliki akses.');
             }
             
-            // Get all related inventaris items 
+
             $relatedItems = PinjamInventaris::where('tanggal_pengajuan', $laporan->peminjaman->tanggal_pengajuan)
                 ->where('tanggal_selesai', $laporan->peminjaman->tanggal_selesai)
                 ->where('waktu_mulai', $laporan->peminjaman->waktu_mulai)

@@ -30,12 +30,12 @@ class PelaporanController extends Controller
     }
     public function update(Request $request, $id)
     {
-        // Validate the input
+
         $request->validate([
             'keterangan' => 'required|string',
         ]);
         
-        // Find the pelaporan record
+ 
         $pelaporan = Pelaporan::find($id);
         
         if (!$pelaporan) {
@@ -43,7 +43,7 @@ class PelaporanController extends Controller
                 ->with('error', 'Laporan tidak ditemukan.');
         }
         
-        // Update the keterangan field
+ 
         $pelaporan->keterangan = $request->keterangan;
         $pelaporan->save();
         
@@ -80,7 +80,7 @@ class PelaporanController extends Controller
         $relatedItems = null;
         
         if ($peminjamanId) {
-            // Get the first item of the peminjaman group with the same details
+   
             $peminjaman = PinjamRuangan::with('ruangan')
                             ->where('id', $peminjamanId)
                             ->where('id_mahasiswa', $mahasiswaId)
@@ -96,7 +96,7 @@ class PelaporanController extends Controller
                     ->with('error', 'Hanya peminjaman yang sudah disetujui yang dapat dilaporkan selesai.');
             }
             
-            // Get all related items with the same request details
+
             $relatedItems = PinjamRuangan::where('tanggal_pengajuan', $peminjaman->tanggal_pengajuan)
                 ->where('tanggal_selesai', $peminjaman->tanggal_selesai)
                 ->where('waktu_mulai', $peminjaman->waktu_mulai)
@@ -107,10 +107,10 @@ class PelaporanController extends Controller
                 ->get();
         }
         
-        // Get admin users for the dropdown
+
         $adminLogistik = AdminLogistik::all();
         
-        // Get all ruangan for the dropdown
+
         $ruangan = \App\Models\Ruangan::all();
         
         return view('mahasiswa.pelaporan.lapor_ruangan.create', compact('peminjaman', 'relatedItems', 'adminLogistik', 'ruangan'));
@@ -133,7 +133,7 @@ class PelaporanController extends Controller
             'id_peminjaman' => 'required|integer',
         ]);
         
-        // Upload foto awal
+
         $fotoAwalPath = null;
         if ($request->hasFile('foto_awal')) {
             $fotoAwal = $request->file('foto_awal');
@@ -141,7 +141,7 @@ class PelaporanController extends Controller
             $fotoAwalPath = $fotoAwal->storeAs('foto_laporan', $fotoAwalFilename, 'public');
         }
         
-        // Upload foto akhir
+
         $fotoAkhirPath = null;
         if ($request->hasFile('foto_akhir')) {
             $fotoAkhir = $request->file('foto_akhir');
@@ -197,7 +197,7 @@ class PelaporanController extends Controller
                 ->with('error', 'Laporan tidak ditemukan atau Anda tidak memiliki akses.');
         }
         
-        // Get all ruangan for the dropdown
+
         $ruangan = \App\Models\Ruangan::all();
         
         return view('mahasiswa.pelaporan.lapor_ruangan.edit', compact('laporan', 'ruangan'));
@@ -225,9 +225,9 @@ class PelaporanController extends Controller
             'foto_akhir' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
         
-        // Update foto awal jika ada
+
         if ($request->hasFile('foto_awal')) {
-            // Hapus foto lama jika ada
+
             if ($laporan->foto_awal) {
                 Storage::disk('public')->delete($laporan->foto_awal);
             }
@@ -237,9 +237,9 @@ class PelaporanController extends Controller
             $laporan->foto_awal = $fotoAwal->storeAs('foto_laporan', $fotoAwalFilename, 'public');
         }
         
-        // Update foto akhir jika ada
+
         if ($request->hasFile('foto_akhir')) {
-            // Hapus foto lama jika ada
+
             if ($laporan->foto_akhir) {
                 Storage::disk('public')->delete($laporan->foto_akhir);
             }
