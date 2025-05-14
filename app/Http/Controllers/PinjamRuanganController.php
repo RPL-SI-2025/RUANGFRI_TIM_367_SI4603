@@ -278,36 +278,6 @@ class PinjamRuanganController extends Controller
         return view('admin.pinjam_ruangan.index', compact('paginatedGroupedPeminjaman'));
     }
     
-    // Admin interface - halaman persetujuan
-    public function adminApproval()
-    {
-        $pendingRequests = PinjamRuangan::with(['ruangan', 'mahasiswa'])
-                ->where('status', 0)
-                ->latest()
-                ->get();
-                
-        // Kelompokkan permintaan tertunda berdasarkan kriteria yang sama
-        $groupedPending = $pendingRequests->groupBy(function($item) {
-            return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
-                  $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan . '-' . $item->id_mahasiswa;
-        });
-        
-        // Konversi ke kumpulan pagination
-        $perPage = 10;
-        $currentPage = request()->input('page', 1);
-        $pagedData = $groupedPending->forPage($currentPage, $perPage);
-        
-        $paginatedGroupedPending = new \Illuminate\Pagination\LengthAwarePaginator(
-            $pagedData,
-            $groupedPending->count(),
-            $perPage,
-            $currentPage,
-            ['path' => request()->url(), 'query' => request()->query()]
-        );
-                
-        return view('admin.pinjam_ruangan.admin_approval', compact('paginatedGroupedPending'));
-    }
-
     // Admin interface - detail peminjaman
     public function adminShow(PinjamRuangan $pinjamRuangan)
     {
