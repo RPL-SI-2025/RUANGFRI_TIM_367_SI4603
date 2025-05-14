@@ -114,28 +114,88 @@
                             <i class="fa fa-check"></i> Setujui Peminjaman
                         </button>
                     </form>
-                    
-                    <form action="{{ route('pinjam-inventaris.update-status', $pinjamInventaris->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="status" value="2">
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menolak peminjaman ini?')">
-                            <i class="fa fa-times"></i> Tolak Peminjaman
-                        </button>
-                    </form>
+
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal">
+                        <i class="fa fa-times"></i> Tolak Peminjaman
+                    </button>
+                </div>
+
+                <!-- Modal for Rejection with Notes -->
+                <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="{{ route('pinjam-inventaris.update-status', $pinjamInventaris->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" name="status" value="2">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="rejectModalLabel">Tolak Peminjaman</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="notes" class="form-label">Catatan Penolakan</label>
+                                        <textarea class="form-control" id="notes" name="notes" rows="4" 
+                                            placeholder="Berikan alasan penolakan peminjaman ini..."></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-danger">Tolak Peminjaman</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             @endif
 
-            @if($pinjamInventaris->status == 1)
-                <div class="border-top pt-3 mt-4">
-                    <form action="{{ route('pinjam-inventaris.update-status', $pinjamInventaris->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="status" value="3">
-                        <button type="submit" class="btn btn-info" onclick="return confirm('Apakah Anda yakin peminjaman ini telah selesai?')">
-                            <i class="fa fa-check-circle"></i> Tandai Selesai
+            @if($pinjamInventaris->status == 2 && $pinjamInventaris->notes)
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold text-danger">
+                            <i class="fa fa-exclamation-circle me-2"></i>Catatan Penolakan
+                        </h5>
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editNotesModal">
+                            <i class="fa fa-edit"></i> Edit Catatan
                         </button>
-                    </form>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-light border">
+                            <p class="mb-0">{{ $pinjamInventaris->notes }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal for Editing Notes -->
+                <div class="modal fade" id="editNotesModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="{{ route('pinjam-inventaris.update-notes', $pinjamInventaris->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit Catatan Penolakan</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="editNotes" class="form-label">Catatan</label>
+                                        <textarea class="form-control" id="editNotes" name="notes" rows="4">{{ $pinjamInventaris->notes }}</textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             @endif
         </div>

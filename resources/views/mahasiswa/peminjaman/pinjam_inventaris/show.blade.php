@@ -137,13 +137,23 @@
                     </div>
                     @endif
                     
-                    @if($pinjamInventaris->catatan)
-                    <div class="row mb-3">
-                        <div class="col-md-4 text-muted">Catatan Admin</div>
-                        <div class="col-md-8">
-                            <div class="alert alert-light">{{ $pinjamInventaris->catatan }}</div>
+                    @if($pinjamInventaris->status == 2 && $pinjamInventaris->notes)
+                        <div class="card shadow-sm border-0 mt-4">
+                            <div class="card-header bg-light py-3">
+                                <h5 class="mb-0 fw-bold text-danger">
+                                    <i class="fa fa-exclamation-circle me-2"></i>Catatan Penolakan
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-danger border-0">
+                                    <p class="mb-0">{{ $pinjamInventaris->notes }}</p>
+                                </div>
+                                <p class="text-muted small mt-3 mb-0">
+                                    <i class="fa fa-info-circle me-1"></i>
+                                    Perhatikan catatan di atas untuk melakukan pengajuan peminjaman baru.
+                                </p>
+                            </div>
                         </div>
-                    </div>
                     @endif
                     
                     @if($pinjamInventaris->status == 0)
