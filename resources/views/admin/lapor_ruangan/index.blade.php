@@ -31,6 +31,7 @@
                         <thead class="bg-light">
                             <tr>
                                 <th class="text-center" width="5%">No</th>
+                                <th>ID Peminjaman</th>
                                 <th>Tanggal</th>
                                 <th>Mahasiswa</th>
                                 <th>Ruangan</th>
@@ -42,6 +43,7 @@
                             @foreach($pelaporans as $index => $item)
                                 <tr>
                                     <td class="text-center">{{ $index + 1 }}</td>
+                                    <td>{{ $item->peminjaman->id }}</td>
                                     <td>{{ \Carbon\Carbon::parse($item->datetime)->format('d M Y H:i') }}</td>
                                     <td>{{ $item->mahasiswa->nama_mahasiswa ?? 'Tidak ada data' }}</td>
                                     <td>{{ $item->ruangan->nama_ruangan ?? 'Tidak ada data' }}</td>

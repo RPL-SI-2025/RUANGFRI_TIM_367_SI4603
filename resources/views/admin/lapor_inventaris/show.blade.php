@@ -23,20 +23,19 @@
                                     <td>{{ $laporan->id_lapor_inventaris }}</td>
                                 </tr>
                                 <tr>
+                                    <th class="bg-light">ID Peminjaman</th>
+                                    <td><strong>{{ $laporan->peminjaman->id }}</strong></td>
+                                <tr>
                                     <th class="bg-light">Tanggal</th>
                                     <td>{{ \Carbon\Carbon::parse($laporan->datetime)->format('d F Y') }}</td>
                                 </tr>
                                 <tr>
-                                    <th class="bg-light">Mahasiswa</th>
+                                    <th class="bg-light">Dibuat Oleh</th>
                                     <td>{{ $laporan->mahasiswa->nama_mahasiswa ?? 'N/A' }} ({{ $laporan->mahasiswa->nim ?? 'N/A' }})</td>
                                 </tr>
                                 <tr>
                                     <th class="bg-light">Admin Logistik</th>
                                     <td>{{ $laporan->logistik->nama ?? 'N/A' }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="bg-light">Dibuat Oleh</th>
-                                    <td>{{ $laporan->oleh }}</td>
                                 </tr>
                                 <tr>
                                     <th class="bg-light">Ditujukan Kepada</th>

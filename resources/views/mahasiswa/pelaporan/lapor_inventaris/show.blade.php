@@ -26,12 +26,15 @@
                                     <td>{{ $laporan->id_lapor_inventaris }}</td>
                                 </tr>
                                 <tr>
+                                    <td><strong>ID Peminjaman:</strong></td>
+                                    <td><strong>{{ $laporan->peminjaman->id }}</strong></td>
+                                <tr>
                                     <td><strong>Tanggal Laporan:</strong></td>
                                     <td>{{ \Carbon\Carbon::parse($laporan->datetime)->format('d F Y') }}</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Dibuat Oleh:</strong></td>
-                                    <td>{{ $laporan->oleh }}</td>
+                                    <td>{{ $laporan->mahasiswa->nama_mahasiswa ?? 'N/A' }}</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Ditujukan Kepada:</strong></td>
