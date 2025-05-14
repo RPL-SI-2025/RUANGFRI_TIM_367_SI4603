@@ -139,7 +139,13 @@
                 </ul>
             </div>
         </li>
-
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('mahasiswa/history*') ? 'active' : '' }}" 
+               href="{{ route('mahasiswa.history.index') }}">
+                <i class="fas fa-history"></i>
+                <span class="ms-2">Riwayat Pelaporan</span>
+            </a>
+        </li>
         <li class="nav-item mt-3">
             <form action="{{ route('mahasiswa.logout') }}" method="POST" id="logout-form">
                 @csrf
