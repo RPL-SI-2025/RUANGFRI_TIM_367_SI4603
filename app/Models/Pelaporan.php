@@ -16,6 +16,7 @@ class Pelaporan extends Model
         'id_logistik',
         'id_mahasiswa',
         'id_ruangan', 
+        'id_pinjam_ruangan',
         'datetime',
         'foto_awal',
         'foto_akhir',
@@ -36,5 +37,9 @@ class Pelaporan extends Model
     public function ruangan()
     {
         return $this->belongsTo(\App\Models\Ruangan::class, 'id_ruangan');
+    }
+    public function peminjaman()
+    {
+        return $this->belongsTo(PinjamRuangan::class, 'id_pinjam_ruangan');
     }
 }
