@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\HistoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\PinjamInventarisController;
@@ -184,6 +184,8 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::get('/pelaporan/lapor-ruangan/{id}/edit', [PelaporanController::class, 'mahasiswaEdit'])->name('mahasiswa.pelaporan.lapor_ruangan.edit');
     Route::put('/pelaporan/lapor-ruangan/{id}', [PelaporanController::class, 'mahasiswaUpdate'])->name('mahasiswa.pelaporan.lapor_ruangan.update');
     Route::get('/pelaporan/lapor-ruangan/{id}', [PelaporanController::class, 'mahasiswaShow'])->name('mahasiswa.pelaporan.lapor_ruangan.show');
+    
 
-
+    Route::get('/history', [HistoryController::class, 'index'])->name('mahasiswa.history.index');
+    Route::get('/history/{type}/{id}', [HistoryController::class, 'show'])->name('mahasiswa.history.show');
 });
