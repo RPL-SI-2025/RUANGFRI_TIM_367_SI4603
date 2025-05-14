@@ -23,6 +23,9 @@
                                     <td>{{ $pelaporan->id_lapor_ruangan }}</td>
                                 </tr>
                                 <tr>
+                                    <th class="bg-light">ID Peminjaman</th>
+                                    <td>{{ $pelaporan->peminjaman->id}}</td>
+                                <tr>
                                     <th class="bg-light">Tanggal</th>
                                     <td>{{ \Carbon\Carbon::parse($pelaporan->datetime)->format('d F Y') }}</td>
                                 </tr>

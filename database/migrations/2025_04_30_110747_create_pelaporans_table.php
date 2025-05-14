@@ -16,6 +16,7 @@ return new class extends Migration
         $table->unsignedBigInteger('id_mahasiswa');
         $table->unsignedBigInteger('id_logistik');
         $table->unsignedBigInteger('id_ruangan');
+        $table ->unsignedBigInteger('id_pinjam_ruangan')->nullable();
         $table->date('datetime');
         $table->string('foto_awal', 255)->nullable();
         $table->string('foto_akhir', 255)->nullable();
@@ -27,6 +28,7 @@ return new class extends Migration
         $table->foreign('id_mahasiswa')->references('id')->on('mahasiswa');
         $table->foreign('id_logistik')->references('id')->on('admin_logistik');
         $table->foreign('id_ruangan')->references('id')->on('ruangan');
+        $table->foreign('id_pinjam_ruangan')->references('id')->on('pinjam_ruangan');
 
     });
 }

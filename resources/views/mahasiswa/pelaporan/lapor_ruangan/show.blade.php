@@ -26,6 +26,9 @@
                                     <td>{{ $laporan->id_lapor_ruangan }}</td>
                                 </tr>
                                 <tr>
+                                    <td><strong>ID Peminjaman:</strong></td>
+                                    <td>{{ $laporan->peminjaman->id }}</td>
+                                <tr>
                                     <td><strong>Tanggal Laporan:</strong></td>
                                     <td>{{ \Carbon\Carbon::parse($laporan->datetime)->format('d F Y, H:i') }}</td>
                                 </tr>

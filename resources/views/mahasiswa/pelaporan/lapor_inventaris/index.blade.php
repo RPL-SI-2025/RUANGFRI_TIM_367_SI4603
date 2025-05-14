@@ -27,7 +27,8 @@
                     <table class="table table-hover align-middle">
                         <thead class="table-light">
                             <tr>
-                                <th>No</th>
+                                <th>ID Laporan</th>
+                                <th>ID Peminjaman</th>
                                 <th>Tanggal</th>
                                 <th>Deskripsi</th>
                                 <th>Admin Logistik</th>
@@ -38,6 +39,7 @@
                             @foreach($laporan as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td><strong>{{ $item->peminjaman->id }}</strong></td>
                                     <td>{{ \Carbon\Carbon::parse($item->datetime)->format('d/m/Y') }}</td>
                                     <td>{{ \Str::limit($item->deskripsi, 50) }}</td>
                                     <td>{{ $item->logistik->nama ?? 'N/A' }}</td>

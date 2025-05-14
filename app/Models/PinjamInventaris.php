@@ -21,7 +21,8 @@ class PinjamInventaris extends Model
         'waktu_mulai',
         'waktu_selesai',
         'file_scan',
-        'status'
+        'status',
+        'notes'
     ];
     
     public function inventaris()
@@ -32,6 +33,11 @@ class PinjamInventaris extends Model
     public function mahasiswa()
     {
         return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa', 'id');
+    }
+    
+    public function laporan()
+    {
+        return $this->hasOne(laporinventaris::class, 'id_pinjam_inventaris', 'id');
     }
     
     // Helper untuk status

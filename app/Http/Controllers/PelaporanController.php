@@ -20,7 +20,7 @@ class PelaporanController extends Controller
 
     public function show($id)
     {
-        $pelaporan = Pelaporan::with(['mahasiswa', 'logistik', 'ruangan'])->find($id);
+        $pelaporan = Pelaporan::with(['mahasiswa', 'logistik', 'ruangan','peminjaman'])->find($id);
         
         if (!$pelaporan) {
             return redirect()->back()->with('error', 'Data tidak ditemukan');
@@ -60,7 +60,7 @@ class PelaporanController extends Controller
         }
         
         $laporan = Pelaporan::where('id_mahasiswa', $mahasiswaId)
-                    ->with(['logistik', 'ruangan']) // Tambahkan relasi ruangan
+                    ->with(['logistik', 'ruangan', 'peminjaman']) 
                     ->latest('datetime')
                     ->get();
                     
@@ -167,6 +167,7 @@ class PelaporanController extends Controller
             'id_logistik' => $request->id_logistik,
             'id_mahasiswa' => $mahasiswaId,
             'id_ruangan' => $peminjaman->id_ruangan,
+            'id_pinjam_ruangan' => $request->id_peminjaman,
             'datetime' => $request->datetime,
             'foto_awal' => $fotoAwalPath,
             'foto_akhir' => $fotoAkhirPath,
@@ -265,7 +266,7 @@ class PelaporanController extends Controller
         
         $laporan = Pelaporan::where('id_lapor_ruangan', $id)
                     ->where('id_mahasiswa', $mahasiswaId)
-                    ->with('logistik')
+                    ->with('logistik', 'ruangan', 'peminjaman')
                     ->first();
                     
         if (!$laporan) {

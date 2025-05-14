@@ -12,6 +12,7 @@ class laporinventaris extends Model
     protected $fillable = [
         'id_logistik',
         'id_mahasiswa',
+        'id_pinjam_inventaris',
         'datetime',
         'foto_awal',
         'foto_akhir',
@@ -29,6 +30,9 @@ class laporinventaris extends Model
     {
         return $this->belongsTo(AdminLogistik::class, 'id_logistik');
     }
+    
+    public function peminjaman()
+    {
+        return $this->belongsTo(PinjamInventaris::class, 'id_pinjam_inventaris');
+    }
 }
-
-

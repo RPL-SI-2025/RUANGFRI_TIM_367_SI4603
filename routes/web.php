@@ -52,14 +52,14 @@ Route::prefix('admin')->group(function () {
     Route::get('/inventaris/{inventaris}', [InventarisController::class, 'show'])->name('admin.inventaris.show');
 
     Route::get('/pinjam-inventaris', [PinjamInventarisController::class, 'adminIndex'])->name('admin.pinjam-inventaris.index');
-    Route::get('/pinjam-inventaris/approval', [PinjamInventarisController::class, 'adminApproval'])->name('admin.pinjam-inventaris.approval');
     Route::get('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'adminShow'])->name('admin.pinjam-inventaris.show');
-    Route::patch('/pinjam-inventaris/{pinjamInventaris}/update-status', [PinjamInventarisController::class, 'updateStatus'])->name('pinjam-inventaris.update-status');
     Route::delete('/pinjam-inventaris/{pinjamInventaris}', [PinjamInventarisController::class, 'destroy'])->name('pinjam-inventaris.destroy');
     Route::put('/pinjam-inventaris/{pinjamInventaris}/update-status', [PinjamInventarisController::class, 'updateStatus'])->name('pinjam-inventaris.update-status');
 
+    Route::put('/pinjam-inventaris/{pinjamInventaris}/notes', [PinjamInventarisController::class, 'updateNotes'])
+    ->name('pinjam-inventaris.update-notes');
+
     Route::get('/pinjam-ruangan', [PinjamRuanganController::class, 'adminIndex'])->name('admin.pinjam-ruangan.index');
-    Route::get('/pinjam-ruangan/approval', [PinjamRuanganController::class, 'adminApproval'])->name('admin.pinjam-ruangan.approval');
     Route::get('/pinjam-ruangan/{pinjamRuangan}', [PinjamRuanganController::class, 'adminShow'])->name('admin.pinjam-ruangan.show');
     Route::put('/pinjam-ruangan/{pinjamRuangan}/update-status', [PinjamRuanganController::class, 'updateStatus'])->name('pinjam-ruangan.update-status');
 

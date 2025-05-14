@@ -19,6 +19,7 @@ class CreatePinjamInventarisTable extends Migration
             $table->time('waktu_selesai');
             $table->string('file_scan', 255)->nullable();
             $table->integer('status')->default(0); // 0: Menunggu Persetujuan, 1: Disetujui, 2: Ditolak, 3: Selesai
+            $table->text('notes')->nullable();
             $table->timestamps();
             
             $table->foreign('id_inventaris')->references('id')->on('inventaris');
