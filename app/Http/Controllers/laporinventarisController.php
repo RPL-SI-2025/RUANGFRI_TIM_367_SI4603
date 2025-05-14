@@ -20,7 +20,6 @@ class laporinventarisController extends Controller
         return view('admin.lapor_inventaris.index', compact('laporan'));
     }
     
-    // Pertahankan method show untuk admin
     public function show($id)
     {
         $laporan = laporinventaris::with(['mahasiswa', 'logistik'])->find($id);
@@ -32,6 +31,60 @@ class laporinventarisController extends Controller
         return view('admin.lapor_inventaris.show', compact('laporan'));
     }
 
+    public function history()
+{
+    $mahasiswaId = Session::get('mahasiswa_id');
+    
+    if (!$mahasiswaId) {
+        return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
+    }
+    
+    $laporan = laporinventaris::where('id_mahasiswa', $mahasiswaId)
+                ->with(['peminjaman' => function($query) {
+                    $query->where('status', 3); 
+                }, 'logistik'])
+                ->whereHas('peminjaman', function($query) {
+                    $query->where('status', 3); 
+                })
+                ->latest('datetime')
+                ->get();
+                
+    return view('mahasiswa.pelaporan.lapor_inventaris.history', compact('laporan'));
+    
+}
+public function historyShow($id)
+{
+    $mahasiswaId = Session::get('mahasiswa_id');
+    
+    if (!$mahasiswaId) {
+        return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
+    }
+    
+    $laporan = laporinventaris::where('id_lapor_inventaris', $id)
+                ->where('id_mahasiswa', $mahasiswaId)
+                ->whereHas('peminjaman', function($query) {
+                    $query->where('status', 3);
+                })
+                ->with(['logistik', 'peminjaman', 'mahasiswa'])
+                ->first();
+                
+    if (!$laporan) {
+        return redirect()->route('mahasiswa.pelaporan.lapor_inventaris.history')
+            ->with('error', 'Laporan tidak ditemukan atau Anda tidak memiliki akses.');
+    }
+    
+
+    $relatedItems = PinjamInventaris::where('tanggal_pengajuan', $laporan->peminjaman->tanggal_pengajuan)
+        ->where('tanggal_selesai', $laporan->peminjaman->tanggal_selesai)
+        ->where('waktu_mulai', $laporan->peminjaman->waktu_mulai)
+        ->where('waktu_selesai', $laporan->peminjaman->waktu_selesai)
+        ->where('file_scan', $laporan->peminjaman->file_scan)
+        ->where('id_mahasiswa', $mahasiswaId)
+        ->with('inventaris')
+        ->get();
+    
+    return view('mahasiswa.pelaporan.lapor_inventaris.history_show', compact('laporan', 'relatedItems'));
+}
     
     public function mahasiswaIndex()
     {
@@ -61,7 +114,6 @@ class laporinventarisController extends Controller
     $peminjaman = null;
     
     if ($peminjamanId) {
-        // Get the first item of the peminjaman group with the same details
         $peminjaman = PinjamInventaris::with('inventaris')
                         ->where('id', $peminjamanId)
                         ->where('id_mahasiswa', $mahasiswaId)
@@ -77,7 +129,6 @@ class laporinventarisController extends Controller
                 ->with('error', 'Hanya peminjaman yang sudah disetujui yang dapat dilaporkan selesai.');
         }
         
-        // Get all related items with the same request details
         $relatedItems = PinjamInventaris::where('tanggal_pengajuan', $peminjaman->tanggal_pengajuan)
             ->where('tanggal_selesai', $peminjaman->tanggal_selesai)
             ->where('waktu_mulai', $peminjaman->waktu_mulai)
@@ -88,14 +139,13 @@ class laporinventarisController extends Controller
             ->get();
     }
     
-    // Get admin users for the dropdown
+   
     $adminLogistik = AdminLogistik::all();
     
     return view('mahasiswa.pelaporan.lapor_inventaris.create', compact('peminjaman', 'relatedItems', 'adminLogistik'));
     }
 
 
-    // Find the mahasiswaStore method and update it
     public function mahasiswaStore(Request $request)
     {
         $mahasiswaId = Session::get('mahasiswa_id');
@@ -113,7 +163,7 @@ class laporinventarisController extends Controller
             'id_peminjaman' => 'required|integer',
         ]);
         
-        // Upload foto awal
+       
         $fotoAwalPath = null;
         if ($request->hasFile('foto_awal')) {
             $fotoAwal = $request->file('foto_awal');
@@ -121,7 +171,7 @@ class laporinventarisController extends Controller
             $fotoAwalPath = $fotoAwal->storeAs('foto_laporan', $fotoAwalFilename, 'public');
         }
         
-        // Upload foto akhir
+        
         $fotoAkhirPath = null;
         if ($request->hasFile('foto_akhir')) {
             $fotoAkhir = $request->file('foto_akhir');
@@ -129,7 +179,7 @@ class laporinventarisController extends Controller
             $fotoAkhirPath = $fotoAkhir->storeAs('foto_laporan', $fotoAkhirFilename, 'public');
         }
         
-        // Create laporan
+        
         $laporan = laporinventaris::create([
             'id_logistik' => $request->id_logistik,
             'id_mahasiswa' => $mahasiswaId,
@@ -142,19 +192,19 @@ class laporinventarisController extends Controller
             'kepada' => 'Admin Logistik'
         ]);
         
-        // Update status peminjaman menjadi selesai (3) for ALL related items in the group
+        
         if ($request->id_peminjaman) {
             $peminjaman = PinjamInventaris::find($request->id_peminjaman);
             
             if ($peminjaman && $peminjaman->id_mahasiswa == $mahasiswaId) {
-                // Mark all related items with the same details as complete
+                
                 PinjamInventaris::where('tanggal_pengajuan', $peminjaman->tanggal_pengajuan)
                     ->where('tanggal_selesai', $peminjaman->tanggal_selesai)
                     ->where('waktu_mulai', $peminjaman->waktu_mulai)
                     ->where('waktu_selesai', $peminjaman->waktu_selesai)
                     ->where('file_scan', $peminjaman->file_scan)
                     ->where('id_mahasiswa', $mahasiswaId)
-                    ->update(['status' => 3]); // Status selesai
+                    ->update(['status' => 3]); 
             }
         }
         
