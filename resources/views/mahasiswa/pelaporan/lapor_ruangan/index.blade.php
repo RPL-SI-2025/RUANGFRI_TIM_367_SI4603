@@ -26,6 +26,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>ID Peminjaman</th>
                                 <th>Tanggal</th>
                                 <th>Ruangan</th>
                                 <th>Deskripsi</th>
@@ -37,6 +38,7 @@
                             @foreach($laporan as $index => $item)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
+                                    <td>{{ $item->peminjaman->id}}</td>
                                     <td class="px-3 py-3">
                                         {{ \Carbon\Carbon::parse($item->tanggal_pengajuan)->format('d M Y') }}
                                         <span class="text-muted"> s/d </span>

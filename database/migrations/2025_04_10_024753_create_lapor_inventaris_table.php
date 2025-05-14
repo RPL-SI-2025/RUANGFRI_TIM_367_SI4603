@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id('id_lapor_inventaris');
                 $table->unsignedBigInteger('id_logistik');
                 $table->unsignedBigInteger('id_mahasiswa');;
+                $table->unsignedBigInteger('id_pinjam_inventaris');
                 $table->date('datetime');
                 $table->string('foto_awal');
                 $table->string('foto_akhir');
@@ -26,6 +27,7 @@ return new class extends Migration
                 $table->timestamps();
                 $table->foreign('id_logistik')->references('id')->on('admin_logistik');
                 $table->foreign('id_mahasiswa')->references('id')->on('mahasiswa');
+                $table->foreign('id_pinjam_inventaris')->references('id')->on('pinjam_inventaris');
         });
     }
 

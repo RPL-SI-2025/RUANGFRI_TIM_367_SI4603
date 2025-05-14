@@ -95,6 +95,7 @@ class laporinventarisController extends Controller
     }
 
 
+    // Find the mahasiswaStore method and update it
     public function mahasiswaStore(Request $request)
     {
         $mahasiswaId = Session::get('mahasiswa_id');
@@ -132,6 +133,7 @@ class laporinventarisController extends Controller
         $laporan = laporinventaris::create([
             'id_logistik' => $request->id_logistik,
             'id_mahasiswa' => $mahasiswaId,
+            'id_pinjam_inventaris' => $request->id_peminjaman,
             'datetime' => $request->datetime,
             'foto_awal' => $fotoAwalPath,
             'foto_akhir' => $fotoAkhirPath,
