@@ -41,5 +41,6 @@
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
     </script>
+    @stack('scripts')
 </body>
 </html>
