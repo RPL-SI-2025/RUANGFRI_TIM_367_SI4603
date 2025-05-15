@@ -2,9 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <h4 class="mb-4">
-        <i class="fas fa-history me-2"></i>Riwayat Peminjaman & Pelaporan
-    </h4>
+
     
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
