@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use PDF;
 
 class PelaporanController extends Controller
 {
@@ -142,6 +143,17 @@ class PelaporanController extends Controller
         $pelaporan->delete();
 
         return redirect()->route('mahasiswa.pelaporan.lapor_ruang.index')->with('success', 'Laporan deleted successfully');
+    }
+
+    public function downloadPdf($id)
+    {
+        $pelaporan = Pelaporan::where('id_lapor_ruangan', $id)
+            ->where('id_mahasiswa', Auth::id())
+            ->firstOrFail();
+
+        $pdf = PDF::loadView('mahasiswa.pelaporan.lapor_ruang.pdf', compact('pelaporan'));
+
+        return $pdf->download('laporan_' . $pelaporan->id_lapor_ruangan . '.pdf');
     }
 
 }
