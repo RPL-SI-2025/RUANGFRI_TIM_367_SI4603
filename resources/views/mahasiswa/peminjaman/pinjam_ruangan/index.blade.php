@@ -122,7 +122,7 @@
                 </div>
             @else
                 <div class="text-center py-5">
-                    <i class="fa fa-calendar-o text-muted" style="font-size: 4rem;"></i>
+                    <i class="fa-regular fa-calendar text-muted" style="font-size: 4rem;"></i>
                     <p class="mt-3 text-muted">Belum ada peminjaman ruangan</p>
                     <a href="{{ route('mahasiswa.katalog.ruangan.index') }}" class="btn btn-primary mt-2">
                         <i class="fa fa-plus me-1"></i> Mulai Peminjaman Ruangan
