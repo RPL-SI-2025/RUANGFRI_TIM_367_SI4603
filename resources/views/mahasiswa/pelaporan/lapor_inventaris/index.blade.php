@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-4">
     <h4 class="mb-4">
-        <i class="fas fa-clipboard-list me-2"></i>Daftar Laporan Inventaris
+        <i class="fas fa-toolbox fa-sm me-2"></i> Daftar Laporan Inventaris
     </h4>
     
     @if(session('success'))
