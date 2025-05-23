@@ -12,7 +12,55 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class HistoryController extends Controller
 {
+
     public function index()
+    {
+        $mahasiswaId = Session::get('mahasiswa_id');
+    
+        if (!$mahasiswaId) {
+            return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+         // === Laporan Inventaris ===
+        $laporanInventaris = laporinventaris::where('id_mahasiswa', $mahasiswaId)
+             ->with(['peminjaman' => function($query) {
+                $query->where('status', 3);
+            }, 'logistik'])
+            ->whereHas('peminjaman', function($query) {
+                $query->where('status', 3);
+            })
+            ->latest('datetime')
+            ->get();
+
+        $perPage = 7;
+        $currentPageInventaris = request()->query('page_inventaris', 1);
+        $paginatedInventaris = new LengthAwarePaginator(
+            $laporanInventaris->forPage($currentPageInventaris, $perPage),
+            $laporanInventaris->count(),
+            $perPage,
+            $currentPageInventaris,
+            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'page_inventaris']
+        );
+
+        // === Laporan Ruangan ===
+        $laporanRuangan = Pelaporan::where('id_mahasiswa', $mahasiswaId)
+            ->with(['logistik', 'ruangan', 'peminjaman'])
+            ->latest('datetime')
+            ->get();
+
+        $currentPageRuangan = request()->query('page_ruangan', 1);
+        $paginatedRuangan = new LengthAwarePaginator(
+            $laporanRuangan->forPage($currentPageRuangan, $perPage),
+            $laporanRuangan->count(),
+            $perPage,
+            $currentPageRuangan,
+            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'page_ruangan']
+        );
+
+        return view('mahasiswa.history.index', compact('paginatedInventaris', 'paginatedRuangan'));
+    }
+
+    /*public function index()
     {
         $mahasiswaId = Session::get('mahasiswa_id');
         
@@ -83,5 +131,5 @@ class HistoryController extends Controller
         
         return redirect()->route('mahasiswa.history.index')
             ->with('error', 'Tipe laporan tidak valid.');
-    }
+    }*/
 }

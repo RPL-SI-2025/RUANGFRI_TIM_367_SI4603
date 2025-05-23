@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Pelaporan;
 use App\Models\PinjamRuangan;
 use App\Models\AdminLogistik;
+use PDF; 
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
@@ -20,7 +21,8 @@ class PelaporanController extends Controller
 
     public function show($id)
     {
-        $pelaporan = Pelaporan::with(['mahasiswa', 'logistik', 'ruangan','peminjaman'])->find($id);
+       $pelaporan = Pelaporan::with(['mahasiswa', 'logistik', 'ruangan', 'peminjaman'])->findOrFail($id);
+
         
         if (!$pelaporan) {
             return redirect()->back()->with('error', 'Data tidak ditemukan');
@@ -275,5 +277,28 @@ class PelaporanController extends Controller
         }
         
         return view('mahasiswa.pelaporan.lapor_ruangan.show', compact('laporan'));
+    }
+
+    public function downloadPdf($id)
+    {
+        $mahasiswaId = Session::get('mahasiswa_id');
+        $pelaporan = Pelaporan::where('id_lapor_ruangan', $id)
+        ->where('id_mahasiswa', $mahasiswaId)
+        ->firstOrFail();
+
+
+        $pdf = PDF::loadView('mahasiswa.pelaporan.lapor_ruangan.pdf', compact('pelaporan'));
+
+        return $pdf->download('laporan_' . $pelaporan->id_lapor_ruangan . '.pdf');
+    }
+
+    public function downloadPdfAdmin($id)
+    {
+        $pelaporan = Pelaporan::with(['mahasiswa', 'logistik', 'ruangan', 'peminjaman'])
+                        ->findOrFail($id);
+
+        $pdf = PDF::loadView('mahasiswa.pelaporan.lapor_ruangan.pdf', compact('pelaporan'));
+
+        return $pdf->download('laporan_' . $pelaporan->id_lapor_ruangan . '.pdf');
     }
 }

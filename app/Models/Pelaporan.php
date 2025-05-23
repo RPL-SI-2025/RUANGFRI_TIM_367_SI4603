@@ -21,6 +21,7 @@ class Pelaporan extends Model
         'foto_awal',
         'foto_akhir',
         'deskripsi',
+        'keteranganAdmin',
         'oleh',
         'kepada'
     ];

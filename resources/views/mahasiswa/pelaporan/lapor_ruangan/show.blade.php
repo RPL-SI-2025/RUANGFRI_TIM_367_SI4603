@@ -101,9 +101,14 @@
                     </div>
                     <div class="d-flex justify-content-end mt-4 pt-3 border-top">
                         <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.edit', $laporan->id_lapor_ruangan) }}" class="btn btn-warning rounded-pill px-4 me-2">
-                            <i class="fas fa-edit me-2"></i> Edit Laporan
+                             <i class="fas fa-edit me-2"></i> Edit Laporan
+                         </a>
+                        <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.pdf', $laporan->id_lapor_ruangan) }}" 
+                         class="btn btn-success rounded-pill px-4">
+                            <i class="fas fa-download me-2"></i> Download Laporan
                         </a>
                     </div>
+
 
                 </div>
             </div>
