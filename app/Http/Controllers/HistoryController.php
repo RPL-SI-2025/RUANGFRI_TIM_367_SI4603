@@ -79,7 +79,7 @@ class HistoryController extends Controller
             
             return view('mahasiswa.history.show_inventaris', compact('laporan', 'relatedItems'));
         
-        } elseif ($type === 'ruangan') {}
+        } elseif ($type === 'inventaris') {}
         
         return redirect()->route('mahasiswa.history.index')
             ->with('error', 'Tipe laporan tidak valid.');
