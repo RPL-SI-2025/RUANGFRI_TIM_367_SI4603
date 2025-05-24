@@ -9,12 +9,26 @@ use App\Models\Inventaris;
 use App\Models\StatusPeminjaman;
 use App\Models\LaporInventaris;
 use App\Models\LaporanRuangan;
+use App\Models\PinjamRuangan;
+use Illuminate\Support\Carbon;
 
 class AdminLogistikController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+
+    public function landing()
+    {
+        $totalRuangan = Ruangan::count();
+        $totalInventaris = Inventaris::count();
+        $ruanganTersedia = Ruangan::where('status', 'Tersedia')->count();
+        $inventarisTersedia = Inventaris::where('status', 'Tersedia')->count();
+        return view('landing', compact('totalRuangan', 'totalInventaris', 'ruanganTersedia', 'inventarisTersedia'));
+    }
+
+
     public function index()
     {
 
@@ -26,10 +40,32 @@ class AdminLogistikController extends Controller
         $inventarisTersedia = Inventaris::where('status', 'Tersedia')->count();
         $inventarisTidakTersedia = Inventaris::where('status', 'Tidak Tersedia')->count();
 
+        $grafik = [
+        'bulan' => [],
+        'jumlah' => []
+    ];
+    for ($i = 5; $i >= 0; $i--) {
+        $bulan = Carbon::now()->subMonths($i)->format('F');
+        $grafik['bulan'][] = $bulan;
+        $grafik['jumlah'][] = PinjamRuangan::whereMonth('created_at', Carbon::now()->subMonths($i)->month)->count();
+    }
+
+    // Aktivitas terbaru (contoh gabungan)
+    $aktivitasTerbaru = collect([
+        ...PinjamRuangan::latest()->take(3)->get()->map(fn($item) => (object)[
+            'deskripsi' => "Peminjaman ruangan oleh {$item->mahasiswa->nama}",
+            'created_at' => $item->created_at
+        ]),
+        ...LaporInventaris::latest()->take(2)->get()->map(fn($item) => (object)[
+            'deskripsi' => "Laporan kerusakan inventaris oleh {$item->mahasiswa->nama}",
+            'created_at' => $item->created_at
+        ]),
+    ])->sortByDesc('created_at')->take(5);
 
 
-        // $jumlahApprovalPending = StatusPeminjaman::where('status_approval', 'menunggu')->count();
-        // $jumlahLaporan = LaporInventaris::count() + LaporanRuangan::count();
+
+
+        $jumlahLaporan = LaporInventaris::count() + LaporanRuangan::count();
 
         return view('admin.dashboard', compact(
             'totalRuangan',
@@ -38,8 +74,9 @@ class AdminLogistikController extends Controller
             'totalInventaris',
             'inventarisTersedia',
             'inventarisTidakTersedia',
-            // 'jumlahApprovalPending',
-            // 'jumlahLaporan'
+            'jumlahLaporan',
+            'grafik', 
+            'aktivitasTerbaru'
         ));
 
         return view('admin.dashboard');

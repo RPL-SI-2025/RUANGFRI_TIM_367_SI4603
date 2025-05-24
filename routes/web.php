@@ -21,10 +21,15 @@ use Illuminate\Support\Facades\Auth;
 
 
 
+Route::get('/', [\App\Http\Controllers\AdminLogistikController::class, 'landing'])->name('landing');
 
-Route::get('/', function () {
-    return view('mahasiswa.auth.login');
-});
+
+
+// Route::get('/', function () {
+//     // return view('mahasiswa.auth.login');
+//     // return view('landing');
+    
+// });
 
 // Ruangan routes
 Route::controller(RuanganController::class)->group(function () {
