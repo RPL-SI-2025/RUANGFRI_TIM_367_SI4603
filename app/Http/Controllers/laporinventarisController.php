@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\PinjamInventaris;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class laporinventarisController extends Controller
 {
@@ -306,4 +306,27 @@ public function historyShow($id)
         
         return view('mahasiswa.pelaporan.lapor_inventaris.show', compact('laporan'));
     }
+  public function downloadPDF($id)
+{
+    $mahasiswaId = Session::get('mahasiswa_id');
+    
+    $laporan = laporinventaris::where('id_lapor_inventaris', $id)
+        ->where('id_mahasiswa', $mahasiswaId)
+        ->with(['mahasiswa', 'logistik', 'peminjaman'])
+        ->firstOrFail();
+
+    $pdf = Pdf::loadView('mahasiswa.pelaporan.lapor_inventaris.pdf', compact('laporan'));
+    
+    
+    $pdf->setPaper('a4');
+    
+
+    $pdf->setOptions([
+        'isHtml5ParserEnabled' => true,
+        'isRemoteEnabled' => true,
+        'defaultFont' => 'sans-serif'
+    ]);
+
+    return $pdf->download('laporan-inventaris-' . $id . '.pdf');
+}
 }
