@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 
+
 Route::get('/', function () {
     return view('mahasiswa.auth.login');
 });
@@ -177,7 +178,9 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::get('/pelaporan/lapor-inventaris/{id}/edit', [laporinventarisController::class, 'mahasiswaEdit'])->name('mahasiswa.pelaporan.lapor_inventaris.edit');
     Route::put('/pelaporan/lapor-inventaris/{id}', [laporinventarisController::class, 'mahasiswaUpdate'])->name('mahasiswa.pelaporan.lapor_inventaris.update');
     Route::get('/pelaporan/lapor-inventaris/{id}', [laporinventarisController::class, 'mahasiswaShow'])->name('mahasiswa.pelaporan.lapor_inventaris.show');
-
+    Route::get('/mahasiswa/pelaporan/lapor-inventaris/{id}/download-pdf', 
+    [App\Http\Controllers\laporinventarisController::class, 'downloadPDF'])
+    ->name('mahasiswa.pelaporan.lapor_inventaris.download-pdf');
     Route::get('/pelaporan/lapor-ruangan', [PelaporanController::class, 'mahasiswaIndex'])->name('mahasiswa.pelaporan.lapor_ruangan.index');
     Route::get('/pelaporan/lapor-ruangan/create', [PelaporanController::class, 'mahasiswaCreate'])->name('mahasiswa.pelaporan.lapor_ruangan.create');
     Route::post('/pelaporan/lapor-ruangan', [PelaporanController::class, 'mahasiswaStore'])->name('mahasiswa.pelaporan.lapor_ruangan.store');
@@ -188,4 +191,5 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
 
     Route::get('/history', [HistoryController::class, 'index'])->name('mahasiswa.history.index');
     Route::get('/history/{type}/{id}', [HistoryController::class, 'show'])->name('mahasiswa.history.show');
+    
 });
