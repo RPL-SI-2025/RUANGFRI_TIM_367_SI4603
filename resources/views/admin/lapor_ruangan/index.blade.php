@@ -36,7 +36,7 @@
                                 <th>Mahasiswa</th>
                                 <th>Ruangan</th>
                                 <th>Deskripsi</th>
-                                <th class="text-center" width="15%">Aksi</th>
+                                <th class="text-center" width="20%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -49,10 +49,16 @@
                                     <td>{{ $item->ruangan->nama_ruangan ?? 'Tidak ada data' }}</td>
                                     <td>{{ Str::limit($item->deskripsi, 50) }}</td>
                                     <td class="text-center">
-                                        <a href="{{ route('admin.lapor_ruangan.show', $item->id_lapor_ruangan) }}" 
-                                           class="btn btn-info btn-sm">
-                                            <i class="bi bi-eye"></i> Detail
-                                        </a>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ route('admin.lapor_ruangan.show', $item->id_lapor_ruangan) }}" 
+                                               class="btn btn-info btn-sm me-2" title="Lihat Detail">
+                                                <i class="bi bi-eye"></i> Detail
+                                            </a>
+                                            <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.pdf', $item->id_lapor_ruangan) }}" 
+                                               class="btn btn-primary btn-sm" title="Download Laporan">
+                                                <i class="bi bi-download"></i> Download
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -72,7 +78,12 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        $('#dataTable').DataTable();
+        $('#dataTable').DataTable({
+            responsive: true,
+            columnDefs: [
+                { orderable: false, targets: 6 } // Disable sorting on the "Aksi" column
+            ]
+        });
     });
 </script>
 @endpush

@@ -25,6 +25,7 @@
                                 <tr>
                                     <th class="bg-light">ID Peminjaman</th>
                                     <td>{{ $pelaporan->peminjaman->id}}</td>
+                                </tr>
                                 <tr>
                                     <th class="bg-light">Tanggal</th>
                                     <td>{{ \Carbon\Carbon::parse($pelaporan->datetime)->format('d F Y') }}</td>
@@ -52,22 +53,6 @@
                             <div class="p-3 border rounded bg-light">
                                 {{ $pelaporan->deskripsi }}
                             </div>
-                            
-                            <h6 class="fw-bold mt-4">Keterangan Admin</h6>
-                            @if($pelaporan->keterangan)
-                                <div class="p-3 border rounded bg-light">
-                                    {{ $pelaporan->keterangan }}
-                                </div>
-                            @else
-                                <form action="{{ route('admin.lapor_ruangan.update', $pelaporan->id_lapor_ruangan) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <div class="form-group">
-                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="4" placeholder="Tambahkan keterangan..." required></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary btn-sm mt-2">Simpan Keterangan</button>
-                                </form>
-                            @endif
                         </div>
                     </div>
 

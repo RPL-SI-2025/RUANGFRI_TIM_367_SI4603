@@ -190,5 +190,5 @@ Route::middleware([\App\Http\Middleware\MahasiswaAuth::class])->prefix('mahasisw
     Route::get('/history/{type}/{id}', [HistoryController::class, 'show'])->name('mahasiswa.history.show');
 
     Route::get('/laporan/{id}/download', [PelaporanController::class, 'downloadPdf'])->name('mahasiswa.pelaporan.lapor_ruangan.pdf');
-
+    
 });
