@@ -1,701 +1,661 @@
-<!-- filepath: resources/views/landing.blade.php -->
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Peminjaman Inventaris & Ruangan</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet" type="text/css" >
-    <style>
-
-        
-    .hero {
-        background: linear-gradient(135deg, #2563eb 0%, #0d6efd 100%);
-        color: #fff;
-        position: relative;
-        overflow: hidden;
-        padding: 100px 20px; /* Sesuaikan padding untuk responsivitas */
-        border-radius: 0 0 50px 50px; /* Kurangi radius untuk tampilan lebih modern */
-        box-shadow: 0 10px 30px rgba(13, 110, 253, 0.15);
-        text-align: center;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sistem Peminjaman FRI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    {
+      box-sizing: border-box;
     }
 
-    .hero h1 {
-        font-size: 3rem; /* Sesuaikan ukuran font */
-        font-weight: 800;
-        line-height: 1.2;
-        margin-bottom: 1rem;
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #111827;
     }
 
-    .hero p {
-        font-size: 1.2rem;
-        opacity: 0.9;
-        max-width: 700px;
-        margin: 0 auto 2rem;
+    a {
+      text-decoration: none;
+      color: inherit;
     }
 
-    .hero .btn {
-        padding: 0.8rem 2rem;
-        font-size: 1rem;
-        border-radius: 50px;
-        font-weight: 600;
-        transition: all 0.3s ease;
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
     }
-
-    .hero .btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    @media (max-width: 768px) {
-        .hero h1 {
-            font-size: 2.5rem; /* Ukuran font lebih kecil untuk layar kecil */
-        }
-
-        .hero p {
-            font-size: 1rem;
-        }
-
-        .hero {
-            padding: 80px 15px; /* Kurangi padding untuk layar kecil */
-        }
-    }
-
-        @keyframes float {
-            from { transform: translateY(0) rotate(0deg); }
-            to { transform: translateY(-100%) rotate(10deg); }
-        }
-
-
-        #fitur {
-        padding: 60px 20px; /* Tambahkan padding untuk jarak */
-        background: #f8f9fa; /* Warna latar belakang yang lembut */
-    }
-
-    .feature-card {
-        background: #ffffff;
-        border-radius: 15px; /* Tambahkan border radius */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Tambahkan bayangan */
-        padding: 30px; /* Tambahkan padding internal */
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .feature-card:hover {
-        transform: translateY(-10px); /* Efek hover */
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Bayangan lebih besar saat hover */
-    }
-
-    .feature-icon {
-        width: 80px;
-        height: 80px;
-        background: linear-gradient(135deg, #e0e7ff 0%, #f0f7ff 100%);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 20px;
-        font-size: 2rem;
-        color: #2563eb;
-    }
-
-    .feature-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #2563eb;
-        margin-bottom: 10px;
-    }
-
-    .feature-description {
-        font-size: 1rem;
-        color: #475569;
-        line-height: 1.6;
-    }
-
 
     .navbar {
-        background: rgba(255, 255, 255, 0.95) !important;
-        backdrop-filter: blur(10px);
-        padding: 1.5rem 1rem; /* Tambahkan padding lebih besar */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: 1e40af ;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-    .navbar-brand {
-        font-size: 1.8rem; /* Perbesar ukuran font */
-        font-weight: 800;
-        background: linear-gradient(135deg, #0d6efd, #2563eb);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-right: 2rem; /* Tambahkan jarak dengan menu */
+    .navbar .logo {
+      background: #1e40af;
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1.2rem;
     }
 
-    .navbar-nav {
-        gap: 1.5rem; /* Tambahkan jarak antar item menu */
+    .navbar nav a {
+      margin: 0 1rem;
+      font-weight: 500;
     }
 
-    .nav-item {
-        margin: 0 0.5rem; /* Tambahkan margin antar item */
+    .btn-login {
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      padding: 0.4rem 1rem;
+      font-weight: 600;
+      background: white;
+      cursor: pointer;
     }
 
-    .nav-link {
-        font-size: 1rem; /* Sesuaikan ukuran font */
-        font-weight: 500;
-        padding: 0.5rem 1rem; /* Tambahkan padding */
-        transition: all 0.3s ease;
+    .hero {
+      background: #f9fafb;
+      padding: 4rem 2rem;
     }
 
-    .nav-link:hover {
-        color: #2563eb; /* Warna hover */
+    .hero-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
     }
 
-    .nav-btn {
-        border-radius: 50px;
-        padding: 0.5rem 1.5rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        margin-left: 1rem; /* Tambahkan jarak dengan menu lainnya */
+    .hero-text h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
     }
 
-    .nav-btn:hover {
-        transform: translateY(-2px);
+    .hero-text p {
+      margin-bottom: 1.5rem;
+      color: #4b5563;
     }
 
-    .btn {
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(255, 0, 0, 0.2);
-    }
-
-    .btn:active {
-        transform: translateY(-1px);
-    }
-
-    .btn::after {
-        content: '';
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
-        transform: translateX(-100%);
-    }
-
-    .btn:hover::after {
-        animation: btn-shine 1.5s ease;
-    }
-
-    .btn-gradient {
-        background: linear-gradient(135deg, #2563eb, #0d6efd);
-        color: white;
-        border: none;
-    }
-
-    .btn-gradient:hover {
-        background: linear-gradient(135deg, #2563eb, #fedbdb);
-        color: 1e3a8a;
-        font-weight: bold
-        
-    }
-
-    @keyframes btn-shine {
-        0% {
-            transform: translateX(-100%);
-        }
-        100% {
-            transform: translateX(100%);
-        }
-    }
-
-    /* Specific button styles */
-    .btn-outline-primary:hover {
-        background: linear-gradient(135deg, #0d6efd, #2563eb);
-        border-color: transparent;
+    .btn-primary, .btn-secondary {
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      display: inline-block;
+      margin-right: 0.8rem;
     }
 
     .btn-primary {
-        background: linear-gradient(135deg, #0d6efd, #2563eb);
-        border: none;
+      background-color: #22c55e;
+      color: white;
     }
 
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #2563eb, #0d6efd);
-        border: none;
+    .btn-secondary {
+      background-color: #1e40af;
+      color: white;
     }
 
-    /* Navigation link hover effect */
-    .nav-link {
-        position: relative;
-        padding: 0.5rem 1rem;
+    .hero-img {
+      max-width: 550px;
     }
 
-    .nav-link::after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: 0;
-        left: 50%;
-        background: linear-gradient(135deg, #0d6efd, #2563eb);
-        transition: all 0.3s ease;
-        transform: translateX(-50%);
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
     }
 
-    .nav-link:hover::after {
-        width: 80%;
+    .tentang-sistem {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        flex-wrap: wrap;
     }
 
-    #jumlah-ruangan-inventaris {
-    padding: 60px 20px; /* Tambahkan padding untuk jarak */
-    background: #f8f9fa; /* Warna latar belakang yang lembut */
-    }
-
-
-
-    .card {
-        background: #ffffff;
-        border-radius: 15px; /* Tambahkan border radius */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Tambahkan bayangan */
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-10px); /* Efek hover */
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Bayangan lebih besar saat hover */
-    }
-
-    .card .card-body {
-        padding: 20px; /* Tambahkan padding internal */
-    }
-
-    .card .card-body h5 {
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: #475569;
-        margin-bottom: 10px;
-    }
-
-    .card .card-body h2 {
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: #2563eb;
-    }
-
-    .card .card-body i {
-        color: #2563eb;
-        margin-bottom: 10px;
-    }
-
-
-
-    footer {
-    background: #2563eb; /* Warna latar belakang sesuai tema */
-    color: #ffffff; /* Warna teks */
-    padding: 60px 20px; /* Tambahkan padding */
-    }
-
-    footer h5 {
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: #ffffff; /* Warna teks heading */
-        margin-bottom: 20px;
-    }
-
-    footer p, footer a {
-        font-size: 0.95rem;
-        color: #e5e7eb; /* Warna teks */
+    .tentang-sistem p {
+        flex: 1;
+        max-width: 1000px;
+        color: #374151;
         line-height: 1.6;
+        text-align: justify;
     }
 
-    footer a:hover {
-        color: #fbbf24; /* Warna hover link */
-        text-decoration: none;
+    .tentang-sistem .room-card {
+        flex: 1;
+        max-width: 400px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #e5e7eb;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    footer .social-icons a {
-        color: #e5e7eb;
-        font-size: 1.2rem;
-        transition: color 0.3s ease;
-    }
-
-    footer .social-icons a:hover {
-        color: #fbbf24;
-    }
-
-    footer ul {
-        padding: 0;
-        list-style: none;
-    }
-
-    footer ul li {
-        margin-bottom: 10px;
-    }
-
-    footer ul li a {
-        text-decoration: none;
-        color: #e5e7eb;
-        transition: color 0.3s ease;
-    }
-
-    footer ul li a:hover {
-        color: #fbbf24;
-    }
-
-    #gedung {
-        background: #f8f9fa; /* Warna latar belakang yang lembut */
-        padding: 60px 20px; /* Tambahkan padding untuk jarak */
-    }
-
-    #gedung h2 {
-        font-size: 2rem;
-        font-weight: 800;
-        color: #2563eb; /* Warna heading */
-        margin-bottom: 20px;
-    }
-
-    #gedung p {
-        font-size: 1.1rem;
-        color: #475569; /* Warna teks */
-        line-height: 1.6;
-    }
-
-    .card {
-        border-radius: 15px; /* Tambahkan border radius */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Tambahkan bayangan */
-        overflow: hidden; /* Pastikan gambar tidak keluar dari card */
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-5px); /* Efek hover */
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Bayangan lebih besar saat hover */
-    }
-
-    .card img {
-        object-fit: cover;
-        min-height: 320px;
-        max-height: 400px;
+    .tentang-sistem .room-card img {
         width: 100%;
+        height: 250px;
+        object-fit: cover;
     }
 
-    .card h2 {
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: #2563eb; /* Warna heading */
-    }
-
-    .card p {
+    .tentang-sistem .room-card div {
+        padding: 1rem;
         font-size: 1rem;
-        color: #475569; /* Warna teks */
-        line-height: 1.6;
+        text-align: center;
     }
 
-    .card a {
-        background: linear-gradient(135deg, #2563eb, #0d6efd);
-        color: #fff;
-        font-weight: 600;
-        padding: 0.8rem 2rem;
-        border-radius: 50px;
-        text-decoration: none;
-        transition: all 0.3s ease;
+    .room-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
     }
 
-    .card a:hover {
-        background: linear-gradient(135deg, #0d6efd, #2563eb);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    .room-card {
+        width: 100%;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #e5e7eb;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    </style>
+    .room-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .room-card div {
+        padding: 1.5rem;
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .available {
+      color: #22c55e;
+      font-weight: bold;
+    }
+
+    .inventory-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+    
+    .inventory-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        padding: 1rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .inventory-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .inventory-card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+    
+    .inventory-card strong {
+        font-size: 1.2rem;
+        color: #111827;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    
+    .inventory-card p {
+        font-size: 1rem;
+        color: #475569;
+    }
+
+    .btn-view-all {
+        display: inline-block;
+        margin-top: 1rem;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .btn-container {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+  #gedung {
+      background: #ffffff;
+      padding: 60px 20px;
+      text-align: center;
+  }
+
+  #gedung h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #1e40af;
+      margin-bottom: 20px;
+  }
+
+  #gedung p {
+      font-size: 1.1rem;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 40px;
+  }
+
+  .gedung-card {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      max-width: 100%;
+      margin: 0 auto;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-bottom: 30px;
+      border: 1.5px solid #000000;
+      border-radius: 12px;
+      padding: 2px;
+  }
+
+  .gedung-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .gedung-card img {
+      width: 500px;
+      height: 350px;
+      margin-left: 20px;
+      margin-right: 20px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      object-fit: cover;
+      border: 3px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 2px;
+      background: white;
+  }
+
+  .gedung-info {
+      padding: 2rem;
+      text-align: left;
+      flex: 1;
+  }
+
+  .gedung-info h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1e40af;
+      margin-bottom: 10px;
+  }
+
+  .gedung-info p {
+      font-size: 1.1rem;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 20px;
+  }
+
+  .gedung-info hr {
+      border: none;
+      border-top: 1px solid #e5e7eb;
+      margin: 20px 0;
+  }
+
+  .gedung-info .btn-gradient {
+      background: linear-gradient(135deg, #1e40af, #1e40af);
+      color: #fff;
+      font-weight: 600;
+      padding: 0.8rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      display: inline-block;
+  }
+
+  .gedung-info .btn-gradient:hover {
+      background: linear-gradient(135deg, #0d6efd, #2563eb);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  #alur-peminjaman {
+      text-align: center;
+      padding: 60px 20px;
+      background: #f9fafb;
+  }
+
+  #alur-peminjaman h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #1e40af;
+      margin-bottom: 20px;
+  }
+
+  #alur-peminjaman p {
+      font-size: 1.1rem;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 40px;
+  }
+
+  .alur-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+  }
+
+  .alur-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .alur-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .alur-card img {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 1rem;
+  }
+
+  .alur-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1e40af;
+      margin-bottom: 0.5rem;
+  }
+
+  .alur-card p {
+      font-size: 1rem;
+      color: #475569;
+      line-height: 1.6;
+  }
+
+  footer {
+      background-color: #1e40af; /* Warna latar belakang footer */
+      color: #ffffff; /* Warna teks */
+      padding: 2rem 1rem;
+  }
+
+  footer .container {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap; /* Agar responsif */
+      gap: 2rem; /* Jarak antar kolom */
+  }
+
+  footer .footer-section {
+      flex: 1; /* Membagi kolom secara merata */
+      min-width: 250px; /* Lebar minimum untuk responsivitas */
+  }
+
+  footer h5 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #fbbf24; /* Warna judul */
+  }
+
+  footer p, footer ul {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin: 0;
+      color: #e5e7eb;
+  }
+
+  footer ul {
+      list-style: none;
+      padding: 0;
+  }
+
+  footer ul li {
+      margin-bottom: 0.5rem;
+  }
+
+  footer ul li a {
+      text-decoration: none;
+      color: #e5e7eb;
+      transition: color 0.3s ease;
+  }
+
+  footer ul li a:hover {
+      color: #fbbf24; /* Warna hover */
+  }
+
+  footer .social-icons a {
+      color: #ffffff;
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+  }
+
+  footer .social-icons a:hover {
+      color: #fbbf24; /* Warna hover ikon sosial */
+  }
+
+    
+
+
+    
+  </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="#">RUANGFRI</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#hero">Beranda</a>
-                </li>
-                   <li class="nav-item">
-                    <a class="nav-link" href="#tentang">Tentang Kami</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#fitur">Fitur</a>
-                </li>
-                {{-- <li class="nav-item">
-                    <a href="{{ route('login') }}" class="btn btn-outline-primary me-2">Login Admin</a>
-                </li> --}}
-                <li class="nav-item">
-                    <a href="{{ route('mahasiswa.login') }}" class="btn btn-primary">Login Mahasiswa</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<section id="hero" class="hero">
-    <div class="container">
-        <h1 class="mb-3 animate__animated animate__fadeInDown">
-            Sistem Peminjaman Inventaris & Ruangan
-        </h1>
-        <p class="mt-3 mb-4 animate__animated animate__fadeInUp">
-            Kelola peminjaman ruangan dan inventaris kampus dengan mudah, cepat, dan terintegrasi.
-        </p>
-        <a href="{{ route('mahasiswa.register') }}" class="btn btn-light btn-lg shadow animate__animated animate__pulse animate__infinite">
-            Daftar Mahasiswa
-        </a>
-    </div>
-</section>
 
-    {{-- Section Tentang Kami --}}
-<section id="tentang" class="py-5" style="background: #f8f9fa;">
-    <div class="container">
-        <div class="about-section text-center p-5 rounded shadow-sm bg-white animate__animated animate__fadeInUp">
-            <h4 class="fw-bold mb-3 text-primary">Tentang Kami</h4>
-            <p class="fs-5" style="color: #475569">
-                <strong>RUANGFRI</strong> adalah platform digital yang dirancang untuk memudahkan pengelolaan peminjaman ruangan dan inventaris di lingkungan kampus. 
-                Dengan sistem terintegrasi, proses peminjaman menjadi lebih efisien, transparan, dan terdokumentasi dengan baik.
-            </p>
-        </div>
+  <header class="navbar">
+    <div class="logo">RUANGFRI</div>
+    <nav>
+      <a href="#">Beranda</a>
+      <a href="#">Tentang Sistem</a>
+      <a href="#">Gedung FRI</a>
+      <a href="#">Alur Peminjaman</a>
+      <a href="#">Katalog Ruangan</a>
+      <a href="#">Katalog Inventaris</a>
+      <button class="btn-login">Login</button>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1>Sistem Peminjaman Fasilitas FRI</h1>
+        <p>Akses Mudah untuk Peminjaman Ruangan dan Inventaris FRI</p>
+        <a href="#" class="btn-secondary">Lihat Katalog</a>
+        <a href="#" class="btn-primary">Ajukan Peminjaman</a>
+      </div>
+      <img src="{{ asset('storage/task.png') }}" alt="Ilustrasi" class="hero-img" />
     </div>
-</section>
+  </section>
+
+  
+
+  <!-- Section Tentang Sistem -->
+
+  <section class="container">
+    <h2>Tentang Sistem</h2>
+    <div class="tentang-sistem">
+      <p>Sistem Peminjaman Fasilitas FRI adalah platform digital yang dirancang untuk memudahkan mahasiswa dalam mengajukan peminjaman ruangan dan inventaris fakultas. Dengan antarmuka yang sederhana dan alur peminjaman yang jelas, mahasiswa dapat dengan cepat mencari, memilih, dan mengajukan peminjaman sesuai kebutuhan kegiatan seperti seminar, praktikum, rapat organisasi, dan keperluan akademik lainnya.</p>
+      <div class="room-card">
+        <img src="{{ asset('storage/task.png') }}" alt="Ruang A101"/>
+        <div>
+          <strong>Ruang A101</strong><br />
+          Kapasitas: 30<br />
+          <span class="available">Tersedia</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- End Section Tentang Sistem -->
+
+ <section id="gedung" class="container">
+    <h2>Gedung di FRI</h2>
+    <p>Jelajahi berbagai gedung yang tersedia di Fakultas Rekayasa Industri.</p>
     
-
-        {{-- Section Fitur --}}
-<section id="fitur" class="py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold" style="color: #2563eb;">Fitur</h2>
-            <p class="fs-5" style="color: #475569;">
-                Jelajahi fitur-fitur unggulan kami yang dirancang untuk mempermudah pengelolaan ruangan dan inventaris.
-            </p>
+    <!-- Gedung TULT -->
+    <div class="gedung-card">
+        <img src="{{ asset('storage/tult.jpg') }}" alt="Gedung TULT" />
+        <div class="gedung-info">
+            <h3>TULT</h3>
+            <p>Gedung Telkom University Landmark Tower (TULT)</p>
+            <hr />
+            <a href="#" class="btn-gradient">LIHAT RUANGAN</a>
         </div>
-        <div class="row text-center">
-            <div class="col-md-4 mb-4">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-building"></i>
-                    </div>
-                    <h5 class="feature-title">Manajemen Ruangan</h5>
-                    <p class="feature-description">
-                        Mengelola ketersediaan, peminjaman, dan pelaporan ruangan secara real-time.
-                    </p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-boxes"></i>
-                    </div>
-                    <h5 class="feature-title">Manajemen Inventaris</h5>
-                    <p class="feature-description">
-                        Peminjaman inventaris kampus dengan proses approval yang transparan.
-                    </p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
-                    <h5 class="feature-title">Laporan & Statistik</h5>
-                    <p class="feature-description">
-                        Monitoring aktivitas peminjaman dan pelaporan kerusakan dengan mudah.
-                    </p>
-                </div>
-            </div>
+    </div>
+
+    <!-- Gedung B -->
+<div class="gedung-card reverse">
+    <div class="gedung-info">
+        <h3>GKU</h3>
+        <p>Gedung Tokong Nanas atau GKU (Gedung Kuliah Umum)</p>
+        <hr />
+        <a href="#" class="btn-gradient">LIHAT RUANGAN</a>
+    </div>
+    <img src="{{ asset('storage/gku.jpg') }}" alt="Gedung B" />
+</div>
+
+    <!-- Gedung C -->
+    <div class="gedung-card">
+        <img src="{{ asset('storage/tult.jpg') }}" alt="Gedung C" />
+        <div class="gedung-info">
+            <h3>CACUK</h3>
+            <p>Gedung Grha Wiyata Cacuk Sudarijanto</p>
+            <hr />
+            <a href="#" class="btn-gradient">LIHAT RUANGAN</a>
+        </div>
+    </div>
+</section>
+<!-- End Section Gedung -->
+
+  <section id="alur-peminjaman" class="container">
+    <h2>Alur Peminjaman</h2>
+    <p>Ikuti langkah-langkah berikut untuk melakukan peminjaman fasilitas di FRI:</p>
+    <div class="alur-grid">
+        <div class="alur-card">
+            <img src="{{ asset('images/step1.png') }}" alt="Langkah 1" />
+            <h3>1. Pilih Fasilitas</h3>
+            <p>Cari dan pilih ruangan atau inventaris yang ingin Anda pinjam sesuai kebutuhan.</p>
+        </div>
+        <div class="alur-card">
+            <img src="{{ asset('images/step2.png') }}" alt="Langkah 2" />
+            <h3>2. Ajukan Peminjaman</h3>
+            <p>Isi formulir peminjaman dengan informasi yang diperlukan dan ajukan permohonan.</p>
+        </div>
+        <div class="alur-card">
+            <img src="{{ asset('images/step3.png') }}" alt="Langkah 3" />
+            <h3>3. Tunggu Persetujuan</h3>
+            <p>Permohonan Anda akan diproses oleh admin. Tunggu hingga disetujui.</p>
+        </div>
+        <div class="alur-card">
+            <img src="{{ asset('images/step4.png') }}" alt="Langkah 4" />
+            <h3>4. Gunakan Fasilitas</h3>
+            <p>Setelah disetujui, gunakan fasilitas sesuai jadwal yang telah ditentukan.</p>
         </div>
     </div>
 </section>
 
-    {{-- Section Jumlah Ruangan & Inventaris --}}
-<section id="jumlah-ruangan-inventaris" class="py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold" style="color: #2563eb;">Statistik Ruang Dan Inventaris Fakultas Rekayasa Industri</h2>
-            <p class="fs-5" style="color: #475569;">
-                Data terkini mengenai jumlah ruangan dan inventaris yang tersedia di Fakultas Rekayasa Industri.
-            </p>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-4 mb-3">
-                <div class="card border-0 shadow text-center py-4">
-                    <div class="card-body">
-                        <div class="mb-2">
-                            <i class="fas fa-door-open fa-2x" style="color: #2563eb"></i>
-                        </div>
-                        <h5 class="fw-bold">Total Ruangan</h5>
-                        <h2 class="display-5 fw-bold">{{ $totalRuangan ?? '-' }}</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card border-0 shadow text-center py-4">
-                    <div class="card-body">
-                        <div class="mb-2">
-                            <i class="fas fa-boxes fa-2x" style="color: #2563eb"></i>
-                        </div>
-                        <h5 class="fw-bold">Ruangan Tersedia</h5>
-                        <h2 class="display-5 fw-bold">{{ $ruanganTersedia ?? '-' }}</h2>
-                    </div>
-                </div>
+  <!-- Section Katalog Ruangan -->
+  
+<section class="container">
+    <h2>Katalog Ruangan</h2>
+    <div class="room-grid">
+        @foreach($ruangans as $ruangan)
+        <div class="room-card">
+            <img src="{{ $ruangan->gambar ? asset('storage/katalog_ruangan/' . $ruangan->gambar) : asset('images/default-room.jpg') }}" alt="Ruangan" />
+            <div>
+                <strong>{{ $ruangan->nama_ruangan }}</strong><br />
+                <strong>Kapasitas: {{ $ruangan->kapasitas }} orang</strong><br />
+                <span class="{{ $ruangan->status == 'Tersedia' ? 'available' : 'text-danger' }}">
+                    {{ $ruangan->status }}
+                </span>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-md-4 mb-3">
-                <div class="card border-0 shadow text-center py-4">
-                    <div class="card-body">
-                        <div class="mb-2">
-                            <i class="fas fa-door-open fa-2x" style="color: #2563eb"></i>
-                        </div>
-                        <h5 class="fw-bold">Total Inventaris</h5>
-                        <h2 class="display-5 fw-bold">{{ $totalInventaris ?? '-' }}</h2>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card border-0 shadow text-center py-4">
-                    <div class="card-body">
-                        <div class="mb-2">
-                            <i class="fas fa-boxes fa-2x" style="color: #2563eb"></i>
-                        </div>
-                        <h5 class="fw-bold">Inventaris Tersedia</h5>
-                        <h2 class="display-5 fw-bold">{{ $inventarisTersedia ?? '-' }}</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @endforeach
     </div>
 </section>
 
-<section id="gedung" class="py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold">Gedung di FRI</h2>
-            <p class="fs-5">
-                Jelajahi berbagai gedung yang tersedia di Fakultas Rekayasa Industri.
-            </p>
+  <!-- End Section Katalog Ruangan -->
+  
+  <!-- Section Katalog Inventaris -->
+
+<section class="container">
+    <h2>Katalog Inventaris</h2>
+    <div class="inventory-grid">
+        @foreach($inventaris as $item)
+        <div class="inventory-card">
+            <img src="{{ $item->gambar_inventaris ? asset('storage/katalog_inventaris/' . $item->gambar_inventaris) : asset('images/default-image.png') }}" alt="{{ $item->nama_inventaris }}" />
+            <strong>{{ $item->nama_inventaris }}</strong>
+            <p>Jumlah tersedia: {{ $item->jumlah }}</p>
         </div>
+        @endforeach
     </div>
 </section>
 
-<!-- Section Gedung A -->
-<section class="container my-5">
-    <div class="card border-3 shadow-sm rounded-4">
-        <div class="row align-items-center g-5 p-4">
-            <div class="col-lg-6">
-                <div class="card border-2 rounded-4 shadow-sm h-100 d-flex align-items-center justify-content-center p-2">
-                    <img src="{{ asset('storage/tult.jpg') }}" alt="Gedung TULT" class="img-fluid w-100 rounded-4">
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="ps-lg-4 pt-4 pt-lg-0">
-                    <h2 class="fw-bold mb-4">TULT</h2>
-                    <p class="mb-2 fs-5">
-                        Gedung Telkom University Landmark Tower (TULT)
-                    </p>
-                    <hr>
-                    <a href="#" class="btn btn-gradient btn-lg rounded-pill px-5 shadow-sm">LIHAT RUANGAN</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+  <!-- End Section Katalog Inventaris -->
 
-<!-- Section Gedung B -->
-<section class="container my-5">
-    <div class="card border-3 shadow-sm rounded-4">
-        <div class="row align-items-center g-5 flex-row-reverse p-4">
-            <div class="col-lg-6">
-                <div class="card border-2 rounded-4 shadow-sm h-100 d-flex align-items-center justify-content-center p-2">
-                    <img src="{{ asset('storage/gku.jpg') }}" alt="Gedung GKU" class="img-fluid w-100 rounded-4">
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="pe-lg-4 pt-4 pt-lg-0 text-lg-end text-start">
-                    <h2 class="fw-bold mb-4">GKU</h2>
-                    <p class="mb-2 fs-5">
-                        Gedung Tokong Nanas atau GKU (Gedung Kuliah Umum)
-                    </p>
-                    <hr>
-                    <a href="#" class="btn btn-gradient btn-lg rounded-pill px-5 shadow-sm">LIHAT RUANGAN</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Section Gedung C -->
-<section class="container my-5">
-    <div class="card border-3 shadow-sm rounded-4">
-        <div class="row align-items-center g-5 p-4">
-            <div class="col-lg-6">
-                <div class="card border-2 rounded-4 shadow-sm h-100 d-flex align-items-center justify-content-center p-2">
-                    <img src="{{ asset('storage/test.jpg') }}" alt="Gedung CACUK" class="img-fluid w-100 rounded-4">
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="ps-lg-4 pt-4 pt-lg-0">
-                    <h2 class="fw-bold mb-4">CACUK</h2>
-                    <p class="mb-2 fs-5">
-                        Gedung Grha Wiyata Cacuk Sudarijanto
-                    </p>
-                    <hr>
-                    <a href="#" class="btn btn-gradient btn-lg rounded-pill px-5 shadow-sm">LIHAT RUANGAN</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-    
-
-<!-- filepath: c:\Users\ali\Documents\GitHub\RUANGFRI_TIM_367_SI4603\resources\views\landing.blade.php -->
 <footer>
     <div class="container">
-        <div class="row">
-            <!-- Logo and Address -->
-            <div class="col-md-4 mb-4">
-                <h5>Fakultas Rekayasa Industri</h5>
-                <p>Telkom University Landmark Tower Lt 18 Jl</p>
-                <p>Telekomunikasi. 1, Terusan Buahbatu - Bojongsoang,<br>Telkom University, Sukapura, Kec. Dayeuhkolot,<br>Kabupaten Bandung, Jawa Barat 40257, Indonesia</p>
-                <p>Telp: +62 812-1482-5873</p>
-                <p>Email: sekretariatfri@365.telkomuniversity.ac.id</a></p>
-                <div class="social-icons d-flex gap-3 mt-3">
-                    <a href="https://www.instagram.com/fri.telkomuniversity?igsh=YnczZzRkN2Fjamlw"><i class="fab fa-instagram"></i></a>
-                </div>
+        <!-- Logo and Address -->
+        <div class="footer-section">
+            <h5>Fakultas Rekayasa Industri</h5>
+            <p>Telkom University Landmark Tower Lt 18 Jl</p>
+            <p>Telekomunikasi. 1, Terusan Buahbatu - Bojongsoang,<br>Telkom University, Sukapura, Kec. Dayeuhkolot,<br>Kabupaten Bandung, Jawa Barat 40257, Indonesia</p>
+            <p>Telp: +62 812-1482-5873</p>
+            <p>Email: sekretariatfri@365.telkomuniversity.ac.id</p>
+            <div class="social-icons d-flex gap-3 mt-3">
+                <a href="https://www.instagram.com/fri.telkomuniversity?igsh=YnczZzRkN2Fjamlw"><i class="fab fa-instagram"></i></a>
             </div>
+        </div>
 
-            <!-- Department Links -->
-            <div class="col-md-4 mb-4">
-                <h5>Department</h5>
-                <ul>
-                    <li><a href="#">Teknik Industri</a></li>
-                    <li><a href="#">Sistem Informasi</a></li>
-                    <li><a href="#">Teknik Logistik</a></li>
-                    <li><a href="#">Manajemen Rekayasa</a></li>
-                </ul>
-            </div>
+        <!-- Department Links -->
+        <div class="footer-section">
+            <h5>Department</h5>
+            <ul>
+                <li><a href="#">Teknik Industri</a></li>
+                <li><a href="#">Sistem Informasi</a></li>
+                <li><a href="#">Teknik Logistik</a></li>
+                <li><a href="#">Manajemen Rekayasa</a></li>
+            </ul>
+        </div>
 
-            <!-- Related Links -->
-            <div class="col-md-4 mb-4">
-                <h5>Related Links</h5>
-                <ul>
-                    <li><a href="https://telkomuniversity.ac.id/">Telkom University</a></li>
-                    <li><a href="https://smb.telkomuniversity.ac.id/">SMB Telkom University</a></li>
-                    <li><a href="https://sie.telkomuniversity.ac.id/academic/study-program/s1-teknik-industri/">Teknik Industri</a></li>
-                    <li><a href="https://sie.telkomuniversity.ac.id/academic/study-program/s1-sistem-informasi/">Sistem Informasi</a></li>
-                    <li><a href="https://sie.telkomuniversity.ac.id/academic/study-program/s1-teknik-logistik/">Teknik Logistik</a></li>
-                    <li><a href="https://jakarta.telkomuniversity.ac.id/">Telkom University Kampus Jakarta</a></li>
-                    <li><a href="https://surabaya.telkomuniversity.ac.id/">Telkom University Kampus Surabaya</a></li>
-                </ul>
-            </div>
+        <!-- Related Links -->
+        <div class="footer-section">
+            <h5>Related Links</h5>
+            <ul>
+                <li><a href="https://telkomuniversity.ac.id/">Telkom University</a></li>
+                <li><a href="https://smb.telkomuniversity.ac.id/">SMB Telkom University</a></li>
+                <li><a href="https://sie.telkomuniversity.ac.id/academic/study-program/s1-teknik-industri/">Teknik Industri</a></li>
+                <li><a href="https://sie.telkomuniversity.ac.id/academic/study-program/s1-sistem-informasi/">Sistem Informasi</a></li>
+                <li><a href="https://sie.telkomuniversity.ac.id/academic/study-program/s1-teknik-logistik/">Teknik Logistik</a></li>
+                <li><a href="https://jakarta.telkomuniversity.ac.id/">Telkom University Kampus Jakarta</a></li>
+                <li><a href="https://surabaya.telkomuniversity.ac.id/">Telkom University Kampus Surabaya</a></li>
+            </ul>
         </div>
     </div>
 </footer>

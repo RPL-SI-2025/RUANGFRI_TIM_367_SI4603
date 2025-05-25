@@ -25,7 +25,9 @@ class AdminLogistikController extends Controller
         $totalInventaris = Inventaris::count();
         $ruanganTersedia = Ruangan::where('status', 'Tersedia')->count();
         $inventarisTersedia = Inventaris::where('status', 'Tersedia')->count();
-        return view('landing', compact('totalRuangan', 'totalInventaris', 'ruanganTersedia', 'inventarisTersedia'));
+        $ruangans = Ruangan::select('gambar', 'nama_ruangan', 'kapasitas', 'status')->get();
+        $inventaris = Inventaris::select('gambar_inventaris', 'nama_inventaris', 'jumlah')->get();
+        return view('landing', compact('totalRuangan', 'totalInventaris', 'ruanganTersedia', 'inventarisTersedia', 'ruangans', 'inventaris'));
     }
 
 
