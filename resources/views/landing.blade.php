@@ -60,22 +60,22 @@ Memantau status pengajuan serta riwayat peminjaman dengan mudah.
 Dengan antarmuka yang intuitif dan ramah pengguna, sistem ini mendukung proses peminjaman yang lebih efisien, akuntabel, dan terdigitalisasi, sejalan dengan visi digitalisasi layanan akademik FRI.</p>
     <div class="tentang-sistem">
         <div class="stat-card">
-        <i class="fas fa-building fa-2x" style="color: #1e40af "></i> <!-- Ikon untuk Total Ruangan -->
+        <i class="fas fa-building fa-2x" style="color: #27ae60 "></i> <!-- Ikon untuk Total Ruangan -->
         <h3>Total Ruangan</h3>
         <p>{{ $totalRuangan }}</p>
     </div>
     <div class="stat-card">
-        <i class="fas fa-door-open fa-2x" style="color: #1e40af "></i> <!-- Ikon untuk Ruangan Tersedia -->
+        <i class="fas fa-door-open fa-2x" style="color: #27ae60 "></i> <!-- Ikon untuk Ruangan Tersedia -->
         <h3>Ruangan Tersedia</h3>
         <p>{{ $ruanganTersedia }}</p>
     </div>
     <div class="stat-card">
-        <i class="fas fa-boxes fa-2x" style="color: #1e40af "></i> <!-- Ikon untuk Total Inventaris -->
+        <i class="fas fa-boxes fa-2x" style="color: #27ae60 "></i> <!-- Ikon untuk Total Inventaris -->
         <h3>Total Inventaris</h3>
         <p>{{ $totalInventaris }}</p>
     </div>
     <div class="stat-card">
-        <i class="fas fa-check-circle fa-2x" style="color: #1e40af "></i> <!-- Ikon untuk Inventaris Tersedia -->
+        <i class="fas fa-check-circle fa-2x" style="color: #27ae60 "></i> <!-- Ikon untuk Inventaris Tersedia -->
         <h3>Inventaris Tersedia</h3>
         <p>{{ $inventarisTersedia }}</p>
     </div>

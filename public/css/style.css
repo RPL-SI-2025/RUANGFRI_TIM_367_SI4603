@@ -63,6 +63,8 @@
       cursor: pointer;
     }
 
+    
+
     .hero {
       background: #27ae60;
       padding: 4rem 3rem;
@@ -213,7 +215,7 @@
   .stat-card p {
       font-size: 2rem; /* Perbesar ukuran angka */
       font-weight: bold;
-      color: #1e40af;
+      color: #27ae60;
       text-align: center;
   }
 
@@ -270,7 +272,7 @@
     }
 
     .room-container h2{
-      color: #1e40af;
+      color: #27ae60;
       font-size: 2rem;
       font-weight: 500px;
     }
@@ -333,7 +335,7 @@
   #gedung h2 {
       font-size: 2.5rem;
       font-weight: 800;
-      color: #1e40af;
+      color: #27ae60;
       margin-bottom: 20px;
   }
 
@@ -389,7 +391,7 @@
   .gedung-info h3 {
       font-size: 1.8rem;
       font-weight: 700;
-      color: #1e40af;
+      color: #27ae60;
       margin-bottom: 10px;
   }
 
@@ -407,7 +409,7 @@
   }
 
   .gedung-info .btn-gradient {
-      background: linear-gradient(135deg, #1e40af, #1e40af);
+      background: linear-gradient(135deg, #27ae60, #27ae60);
       color: #fff;
       font-weight: 600;
       padding: 0.8rem 2.5rem;
@@ -419,7 +421,7 @@
   }
 
   .gedung-info .btn-gradient:hover {
-      background: linear-gradient(135deg, #0d6efd, #2563eb);
+      background: linear-gradient(135deg, #2ecc71, #2ecc71);
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   }
 
@@ -433,7 +435,7 @@
   #alur-peminjaman h2 {
       font-size: 2.5rem;
       font-weight: 800;
-      color: #1e40af;
+      color: #27ae60;
       margin-bottom: 20px;
   }
 
@@ -482,7 +484,7 @@
   .alur-card h3 {
       font-size: 1.5rem;
       font-weight: 700;
-      color: #1e40af;
+      color: #27ae60;
       margin-bottom: 0.5rem;
   }
 
@@ -493,7 +495,7 @@
   }
 
   footer {
-      background-color: #1e40af;
+      background-color: #27ae60;
       color: #ffffff;
       padding: 2rem 1rem;
   }
@@ -518,7 +520,7 @@
       font-size: 1.2rem;
       font-weight: 700;
       margin-bottom: 1rem;
-      color: #fbbf24;
+      color: #f0f0f0;
   }
 
   .footer-section p,
