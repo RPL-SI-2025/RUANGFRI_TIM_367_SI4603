@@ -6,7 +6,7 @@
         <h4 class="text-primary mb-0 fw-bold">
             <i class="fa fa-building me-2"></i>Daftar Peminjaman Ruangan
         </h4>
-        <a href="{{ route('mahasiswa.cart.keranjang_ruangan.index') }}" class="btn btn-outline-primary rounded-pill">
+        <a href="{{ route('mahasiswa.katalog.ruangan.index') }}" class="btn btn-outline-primary rounded-pill">
             <i class="fa fa-plus me-1"></i> Pinjam Ruangan Baru
         </a>
     </div>
@@ -27,7 +27,7 @@
 
     <div class="card shadow-sm border-0">
         <div class="card-body p-0">
-            @if($pinjamRuangan->count() > 0)
+            @if($paginatedPinjamRuangan->count() > 0)
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
@@ -41,31 +41,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php 
-
-                                $groupedPinjam = $pinjamRuangan->groupBy(function($item) {
-                                    return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
-                                        $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
-                                });
-                                $i = 1;
-                            @endphp
-
-                            @foreach($groupedPinjam as $group)
+                            @foreach($paginatedPinjamRuangan as $group)
                                 @php
                                     $firstItem = $group->first();
                                 @endphp
                                 <tr>
-                                    <td class="px-3 py-3">{{ $i++ }}</td>
+                                    <td class="px-3 py-3">{{ $loop->iteration }}</td>
                                     <td class="px-3 py-3">
                                         {{ \Carbon\Carbon::parse($firstItem->tanggal_pengajuan)->format('d M Y') }}
                                         <span class="text-muted"> s/d </span>
                                         {{ \Carbon\Carbon::parse($firstItem->tanggal_selesai)->format('d M Y') }}
                                     </td>
-                                    <td >
-                                        <ul >
+                                    <td>
+                                        <ul>
                                             @foreach($group as $item)
                                                 <li>{{ $item->ruangan->nama_ruangan ?? 'Ruangan tidak ditemukan' }}</li>
-            
+                                                
                                             @endforeach
                                         </ul>
                                     </td>
@@ -98,8 +89,8 @@
                                                     <i class="fa fa-edit"></i>
                                                 </a>
                                                 <form action="{{ route('mahasiswa.peminjaman.pinjam-ruangan.cancel', $firstItem->id) }}" 
-                                                      method="POST" class="d-inline" 
-                                                      onsubmit="return confirm('Apakah Anda yakin ingin membatalkan peminjaman ini?')">
+                                                    method="POST" class="d-inline" 
+                                                    onsubmit="return confirm('Apakah Anda yakin ingin membatalkan peminjaman ini?')">
                                                     @csrf
                                                     @method('PUT')
                                                     <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -109,8 +100,8 @@
                                             @endif
                                             @if($firstItem->status == 1)
                                                 <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.create', ['id' => $firstItem->id]) }}" 
-                                                class="btn btn-sm btn-outline-warning">
-                                                    <i class="fa fa-flag"></i> Lapor
+                                                   class="btn btn-sm btn-outline-warning">
+                                                    <i class="fa fa-flag"></i>
                                                 </a>
                                             @endif
                                         </div>
@@ -120,9 +111,12 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="d-flex justify-content-center py-3">
+                    {{ $paginatedPinjamRuangan->links() }}
+                </div>
             @else
                 <div class="text-center py-5">
-                    <i class="fa fa-calendar-o text-muted" style="font-size: 4rem;"></i>
+                    <i class="fa fa-building text-muted" style="font-size: 4rem;"></i>
                     <p class="mt-3 text-muted">Belum ada peminjaman ruangan</p>
                     <a href="{{ route('mahasiswa.katalog.ruangan.index') }}" class="btn btn-primary mt-2">
                         <i class="fa fa-plus me-1"></i> Mulai Peminjaman Ruangan

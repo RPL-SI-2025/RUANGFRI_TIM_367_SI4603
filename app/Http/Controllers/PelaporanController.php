@@ -161,8 +161,48 @@ class PelaporanController extends Controller
                     ->where('file_scan', $peminjaman->file_scan)
                     ->where('id_mahasiswa', $mahasiswaId)
                     ->update(['status' => 3]); // Status selesai
+                    
+
+                $affectedJadwals = \App\Models\Jadwal::whereIn('id_pinjam_ruangan', function($query) use ($peminjaman, $mahasiswaId) {
+                    $query->select('id')
+                        ->from('pinjam_ruangan')
+                        ->where('tanggal_pengajuan', $peminjaman->tanggal_pengajuan)
+                        ->where('tanggal_selesai', $peminjaman->tanggal_selesai)
+                        ->where('waktu_mulai', $peminjaman->waktu_mulai)
+                        ->where('waktu_selesai', $peminjaman->waktu_selesai)
+                        ->where('file_scan', $peminjaman->file_scan)
+                        ->where('id_mahasiswa', $mahasiswaId);
+                })->get();
+                
+                foreach ($affectedJadwals as $jadwal) {
+                    $jadwal->status = 'tersedia';
+                    $jadwal->id_pinjam_ruangan = null;
+                    $jadwal->save();
+                }
+                
+
+                $affectedRoomIds = PinjamRuangan::where('tanggal_pengajuan', $peminjaman->tanggal_pengajuan)
+                    ->where('tanggal_selesai', $peminjaman->tanggal_selesai)
+                    ->where('waktu_mulai', $peminjaman->waktu_mulai)
+                    ->where('waktu_selesai', $peminjaman->waktu_selesai)
+                    ->where('file_scan', $peminjaman->file_scan)
+                    ->where('id_mahasiswa', $mahasiswaId)
+                    ->pluck('id_ruangan');
+                
+                foreach ($affectedRoomIds as $roomId) {
+
+                    $bookedJadwals = \App\Models\Jadwal::where('id_ruangan', $roomId)
+                        ->whereIn('status', ['booked', 'proses'])
+                        ->count();
+                    
+
+                    if ($bookedJadwals == 0) {
+                        \App\Models\Ruangan::where('id', $roomId)->update(['status' => 'Tersedia']);
+                    }
+                }
             }
         }
+        
         $laporan = Pelaporan::create([
             'id_logistik' => $request->id_logistik,
             'id_mahasiswa' => $mahasiswaId,

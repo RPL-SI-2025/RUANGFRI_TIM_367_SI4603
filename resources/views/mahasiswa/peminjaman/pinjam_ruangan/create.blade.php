@@ -33,8 +33,10 @@
                                     <tr>
                                         <th class="py-3">No</th>
                                         <th class="py-3">Nama Ruangan</th>
-                                        <th class="py-3">Kapasitas</th>
+                                        
                                         <th class="py-3">Lokasi</th>
+                                        <th class="py-3">Tanggal</th>
+                                        <th class="py-3">Waktu</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -42,89 +44,26 @@
                                         <tr class="align-middle">
                                             <td>{{ $loop->iteration }}</td>
                                             <td class="fw-medium">{{ $item['nama_ruangan'] }}</td>
-                                            <td>{{ $item['kapasitas'] }} orang</td>
                                             <td>{{ $item['lokasi'] }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($item['tanggal_booking'])->format('d M Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($item['waktu_mulai'])->format('H:i') }} - {{ \Carbon\Carbon::parse($item['waktu_selesai'])->format('H:i') }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
                     <div class="mt-5">
-                        <h5 class="text-secondary fw-bold mb-4">
-                            <i class="fa fa-calendar me-2"></i>Informasi Pengajuan
-                        </h5>
-                        
-                        <form action="{{ route('pinjam-ruangan.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('pinjam-ruangan.store') }}" method="POST" enctype="multipart/form-data" id="bookingForm">
                             @csrf
+                            @foreach($cartItems as $id => $item)
+                                <input type="hidden" name="ruangan_ids[]" value="{{ $id }}">
+                            @endforeach
+                            <input type="hidden" name="tanggal_pengajuan" value="{{ reset($cartItems)['tanggal_booking'] }}">
+                            <input type="hidden" name="tanggal_selesai" value="{{ reset($cartItems)['tanggal_booking'] }}">
+                            <input type="hidden" name="waktu_mulai" value="{{ reset($cartItems)['waktu_mulai'] }}">
+                            <input type="hidden" name="waktu_selesai" value="{{ reset($cartItems)['waktu_selesai'] }}">
                             
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="tanggal_pengajuan" class="form-label fw-medium">Tanggal Pengajuan</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0">
-                                                <i class="fa fa-calendar-check-o text-primary"></i>
-                                            </span>
-                                            <input type="date" class="form-control @error('tanggal_pengajuan') is-invalid @enderror border-start-0" 
-                                                id="tanggal_pengajuan" name="tanggal_pengajuan" value="{{ old('tanggal_pengajuan', date('Y-m-d')) }}" required>
-                                        </div>
-                                        @error('tanggal_pengajuan')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="tanggal_selesai" class="form-label fw-medium">Tanggal Selesai</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0">
-                                                <i class="fa fa-calendar-times-o text-primary"></i>
-                                            </span>
-                                            <input type="date" class="form-control @error('tanggal_selesai') is-invalid @enderror border-start-0" 
-                                                id="tanggal_selesai" name="tanggal_selesai" value="{{ old('tanggal_selesai') }}" required>
-                                        </div>
-                                        @error('tanggal_selesai')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="waktu_mulai" class="form-label fw-medium">Waktu Mulai</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0">
-                                                <i class="fa fa-clock-o text-primary"></i>
-                                            </span>
-                                            <input type="time" class="form-control @error('waktu_mulai') is-invalid @enderror border-start-0" 
-                                                id="waktu_mulai" name="waktu_mulai" value="{{ old('waktu_mulai') }}" required>
-                                        </div>
-                                        @error('waktu_mulai')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="waktu_selesai" class="form-label fw-medium">Waktu Selesai</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0">
-                                                <i class="fa fa-clock-o text-primary"></i>
-                                            </span>
-                                            <input type="time" class="form-control @error('waktu_selesai') is-invalid @enderror border-start-0" 
-                                                id="waktu_selesai" name="waktu_selesai" value="{{ old('waktu_selesai') }}" required>
-                                        </div>
-                                        @error('waktu_selesai')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="form-group mb-4">
                                 <label for="tujuan_peminjaman" class="form-label fw-medium">Tujuan Peminjaman</label>
                                 <div class="input-group">
@@ -157,7 +96,7 @@
                             </div>
 
                             <div class="d-flex justify-content-end mt-5 pt-3 border-top">
-                                <button type="submit" class="btn btn-success rounded-pill px-5">
+                                <button type="submit" class="btn btn-success rounded-pill px-5" id="submitBtn" onclick="showLoading()">
                                     <i class="fa fa-paper-plane me-2"></i> Ajukan Peminjaman Ruangan
                                 </button>
                             </div>
@@ -194,4 +133,24 @@
     color: #444;
 }
 </style>
+<!-- <script>
+function showLoading() {
+    const btn = document.getElementById('submitBtn');
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Memproses...';
+    btn.disabled = true;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('bookingForm');
+    form.addEventListener('submit', function(event) {
+        if (!this.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        } else {
+            showLoading();
+        }
+        this.classList.add('was-validated');
+    });
+});
+</script> -->
 @endsection

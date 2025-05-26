@@ -18,4 +18,13 @@ class Ruangan extends Model
         'status',
         'gambar'
     ];
+
+    public function jadwals()
+    {
+        return $this->hasMany(Jadwal::class, 'id_ruangan');
+    }
+    public function availableJadwals()
+    {
+        return $this->jadwals()->where('status', 'tersedia');
+    }
 }
