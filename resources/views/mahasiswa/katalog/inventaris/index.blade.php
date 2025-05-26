@@ -90,7 +90,7 @@
 @endsection
 @push('scripts')
 <script>
-    // Auto-dismiss alerts after 2 seconds
+
     document.addEventListener('DOMContentLoaded', function() {
         const successAlert = document.getElementById('successAlert');
         const errorAlert = document.getElementById('errorAlert');

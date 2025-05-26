@@ -1,3 +1,4 @@
+
 @extends('mahasiswa.layouts.app')
 
 @section('content')
@@ -82,4 +83,73 @@
         </div>
     </div>
 </div>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-light py-3">
+                    <h5 class="mb-0 fw-bold">Jadwal Ketersediaan</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="calendar-legend d-flex flex-wrap mb-3 justify-content-center">
+                            <div class="legend-item mx-2">
+                                <span class="legend-indicator tersedia"></span> Tersedia
+                            </div>
+                            <div class="legend-item mx-2">
+                                <span class="legend-indicator proses"></span> Dalam Proses
+                            </div>
+                            <div class="legend-item mx-2">
+                                <span class="legend-indicator booked"></span> Sudah Dipesan
+                            </div>
+                            <div class="legend-item mx-2">
+                                <span class="legend-indicator disabled"></span> Tidak Tersedia
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="calendar-container" class="mb-3">
+                        <div id="full-calendar"></div>
+                    </div>
+                    
+                    <div id="timeslots-container" class="mt-4" style="display: none;">
+                        <h6 class="fw-bold text-secondary mb-3">
+                            <i class="fa fa-clock-o me-2"></i>Slot Waktu Tersedia <span id="selected-date"></span>
+                        </h6>
+                        <div class="row" id="timeslots-list"></div>
+                        <button id="back-to-calendar" class="btn btn-sm btn-outline-secondary mt-3">
+                            <i class="fa fa-arrow-left me-1"></i> Kembali ke Kalender
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('styles')
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <link href="{{ asset('css/ruangan-calendar.css') }}" rel="stylesheet">
+@endpush
+
+
+@push('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
+<script src="{{ asset('js/ruangan-calendar.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const ruanganCalendar = new RuanganCalendar({
+            ruanganId: {{ $ruangan->id }},
+            csrfToken: '{{ csrf_token() }}',
+            cartUrl: '{{ route('mahasiswa.cart.keranjang_ruangan.index') }}',
+            addToCartUrl: '{{ route('mahasiswa.cart.keranjang_ruangan.add') }}',
+            timeSlotsUrl: '/mahasiswa/jadwal/timeslots',
+            jadwalUrl: '/mahasiswa/jadwal/ruangan'
+        });
+    });
+</script>
+@endpush
 @endsection
