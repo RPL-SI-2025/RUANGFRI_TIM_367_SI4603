@@ -35,10 +35,9 @@
       <div class="hero-text">
         <h1>Sistem Peminjaman Fasilitas FRI</h1>
         <p>Akses Mudah untuk Peminjaman Ruangan dan Inventaris FRI</p>
-        <a href="#" class="btn-secondary">Lihat Katalog</a>
-        <a href="#" class="btn-primary" style="background-color:#10b981">Ajukan Peminjaman</a>
+        <a href="#" class="btn-secondary" style="background-color:#2ecc71">Selengkapnya</a>
       </div>
-      <img src="{{ asset('storage/webaset/task.png') }}" alt="Ilustrasi" class="hero-img" />
+      <img src="{{ asset('storage/webaset/hero.png') }}" alt="Ilustrasi" class="hero-img" />
     </div>
   </section>
 

@@ -30,7 +30,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 1rem 2rem;
-      background: #1e40af ;
+      background: #ffffff ;
       border-bottom: 1px solid #e5e7eb;
       position: sticky;
       top: 0;
@@ -38,7 +38,7 @@
     }
 
     .navbar .logo {
-      background: #1e40af;
+      background: #27ae60;
       color: white;
       padding: 0.3rem 0.8rem;
       border-radius: 6px;
@@ -49,7 +49,7 @@
     .navbar nav a {
       margin: 0 1rem;
       font-weight: 500;
-      color: white;
+      color: rgb(0, 0, 0);
       margin-top: 8px;
 
     }
@@ -64,7 +64,7 @@
     }
 
     .hero {
-      background: #f0f4ff;
+      background: #27ae60;
       padding: 4rem 3rem;
     }
 
@@ -80,11 +80,12 @@
       font-size: 2.2rem;
       margin-bottom: 1rem;
       font-weight: 700;
+      color: #ffffff;
     }
 
     .hero-text p {
       margin-bottom: 1.5rem;
-      color: #4b5563;
+      color: #ffffff;
     }
 
     .btn-primary, .btn-secondary {
@@ -131,7 +132,7 @@
 }
 
     .tentang-sistem-container h2 {
-      color: #1e40af;
+      color: #27ae60;
       padding-bottom: 2rem;
       font-size: 2.5rem;
       font-weight: 800;
@@ -323,7 +324,7 @@
     }
 
   #gedung {
-      background: #eef2ff;
+      background: #f6fff5;
       padding: 4rem 2rem;
       text-align: center;
       

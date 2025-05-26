@@ -75,6 +75,8 @@ Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminLogistikController::class, 'index'])->name('dashboard');
+    Route::get('/create', [RuanganController::class, 'create'])->name('admin.katalog_ruangan.create');
+    Route::get('/pinjam-approval', [PinjamRuanganController::class, 'approval'])->name('admin.pinjam.approval');
 
     // Inventaris Management
     Route::prefix('inventaris')->name('inventaris.')->group(function () {

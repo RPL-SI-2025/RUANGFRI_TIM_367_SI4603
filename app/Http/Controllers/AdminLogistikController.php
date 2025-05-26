@@ -67,7 +67,7 @@ class AdminLogistikController extends Controller
 
 
 
-        $jumlahLaporan = LaporInventaris::count() + LaporanRuangan::count();
+        $jumlahLaporan = LaporInventaris::count();
 
         return view('admin.dashboard', compact(
             'totalRuangan',
@@ -82,27 +82,6 @@ class AdminLogistikController extends Controller
         ));
 
         return view('admin.dashboard');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         return view('admin.dashboard');
     }

@@ -70,7 +70,7 @@
         <div class="card text-white bg-info shadow">
             <div class="card-body">
                 <h5 class="card-title">Pengajuan Belum Disetujui</h5>
-                <p class="card-text fs-4">{{ $pengajuanBelumDisetujui }}</p>
+                {{-- <p class="card-text fs-4">{{ $pengajuanBelumDisetujui }}</p> --}}
             </div>
         </div>
     </div>
@@ -80,10 +80,10 @@
         <div class="card shadow">
             <div class="card-body">
                 <h5 class="card-title">Aksi Cepat</h5>
-                <a href="{{ route('ruangan.create') }}" class="btn btn-primary me-2">+ Tambah Ruangan</a>
-                <a href="{{ route('inventaris.create') }}" class="btn btn-success me-2">+ Tambah Inventaris</a>
-                <a href="{{ route('pinjam.approval') }}" class="btn btn-warning me-2">✔️ Persetujuan</a>
-                <a href="{{ route('laporan.index') }}" class="btn btn-dark">📄 Laporan</a>
+                <a href="{{ route('admin.katalog_ruangan.create') }}" class="btn btn-primary me-2">+ Tambah Ruangan</a>
+                <a href="{{ route('admin.inventaris.create') }}" class="btn btn-success me-2">+ Tambah Inventaris</a>
+                <a href="{{-- {{ route('pinjam.approval') }} --}}" class="btn btn-warning me-2">✔️ Persetujuan</a>
+                <a href="{{-- {{ route('laporan.index') }} --}}" class="btn btn-dark">📄 Laporan</a>
             </div>
         </div>
     </div>
