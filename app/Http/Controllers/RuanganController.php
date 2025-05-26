@@ -11,6 +11,12 @@ use Illuminate\Support\Str;
 class RuanganController extends Controller
 {
 
+    private $lokasiOptions = [
+        'Gedung B (Cacuk)',
+        'Telkom University Landmark Tower (TULT)',
+        'Gedung Kuliah Umum (GKU)',
+    ];
+
     public function mahasiswaIndex(Request $request)
     {
         $query = Ruangan::query();
@@ -36,41 +42,24 @@ class RuanganController extends Controller
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function index(Request $request)
     {
         $query = Ruangan::query();
 
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where('nama_ruangan', 'like', "%{$search}%")
-                  ->orWhere('lokasi', 'like', "%{$search}%");
+        if ($request->has('search') && $request->search != '') {
+            $query->where('nama_ruangan', 'like', '%' . $request->search . '%');
         }
 
-        $ruangans = $query->orderBy('nama_ruangan')->get();
+        if ($request->has('lokasi') && $request->lokasi != '') {
+            $query->where('lokasi', $request->lokasi);
+        }
+
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+
+        $ruangans = $query->get();
+
         return view('admin.katalog_ruangan.index', compact('ruangans'));
     }
 
@@ -85,6 +74,7 @@ class RuanganController extends Controller
 
     public function create()
     {
+         $lokasiOptions = $this->lokasiOptions;
         return view('admin.katalog_ruangan.create');
     }
 
@@ -93,12 +83,14 @@ class RuanganController extends Controller
     $validatedData = $request->validate([
         'nama_ruangan' => 'required|unique:ruangan,nama_ruangan',
         'kapasitas'    => 'required|integer|min:10|max:300',
-        'fasilitas'    => 'required|string',
-        'lokasi'       => 'required|string',
+        'fasilitas'    => 'required|array|min:1',
+        'fasilitas.*'  => 'required|string',
+        'lokasi'       => 'required|in:' . implode(',', $this->lokasiOptions),
         'status'       => 'required|in:Tersedia,Tidak Tersedia',
         'gambar'       => 'nullable|image|max:2048',
     ]);
 
+     $validatedData['fasilitas'] = implode(', ', $validatedData['fasilitas']);
 
     if ($request->hasFile('gambar')) {
         $file     = $request->file('gambar');
@@ -106,7 +98,6 @@ class RuanganController extends Controller
 
         Storage::disk('public')->makeDirectory('katalog_ruangan');
         Storage::disk('public')->putFileAs('katalog_ruangan', $file, $filename);
-
 
         $validatedData['gambar'] = $filename;
     }
@@ -128,6 +119,9 @@ class RuanganController extends Controller
             return redirect()->route('admin.katalog_ruangan.index')->with('error', 'Ruangan tidak ditemukan');
         }
 
+        $lokasiOptions = $this->lokasiOptions;
+        $fasilitasArray = explode(', ', $ruangan->fasilitas);
+
         return view('admin.katalog_ruangan.edit', compact('ruangan'));
     }
 
@@ -136,21 +130,22 @@ class RuanganController extends Controller
 
         $ruangan = Ruangan::find($id);
 
-
         if (is_null($ruangan)) {
             return redirect()->route('admin.katalog_ruangan.index')->with('error', 'Ruangan tidak ditemukan');
         }
         $validatedData = $request->validate([
             'nama_ruangan' => 'required|unique:ruangan,nama_ruangan,' . $id . ',id',
             'kapasitas' => 'required|integer|min:10|max:300',
-            'fasilitas' => 'required|string',
-            'lokasi' => 'required|string',
+            'fasilitas'    => 'required|array|min:1',
+            'fasilitas.*'  => 'required|string',
+            'lokasi'       => 'required|in:' . implode(',', $this->lokasiOptions),
             'status' => 'required|in:Tersedia,Tidak Tersedia',
             'gambar' => 'nullable|image|max:2048',
         ]);
 
-        if ($request->hasFile('gambar')) {
+        $validatedData['fasilitas'] = implode(', ', $validatedData['fasilitas']);
 
+        if ($request->hasFile('gambar')) {
             if ($ruangan->gambar) {
                 Storage::disk('public')->delete('katalog_ruangan/' . $ruangan->gambar);
             }
