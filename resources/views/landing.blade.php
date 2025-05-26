@@ -38,7 +38,7 @@
         <a href="#" class="btn-secondary">Lihat Katalog</a>
         <a href="#" class="btn-primary" style="background-color:#10b981">Ajukan Peminjaman</a>
       </div>
-      <img src="{{ asset('storage/task.png') }}" alt="Ilustrasi" class="hero-img" />
+      <img src="{{ asset('storage/webaset/task.png') }}" alt="Ilustrasi" class="hero-img" />
     </div>
   </section>
 
@@ -92,7 +92,7 @@ Dengan antarmuka yang intuitif dan ramah pengguna, sistem ini mendukung proses p
     
     <!-- Gedung TULT -->
   <div class="gedung-card">
-    <img src="{{ asset('storage/tult.jpg') }}" alt="Gedung TULT" />
+    <img src="{{ asset('storage/webaset/tult.jpg') }}" alt="Gedung TULT" />
     <div class="gedung-info">
       <h3>TULT</h3>
       <p>Gedung Telkom University Landmark Tower (TULT)</p>
@@ -109,12 +109,12 @@ Dengan antarmuka yang intuitif dan ramah pengguna, sistem ini mendukung proses p
         <hr />
         <a href="#" class="btn-gradient">LIHAT RUANGAN</a>
     </div>
-    <img src="{{ asset('storage/gku.jpg') }}" alt="Gedung B" />
+    <img src="{{ asset('storage/webaset/gku.jpg') }}" alt="Gedung B" />
 </div>
 
     <!-- Gedung C -->
     <div class="gedung-card">
-        <img src="{{ asset('storage/tult.jpg') }}" alt="Gedung C" />
+        <img src="{{ asset('storage/webaset/tult.jpg') }}" alt="Gedung C" />
         <div class="gedung-info">
             <h3>CACUK</h3>
             <p>Gedung Grha Wiyata Cacuk Sudarijanto</p>
@@ -132,27 +132,27 @@ Dengan antarmuka yang intuitif dan ramah pengguna, sistem ini mendukung proses p
     <p>Ikuti langkah-langkah berikut untuk melakukan peminjaman fasilitas di FRI:</p>
     <div class="alur-grid">
         <div class="alur-card">
-            <img src="{{ asset('storage/login.jpg') }}" alt="Langkah 1" />
+            <img src="{{ asset('storage/webaset/login.jpg') }}" alt="Langkah 1" />
             <h3>1. Login Kedalam Website</h3>
             <p>Silahkan Login Terlebih Dahulu ke dalam website</p>
         </div>
         <div class="alur-card">
-            <img src="{{ asset('storage/memilih.jpg') }}" alt="Langkah 2" />
+            <img src="{{ asset('storage/webaset/memilih.jpg') }}" alt="Langkah 2" />
             <h3>2. Pilih Ruangan/Inventaris</h3>
             <p>Cari dan pilih ruangan atau inventaris yang ingin Anda pinjam sesuai kebutuhan.</p>
         </div>
         <div class="alur-card">
-            <img src="{{ asset('storage/formulir.jpg') }}" alt="Langkah 3" />
+            <img src="{{ asset('storage/webaset/formulir.jpg') }}" alt="Langkah 3" />
             <h3>3. Ajukan Peminjaman</h3>
             <p>Isi formulir peminjaman dengan informasi yang diperlukan dan ajukan permohonan.</p>
         </div>
         <div class="alur-card">
-            <img src="{{ asset('storage/persetujuan.jpg') }}" alt="Langkah 4" />
+            <img src="{{ asset('storage/webaset/persetujuan.jpg') }}" alt="Langkah 4" />
             <h3>4. Tunggu Persetujuan</h3>
             <p>Permohonan Anda akan diproses oleh admin. Tunggu hingga disetujui.</p>
         </div>
         <div class="alur-card">
-            <img src="{{ asset('storage/gunakan.jpg') }}" alt="Langkah 5" />
+            <img src="{{ asset('storage/webaset/gunakan.jpg') }}" alt="Langkah 5" />
             <h3>5. Gunakan Fasilitas</h3>
             <p>Setelah disetujui, gunakan fasilitas sesuai jadwal yang telah ditentukan.</p>
         </div>
