@@ -19,17 +19,17 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
 
+/*
+|--------------------------------------------------------------------------
+| Default Routes
+|--------------------------------------------------------------------------
+*/
 
+Route::get('/', [AdminLogistikController::class, 'landing'])->name('landing');
 
-Route::get('/', [\App\Http\Controllers\AdminLogistikController::class, 'landing'])->name('landing');
-
-
-
-// Route::get('/', function () {
-//     // return view('mahasiswa.auth.login');
-//     // return view('landing');
-    
-// });
+Route::middleware(['auth:mahasiswa'])->group(function () {
+    Route::get('/mahasiswa/dashboard', [MahasiswaAuthController::class, 'dashboard'])->name('mahasiswa.dashboard');
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -152,9 +152,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.')->group(function() {
     
     // Dashboard
-    Route::get('/dashboard', function() {
-        return view('mahasiswa.page.dashboard');
-    })->name('dashboard');
+
 
     // Profile Management
     Route::prefix('profile')->name('profile.')->group(function () {

@@ -38,7 +38,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td class="fw-medium">{{ $item['nama_inventaris'] }}</td>
                                             <td>
-                                                <form action="{{ route('cart.update', $id) }}" method="POST" class="d-flex align-items-center">
+                                                <form action="{{ route('mahasiswa.cart.keranjang_inventaris.update', $id) }}" method="POST" class="d-flex align-items-center">
                                                     @csrf
                                                     @method('PUT')
                                                     <div class="input-group input-group-sm" style="width: 140px;">
@@ -53,7 +53,7 @@
                                                 </form>
                                             </td>
                                             <td>
-                                                <form action="{{ route('cart.remove', $id) }}" method="POST" class="d-inline">
+                                                <form action="{{ route('mahasiswa.cart.keranjang_inventaris.remove', $id) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill"
                                                         onclick="return confirm('Yakin ingin menghapus item ini?')">
@@ -68,7 +68,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
-                            <form action="{{ route('cart.clear') }}" method="POST" class="d-inline">
+                            <form action="{{ route('mahasiswa.cart.keranjang_inventaris.clear') }}" method="POST" class="d-inline">
                                 @csrf
                                 <button type="submit" class="btn btn-outline-secondary rounded-pill" 
                                 onclick="return confirm('Yakin ingin mengosongkan keranjang?')">
@@ -76,7 +76,7 @@
                                 </button>
                             </form>
                             
-                            <form action="{{ route('cart.checkout') }}" method="POST">
+                            <form action="{{ route('mahasiswa.cart.keranjang_inventaris.checkout') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-success rounded-pill px-4">
                                     <i class="fa fa-check-circle me-1"></i> Proses Peminjaman

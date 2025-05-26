@@ -66,7 +66,7 @@
                             <i class="fa fa-info-circle me-1"></i> Detail
                         </a>
                         @if($item->status === 'Tersedia' && $item->jumlah > 0)
-                        <form action="{{ route('cart.add') }}" method="POST">
+                        <form action="{{ route('mahasiswa.cart.keranjang_inventaris.add') }}" method="POST">
                             @csrf
                             <input type="hidden" name="id_inventaris" value="{{ $item->id }}">
                             <input type="hidden" name="jumlah" value="1">
