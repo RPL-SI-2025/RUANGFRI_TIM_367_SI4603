@@ -164,7 +164,7 @@
             @endif
             @if($pinjamRuangan->catatan)
             <div class="mb-3 row">
-                <label class="col-sm-3 col-form-label text-muted">Catatan</label>
+                <label class="col-sm-3 col-form-label text-muted">catatan</label>
                 <div class="col-sm-9">
                     <p class="form-control-plaintext">{{ $pinjamRuangan->catatan }}</p>
                 </div>
