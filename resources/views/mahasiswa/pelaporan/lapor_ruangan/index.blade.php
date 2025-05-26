@@ -23,11 +23,11 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>ID Peminjaman</th>
-                                <th>Tanggal</th>
+                                <th>Tanggal Pelaporan</th>
+                                <th>Tanggal Peminjaman</th>
                                 <th>Ruangan</th>
                                 <th>Deskripsi</th>
-                                <th>Admin Logistik</th>
+                                <th>Diberikan Kepada</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -35,11 +35,11 @@
                             @foreach($laporan as $index => $item)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $item->peminjaman->id}}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y H:i') }}</td>
                                     <td class="px-3 py-3">
-                                        {{ \Carbon\Carbon::parse($item->tanggal_pengajuan)->format('d M Y') }}
+                                        {{ \Carbon\Carbon::parse($item->peminjaman->tanggal_pengajuan)->format('d M Y') }}
                                         <span class="text-muted"> s/d </span>
-                                        {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}
+                                        {{ \Carbon\Carbon::parse($item->peminjaman->tanggal_pengajuan)->format('d M Y') }}
                                     </td>
                                     <td>{{ $item->ruangan->nama_ruangan ?? 'Tidak ada data' }}</td>
                                     <td>{{$item->deskripsi ?? 'Tidak ada data'}}</td>
@@ -48,15 +48,11 @@
                                         <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.show', $item->id_lapor_ruangan) }}" class="btn btn-info btn-sm">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        @if($item->status == 'pending')
-                                            <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.edit', $item->id_lapor_ruangan) }}" class="btn btn-warning btn-sm">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ $item->id_lapor_ruangan }}">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        @endif
+                                        <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.edit', $item->id_lapor_ruangan) }}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
                                     </td>
+
                                 </tr>
                             @endforeach
                         </tbody>
