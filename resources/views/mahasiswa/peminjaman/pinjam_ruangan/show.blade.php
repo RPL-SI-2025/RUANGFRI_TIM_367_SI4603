@@ -22,10 +22,11 @@
                         <table class="table table-hover border">
                             <thead class="table-light">
                                 <tr>
-                                    <th>No</th>
-                                    <th>Nama Ruangan</th>
-                                    <th>Kapasitas</th>
-                                    <th>Lokasi</th>
+                                    <th class="py-3">No</th>
+                                    <th class="py-3">Nama Ruangan</th>
+                                    <th class="py-3">Lokasi</th>
+                                    <th class="py-3">Tanggal</th>
+                                    <th class="py-3">Waktu</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -33,8 +34,15 @@
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td class="fw-medium">{{ $room->ruangan->nama_ruangan }}</td>
-                                        <td>{{ $room->ruangan->kapasitas }} orang</td>
+                                        
                                         <td>{{ $room->ruangan->lokasi }}</td>
+                                        <td class="px-3 py-3">
+                                            {{ \Carbon\Carbon::parse($room->tanggal_pengajuan)->format('d M Y') }}
+                                            <span class="text-muted"> s/d </span>
+                                            {{ \Carbon\Carbon::parse($room->tanggal_selesai)->format('d M Y') }}
+                                        </td>
+                                        <td>{{ \Carbon\Carbon::parse($room->waktu_mulai)->format('H:i') }} - 
+                                            {{ \Carbon\Carbon::parse($room->waktu_selesai)->format('H:i') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

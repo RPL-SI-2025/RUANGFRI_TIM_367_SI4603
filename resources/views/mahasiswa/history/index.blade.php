@@ -2,9 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <h4 class="mb-4">
-        <i class="fas fa-history me-2"></i>Riwayat Peminjaman & Pelaporan
-    </h4>
+
     
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -103,20 +101,6 @@
             @endif
         </div>
     </div>
-    
-    <!-- If both are empty -->
-    @if(count($paginatedInventaris) == 0 )
-        <div class="mt-4 text-center">
-            <div class="d-flex justify-content-center mt-3">
-                <a href="{{ route('mahasiswa.peminjaman.pinjam-inventaris.index') }}" class="btn btn-primary me-2">
-                    <i class="fas fa-box me-1"></i> Peminjaman Inventaris
-                </a>
-                <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.index') }}" class="btn btn-success">
-                    <i class="fas fa-door-open me-1"></i> Peminjaman Ruangan
-                </a>
-            </div>
-        </div>
-    @endif
 </div>
 
 @push('scripts')

@@ -2,9 +2,9 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Laporan Ruangan</h1>
-    </div>
+    <h4 class="mb-4">
+        <i class="fas fa-door-closed fa-sm me-2"></i>Daftar Laporan Ruangan
+    </h4>
 
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -16,9 +16,6 @@
     @endif
 
     <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Daftar Laporan Ruangan</h6>
-        </div>
         <div class="card-body">
             @if($laporan->count() > 0)
                 <div class="table-responsive">
@@ -26,11 +23,11 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>ID Peminjaman</th>
-                                <th>Tanggal</th>
+                                <th>Tanggal Pelaporan</th>
+                                <th>Tanggal Peminjaman</th>
                                 <th>Ruangan</th>
                                 <th>Deskripsi</th>
-                                <th>Admin Logistik</th>
+                                <th>Diberikan Kepada</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -38,11 +35,11 @@
                             @foreach($laporan as $index => $item)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
-                                    <td>{{ $item->peminjaman->id}}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y H:i') }}</td>
                                     <td class="px-3 py-3">
-                                        {{ \Carbon\Carbon::parse($item->tanggal_pengajuan)->format('d M Y') }}
+                                        {{ \Carbon\Carbon::parse($item->peminjaman->tanggal_pengajuan)->format('d M Y') }}
                                         <span class="text-muted"> s/d </span>
-                                        {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}
+                                        {{ \Carbon\Carbon::parse($item->peminjaman->tanggal_pengajuan)->format('d M Y') }}
                                     </td>
                                     <td>{{ $item->ruangan->nama_ruangan ?? 'Tidak ada data' }}</td>
                                     <td>{{$item->deskripsi ?? 'Tidak ada data'}}</td>
@@ -51,15 +48,11 @@
                                         <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.show', $item->id_lapor_ruangan) }}" class="btn btn-info btn-sm">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        @if($item->status == 'pending')
-                                            <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.edit', $item->id_lapor_ruangan) }}" class="btn btn-warning btn-sm">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ $item->id_lapor_ruangan }}">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        @endif
+                                        <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.edit', $item->id_lapor_ruangan) }}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
                                     </td>
+
                                 </tr>
                             @endforeach
                         </tbody>
@@ -69,9 +62,9 @@
                 <div class="text-center py-5">
                     <i class="fas fa-clipboard fa-3x text-muted mb-3"></i>
                     <h5 class="text-muted">Belum ada laporan ruangan</h5>
-                    <p class="text-muted">Buat laporan baru dengan mengklik tombol "Buat Laporan Baru" di atas.</p>
-                    <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.create') }}" class="btn btn-primary mt-2">
-                        <i class="fas fa-plus mr-1"></i> Buat Laporan Baru
+                    <p class="text-muted">Laporan akan muncul saat Anda menyelesaikan peminjaman Ruangan.</p>
+                    <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.index') }}" class="btn btn-primary mt-2">
+                        <i class="fas fa-arrow-left me-2"></i> Kembali ke Daftar Peminjaman
                     </a>
                 </div>
             @endif

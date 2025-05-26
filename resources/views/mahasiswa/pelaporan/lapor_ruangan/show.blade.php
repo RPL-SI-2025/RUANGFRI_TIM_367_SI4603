@@ -22,15 +22,18 @@
                             <h5 class="text-secondary fw-bold mb-3">Informasi Laporan</h5>
                             <table class="table table-borderless">
                                 <tr>
-                                    <td width="40%"><strong>ID Laporan:</strong></td>
-                                    <td>{{ $laporan->id_lapor_ruangan }}</td>
+                                    <td><strong>Tanggal Pelaporan</strong></td>
+                                    <td class="px-3 py-3">
+                                        {{ \Carbon\Carbon::parse($laporan->created_at)->format('d M Y H:i') }}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><strong>ID Peminjaman:</strong></td>
-                                    <td>{{ $laporan->peminjaman->id }}</td>
-                                <tr>
-                                    <td><strong>Tanggal Laporan:</strong></td>
-                                    <td>{{ \Carbon\Carbon::parse($laporan->datetime)->format('d F Y, H:i') }}</td>
+                                    <td><strong>Tanggal Peminjaman</strong></td>
+                                    <td class="px-3 py-3">
+                                        {{ \Carbon\Carbon::parse($laporan->peminjaman->tanggal_pengajuan)->format('d M Y') }}
+                                        <span class="text-muted"> s/d </span>
+                                        {{ \Carbon\Carbon::parse($laporan->peminjaman->tanggal_pengajuan)->format('d M Y') }}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><strong>Ruangan:</strong></td>
@@ -45,7 +48,7 @@
                                     <td>{{ $laporan->oleh }}</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Admin Logistik:</strong></td>
+                                    <td><strong>Diberikan Kepada:</strong></td>
                                     <td>{{ $laporan->logistik->nama ?? 'N/A' }}</td>
                                 </tr>
                             </table>
