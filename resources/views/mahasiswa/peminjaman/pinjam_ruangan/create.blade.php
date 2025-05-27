@@ -54,7 +54,7 @@
                         </div>
                     </div>
                     <div class="mt-5">
-                        <form action="{{ route('pinjam-ruangan.store') }}" method="POST" enctype="multipart/form-data" id="bookingForm">
+                        <form action="{{ route('mahasiswa.peminjaman.pinjam-ruangan.store') }}" method="POST" enctype="multipart/form-data" id="bookingForm">
                             @csrf
                             @foreach($cartItems as $id => $item)
                                 <input type="hidden" name="ruangan_ids[]" value="{{ $id }}">
