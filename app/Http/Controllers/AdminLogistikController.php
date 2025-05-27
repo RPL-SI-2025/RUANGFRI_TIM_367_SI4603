@@ -52,7 +52,7 @@ class AdminLogistikController extends Controller
         $grafik['jumlah'][] = PinjamRuangan::whereMonth('created_at', Carbon::now()->subMonths($i)->month)->count();
     }
 
-    // Aktivitas terbaru (contoh gabungan)
+    
     $aktivitasTerbaru = collect([
         ...PinjamRuangan::latest()->take(3)->get()->map(fn($item) => (object)[
             'deskripsi' => "Peminjaman ruangan oleh {$item->mahasiswa->nama}",
@@ -83,7 +83,7 @@ class AdminLogistikController extends Controller
 
         return view('admin.dashboard');
 
-        return view('admin.dashboard');
+    
     }
 
     /**

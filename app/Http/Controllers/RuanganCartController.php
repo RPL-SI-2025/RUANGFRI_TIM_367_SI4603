@@ -108,7 +108,7 @@ class RuanganCartController extends Controller
             'waktu_mulai' => $startTime,
             'waktu_selesai' => $endTime,
             'jadwal_ids' => $jadwalIds,
-            'selected_slots' => $selectedSlots, // Store the selected slots
+            'selected_slots' => $selectedSlots, 
             'timestamp' => now()->toDateTimeString()
         ];
         
