@@ -16,30 +16,89 @@
 
 <body>
 
-  <header class="navbar">
-      <div class="logo">RUANGFRI</div>
-      <button class="hamburger" onclick="toggleMenu()">☰</button>
-      <nav class="responsive">
+<header class="navbar">
+    <div class="logo">RUANGFRI</div>
+    <button class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <nav class="responsive">
         <a href="#hero">Beranda</a>
         <a href="#tentang-sistem">Tentang Sistem</a>
         <a href="#gedung">Gedung FRI</a>
         <a href="#alur-peminjaman">Alur Peminjaman</a>
         <a href="#ruangan">Katalog Ruangan</a>
         <a href="#inventaris">Katalog Inventaris</a>
-         <a href="{{ route('mahasiswa.login') }}"> <button class="btn-login">Login</button> </a> 
-      </nav>
-  </header>
+        <a href="{{ route('mahasiswa.login') }}">
+            <button class="btn-login">Login</button>
+        </a>
+    </nav>
+</header>
+
+<script>
+function toggleMenu() {
+    const nav = document.querySelector('.navbar nav');
+    const hamburger = document.querySelector('.hamburger');
+    nav.classList.toggle('show');
+    hamburger.classList.toggle('active');
+}
+
+// Add scroll effect to navbar
+window.addEventListener('scroll', function() {
+    const navbar = document.querySelector('.navbar');
+    if (window.scrollY > 50) {
+        navbar.style.padding = '0.8rem 5%';
+        navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+    } else {
+        navbar.style.padding = '1rem 5%';
+        navbar.style.boxShadow = 'none';
+    }
+});
+</script>
+
+
+
+
 
   <section id="hero" class="hero">
     <div class="container hero-content">
-      <div class="hero-text">
-        <h1>Sistem Peminjaman Fasilitas FRI</h1>
-        <p>Akses Mudah untuk Peminjaman Ruangan dan Inventaris FRI</p>
-        <a href="#" class="btn-secondary" style="background-color:#2ecc71">Selengkapnya</a>
-      </div>
-      <img src="{{ asset('storage/webaset/hero.png') }}" alt="Ilustrasi" class="hero-img" />
+        <div class="hero-text">
+            <h1>Sistem Peminjaman Fasilitas FRI</h1>
+            <p>Akses Mudah untuk Peminjaman Ruangan dan Inventaris FRI</p>
+            <a href="#" class="btn-hero">Selengkapnya</a>
+        </div>
+        <img src="{{ asset('storage/webaset/hero.png') }}" alt="Ilustrasi" class="hero-img" />
     </div>
-  </section>
+    <!-- Add scroll indicator -->
+
+    
+
+    <div class="scroll-indicator" onclick="scrollToNextSection()">
+        <div class="mouse">
+            <div class="wheel"></div>
+        </div>
+        <div class="arrow">
+            <span></span>
+        </div>
+    </div>
+    
+    <script>
+    function scrollToNextSection() {
+        const heroSection = document.getElementById('hero');
+        const nextSection = document.getElementById('tentang-sistem');
+        
+        if (nextSection) {
+            nextSection.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+    </script>
+
+
+</section>
 
   
 
@@ -60,22 +119,22 @@ Memantau status pengajuan serta riwayat peminjaman dengan mudah.
 Dengan antarmuka yang intuitif dan ramah pengguna, sistem ini mendukung proses peminjaman yang lebih efisien, akuntabel, dan terdigitalisasi, sejalan dengan visi digitalisasi layanan akademik FRI.</p>
     <div class="tentang-sistem">
         <div class="stat-card">
-        <i class="fas fa-building fa-2x" style="color: #27ae60 "></i> <!-- Ikon untuk Total Ruangan -->
+        <i class="fas fa-building fa-2x" style="color: #3AA17E "></i> <!-- Ikon untuk Total Ruangan -->
         <h3>Total Ruangan</h3>
         <p>{{ $totalRuangan }}</p>
     </div>
     <div class="stat-card">
-        <i class="fas fa-door-open fa-2x" style="color: #27ae60 "></i> <!-- Ikon untuk Ruangan Tersedia -->
+        <i class="fas fa-door-open fa-2x" style="color: #3AA17E "></i> <!-- Ikon untuk Ruangan Tersedia -->
         <h3>Ruangan Tersedia</h3>
         <p>{{ $ruanganTersedia }}</p>
     </div>
     <div class="stat-card">
-        <i class="fas fa-boxes fa-2x" style="color: #27ae60 "></i> <!-- Ikon untuk Total Inventaris -->
+        <i class="fas fa-boxes fa-2x" style="color: #3AA17E "></i> <!-- Ikon untuk Total Inventaris -->
         <h3>Total Inventaris</h3>
         <p>{{ $totalInventaris }}</p>
     </div>
     <div class="stat-card">
-        <i class="fas fa-check-circle fa-2x" style="color: #27ae60 "></i> <!-- Ikon untuk Inventaris Tersedia -->
+        <i class="fas fa-check-circle fa-2x" style="color: #3AA17E "></i> <!-- Ikon untuk Inventaris Tersedia -->
         <h3>Inventaris Tersedia</h3>
         <p>{{ $inventarisTersedia }}</p>
     </div>
@@ -209,6 +268,9 @@ Dengan antarmuka yang intuitif dan ramah pengguna, sistem ini mendukung proses p
             </p>
             <div class="social-icons">
                 <a href="https://www.instagram.com/fri.telkomuniversity?igsh=YnczZzRkN2Fjamlw"><i class="fab fa-instagram"></i></a>
+            </div>
+            <div class="social-icons">
+                <a href="https://www.youtube.com/@fri.telkomuniversity"><i class="fab fa-youtube"></i></a>
             </div>
         </div>
         <div class="footer-section">
