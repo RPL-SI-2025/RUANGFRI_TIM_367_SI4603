@@ -350,18 +350,18 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Handle modal ruangan
+    
     const tolakModal = document.getElementById('tolakModal');
     const editCatatanModal = document.getElementById('editCatatanModal');
     const tolakForm = document.getElementById('tolakForm');
     
-    // Reset form dan focus saat modal dibuka
+    
     if (tolakModal) {
         tolakModal.addEventListener('show.bs.modal', function (event) {
-            // Reset form
+            
             if (tolakForm) {
                 tolakForm.reset();
-                // Clear any validation errors
+                
                 const inputs = tolakForm.querySelectorAll('.is-invalid');
                 inputs.forEach(input => {
                     input.classList.remove('is-invalid');
@@ -374,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         tolakModal.addEventListener('shown.bs.modal', function (event) {
-            // Focus pada textarea setelah modal selesai ditampilkan
+            
             const textarea = tolakModal.querySelector('#catatan');
             if (textarea) {
                 textarea.focus();
@@ -387,23 +387,23 @@ document.addEventListener('DOMContentLoaded', function() {
             const textarea = editCatatanModal.querySelector('#editCatatan');
             if (textarea) {
                 textarea.focus();
-                // Set cursor ke akhir text
+                
                 textarea.setSelectionRange(textarea.value.length, textarea.value.length);
             }
         });
     }
     
-    // Form validation
+    
     if (tolakForm) {
         tolakForm.addEventListener('submit', function(e) {
             const catatan = document.getElementById('catatan');
             const catatanError = document.getElementById('catatanError');
             
-            // Reset validation
+            
             catatan.classList.remove('is-invalid');
             catatanError.style.display = 'none';
             
-            // Validate
+            
             if (!catatan.value.trim()) {
                 e.preventDefault();
                 catatan.classList.add('is-invalid');
@@ -422,7 +422,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return false;
             }
             
-            // Show loading state
+            
             const submitBtn = document.getElementById('tolakSubmitBtn');
             if (submitBtn) {
                 submitBtn.disabled = true;
@@ -431,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Auto-resize textarea
+    
     const textareas = document.querySelectorAll('textarea');
     textareas.forEach(textarea => {
         textarea.addEventListener('input', function() {
