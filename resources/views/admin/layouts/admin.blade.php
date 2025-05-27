@@ -135,7 +135,7 @@
                             </div>
                             <span class="nav-text">Approval Inventaris</span>
                         </a>
-                        <a href="#" class="nav-link {{ request()->routeIs('admin.history_inventaris.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.historymahasiswa.history.history_inventaris.index') }}" class="nav-link {{ request()->routeIs('admin.history_inventaris.*') ? 'active' : '' }}">
                             <div class="nav-icon">
                                 <i class="fas fa-clock"></i>
                             </div>

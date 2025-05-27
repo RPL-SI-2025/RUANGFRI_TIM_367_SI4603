@@ -340,3 +340,4 @@ class JadwalRuanganController extends Controller
         }
     }
 }
+
