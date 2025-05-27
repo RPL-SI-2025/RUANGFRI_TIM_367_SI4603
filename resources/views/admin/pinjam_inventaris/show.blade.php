@@ -314,18 +314,18 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Handle modal inventaris
+    
     const rejectModal = document.getElementById('rejectModal');
     const editNotesModal = document.getElementById('editNotesModal');
     const rejectForm = document.getElementById('rejectForm');
     
-    // Reset form saat modal dibuka
+    
     if (rejectModal) {
         rejectModal.addEventListener('show.bs.modal', function (event) {
-            // Reset form
+            
             if (rejectForm) {
                 rejectForm.reset();
-                // Clear any validation errors
+                
                 const inputs = rejectForm.querySelectorAll('.is-invalid');
                 inputs.forEach(input => {
                     input.classList.remove('is-invalid');
@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         rejectModal.addEventListener('shown.bs.modal', function (event) {
-            // Focus pada textarea setelah modal selesai ditampilkan
+            
             const textarea = rejectModal.querySelector('#notes');
             if (textarea) {
                 textarea.focus();
@@ -351,23 +351,23 @@ document.addEventListener('DOMContentLoaded', function() {
             const textarea = editNotesModal.querySelector('#editNotes');
             if (textarea) {
                 textarea.focus();
-                // Set cursor ke akhir text
+                
                 textarea.setSelectionRange(textarea.value.length, textarea.value.length);
             }
         });
     }
     
-    // Form validation
+    
     if (rejectForm) {
         rejectForm.addEventListener('submit', function(e) {
             const notes = document.getElementById('notes');
             const notesError = document.getElementById('notesError');
             
-            // Reset validation
+            
             notes.classList.remove('is-invalid');
             notesError.style.display = 'none';
             
-            // Validate
+            
             if (!notes.value.trim()) {
                 e.preventDefault();
                 notes.classList.add('is-invalid');
@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return false;
             }
             
-            // Show loading state
+            
             const submitBtn = document.getElementById('rejectSubmitBtn');
             if (submitBtn) {
                 submitBtn.disabled = true;
@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Auto-resize textarea
+    
     const textareas = document.querySelectorAll('textarea');
     textareas.forEach(textarea => {
         textarea.addEventListener('input', function() {
@@ -404,11 +404,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Ensure modal is properly positioned
+    
     const modals = document.querySelectorAll('.modal');
     modals.forEach(modal => {
         modal.addEventListener('show.bs.modal', function() {
-            // Remove any existing backdrops
+            
             const existingBackdrops = document.querySelectorAll('.modal-backdrop');
             existingBackdrops.forEach(backdrop => {
                 if (backdrop.parentNode) {

@@ -63,7 +63,7 @@ Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
     Route::get('/login', [MahasiswaAuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [MahasiswaAuthController::class, 'login'])->name('login.submit');
     Route::post('/logout', [MahasiswaAuthController::class, 'logout'])->name('logout');
-    Route::get('/register', [MahasiswaAuthController::class, 'showRegistrationForm'])->name('register');
+    
     Route::post('/register', [MahasiswaAuthController::class, 'register'])->name('register.submit');
 });
 

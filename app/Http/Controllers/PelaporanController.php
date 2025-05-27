@@ -160,7 +160,7 @@ class PelaporanController extends Controller
                     ->where('waktu_selesai', $peminjaman->waktu_selesai)
                     ->where('file_scan', $peminjaman->file_scan)
                     ->where('id_mahasiswa', $mahasiswaId)
-                    ->update(['status' => 3]); // Status selesai
+                    ->update(['status' => 3]); 
                     
 
                 $affectedJadwals = \App\Models\Jadwal::whereIn('id_pinjam_ruangan', function($query) use ($peminjaman, $mahasiswaId) {

@@ -122,7 +122,7 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        // Initialize any needed JS
+        
     });
 </script>
 @endpush

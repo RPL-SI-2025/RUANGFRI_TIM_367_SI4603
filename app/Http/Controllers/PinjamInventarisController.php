@@ -101,7 +101,7 @@ class PinjamInventarisController extends Controller
                 'waktu_mulai' => $request->waktu_mulai,
                 'waktu_selesai' => $request->waktu_selesai,
                 'file_scan' => $fileName,
-                'status' => 0 // Waiting for approval
+                'status' => 0 
             ]);
         }
         
@@ -234,7 +234,7 @@ class PinjamInventarisController extends Controller
         $pinjamInventaris->save();
         
 
-        if ($request->status == 2 && $request->filled('notes')) {  // If rejected with notes
+        if ($request->status == 2 && $request->filled('notes')) {  
             PinjamInventaris::where('tanggal_pengajuan', $pinjamInventaris->tanggal_pengajuan)
                 ->where('tanggal_selesai', $pinjamInventaris->tanggal_selesai)
                 ->where('waktu_mulai', $pinjamInventaris->waktu_mulai)
