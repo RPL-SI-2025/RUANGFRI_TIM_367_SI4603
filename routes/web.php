@@ -98,6 +98,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [PinjamRuanganController::class, 'adminIndex'])->name('index');
         Route::get('/{pinjamRuangan}', [PinjamRuanganController::class, 'adminShow'])->name('show');
         Route::put('/{pinjamRuangan}/update-status', [PinjamRuanganController::class, 'updateStatus'])->name('update-status');
+        Route::put('/{pinjamRuangan}/update-notes', [PinjamRuanganController::class, 'updateNotes'])->name('update-notes');
     });
 
     // Laporan Inventaris Management
