@@ -146,10 +146,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
     // history admin
-    Route::prefix('history')->name('history')->group(function () {
-     Route::get('/history', [HistoryController::class, 'index'])->name('mahasiswa.history.history_inventaris.index');
-     Route::get('/history/{type}/{id}', [HistoryController::class, 'show'])->name('mahasiswa.history.history_inventaris.show');
+   Route::prefix('history')->name('history_inventaris.')->group(function () {
+        Route::get('/', [HistoryController::class, 'adminindex'])->name('index');
+        Route::get('/{type}/{id}', [HistoryController::class, 'adminshow'])->name('show');
     });
+    
 });
 /*
 |--------------------------------------------------------------------------
