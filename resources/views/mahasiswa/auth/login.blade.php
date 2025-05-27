@@ -7,6 +7,35 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    <style>
+        body {
+            background-image: url('{{ asset('storage/webaset/background.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-opacity: 0.8;
+        }
+        .card-header h3 {
+            color: #2ecc71;
+        }
+        .btn-primary {
+            background-color: #2ecc71;
+            border-color: #2ecc71;
+        }
+        .btn-primary:hover {
+            background-color: #27ae60;
+            border-color: #27ae60;
+        }
+        .register-link {
+            color: #2ecc71;
+        }
+        .register-link:hover {
+            color: #27ae60;
+        }
+        .btn {
+            border-radius: 25px;
+        }
+    </style>
 </head>
 <body>
     <div class="container login-container">
@@ -38,8 +67,8 @@
                         <label for="email" class="form-label">
                             <i class="fas fa-envelope me-2"></i>Email
                         </label>
-                        <input type="email" class="form-control" id="email" name="email" 
-                            value="{{ old('email') }}" required autofocus 
+                        <input type="email" class="form-control" id="email" name="email"
+                            value="{{ old('email') }}" required autofocus
                             placeholder="Masukkan email Anda">
                     </div>
 
@@ -47,7 +76,7 @@
                         <label for="password" class="form-label">
                             <i class="fas fa-lock me-2"></i>Password
                         </label>
-                        <input type="password" class="form-control" id="password" name="password" 
+                        <input type="password" class="form-control" id="password" name="password"
                                required placeholder="Masukkan password Anda">
                     </div>
 
@@ -64,7 +93,7 @@
                 </form>
             </div>
             <div class="card-footer text-center">
-                <p class="mb-0">Belum punya akun? 
+                <p class="mb-0">Belum punya akun?
                     <a href="{{ route('mahasiswa.register') }}" class="register-link">
                         <i class="fas fa-user-plus me-1"></i>Daftar sekarang
                     </a>

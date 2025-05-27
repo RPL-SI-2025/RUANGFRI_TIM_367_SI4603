@@ -18,6 +18,16 @@ class Mahasiswa extends Authenticatable
         'nim',
         'nama_mahasiswa',
         'email',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'no_telepon',
+        'wa',
+        'alamat',
+        'angkatan',
+        'tujuan',
+        'instansi',
+        'profile_photo',
+        'ktm',
         'password',
     ];
 

@@ -8,8 +8,76 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/style.css') }}">
   <style>
-  
-  </style>
+  .logo {
+        color: #27ae60;
+        border: none;
+    }
+
+    .navbar a {
+        transition: transform 0.3s, color 0.3s;
+    }
+
+    .navbar a:hover {
+        transform: scale(1.1);
+        color: #27ae60;
+        font: bold;
+    }
+
+    .btn-login {
+        background-color: transparent;
+        border: 2px solid #27ae60;
+        color: #27ae60;=
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn-login:hover {
+        background-color: #27ae60;
+        color: white;
+        font-weight: bold;
+    }
+
+    .btn-secondary {
+    border-radius: 25px;
+        transition: background-color 0.3s;/
+    }
+
+    .btn-secondary:hover {
+        transform: scale(1.1);
+        background-color: #27ae60;
+    }
+    .tentang-sistem-container {
+        margin: 0 70px;
+    }
+
+    .stat-card {
+        transition: background-color 0.3s;
+    }
+
+    .stat-card:hover {
+        background-color: rgba(39, 174, 96, 0.1);
+        transform: scale(1.05);
+    }
+    .room-container h2,
+    .inventory-container h2 {
+        color: #27ae60;
+        font-weight: bold;
+    }
+
+    .room-card p.available {
+        color: #27ae60;
+    }
+
+    .alur-card {
+        transition: background-color 0.3s, transform 0.3s; /* Efek transisi */
+    }
+
+    .alur-card:hover {
+        background-color: rgba(39, 174, 96, 0.1); /* Warna lebih gelap saat hover */
+        transform: scale(1.05); /* Zoom saat hover */
+    }
+
+</style>
+
 
 </head>
 
@@ -26,7 +94,7 @@
         <a href="#alur-peminjaman">Alur Peminjaman</a>
         <a href="#ruangan">Katalog Ruangan</a>
         <a href="#inventaris">Katalog Inventaris</a>
-         <a href="{{ route('mahasiswa.login') }}"> <button class="btn-login">Login</button> </a> 
+         <a href="{{ route('mahasiswa.login') }}"> <button class="btn-login">Login</button> </a>
       </nav>
   </header>
 
@@ -41,7 +109,7 @@
     </div>
   </section>
 
-  
+
 
   <!-- Section Tentang Sistem -->
 
@@ -86,39 +154,48 @@ Dengan antarmuka yang intuitif dan ramah pengguna, sistem ini mendukung proses p
   <!-- End Section Tentang Sistem -->
 
  <section id="gedung" class="gedung">
-    <h2>Gedung di FRI</h2>
+    <h2>Gedung FRI</h2>
     <p>Jelajahi berbagai gedung yang tersedia di Fakultas Rekayasa Industri.</p>
-    
+
     <!-- Gedung TULT -->
   <div class="gedung-card">
     <img src="{{ asset('storage/webaset/tult.jpg') }}" alt="Gedung TULT" />
     <div class="gedung-info">
-      <h3>TULT</h3>
-      <p>Gedung Telkom University Landmark Tower (TULT)</p>
+      <h3>Telkom University Landmark Tower (TULT)</h3>
+      <p>Telkom University Landmark Tower, disingkat TULT, adalah gedung tertinggi di lingkungan kampus Telkom University.
+        Gedung ini memiliki 19 lantai dan menjadi salah satu landmark utama di kawasan kampus.
+        TULT difungsikan sebagai pusat administrasi, ruang pertemuan, serta fasilitas pendukung kegiatan akademik dan non-akademik.
+        Dengan desain modern dan menjulang tinggi, TULT menjadi ikon visual yang mudah dikenali di kawasan Telkom University</p>
       <hr />
-      <a href="#" class="btn-gradient">LIHAT RUANGAN</a>
+      <a href="#" class="btn-gradient">Lihat Ruangan</a>
     </div>
   </div>
 
     <!-- Gedung B -->
 <div class="gedung-card reverse">
     <div class="gedung-info">
-        <h3>GKU</h3>
-        <p>Gedung Tokong Nanas atau GKU (Gedung Kuliah Umum)</p>
+        <h3>Gedung Kuliah Umum (Tokong Nanas)</h3>
+        <p>Gedung Kuliah Umum yang dikenal dengan sebutan Tokong Nanas adalah gedung kuliah umum 10 lantai yang juga menjadi
+            salah satu ikon Telkom University. Nama "Tokong Nanas" berasal dari bentuk atapnya yang menyerupai buah nanas.
+            Gedung ini digunakan untuk berbagai aktivitas perkuliahan dan seminar, serta menjadi salah satu pusat kegiatan mahasiswa di kampus.
+            Secara resmi, gedung ini tercatat sebagai KU3 dalam daftar gedung Telkom University</p>
         <hr />
-        <a href="#" class="btn-gradient">LIHAT RUANGAN</a>
+        <a href="#" class="btn-gradient">Lihat Ruangan</a>
     </div>
     <img src="{{ asset('storage/webaset/gku.jpg') }}" alt="Gedung B" />
 </div>
 
     <!-- Gedung C -->
     <div class="gedung-card">
-        <img src="{{ asset('storage/webaset/tult.jpg') }}" alt="Gedung C" />
+        <img src="{{ asset('storage/webaset/cacuk.png') }}" alt="Gedung C" />
         <div class="gedung-info">
-            <h3>CACUK</h3>
-            <p>Gedung Grha Wiyata Cacuk Sudarijanto</p>
+            <h3>Gedung B Cacuk (Grha Wiyata Cacuk Sudarijanto-B)</h3>
+            <p>Gedung B Cacuk, secara resmi bernama Grha Wiyata Cacuk Sudarijanto-B, merupakan salah satu gedung kuliah umum di Telkom University.
+                Gedung ini digunakan sebagai fasilitas utama untuk perkuliahan berbagai program studi dan menjadi bagian dari kompleks gedung kuliah umum
+                yang dinamai untuk menghormati tokoh penting dalam sejarah Telkom University, yaitu Cacuk Sudarijanto.
+                Gedung ini sering disebut juga sebagai KU2.</p>
             <hr />
-            <a href="#" class="btn-gradient">LIHAT RUANGAN</a>
+            <a href="#" class="btn-gradient">Lihat Ruangan</a>
         </div>
     </div>
 </section>
@@ -159,7 +236,7 @@ Dengan antarmuka yang intuitif dan ramah pengguna, sistem ini mendukung proses p
 </section>
 
 
-  
+
 <!-- Section Katalog Ruangan -->
 <section id="ruangan" class="room-container">
     <h2>Katalog Ruangan</h2>
@@ -179,7 +256,7 @@ Dengan antarmuka yang intuitif dan ramah pengguna, sistem ini mendukung proses p
 <!-- End Section Katalog Ruangan -->
 
 
-  
+
   <!-- Section Katalog Inventaris -->
 
 <section id="inventaris" class="inventory-container">
@@ -209,6 +286,9 @@ Dengan antarmuka yang intuitif dan ramah pengguna, sistem ini mendukung proses p
             </p>
             <div class="social-icons">
                 <a href="https://www.instagram.com/fri.telkomuniversity?igsh=YnczZzRkN2Fjamlw"><i class="fab fa-instagram"></i></a>
+                <a href="mailto:sekretariatfri@365.telkomuniversity.ac.id"><i class="fas fa-envelope"></i></a>
+                <a href="https://www.youtube.com/@fri.telkomuniversity"><i class="fab fa-youtube"></i></a>
+                <a href="https://www.linkedin.com/school/school-of-industrial-engineering-telkom-university-bandung/?originalSubdomain=id"><i class="fab fa-linkedin"></i></a>
             </div>
         </div>
         <div class="footer-section">

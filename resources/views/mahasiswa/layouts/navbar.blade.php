@@ -1,4 +1,20 @@
 <!-- Top Navbar -->
+
+<style>
+    .top-navbar {
+        background-color: #ffffff;
+    }
+    .top-navbar h5 {
+        color: #2ecc71; =
+    }
+    .top-navbar small {
+        color: #6c757d;=
+    }
+    .top-navbar .text-secondary {
+        color: #2ecc71;
+    }
+</style>
+
 <nav class="top-navbar d-flex justify-content-between align-items-center sticky-top">
     <div class="d-flex align-items-center">
         <button class="btn text-secondary border-0" id="sidebarToggle">
@@ -9,7 +25,7 @@
             <small class="text-muted">Selamat datang, {{ Session::get('mahasiswa_name') }}</small>
         </div>
     </div>
-    
+
     <div class="d-flex align-items-center">
 
         <div class="position-relative me-3">
@@ -23,7 +39,7 @@
                 @endif
             </a>
         </div>
-        
+
         <div class="user-dropdown dropdown">
             <a class="dropdown-toggle d-flex align-items-center text-decoration-none" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="user-avatar">{{ substr(Session::get('mahasiswa_name') ?? 'MA', 0, 2) }}</div>
