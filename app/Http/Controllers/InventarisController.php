@@ -9,9 +9,20 @@ use Illuminate\Support\Facades\Storage;
 
 class InventarisController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $inventaris = Inventaris::all();
+        $query = Inventaris::query();
+
+        if ($request->filled('search')) {
+            $query->where('nama_inventaris', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $inventaris = $query->get();
+
         return view('admin.inventaris.index', compact('inventaris'));
     }
 
@@ -65,47 +76,58 @@ class InventarisController extends Controller
             'jumlah'            => 'required|integer',
             'status'            => 'required|in:Tersedia,Tidak Tersedia',
         ]);
-    
+
         if ($request->hasFile('gambar_inventaris')) {
             $file     = $request->file('gambar_inventaris');
             $filename = time() . '_' . $file->getClientOriginalName();
-    
+
             Storage::disk('public')->makeDirectory('katalog_inventaris');
-    
+
             Storage::disk('public')->putFileAs('katalog_inventaris', $file, $filename);
-    
+
             if ($inventaris->gambar_inventaris) {
                 Storage::disk('public')->delete('katalog_inventaris/' . $inventaris->gambar_inventaris);
             }
-    
+
             $data['gambar_inventaris'] = $filename;
         }
-    
+
         $inventaris->update($data);
-    
+
         return redirect()
             ->route('admin.inventaris.index')
             ->with('success', 'Inventaris berhasil diperbarui.');
     }
-    
-    
+
+
 
     public function destroy(Inventaris $inventaris)
     {
         if ($inventaris->gambar_inventaris) {
             Storage::disk('public')->delete('katalog_inventaris/' . $inventaris->gambar_inventaris);
         }
-    
+
         $inventaris->delete();
-    
+
         return redirect()
             ->route('admin.inventaris.index')
             ->with('success', 'Inventaris dan gambarnya berhasil dihapus.');
     }
 
-    public function mahasiswaIndex()
+    public function mahasiswaIndex(Request $request)
     {
-        $inventaris = Inventaris::all(); // tampilkan semua, tidak hanya yang tersedia
+        $query = Inventaris::query();
+
+        if ($request->filled('search')) {
+            $query->where('nama_inventaris', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $inventaris = $query->get();
+
         return view('mahasiswa.katalog.inventaris.index', compact('inventaris'));
     }
 

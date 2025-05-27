@@ -22,12 +22,18 @@ class RuanganController extends Controller
         $query = Ruangan::query();
 
         if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where('nama_ruangan', 'like', "%{$search}%")
-                  ->orWhere('lokasi', 'like', "%{$search}%");
+            $query->where('nama_ruangan', 'like', '%' . $request->search . '%');
         }
 
-        $ruangans = $query->orderBy('nama_ruangan')->get();
+        if ($request->filled('lokasi')) {
+            $query->where('lokasi', $request->lokasi);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $ruangans = $query->paginate(9)->withQueryString();
         return view('mahasiswa.katalog.ruangan.index', compact('ruangans'));
     }
 
