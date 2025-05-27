@@ -32,3 +32,4 @@ class ControllerMahasiswa extends Controller
         return redirect()->route('mahasiswa.index');
     }
 }
+

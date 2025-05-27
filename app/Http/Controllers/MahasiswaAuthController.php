@@ -96,10 +96,6 @@ class MahasiswaAuthController extends Controller
         // Ambil 3 ruangan untuk katalog ringkas
         $ruangans = \App\Models\Ruangan::take(3)->get();
 
-        // Debugging
-        if ($ruangans->isEmpty()) {
-            dd('Tidak ada data ruangan');
-        }
 
         // Ambil 3 inventaris untuk katalog ringkas
         $inventaris = \App\Models\Inventaris::take(3)->get();
