@@ -145,8 +145,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/{jadwal}', [App\Http\Controllers\JadwalRuanganController::class, 'destroy'])->name('destroy');
         Route::post('/generate', [App\Http\Controllers\JadwalRuanganController::class, 'generateJadwal'])->name('generate');
     });
-});
 
+    // history admin
+   Route::prefix('history')->name('history_inventaris.')->group(function () {
+        Route::get('/', [HistoryController::class, 'adminindex'])->name('index');
+        Route::get('/{type}/{id}', [HistoryController::class, 'adminshow'])->name('show');
+    });
+    
+});
 /*
 |--------------------------------------------------------------------------
 | Mahasiswa Protected Routes
@@ -255,6 +261,8 @@ Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.
     Route::prefix('history')->name('history.')->group(function () {
         Route::get('/', [HistoryController::class, 'index'])->name('index');
         Route::get('/{type}/{id}', [HistoryController::class, 'show'])->name('show');
+        Route::get('/history', [HistoryController::class, 'index'])->name('mahasiswa.history.history_inventaris.index');
+        Route::get('/history/{type}/{id}', [HistoryController::class, 'show'])->name('mahasiswa.history.history_inventaris.show');
     });
 
     // Jadwal API Routes
@@ -270,4 +278,4 @@ Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.
 | Debug Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/debug/operational-days/{id_ruangan}', [App\Http\Controllers\JadwalRuanganController::class, 'debugOperationalDays'])->name('debug.operational-days');
+// Route::get('/debug/operational-days/{id_ruangan}', [App\Http\Controllers\JadwalRuanganController::class, 'debugOperationalDays'])->name('debug.operational-days');
