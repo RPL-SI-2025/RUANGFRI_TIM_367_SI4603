@@ -96,7 +96,7 @@
                                                    class="btn btn-sm btn-outline-success">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
-                                                <form action="{{ route('pinjam-inventaris.destroy', $firstItem->id) }}" 
+                                                <form action="{{ route('mahasiswa.peminjaman.pinjam-inventaris.destroy', $firstItem->id) }}" 
                                                       method="POST" class="d-inline" 
                                                       onsubmit="return confirm('Apakah Anda yakin ingin membatalkan peminjaman ini?')">
                                                     @csrf

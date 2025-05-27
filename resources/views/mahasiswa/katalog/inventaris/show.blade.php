@@ -49,7 +49,7 @@
                                 @endif
                                 
                                 @if($inventaris->status == 'Tersedia')
-                                    <form action="{{ route('cart.add') }}" method="POST" class="mt-4">
+                                    <form action="{{ route('mahasiswa.cart.keranjang_inventaris.add') }}" method="POST" class="mt-4">
                                         @csrf
                                         <input type="hidden" name="id_inventaris" value="{{ $inventaris->id }}">
                                         
