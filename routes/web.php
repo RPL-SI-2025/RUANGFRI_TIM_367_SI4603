@@ -24,8 +24,11 @@ use Illuminate\Support\Facades\Auth;
 | Default Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/', function () {
-    return view('mahasiswa.auth.login');
+
+Route::get('/', [AdminLogistikController::class, 'landing'])->name('landing');
+
+Route::middleware(['auth:mahasiswa'])->group(function () {
+    Route::get('/mahasiswa/dashboard', [MahasiswaAuthController::class, 'dashboard'])->name('mahasiswa.dashboard');
 });
 
 /*
@@ -72,6 +75,8 @@ Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminLogistikController::class, 'index'])->name('dashboard');
+    Route::get('/create', [RuanganController::class, 'create'])->name('admin.katalog_ruangan.create');
+    Route::get('/pinjam-approval', [PinjamRuanganController::class, 'approval'])->name('admin.pinjam.approval');
 
     // Inventaris Management
     Route::prefix('inventaris')->name('inventaris.')->group(function () {
@@ -150,9 +155,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.')->group(function() {
     
     // Dashboard
-    Route::get('/dashboard', function() {
-        return view('mahasiswa.page.dashboard');
-    })->name('dashboard');
+
 
     // Profile Management
     Route::prefix('profile')->name('profile.')->group(function () {
