@@ -501,7 +501,17 @@ class PinjamRuanganController extends Controller
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+    public function updateNotes(Request $request, PinjamRuangan $pinjamRuangan)
+    {
+        $request->validate([
+            'catatan' => 'nullable|string|max:500',
+        ]);
         
+        $pinjamRuangan->catatan = $request->catatan;
+        $pinjamRuangan->save();
+        
+        return back()->with('success', 'Catatan berhasil diperbarui.');
+    }
 
 
     public function adminIndex()
