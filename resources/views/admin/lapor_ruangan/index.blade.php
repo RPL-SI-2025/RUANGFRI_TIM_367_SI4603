@@ -182,6 +182,10 @@
                                                class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm hover-scale">
                                                 <i class="fas fa-eye me-1"></i> Detail
                                             </a>
+                                            <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.download-pdf', $item->id_lapor_ruangan) }}" 
+                                               class="btn btn-primary btn-sm" title="Download Laporan">
+                                                <i class="bi bi-download"></i> Download
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>

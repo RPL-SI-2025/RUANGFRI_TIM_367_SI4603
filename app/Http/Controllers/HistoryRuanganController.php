@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\laporinventaris;
-use App\Models\PinjamInventaris;
+use App\Models\Pelaporan;
+use App\Models\PinjamRuangan;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class HistoryController extends Controller
+class HistoryRuanganController extends Controller
 {
     public function index()
     {
@@ -18,7 +18,7 @@ class HistoryController extends Controller
             return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
         }
         
-        $laporanInventaris = laporinventaris::where('id_mahasiswa', $mahasiswaId)
+        $laporanRuangan = Pelaporan::where('id_mahasiswa', $mahasiswaId)
             ->with(['peminjaman' => function($query) {
                 $query->where('status', 3); 
             }, 'logistik'])
@@ -30,17 +30,17 @@ class HistoryController extends Controller
             
 
         $perPage = 7; 
-        $currentPageInventaris = request()->query('page_inventaris', 1);
+        $currentPageRuangan = request()->query('page_ruangan', 1);
         
-        $paginatedInventaris = new LengthAwarePaginator(
-            $laporanInventaris->forPage($currentPageInventaris, $perPage),
-            $laporanInventaris->count(),
+        $paginatedRuangan = new LengthAwarePaginator(
+            $laporanRuangan->forPage($currentPageRuangan, $perPage),
+            $laporanRuangan->count(),
             $perPage,
-            $currentPageInventaris,
-            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'page_inventaris']
+            $currentPageRuangan,
+            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'page_ruangan']
         );
          
-        return view('mahasiswa.history.history_inventaris.index', compact('paginatedInventaris'));
+        return view('mahasiswa.history.history_ruangan.index', compact('paginatedRuangan'));
     }
     
     public function show($type, $id)
@@ -51,8 +51,8 @@ class HistoryController extends Controller
             return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
         }
         
-        if ($type === 'inventaris') {
-            $laporan = laporinventaris::where('id_lapor_inventaris', $id)
+        if ($type === 'ruangan') {
+            $laporan = Pelaporan::where('id_lapor_ruangan', $id)
                 ->where('id_mahasiswa', $mahasiswaId)
                 ->whereHas('peminjaman', function($query) {
                     $query->where('status', 3); 
@@ -61,25 +61,25 @@ class HistoryController extends Controller
                 ->first();
                 
             if (!$laporan) {
-                return redirect()->route('mahasiswa.history.history_inventaris.index')
+                return redirect()->route('mahasiswa.history.history_ruangan.index')
                     ->with('error', 'Laporan tidak ditemukan atau Anda tidak memiliki akses.');
             }
             
             
-            $relatedItems = PinjamInventaris::where('tanggal_pengajuan', $laporan->peminjaman->tanggal_pengajuan)
+            $relatedItems = PinjamRuangan::where('tanggal_pengajuan', $laporan->peminjaman->tanggal_pengajuan)
                 ->where('tanggal_selesai', $laporan->peminjaman->tanggal_selesai)
                 ->where('waktu_mulai', $laporan->peminjaman->waktu_mulai)
                 ->where('waktu_selesai', $laporan->peminjaman->waktu_selesai)
                 ->where('file_scan', $laporan->peminjaman->file_scan)
                 ->where('id_mahasiswa', $mahasiswaId)
-                ->with('inventaris')
+                ->with('ruangan')
                 ->get();
             
-            return view('mahasiswa.history.history_inventaris.show_inventaris', compact('laporan', 'relatedItems'));
+            return view('mahasiswa.history.history_ruangan.show_ruangan', compact('laporan', 'relatedItems'));
         
-        } elseif ($type === 'inventaris') {}
+        } elseif ($type === 'ruangan') {}
         
-        return redirect()->route('mahasiswa.history.history_inventaris.index')
+        return redirect()->route('mahasiswa.history.history_ruangan.index')
             ->with('error', 'Tipe laporan tidak valid.');
             
     }
@@ -88,7 +88,7 @@ class HistoryController extends Controller
         $mahasiswaId = Session::get('mahasiswa_id');
         
         
-        $laporanInventaris = laporinventaris::where('id_mahasiswa', $mahasiswaId)
+        $laporanRuangan = Pelaporan::where('id_mahasiswa', $mahasiswaId)
             ->with(['peminjaman' => function($query) {
                 $query->where('status', 3); 
             }, 'logistik'])
@@ -100,17 +100,17 @@ class HistoryController extends Controller
             
 
         $perPage = 7; 
-        $currentPageInventaris = request()->query('page_inventaris', 1);
+        $currentPageRuangan = request()->query('page_ruangan', 1);
         
-        $paginatedInventaris = new LengthAwarePaginator(
-            $laporanInventaris->forPage($currentPageInventaris, $perPage),
-            $laporanInventaris->count(),
+        $paginatedRuangan = new LengthAwarePaginator(
+            $laporanRuangan->forPage($currentPageRuangan, $perPage),
+            $laporanRuangan->count(),
             $perPage,
-            $currentPageInventaris,
-            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'page_inventaris']
+            $currentPageRuangan,
+            ['path' => request()->url(), 'query' => request()->query(), 'pageName' => 'page_ruangan']
         );
          
-        return view('admin.history_inventaris.index', compact('paginatedInventaris'));
+        return view('admin.history_ruangan.index', compact('paginatedRuangan'));
     }
     
     public function adminshow($type, $id)
@@ -119,8 +119,8 @@ class HistoryController extends Controller
         
       
         
-        if ($type === 'inventaris') {
-            $laporan = laporinventaris::where('id_lapor_inventaris', $id)
+        if ($type === 'ruangan') {
+            $laporan = Pelaporan::where('id_lapor_ruangan', $id)
                 ->where('id_mahasiswa', $mahasiswaId)
                 ->whereHas('peminjaman', function($query) {
                     $query->where('status', 3); 
@@ -129,12 +129,12 @@ class HistoryController extends Controller
                 ->first();
                 
             if (!$laporan) {
-                return redirect()->route('admin.history_inventaris.index')
+                return redirect()->route('admin.history_ruangan.index')
                     ->with('error', 'Laporan tidak ditemukan atau Anda tidak memiliki akses.');
             }
             
             
-            $relatedItems = PinjamInventaris::where('tanggal_pengajuan', $laporan->peminjaman->tanggal_pengajuan)
+            $relatedItems = PinjamRuangan::where('tanggal_pengajuan', $laporan->peminjaman->tanggal_pengajuan)
                 ->where('tanggal_selesai', $laporan->peminjaman->tanggal_selesai)
                 ->where('waktu_mulai', $laporan->peminjaman->waktu_mulai)
                 ->where('waktu_selesai', $laporan->peminjaman->waktu_selesai)
@@ -143,11 +143,11 @@ class HistoryController extends Controller
                 ->with('inventaris')
                 ->get();
             
-            return view('admin.history_inventaris.show', compact('laporan', 'relatedItems'));
+            return view('admin.history_ruangan.show', compact('laporan', 'relatedItems'));
         
-        } elseif ($type === 'inventaris') {}
+        } elseif ($type === 'ruangan') {}
         
-        return redirect()->route('admin.history_inventaris.index')
+        return redirect()->route('admin.history_ruangan.index')
             ->with('error', 'Tipe laporan tidak valid.');
     }
 }

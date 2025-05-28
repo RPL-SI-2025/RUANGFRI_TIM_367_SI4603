@@ -225,6 +225,11 @@
                                 </div>
                             @endif
                         </div>
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.download-pdf', $pelaporan->id_lapor_ruangan) }}" class="btn btn-success rounded-pill px-4">
+                                <i class="bi bi-file-earmark-pdf"></i> Download PDF
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
