@@ -282,45 +282,62 @@ Dengan antarmuka yang intuitif dan ramah pengguna, sistem ini mendukung proses p
         </div>
     </section>
 
-  <!-- End Section Katalog Inventaris -->
-
-<footer>
-    <div class="footer-container">
-        <div class="footer-section">
-            <h5>Fakultas Rekayasa Industri</h5>
-            <p>
-                Telkom University Landmark Tower Lt 18 Jl Telekomunikasi No. 1, Bojongsoang<br>
-                Bandung 40257, Indonesia<br>
-                Telp: +62 812-1482-5873<br>
-                Email: sekretariatfri@365.telkomuniversity.ac.id
-            </p>
-            <div class="social-icons">
-                <a href="https://www.instagram.com/fri.telkomuniversity?igsh=YnczZzRkN2Fjamlw"><i class="fab fa-instagram"></i></a>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <h5>Fakultas Rekayasa Industri</h5>
+                    <p>
+                        Telkom University Landmark Tower Lt 18<br>
+                        Jl Telekomunikasi No. 1, Bojongsoang<br>
+                        Bandung 40257, Indonesia<br><br>
+                        <i class="fas fa-phone me-2"></i>+62 812-1482-5873<br>
+                        <i class="fas fa-envelope me-2"></i>sekretariatfri@365.telkomuniversity.ac.id
+                    </p>
+                    <div class="social-icons">
+                        <a href="https://www.instagram.com/fri.telkomuniversity" target="_blank">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 col-md-6">
+                    <h5>Department</h5>
+                    <ul>
+                        <li>Teknik Industri</li>
+                        <li>Sistem Informasi</li>
+                        <li>Teknik Logistik</li>
+                        <li>Manajemen Rekayasa</li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <h5>Related Links</h5>
+                    <ul>
+                        <li><a href="#">Telkom University</a></li>
+                        <li><a href="#">SMB Telkom University</a></li>
+                        <li><a href="#">Teknik Industri</a></li>
+                        <li><a href="#">Sistem Informasi</a></li>
+                        <li><a href="#">Teknik Logistik</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <h5>Campus</h5>
+                    <ul>
+                        <li><a href="#">Telkom University Bandung</a></li>
+                        <li><a href="#">Telkom University Jakarta</a></li>
+                        <li><a href="#">Telkom University Surabaya</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 RUANGFRI - Fakultas Rekayasa Industri, Telkom University. All rights reserved.</p>
             </div>
         </div>
-        <div class="footer-section">
-            <h5>Department</h5>
-            <ul>
-                <li>Teknik Industri</li>
-                <li>Sistem Informasi</li>
-                <li>Teknik Logistik</li>
-                <li>Manajemen Rekayasa</li>
-            </ul>
-        </div>
-        <div class="footer-section">
-            <h5>Related Links</h5>
-            <ul>
-                <li><a href="#">Telkom University</a></li>
-                <li><a href="#">SMB Telkom University</a></li>
-                <li><a href="#">Teknik Industri</a></li>
-                <li><a href="#">Sistem Informasi</a></li>
-                <li><a href="#">Teknik Logistik</a></li>
-                <li><a href="#">Telkom University Kampus Jakarta</a></li>
-                <li><a href="#">Telkom University Kampus Surabaya</a></li>
-            </ul>
-        </div>
-    </div>
-</footer>
+    </footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
