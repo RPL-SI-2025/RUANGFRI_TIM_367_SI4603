@@ -27,49 +27,109 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
     </div>
-  </section>
 
-  
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top navbar-custom" id="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="#hero">RUANGFRI</a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#hero">Beranda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">Tentang Sistem</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#buildings">Gedung FRI</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#process">Alur Peminjaman</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#catalog">Katalog</a>
+                    </li>
+                </ul>
+                
+                <a href="{{ route('mahasiswa.login') }}" class="btn-login">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </a>
+            </div>
+        </div>
+    </nav>
 
-  <!-- Section Tentang Sistem -->
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6" data-aos="fade-right" data-aos-duration="1000">
+                    <div class="hero-content">
+                        <h1>Sistem Peminjaman <span class="highlight">Fasilitas FRI</span></h1>
+                        <p>Platform digital terpadu untuk akses mudah peminjaman ruangan dan inventaris di Fakultas Rekayasa Industri, Telkom University</p>
+                        
+                        <div class="hero-buttons">
+                            <a href="#about" class="btn btn-primary-custom">
+                                <i class="fas fa-rocket me-2"></i>Mulai Sekarang
+                            </a>
+                            <a href="#process" class="btn btn-outline-custom">
+                                <i class="fas fa-play me-2"></i>Pelajari Lebih
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+                    <div class="hero-image text-center">
+                        <img src="{{ asset('storage/webaset/hero.png') }}" alt="Hero Illustration" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <section id="tentang-sistem" class="tentang-sistem-container">
-    <h2>Tentang Website</h2>
-    Sistem Peminjaman Fasilitas FRI adalah platform digital terpadu yang dirancang untuk memudahkan mahasiswa dan sivitas akademika dalam mengakses dan mengelola peminjaman ruangan dan inventaris di lingkungan Fakultas Rekayasa Industri, Telkom University.
-
-Melalui sistem ini, pengguna dapat:
-
-Melihat katalog ruangan dan inventaris yang tersedia secara real-time.
-
-Mengajukan peminjaman secara cepat, transparan, dan terdokumentasi.
-
-Memantau status pengajuan serta riwayat peminjaman dengan mudah.
-
-Dengan antarmuka yang intuitif dan ramah pengguna, sistem ini mendukung proses peminjaman yang lebih efisien, akuntabel, dan terdigitalisasi, sejalan dengan visi digitalisasi layanan akademik FRI.</p>
-    <div class="tentang-sistem">
-        <div class="stat-card">
-        <i class="fas fa-building fa-2x" style="color: #27ae60 "></i> <!-- Ikon untuk Total Ruangan -->
-        <h3>Total Ruangan</h3>
-        <p>{{ $totalRuangan }}</p>
-    </div>
-    <div class="stat-card">
-        <i class="fas fa-door-open fa-2x" style="color: #27ae60 "></i> <!-- Ikon untuk Ruangan Tersedia -->
-        <h3>Ruangan Tersedia</h3>
-        <p>{{ $ruanganTersedia }}</p>
-    </div>
-    <div class="stat-card">
-        <i class="fas fa-boxes fa-2x" style="color: #27ae60 "></i> <!-- Ikon untuk Total Inventaris -->
-        <h3>Total Inventaris</h3>
-        <p>{{ $totalInventaris }}</p>
-    </div>
-    <div class="stat-card">
-        <i class="fas fa-check-circle fa-2x" style="color: #27ae60 "></i> <!-- Ikon untuk Inventaris Tersedia -->
-        <h3>Inventaris Tersedia</h3>
-        <p>{{ $inventarisTersedia }}</p>
-    </div>
-    </div>
-</div>
-</section>
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
+                    <div class="stat-card">
+                        <i class="fas fa-building icon"></i>
+                        <h3>{{ $totalRuangan }}</h3>
+                        <p>Total Ruangan</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+                    <div class="stat-card">
+                        <i class="fas fa-door-open icon"></i>
+                        <h3>{{ $ruanganTersedia }}</h3>
+                        <p>Ruangan Tersedia</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="300">
+                    <div class="stat-card">
+                        <i class="fas fa-boxes icon"></i>
+                        <h3>{{ $totalInventaris }}</h3>
+                        <p>Total Inventaris</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="400">
+                    <div class="stat-card">
+                        <i class="fas fa-check-circle icon"></i>
+                        <h3>{{ $inventarisTersedia }}</h3>
+                        <p>Inventaris Tersedia</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- About Section -->
     <section id="about" class="about-section">
@@ -169,58 +229,79 @@ Dengan antarmuka yang intuitif dan ramah pengguna, sistem ini mendukung proses p
     </section>
 
     <!-- Process Section -->
+        <!-- Process Section -->
     <section id="process" class="process-section">
         <div class="container">
-            <div class="row">
-                <div class="col-12" data-aos="fade-up" data-aos-duration="800">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center" data-aos="fade-up" data-aos-duration="800">
                     <h2 class="section-title">Alur Peminjaman</h2>
                     <p class="section-subtitle">Ikuti langkah-langkah sederhana untuk melakukan peminjaman fasilitas</p>
                 </div>
             </div>
             
-            <div class="row g-4 mt-4">
+            <div class="row g-4 mt-4 justify-content-center">
                 <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
                     <div class="process-card">
-                        <div class="process-number">1</div>
-                        <img src="{{ asset('storage/webaset/login.jpg') }}" alt="Login">
-                        <h5>Login</h5>
-                        <p>Masuk ke dalam sistem</p>
+                        <div class="process-icon">
+                            <div class="process-number">1</div>
+                            <img src="{{ asset('storage/webaset/login.jpg') }}" alt="Login" class="img-fluid">
+                        </div>
+                        <div class="process-content">
+                            <h5>Login</h5>
+                            <p>Masuk ke dalam sistem menggunakan akun mahasiswa</p>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
                     <div class="process-card">
-                        <div class="process-number">2</div>
-                        <img src="{{ asset('storage/webaset/memilih.jpg') }}" alt="Pilih">
-                        <h5>Pilih</h5>
-                        <p>Pilih ruangan atau inventaris</p>
+                        <div class="process-icon">
+                            <div class="process-number">2</div>
+                            <img src="{{ asset('storage/webaset/memilih.jpg') }}" alt="Pilih" class="img-fluid">
+                        </div>
+                        <div class="process-content">
+                            <h5>Pilih</h5>
+                            <p>Pilih ruangan atau inventaris yang tersedia</p>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="300">
                     <div class="process-card">
-                        <div class="process-number">3</div>
-                        <img src="{{ asset('storage/webaset/formulir.jpg') }}" alt="Formulir">
-                        <h5>Ajukan</h5>
-                        <p>Isi formulir peminjaman</p>
+                        <div class="process-icon">
+                            <div class="process-number">3</div>
+                            <img src="{{ asset('storage/webaset/formulir.jpg') }}" alt="Formulir" class="img-fluid">
+                        </div>
+                        <div class="process-content">
+                            <h5>Ajukan</h5>
+                            <p>Isi formulir peminjaman dengan lengkap</p>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="400">
                     <div class="process-card">
-                        <div class="process-number">4</div>
-                        <img src="{{ asset('storage/webaset/persetujuan.jpg') }}" alt="Persetujuan">
-                        <h5>Tunggu</h5>
-                        <p>Menunggu persetujuan admin</p>
+                        <div class="process-icon">
+                            <div class="process-number">4</div>
+                            <img src="{{ asset('storage/webaset/persetujuan.jpg') }}" alt="Persetujuan" class="img-fluid">
+                        </div>
+                        <div class="process-content">
+                            <h5>Tunggu</h5>
+                            <p>Menunggu persetujuan dari admin FRI</p>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="500">
                     <div class="process-card">
-                        <div class="process-number">5</div>
-                        <img src="{{ asset('storage/webaset/gunakan.jpg') }}" alt="Gunakan">
-                        <h5>Gunakan</h5>
-                        <p>Gunakan fasilitas sesuai jadwal</p>
+                        <div class="process-icon">
+                            <div class="process-number">5</div>
+                            <img src="{{ asset('storage/webaset/gunakan.jpg') }}" alt="Gunakan" class="img-fluid">
+                        </div>
+                        <div class="process-content">
+                            <h5>Gunakan</h5>
+                            <p>Gunakan fasilitas sesuai jadwal yang disetujui</p>
+                        </div>
                     </div>
                 </div>
             </div>
