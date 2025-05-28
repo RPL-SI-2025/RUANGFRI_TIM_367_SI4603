@@ -105,7 +105,7 @@ class InventarisController extends Controller
 
     public function mahasiswaIndex()
     {
-        $inventaris = Inventaris::all(); // tampilkan semua, tidak hanya yang tersedia
+        $inventaris = Inventaris::all(); 
         return view('mahasiswa.katalog.inventaris.index', compact('inventaris'));
     }
 

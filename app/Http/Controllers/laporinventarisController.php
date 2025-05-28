@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\laporinventaris;  // Menggunakan LaporInventaris dengan PascalCase
+use App\Models\laporinventaris;  
 use App\Models\AdminLogistik;
 use Illuminate\Http\Request;
 use App\Models\PinjamInventaris;

@@ -111,7 +111,7 @@ class PinjamRuanganController extends Controller
                     'waktu_selesai' => $request->waktu_selesai,
                     'tujuan_peminjaman' => $request->tujuan_peminjaman,
                     'file_scan' => $fileName,
-                    'status' => 0 // Menunggu persetujuan
+                    'status' => 0 
                 ]);
                 
 
@@ -422,7 +422,7 @@ class PinjamRuanganController extends Controller
                 ->update(['status' => $request->status]);
 
 
-            if ($request->status == 1) { // Approved
+            if ($request->status == 1) { 
 
                 $this->updateJadwalStatus($pinjamRuangan, 'booked');
                 
@@ -453,7 +453,7 @@ class PinjamRuanganController extends Controller
                         Ruangan::where('id', $roomId)->update(['status' => 'Tersedia']);
                     }
                 }
-            } elseif ($request->status == 2 || $request->status == 4) { // Rejected or cancelled
+            } elseif ($request->status == 2 || $request->status == 4) { 
                 $this->updateJadwalStatus($pinjamRuangan, 'tersedia');
                 
 
@@ -468,7 +468,7 @@ class PinjamRuanganController extends Controller
                 Ruangan::whereIn('id', $affectedRoomIds)
                     ->update(['status' => 'Tersedia']);
                     
-            } elseif ($request->status == 3) { // Completed
+            } elseif ($request->status == 3) { 
                 $this->updateJadwalStatus($pinjamRuangan, 'tersedia');
                 
 
@@ -663,8 +663,8 @@ class PinjamRuanganController extends Controller
 
         if ($status === 'tersedia') {
             $pendingBookings = PinjamRuangan::where('id_ruangan', $pinjamRuangan->id_ruangan)
-                ->where('status', 0) // Pending status
-                ->where('id', '!=', $pinjamRuangan->id) // Not this booking
+                ->where('status', 0) 
+                ->where('id', '!=', $pinjamRuangan->id) 
                 ->where(function($q) use ($pinjamRuangan) {
 
                     $q->whereBetween('tanggal_pengajuan', [$pinjamRuangan->tanggal_pengajuan, $pinjamRuangan->tanggal_selesai])
