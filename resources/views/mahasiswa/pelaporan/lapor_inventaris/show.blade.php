@@ -83,6 +83,9 @@
                         <a href="{{ route('mahasiswa.pelaporan.lapor_inventaris.edit', $laporan->id_lapor_inventaris) }}" class="btn btn-warning rounded-pill px-4 me-2">
                             <i class="fas fa-edit me-2"></i> Edit Laporan
                         </a>
+                         <a href="{{ route('mahasiswa.pelaporan.lapor_inventaris.download-pdf', $laporan->id_lapor_inventaris) }}" class="btn btn-success rounded-pill px-4">
+                            <i class="fas fa-file-pdf me-2"></i> Download PDF
+                        </a>
                     </div>
                 </div>
             </div>
