@@ -115,6 +115,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/{lapor_inventaris}/edit', [laporinventarisController::class, 'edit'])->name('edit');
         Route::put('/{lapor_inventaris}', [laporinventarisController::class, 'update'])->name('update');
         Route::delete('/{lapor_inventaris}', [laporinventarisController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}/download-pdf', [laporInventarisController::class, 'admindownloadPDF'])->name('download-pdf');
     });
 
     // Laporan Ruangan Management
@@ -244,6 +245,7 @@ Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.
             Route::get('/{id}', [laporinventarisController::class, 'mahasiswaShow'])->name('show');
             Route::get('/{id}/edit', [laporinventarisController::class, 'mahasiswaEdit'])->name('edit');
             Route::put('/{id}', [laporinventarisController::class, 'mahasiswaUpdate'])->name('update');
+            Route::get('/{id}/download-pdf', [laporinventarisController::class, 'downloadPDF'])->name('download-pdf');
         });
 
         // Ruangan Pelaporan
