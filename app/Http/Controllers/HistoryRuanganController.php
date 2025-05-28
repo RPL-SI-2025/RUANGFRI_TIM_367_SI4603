@@ -75,7 +75,7 @@ class HistoryRuanganController extends Controller
                 ->with('ruangan')
                 ->get();
             
-            return view('mahasiswa.history.history_ruangan.show_ruangan', compact('laporan', 'relatedItems'));
+            return view('mahasiswa.history.history_ruangan.show', compact('laporan', 'relatedItems'));
         
         } elseif ($type === 'ruangan') {}
         
@@ -140,7 +140,7 @@ class HistoryRuanganController extends Controller
                 ->where('waktu_selesai', $laporan->peminjaman->waktu_selesai)
                 ->where('file_scan', $laporan->peminjaman->file_scan)
                 ->where('id_mahasiswa', $mahasiswaId)
-                ->with('inventaris')
+                ->with('ruangan')
                 ->get();
             
             return view('admin.history_ruangan.show', compact('laporan', 'relatedItems'));

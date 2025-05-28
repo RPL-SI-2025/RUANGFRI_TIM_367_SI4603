@@ -153,6 +153,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [HistoryController::class, 'adminindex'])->name('index');
         Route::get('/{type}/{id}', [HistoryController::class, 'adminshow'])->name('show');
     });
+
+    Route::prefix('historyRuangan')->name('history_ruangan.')->group(function () {
+        Route::get('/', [HistoryRuanganController::class, 'adminindex'])->name('index');
+        Route::get('/{type}/{id}', [HistoryRuanganController::class, 'adminshow'])->name('show');
+ 
+    });
     
 });
 /*
@@ -268,7 +274,8 @@ Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.
         Route::get('/history', [HistoryController::class, 'index'])->name('mahasiswa.history.history_inventaris.index');
         Route::get('/history/{type}/{id}', [HistoryController::class, 'show'])->name('mahasiswa.history.history_inventaris.show');
         Route::get('/historyRuangan', [HistoryRuanganController::class, 'index'])->name('mahasiswa.history.history_ruangan.index');
-        Route::get('/historyRuangan/{id}', [HistoryRuanganController::class, 'show'])->name('mahasiswa.history.history_ruangan.show');
+        Route::get('/historyRuangan/{type}/{id}', [HistoryRuanganController::class, 'show'])->name('mahasiswa.history.history_ruangan.show');
+
     
     });
 

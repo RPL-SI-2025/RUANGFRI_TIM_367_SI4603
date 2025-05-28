@@ -79,7 +79,7 @@ class HistoryController extends Controller
         
         } elseif ($type === 'inventaris') {}
         
-        return redirect()->route('mahasiswa.history.history_inventaris.index')
+        return redirect()->route('mahasiswa.history.mahasiswa.history.history_inventaris.index')
             ->with('error', 'Tipe laporan tidak valid.');
             
     }
