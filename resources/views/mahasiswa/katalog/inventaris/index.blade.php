@@ -12,6 +12,53 @@
         </a>
     </div>
 
+<!-- Add Filter Section -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form method="GET" action="{{ route('mahasiswa.katalog.inventaris.index') }}" class="row g-3 align-items-end">
+            <!-- Search Filter -->
+            <div class="col-md-5">
+                <label for="search" class="form-label text-primary fw-bold">Cari Inventaris</label>
+                <div class="input-group">
+                    <span class="input-group-text border-end-0 bg-white">
+                        <i class="fa fa-search text-muted"></i>
+                    </span>
+                    <input type="text" 
+                           class="form-control border-start-0" 
+                           id="search" 
+                           name="search" 
+                           placeholder="Cari berdasarkan nama atau deskripsi..."
+                           value="{{ request('search') }}">
+                </div>
+            </div>
+
+            <!-- Jenis Filter -->
+            <div class="col-md-4">
+                <label for="jenis" class="form-label text-primary fw-bold">Filter Jenis</label>
+                <select name="jenis" id="jenis" class="form-select rounded-pill">
+                    <option value="">Semua Jenis</option>
+                    <option value="Elektronik" {{ request('jenis') == 'Elektronik' ? 'selected' : '' }}>Elektronik</option>
+                    <option value="Furniture" {{ request('jenis') == 'Furniture' ? 'selected' : '' }}>Furniture</option>
+                    <option value="Alat Lab" {{ request('jenis') == 'Alat Lab' ? 'selected' : '' }}>Alat Lab</option>
+                    <option value="Lainnya" {{ request('jenis') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                </select>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary rounded-pill">
+                    <i class="fa fa-filter me-2"></i>Filter
+                </button>
+                @if(request()->hasAny(['jenis', 'search']))
+                    <a href="{{ route('mahasiswa.katalog.inventaris.index') }}" class="btn btn-outline-secondary rounded-pill">
+                        <i class="fa fa-times me-2"></i>Reset
+                    </a>
+                @endif
+            </div>
+        </form>
+    </div>
+</div>
+
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
             <i class="fa fa-check-circle me-2"></i>{{ session('success') }}

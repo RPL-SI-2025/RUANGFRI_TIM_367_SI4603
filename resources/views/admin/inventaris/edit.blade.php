@@ -29,6 +29,17 @@
             </div>
 
             <div class="mb-3">
+                <label for="jenis" class="form-label">Jenis</label>
+                <select name="jenis" class="form-select" required>
+                    <option value="">Pilih Jenis</option>
+                    <option value="Elektronik" {{ $inventaris->jenis == 'Elektronik' ? 'selected' : '' }}>Elektronik</option>
+                    <option value="Furniture" {{ $inventaris->jenis == 'Furniture' ? 'selected' : '' }}>Furniture</option>
+                    <option value="Alat Lab" {{ $inventaris->jenis == 'Alat Lab' ? 'selected' : '' }}>Alat Lab</option>
+                    <option value="Lainnya" {{ $inventaris->jenis == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
                 <label for="deskripsi" class="form-label">Deskripsi</label>
                 <input type="text" class="form-control" name="deskripsi" value="{{ $inventaris->deskripsi }}" required>
             </div>

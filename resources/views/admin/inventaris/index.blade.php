@@ -18,6 +18,7 @@
             <th>No</th>
             <th>Foto</th>
             <th>Nama Inventaris</th>
+            <th>Jenis</th>
             <th>Deskripsi</th>
             <th>Jumlah</th>
             <th>Status</th>
@@ -30,14 +31,14 @@
             <td>{{ $loop->iteration }}</td>
             <td>
                 @if ($item->gambar_inventaris)
-                <img src="{{ asset('storage/katalog_inventaris/' . $item->gambar_inventaris) }}" alt="{{ $item->nama_inventaris }}" width="100">
-            @else
-                Tidak ada gambar
-            @endif
-            
+                    <img src="{{ asset('storage/katalog_inventaris/' . $item->gambar_inventaris) }}" 
+                         alt="{{ $item->nama_inventaris }}" width="100">
+                @else
+                    Tidak ada gambar
+                @endif
             </td>
-            
             <td>{{ $item->nama_inventaris }}</td>
+            <td>{{ $item->jenis }}</td>
             <td>{{ $item->deskripsi }}</td>
             <td>{{ $item->jumlah }}</td>
             <td>{{ $item->status }}</td>

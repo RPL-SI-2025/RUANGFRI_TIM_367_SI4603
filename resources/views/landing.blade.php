@@ -308,60 +308,75 @@
         </div>
     </section>
 
-    <!-- Catalog Section -->
     <section id="catalog" class="catalog-section">
-        <div class="container">
-            <!-- Room Catalog -->
-            <div class="row mb-5">
-                <div class="col-12" data-aos="fade-up" data-aos-duration="800">
-                    <h2 class="section-title">Katalog Ruangan</h2>
-                    <p class="section-subtitle">Temukan ruangan yang sesuai dengan kebutuhan Anda</p>
-                </div>
-            </div>
-            
-            <div class="row g-4 mb-5">
-                @foreach($ruangans as $index => $ruangan)
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="{{ ($index + 1) * 100 }}">
-                    <div class="catalog-card">
-                        <img src="{{ $ruangan->gambar ? asset('storage/katalog_ruangan/' . $ruangan->gambar) : asset('images/default-room.jpg') }}" alt="{{ $ruangan->nama_ruangan }}">
-                        <div class="catalog-card-body">
-                            <h6>{{ $ruangan->nama_ruangan }}</h6>
-                            <p><i class="fas fa-users me-2"></i>Kapasitas: {{ $ruangan->kapasitas }} orang</p>
-                            <span class="status-badge {{ $ruangan->status == 'Tersedia' ? 'status-available' : 'status-unavailable' }}">
-                                {{ $ruangan->status }}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-            
-            <!-- Inventory Catalog -->
-            <div class="row mb-5">
-                <div class="col-12" data-aos="fade-up" data-aos-duration="800">
-                    <h2 class="section-title">Katalog Inventaris</h2>
-                    <p class="section-subtitle">Berbagai inventaris yang tersedia untuk mendukung kegiatan Anda</p>
-                </div>
-            </div>
-            
-            <div class="row g-4">
-                @foreach($inventaris as $index => $item)
-                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="{{ ($index + 1) * 100 }}">
-                    <div class="catalog-card">
-                        <img src="{{ $item->gambar_inventaris ? asset('storage/katalog_inventaris/' . $item->gambar_inventaris) : asset('images/default-image.png') }}" alt="{{ $item->nama_inventaris }}">
-                        <div class="catalog-card-body">
-                            <h6>{{ $item->nama_inventaris }}</h6>
-                            <p><i class="fas fa-box me-2"></i>Jumlah tersedia: {{ $item->jumlah }}</p>
-                            <span class="status-badge status-available">
-                                Tersedia
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
+    <div class="container">
+        <!-- Room Catalog -->
+        <div class="row mb-5">
+            <div class="col-12" data-aos="fade-up" data-aos-duration="800">
+                <h2 class="section-title">Katalog Ruangan</h2>
+                <p class="section-subtitle">Temukan ruangan yang sesuai dengan kebutuhan Anda</p>
             </div>
         </div>
-    </section>
+        
+        <div class="row g-4 mb-5">
+            @foreach($ruangans->take(3) as $index => $ruangan)
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="{{ ($index + 1) * 100 }}">
+                <div class="catalog-card">
+                    <img src="{{ $ruangan->gambar ? asset('storage/katalog_ruangan/' . $ruangan->gambar) : asset('images/default-room.jpg') }}" alt="{{ $ruangan->nama_ruangan }}">
+                    <div class="catalog-card-body">
+                        <h6>{{ $ruangan->nama_ruangan }}</h6>
+                        <p><i class="fas fa-users me-2"></i>Kapasitas: {{ $ruangan->kapasitas }} orang</p>
+                        <span class="status-badge {{ $ruangan->status == 'Tersedia' ? 'status-available' : 'status-unavailable' }}">
+                            {{ $ruangan->status }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+
+            @if($ruangans->count() > 3)
+            <div class="col-12 text-center mt-4">
+                <a href="{{ route('mahasiswa.login') }}" class="btn btn-primary-custom">
+                    <i class="fas fa-eye me-2"></i>Lihat Semua Ruangan
+                </a>
+            </div>
+            @endif
+        </div>
+            
+        <!-- Inventory Catalog -->
+        <div class="row mb-5">
+            <div class="col-12" data-aos="fade-up" data-aos-duration="800">
+                <h2 class="section-title">Katalog Inventaris</h2>
+                <p class="section-subtitle">Berbagai inventaris yang tersedia untuk mendukung kegiatan Anda</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            @foreach($inventaris->take(3) as $index => $item)
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="{{ ($index + 1) * 100 }}">
+                <div class="catalog-card">
+                    <img src="{{ $item->gambar_inventaris ? asset('storage/katalog_inventaris/' . $item->gambar_inventaris) : asset('images/default-image.png') }}" alt="{{ $item->nama_inventaris }}">
+                    <div class="catalog-card-body">
+                        <h6>{{ $item->nama_inventaris }}</h6>
+                        <p><i class="fas fa-box me-2"></i>Jumlah tersedia: {{ $item->jumlah }}</p>
+                        <span class="status-badge status-available">
+                            Tersedia
+                        </span>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+
+            @if($inventaris->count() > 3)
+            <div class="col-12 text-center mt-4">
+                <a href="{{ route('mahasiswa.login') }}" class="btn btn-primary-custom">
+                    <i class="fas fa-eye me-2"></i>Lihat Semua Inventaris
+                </a>
+            </div>
+            @endif
+        </div>
+    </div>
+</section>
 
     <!-- Footer -->
     <footer class="footer">

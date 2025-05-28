@@ -10,6 +10,8 @@ use App\Models\StatusPeminjaman;
 use App\Models\LaporInventaris;
 use App\Models\LaporanRuangan;
 use App\Models\PinjamRuangan;
+use App\Models\PinjamInventaris;
+use App\Models\LaporRuangan;
 use Illuminate\Support\Carbon;
 
 class AdminLogistikController extends Controller
@@ -25,8 +27,8 @@ class AdminLogistikController extends Controller
         $totalInventaris = Inventaris::count();
         $ruanganTersedia = Ruangan::where('status', 'Tersedia')->count();
         $inventarisTersedia = Inventaris::where('status', 'Tersedia')->count();
-        $ruangans = Ruangan::select('gambar', 'nama_ruangan', 'kapasitas', 'status')->get();
-        $inventaris = Inventaris::select('gambar_inventaris', 'nama_inventaris', 'jumlah')->get();
+        $ruangans = Ruangan::latest()->get();
+        $inventaris = Inventaris::latest()->get();
         return view('landing', compact('totalRuangan', 'totalInventaris', 'ruanganTersedia', 'inventarisTersedia', 'ruangans', 'inventaris'));
     }
 
@@ -43,13 +45,18 @@ class AdminLogistikController extends Controller
         $inventarisTidakTersedia = Inventaris::where('status', 'Tidak Tersedia')->count();
 
         $grafik = [
-        'bulan' => [],
-        'jumlah' => []
+    'bulan' => [],
+    'jumlah' => [], // for rooms
+    'jumlah_inventaris' => [] // for inventory
     ];
+
     for ($i = 5; $i >= 0; $i--) {
         $bulan = Carbon::now()->subMonths($i)->format('F');
+        $tanggal = Carbon::now()->subMonths($i);
+        
         $grafik['bulan'][] = $bulan;
-        $grafik['jumlah'][] = PinjamRuangan::whereMonth('created_at', Carbon::now()->subMonths($i)->month)->count();
+        $grafik['jumlah'][] = PinjamRuangan::whereMonth('created_at', $tanggal->month)->count();
+        $grafik['jumlah_inventaris'][] = PinjamInventaris::whereMonth('created_at', $tanggal->month)->count();
     }
 
     
@@ -67,8 +74,10 @@ class AdminLogistikController extends Controller
 
 
 
-        $jumlahLaporan = LaporInventaris::count();
+        $pendingPeminjaman = PinjamRuangan::where('status', 0)->count();
+        // $newLaporan = LaporanRuangan::where('status', 0)->count();
 
+        // Add these to your compact statement
         return view('admin.dashboard', compact(
             'totalRuangan',
             'ruanganTersedia',
@@ -76,13 +85,11 @@ class AdminLogistikController extends Controller
             'totalInventaris',
             'inventarisTersedia',
             'inventarisTidakTersedia',
-            'jumlahLaporan',
-            'grafik', 
-            'aktivitasTerbaru'
+            'grafik',
+            'aktivitasTerbaru',
+            'pendingPeminjaman', // Add this
+            // 'newLaporan'        // And this
         ));
-
-        return view('admin.dashboard');
-
     
     }
 
