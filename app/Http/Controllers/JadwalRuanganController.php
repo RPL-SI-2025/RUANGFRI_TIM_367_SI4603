@@ -47,7 +47,7 @@ class JadwalRuanganController extends Controller
 
             $startTime = Carbon::parse($request->jam_mulai);
             $endTime = Carbon::parse($request->jam_selesai);
-            $interval = $request->jeda_waktu * 60; // Convert to minutes
+            $interval = $request->jeda_waktu * 60; 
             
             DB::beginTransaction();
             
@@ -177,7 +177,7 @@ class JadwalRuanganController extends Controller
             'jam_selesai' => 'required|after:jam_mulai',
             'jeda_waktu' => 'required|integer|min:1|max:4',
             'hari_operasional' => 'required|array',
-            'hari_operasional.*' => 'required|integer|between:0,6', // 0 = Sunday, 6 = Saturday
+            'hari_operasional.*' => 'required|integer|between:0,6', 
         ]);
 
         try {
@@ -187,7 +187,7 @@ class JadwalRuanganController extends Controller
             
             $startTime = Carbon::parse($request->jam_mulai);
             $endTime = Carbon::parse($request->jam_selesai);
-            $interval = $request->jeda_waktu * 60; // Convert to minutes
+            $interval = $request->jeda_waktu * 60; 
             
             DB::beginTransaction();
             
@@ -248,7 +248,7 @@ class JadwalRuanganController extends Controller
                 ];
                 
 
-                $mainStatus = 'unavailable'; // Default
+                $mainStatus = 'unavailable'; 
                 if ($statusCounts['tersedia'] > 0) {
                     if ($statusCounts['booked'] > 0 || $statusCounts['proses'] > 0) {
                         $mainStatus = 'partially-available';
@@ -330,7 +330,7 @@ class JadwalRuanganController extends Controller
                     'id' => $jadwal->id,
                     'start' => date('H:i', strtotime($jadwal->jam_mulai)),
                     'end' => date('H:i', strtotime($jadwal->jam_selesai)),
-                    'status' => $jadwal->status // Include the status in the response
+                    'status' => $jadwal->status 
                 ];
             }
             
@@ -340,3 +340,4 @@ class JadwalRuanganController extends Controller
         }
     }
 }
+

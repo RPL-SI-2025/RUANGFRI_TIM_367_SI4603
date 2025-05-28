@@ -1,8 +1,10 @@
-@extends('mahasiswa.layouts.app')
+@extends('admin.layouts.admin')
 
 @section('content')
 <div class="container py-4">
-
+    <h4 class="mb-4">
+        <i class="fas fa-history me-2"></i>Riwayat Peminjaman & Pelaporan
+    </h4>
     
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -32,8 +34,9 @@
                         <thead class="table-light">
                             <tr>
                                 <th>ID Pelaporan</th>
-                                <th>ID Peminjaman</th>
-                                <th>Tanggal</th>
+                                <th>Tanggal Peminjaman</th>
+                                <th>Tanggal Pelaporan</th>
+                                <th>Pelapor</th>
                                 <th>File Scan</th>
                                 <th>Foto Awal</th>
                                 <th>Foto Akhir</th>
@@ -45,8 +48,25 @@
                             @foreach($paginatedInventaris as $item)
                                 <tr>
                                     <td>{{ $item->id_lapor_inventaris }}</td>
-                                    <td><strong>{{ $item->peminjaman->id }}</strong></td>
-                                    <td>{{ \Carbon\Carbon::parse($item->datetime)->format('d/m/Y') }}</td>
+                                    <td class="px-3 py-3">
+                                        {{ \Carbon\Carbon::parse($item->tanggal_pengajuan)->format('d M Y') }}
+                                        <span class="text-muted"> s/d </span>
+                                        {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}
+                                    </td>
+                                    <td class="px-4 py-4">
+                                        <div class="d-flex flex-column">
+                                            <span class="fw-medium text-dark">
+                                                {{ \Carbon\Carbon::parse($item->created_at)->format('d M Y') }}
+                                            </span>
+                                            <small class="text-muted">
+                                                <i class="fas fa-clock me-1"></i>
+                                                {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }}
+                                            </small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {{ $item->mahasiswa->nama_mahasiswa ?? 'Tidak diketahui' }}
+                                    </td>
                                     <td>
                                         @if($item->peminjaman && $item->peminjaman->file_scan)
                                             <a href="{{ asset('storage/uploads/file_scan/' . $item->peminjaman->file_scan) }}" 
@@ -81,7 +101,7 @@
                                         <span class="badge bg-info">Selesai</span>
                                     </td>
                                     <td class="text-center">
-                                        <a href="{{ route('mahasiswa.history.show', ['inventaris', $item->id_lapor_inventaris]) }}" class="btn btn-info btn-sm">
+                                        <a href="{{ route('admin.history_inventaris.show', ['inventaris', $item->id_lapor_inventaris]) }}" class="btn btn-info btn-sm">
                                             <i class="fas fa-eye"></i> Detail
                                         </a>
                                     </td>
@@ -101,12 +121,26 @@
             @endif
         </div>
     </div>
+    
+    <!-- If both are empty -->
+    @if(count($paginatedInventaris) == 0 )
+        <div class="mt-4 text-center">
+            <div class="d-flex justify-content-center mt-3">
+                <a href="{{ route('admin.pinjam-inventaris.index') }}" class="btn btn-primary me-2">
+                    <i class="fas fa-box me-1"></i> Peminjaman Inventaris
+                </a>
+                <a href="{{ route('admin.pinjam-ruangan.index') }}" class="btn btn-success">
+                    <i class="fas fa-door-open me-1"></i> Peminjaman Ruangan
+                </a>
+            </div>
+        </div>
+    @endif
 </div>
 
 @push('scripts')
 <script>
     $(document).ready(function() {
-
+        
     });
 </script>
 @endpush

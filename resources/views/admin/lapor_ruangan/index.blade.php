@@ -217,7 +217,7 @@
 </div>
 
 <style>
-/* Primary Styles */
+
 :root {
     --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);

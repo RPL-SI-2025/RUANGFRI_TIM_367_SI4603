@@ -111,7 +111,7 @@ class PinjamRuanganController extends Controller
                     'waktu_selesai' => $request->waktu_selesai,
                     'tujuan_peminjaman' => $request->tujuan_peminjaman,
                     'file_scan' => $fileName,
-                    'status' => 0 // Menunggu persetujuan
+                    'status' => 0 
                 ]);
                 
 
@@ -422,7 +422,7 @@ class PinjamRuanganController extends Controller
                 ->update(['status' => $request->status]);
 
 
-            if ($request->status == 1) { // Approved
+            if ($request->status == 1) { 
 
                 $this->updateJadwalStatus($pinjamRuangan, 'booked');
                 
@@ -453,7 +453,7 @@ class PinjamRuanganController extends Controller
                         Ruangan::where('id', $roomId)->update(['status' => 'Tersedia']);
                     }
                 }
-            } elseif ($request->status == 2 || $request->status == 4) { // Rejected or cancelled
+            } elseif ($request->status == 2 || $request->status == 4) { 
                 $this->updateJadwalStatus($pinjamRuangan, 'tersedia');
                 
 
@@ -468,7 +468,7 @@ class PinjamRuanganController extends Controller
                 Ruangan::whereIn('id', $affectedRoomIds)
                     ->update(['status' => 'Tersedia']);
                     
-            } elseif ($request->status == 3) { // Completed
+            } elseif ($request->status == 3) { 
                 $this->updateJadwalStatus($pinjamRuangan, 'tersedia');
                 
 
@@ -501,7 +501,17 @@ class PinjamRuanganController extends Controller
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+    public function updateNotes(Request $request, PinjamRuangan $pinjamRuangan)
+    {
+        $request->validate([
+            'catatan' => 'nullable|string|max:500',
+        ]);
         
+        $pinjamRuangan->catatan = $request->catatan;
+        $pinjamRuangan->save();
+        
+        return back()->with('success', 'Catatan berhasil diperbarui.');
+    }
 
 
     public function adminIndex()
@@ -653,8 +663,8 @@ class PinjamRuanganController extends Controller
 
         if ($status === 'tersedia') {
             $pendingBookings = PinjamRuangan::where('id_ruangan', $pinjamRuangan->id_ruangan)
-                ->where('status', 0) // Pending status
-                ->where('id', '!=', $pinjamRuangan->id) // Not this booking
+                ->where('status', 0) 
+                ->where('id', '!=', $pinjamRuangan->id) 
                 ->where(function($q) use ($pinjamRuangan) {
 
                     $q->whereBetween('tanggal_pengajuan', [$pinjamRuangan->tanggal_pengajuan, $pinjamRuangan->tanggal_selesai])

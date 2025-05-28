@@ -8,7 +8,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="m-0">Detail Laporan Inventaris #{{ $laporan->id_lapor_inventaris }}</h5>
+                    <h5 class="m-0">Detail Laporan Inventaris {{ $laporan->id_lapor_inventaris }}</h5>
                     <a href="{{ route('admin.lapor_inventaris.index') }}" class="btn btn-secondary btn-sm">
                         <i class="bi bi-arrow-left"></i> Kembali
                     </a>
@@ -51,9 +51,11 @@
                         </div>
                     </div>
 
+
                     <div class="row">
                         <div class="col-md-6 mb-4">
                             <h6 class="fw-bold">Foto Kondisi Awal</h6>
+                            <hr> <!-- Garis pembatas -->
                             @if($laporan->foto_awal)
                                 <img src="{{ asset('storage/' . $laporan->foto_awal) }}" class="img-fluid rounded border" alt="Foto Kondisi Awal">
                             @else
@@ -64,6 +66,7 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <h6 class="fw-bold">Foto Kondisi Akhir</h6>
+                            <hr> <!-- Garis pembatas -->
                             @if($laporan->foto_akhir)
                                 <img src="{{ asset('storage/' . $laporan->foto_akhir) }}" class="img-fluid rounded border" alt="Foto Kondisi Akhir">
                             @else
@@ -71,6 +74,11 @@
                                     <i class="bi bi-image"></i> Tidak ada foto
                                 </div>
                             @endif
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ route('admin.lapor_inventaris.download-pdf', $laporan->id_lapor_inventaris) }}" class="btn btn-success rounded-pill px-4">
+                                <i class="bi bi-file-earmark-pdf"></i> Download PDF
+                            </a>
                         </div>
                     </div>
                 </div>

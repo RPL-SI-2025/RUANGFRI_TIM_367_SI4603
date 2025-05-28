@@ -54,7 +54,7 @@
                             <i class="fa fa-calendar me-2"></i>Informasi Pengajuan
                         </h5>
                         
-                        <form action="{{ route('pinjam-inventaris.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('mahasiswa.peminjaman.pinjam-inventaris.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             
                             <div class="row mb-4">

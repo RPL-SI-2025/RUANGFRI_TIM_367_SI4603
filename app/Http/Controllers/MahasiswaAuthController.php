@@ -19,11 +19,7 @@ class MahasiswaAuthController extends Controller
     return Auth::guard('mahasiswa');
     }
 
-    public function showRegistrationForm()
-{
-    return view('mahasiswa.auth.register');
-}
-
+    
     public function register(Request $request)
     {
         $request->validate([
@@ -93,23 +89,19 @@ class MahasiswaAuthController extends Controller
 
     public function dashboard()
     {
-        // Ambil 3 ruangan untuk katalog ringkas
+        
         $ruangans = \App\Models\Ruangan::take(3)->get();
 
-        // Debugging
-        if ($ruangans->isEmpty()) {
-            dd('Tidak ada data ruangan');
-        }
 
-        // Ambil 3 inventaris untuk katalog ringkas
+        
         $inventaris = \App\Models\Inventaris::take(3)->get();
 
-        // Ambil data peminjaman berdasarkan status
+        
         $peminjamanDiterima = \App\Models\PinjamRuangan::where('status', 'Diterima')->get();
         $peminjamanDitolak = \App\Models\PinjamRuangan::where('status', 'Ditolak')->get();
         $peminjamanPending = \App\Models\PinjamRuangan::where('status', 'Pending')->get();
 
-        // Kirim data ke view
+        
         return view('mahasiswa.page.dashboard', compact('ruangans', 'inventaris', 'peminjamanDiterima', 'peminjamanDitolak', 'peminjamanPending'));
     }
 

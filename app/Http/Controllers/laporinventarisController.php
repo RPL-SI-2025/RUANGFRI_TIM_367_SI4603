@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\laporinventaris;  // Menggunakan LaporInventaris dengan PascalCase
+use App\Models\laporinventaris;  
 use App\Models\AdminLogistik;
 use Illuminate\Http\Request;
 use App\Models\PinjamInventaris;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class laporinventarisController extends Controller
 {
@@ -305,5 +305,46 @@ public function historyShow($id)
         }
         
         return view('mahasiswa.pelaporan.lapor_inventaris.show', compact('laporan'));
+    }
+ 
+
+
+        public function downloadPDF($id)
+    {
+    $mahasiswaId = Session::get('mahasiswa_id');
+
+    if (!$mahasiswaId) {
+        return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
+    }
+
+    $laporan = laporinventaris::where('id_lapor_inventaris', $id)
+                ->where('id_mahasiswa', $mahasiswaId)
+                ->with('logistik')
+                ->first();
+
+    if (!$laporan) {
+        return redirect()->route('mahasiswa.pelaporan.lapor_inventaris.index')
+            ->with('error', 'Laporan tidak ditemukan atau Anda tidak memiliki akses.');
+    }
+
+    $data = [
+        'laporan' => $laporan,
+    ];
+
+    $pdf = Pdf::loadView('mahasiswa.pelaporan.lapor_inventaris.pdf', $data);
+
+    return $pdf->download('laporan_inventaris_' . $id . '.pdf');
+    }
+    public function admindownloadPDF($id)
+    {
+        $laporan = LaporInventaris::with(['peminjaman', 'mahasiswa', 'logistik'])->findOrFail($id);
+
+        $data = [
+            'laporan' => $laporan,
+        ];
+
+        $pdf = Pdf::loadView('admin.lapor_inventaris.pdf', $data);
+
+        return $pdf->download('laporan_inventaris_admin_' . $id . '.pdf');
     }
 }
