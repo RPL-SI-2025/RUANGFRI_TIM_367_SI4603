@@ -59,3 +59,19 @@
         </div>
     </div>
 </nav>
+<style>
+.sidebar-toggle {
+    background: none;
+    border: none;
+    color: var(--primary-dark);
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all var(--transition-fast);
+}
+
+.sidebar-toggle:hover {
+    background: rgba(44, 62, 80, 0.1);
+    color: var(--accent-blue);
+}
+</style>
