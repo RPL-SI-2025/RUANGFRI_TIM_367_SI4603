@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\HistoryRuanganController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\PinjamInventarisController;
@@ -152,6 +153,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [HistoryController::class, 'adminindex'])->name('index');
         Route::get('/{type}/{id}', [HistoryController::class, 'adminshow'])->name('show');
     });
+
+    Route::prefix('historyRuangan')->name('history_ruangan.')->group(function () {
+        Route::get('/', [HistoryRuanganController::class, 'adminindex'])->name('index');
+        Route::get('/{type}/{id}', [HistoryRuanganController::class, 'adminshow'])->name('show');
+ 
+    });
     
 });
 /*
@@ -256,6 +263,7 @@ Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.
             Route::get('/{id}', [PelaporanController::class, 'mahasiswaShow'])->name('show');
             Route::get('/{id}/edit', [PelaporanController::class, 'mahasiswaEdit'])->name('edit');
             Route::put('/{id}', [PelaporanController::class, 'mahasiswaUpdate'])->name('update');
+            Route::get('/{id}/download-pdf', [PelaporanController::class, 'downloadPdf'])->name('download-pdf');
         });
     });
 
@@ -265,6 +273,10 @@ Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.
         Route::get('/{type}/{id}', [HistoryController::class, 'show'])->name('show');
         Route::get('/history', [HistoryController::class, 'index'])->name('mahasiswa.history.history_inventaris.index');
         Route::get('/history/{type}/{id}', [HistoryController::class, 'show'])->name('mahasiswa.history.history_inventaris.show');
+        Route::get('/historyRuangan', [HistoryRuanganController::class, 'index'])->name('mahasiswa.history.history_ruangan.index');
+        Route::get('/historyRuangan/{type}/{id}', [HistoryRuanganController::class, 'show'])->name('mahasiswa.history.history_ruangan.show');
+
+    
     });
 
     // Jadwal API Routes
