@@ -246,6 +246,7 @@ class PinjamInventarisController extends Controller
 
 
 
+
     public function updateStatus(Request $request, PinjamInventaris $pinjamInventaris)
     {
         // Validate request
@@ -263,55 +264,50 @@ class PinjamInventarisController extends Controller
             ->where('id_mahasiswa', $pinjamInventaris->id_mahasiswa)
             ->get();
     
-        // If status is being changed to "Disetujui" (1)
-        if ($request->status == 1) {
-            // Tidak perlu cek stok lagi karena sudah dikurangi saat pengajuan
-            foreach ($relatedItems as $item) {
-                $inventaris = Inventaris::find($item->id_inventaris);
-                if (!$inventaris) {
-                    return back()->with('error', "Inventaris tidak ditemukan.");
-                }
-                
-                // Update status inventaris jika stok habis
-                if ($inventaris->jumlah <= 0) {
-                    $inventaris->status = 'Tidak Tersedia';
-                    $inventaris->save();
-                }
-            }
-        }
-    
-        // If status is being changed to "Selesai" (3) or "Ditolak" (2)
-        if (($request->status == 3 || $request->status == 2) && $pinjamInventaris->status == 1) {
-            // Return stock for all items
-            foreach ($relatedItems as $item) {
-                $inventaris = Inventaris::find($item->id_inventaris);
-                if ($inventaris) {
-                    $inventaris->jumlah += $item->jumlah_pinjam;
-                    
-                    // Set status back to "Tersedia"
-                    if ($inventaris->jumlah > 0) {
-                        $inventaris->status = 'Tersedia';
+        DB::beginTransaction();
+        try {
+            // If status is being changed to "Ditolak" (2)
+            if ($request->status == 2) {
+                // Return stock for all items
+                foreach ($relatedItems as $item) {
+                    $inventaris = Inventaris::find($item->id_inventaris);
+                    if ($inventaris) {
+                        // Restore stock
+                        $inventaris->jumlah += $item->jumlah_pinjam;
+                        
+                        // Update status back to "Tersedia"
+                        if ($inventaris->jumlah > 0) {
+                            $inventaris->status = 'Tersedia';
+                        }
+                        
+                        $inventaris->save();
                     }
-                    
-                    $inventaris->save();
                 }
             }
+    
+            // Update status for all related items
+            foreach ($relatedItems as $item) {
+                $item->status = $request->status;
+                $item->notes = $request->notes;
+                $item->save();
+            }
+    
+            DB::commit();
+    
+            $statusText = match($request->status) {
+                0 => 'menunggu persetujuan',
+                1 => 'disetujui',
+                2 => 'ditolak',
+                3 => 'selesai',
+                default => 'diperbarui'
+            };
+    
+            return back()->with('success', "Status peminjaman berhasil $statusText.");
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->with('error', 'Terjadi kesalahan saat memperbarui status peminjaman.');
         }
     
-        // Update status for all related items
-        foreach ($relatedItems as $item) {
-            $item->status = $request->status;
-            $item->notes = $request->notes;
-            $item->save();
-        }
-    
-        $statusText = match($request->status) {
-            0 => 'menunggu persetujuan',
-            1 => 'disetujui',
-            2 => 'ditolak',
-            3 => 'selesai',
-            default => 'diperbarui'
-        };
     
         return back()->with('success', "Status peminjaman berhasil $statusText.");
     }
