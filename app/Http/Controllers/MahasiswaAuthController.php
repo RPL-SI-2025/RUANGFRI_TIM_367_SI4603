@@ -11,6 +11,7 @@ use App\Models\Ruangan;
 use App\Models\Inventaris;
 use App\Models\Peminjaman;
 use App\Models\PinjamRuangan;
+use App\Models\PinjamInventaris;
 
 class MahasiswaAuthController extends Controller
 {
@@ -87,22 +88,82 @@ class MahasiswaAuthController extends Controller
 
 
 
+
     public function dashboard()
     {
+        $mahasiswaId = Session::get('mahasiswa_id');
         
-        $ruangans = \App\Models\Ruangan::take(3)->get();
+        // Get latest ruangan and inventaris
+        $ruangans = Ruangan::latest()->take(3)->get();
+        $inventaris = Inventaris::latest()->take(3)->get();
+    
+        // Get peminjaman with status = 1 (Disetujui)
+        $peminjamanDiterima = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
+    ->where('status', 1)
+    ->with('ruangan')
+    ->get()
+    ->merge(
+        PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
+        ->where('status', 1)
+        ->with('inventaris')
+        ->get()
+    )
+    ->map(function($item) {
+        return (object)[
+            'id' => $item->id, // Add this line
+            'nama' => $item->ruangan ? $item->ruangan->nama_ruangan : $item->inventaris->nama_inventaris,
+            'jenis' => $item->ruangan ? 'Ruangan' : 'Inventaris',
+            'tanggal' => $item->tanggal_pengajuan
+        ];
+    });
 
+// Do the same for $peminjamanDitolak and $peminjamanPending
+$peminjamanDitolak = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
+    ->where('status', 2)
+    ->with('ruangan')
+    ->get()
+    ->merge(
+        PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
+        ->where('status', 2)
+        ->with('inventaris')
+        ->get()
+    )
+    ->map(function($item) {
+        return (object)[
+            'id' => $item->id, // Add this line
+            'nama' => $item->ruangan ? $item->ruangan->nama_ruangan : $item->inventaris->nama_inventaris,
+            'jenis' => $item->ruangan ? 'Ruangan' : 'Inventaris',
+            'tanggal' => $item->tanggal_pengajuan,
+            'notes' => $item->notes
+        ];
+    });
 
-        
-        $inventaris = \App\Models\Inventaris::take(3)->get();
-
-        
-        $peminjamanDiterima = \App\Models\PinjamRuangan::where('status', 'Diterima')->get();
-        $peminjamanDitolak = \App\Models\PinjamRuangan::where('status', 'Ditolak')->get();
-        $peminjamanPending = \App\Models\PinjamRuangan::where('status', 'Pending')->get();
-
-        
-        return view('mahasiswa.page.dashboard', compact('ruangans', 'inventaris', 'peminjamanDiterima', 'peminjamanDitolak', 'peminjamanPending'));
+$peminjamanPending = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
+    ->where('status', 0)
+    ->with('ruangan')
+    ->get()
+    ->merge(
+        PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
+        ->where('status', 0)
+        ->with('inventaris')
+        ->get()
+    )
+    ->map(function($item) {
+        return (object)[
+            'id' => $item->id, // Add this line
+            'nama' => $item->ruangan ? $item->ruangan->nama_ruangan : $item->inventaris->nama_inventaris,
+            'jenis' => $item->ruangan ? 'Ruangan' : 'Inventaris',
+            'tanggal' => $item->tanggal_pengajuan
+        ];
+    });
+    
+        return view('mahasiswa.page.dashboard', compact(
+            'ruangans', 
+            'inventaris', 
+            'peminjamanDiterima', 
+            'peminjamanDitolak', 
+            'peminjamanPending'
+        ));
     }
 
 }

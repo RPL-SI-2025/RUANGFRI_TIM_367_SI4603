@@ -108,25 +108,25 @@
                     </div>
                     <p class="card-text text-muted flex-grow-1 mb-3">{{ Str::limit($item->deskripsi, 80) }}</p>
                     <div class="d-flex justify-content-between">
-                        <a href="{{ route('mahasiswa.katalog.inventaris.show', $item->id) }}"
-                           class="btn btn-sm btn-outline-primary rounded-pill">
-                            <i class="fa fa-info-circle me-1"></i> Detail
-                        </a>
-                        @if($item->status === 'Tersedia' && $item->jumlah > 0)
-                        <form action="{{ route('mahasiswa.cart.keranjang_inventaris.add') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="id_inventaris" value="{{ $item->id }}">
-                            <input type="hidden" name="jumlah" value="1">
-                            <button class="btn btn-sm btn-primary rounded-pill">
-                                <i class="fa fa-cart-plus me-1"></i> Tambahkan
-                            </button>
-                        </form>
-                        @else
-                        <button class="btn btn-sm btn-secondary rounded-pill" disabled>
-                            <i class="fa fa-ban me-1"></i> Tidak Tersedia
-                        </button>
-                        @endif
-                    </div>
+    <a href="{{ route('mahasiswa.katalog.inventaris.show', $item->id) }}"
+       class="btn btn-sm btn-outline-primary rounded-pill">
+        <i class="fa fa-info-circle me-1"></i> Detail
+    </a>
+    @if($item->status === 'Tersedia' && $item->jumlah > 0)
+        <form action="{{ route('mahasiswa.cart.keranjang_inventaris.add') }}" method="POST">
+            @csrf
+            <input type="hidden" name="id_inventaris" value="{{ $item->id }}">
+            <input type="hidden" name="jumlah" value="1">
+            <button class="btn btn-sm btn-primary rounded-pill">
+                <i class="fa fa-cart-plus me-1"></i> Tambahkan
+            </button>
+        </form>
+    @else
+        <button class="btn btn-sm btn-secondary rounded-pill" disabled>
+            <i class="fa fa-ban me-1"></i> Tidak Tersedia
+        </button>
+    @endif
+</div>
                 </div>
             </div>
         </div>

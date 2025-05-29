@@ -15,56 +15,45 @@ class CartController extends Controller
     }
     
     public function add(Request $request)
-    {
-        $request->validate([
-            'id_inventaris' => 'required|exists:inventaris,id',
-            'jumlah' => 'required|integer|min:1'
-        ]);
-        
-        $inventaris = Inventaris::findOrFail($request->id_inventaris);
-        
-        if ($inventaris->jumlah < $request->jumlah) {
-            return redirect()->back()->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
-        }
-        
-        $cart = Session::get('cart', []);
-        
+{
+    $request->validate([
+        'id_inventaris' => 'required|exists:inventaris,id',
+        'jumlah' => 'required|integer|min:1'
+    ]);
 
-        $itemId = $inventaris->id;
-        $newQuantity = $request->jumlah;
-        
-        if (isset($cart[$itemId])) {
-            
-            $newQuantity = $cart[$itemId]['jumlah'] + $request->jumlah;
-            
-            
-            if ($newQuantity > $inventaris->jumlah) {
-                return redirect()->back()->with('error', 'Total jumlah yang diminta melebihi stok yang tersedia.');
-            }
-        }
-        
-
-        $itemData = [
-            'id' => $inventaris->id,
-            'nama_inventaris' => $inventaris->nama_inventaris,
-            'jumlah' => $newQuantity,
-            'kode_inventaris' => $inventaris->kode_inventaris,
-            'kategori_id' => $inventaris->kategori_id,
-            'kategori_nama' => $inventaris->kategori->nama_kategori ?? null,
-            'kondisi' => $inventaris->kondisi,
-            'stok_tersedia' => $inventaris->jumlah,
-            'gambar' => $inventaris->gambar,
-            'timestamp' => now()->toDateTimeString(),
-        ];
-        
-
-        $cart[$itemId] = $itemData;
-        
-        
-        Session::put('cart', $cart);
-        
-        return redirect()->route('mahasiswa.katalog.inventaris.index')->with('success', 'Item berhasil ditambahkan ke keranjang.');
+    $inventaris = Inventaris::find($request->id_inventaris);
+    
+    // Check if item is available and has stock
+    if ($inventaris->status !== 'Tersedia' || $inventaris->jumlah <= 0) {
+        return redirect()->back()->with('error', 'Inventaris tidak tersedia untuk dipinjam.');
     }
+
+    $cart = Session::get('cart', []);
+    $itemId = $request->id_inventaris;
+    $newQuantity = $request->jumlah;
+
+    // If item already in cart, add quantities
+    if (isset($cart[$itemId])) {
+        $newQuantity = $cart[$itemId]['jumlah'] + $request->jumlah;
+    }
+    
+    // Check if requested quantity exceeds available stock
+    if ($newQuantity > $inventaris->jumlah) {
+        return redirect()->back()->with('error', 'Jumlah yang diminta melebihi stok yang tersedia.');
+    }
+
+    $cart[$itemId] = [
+        'id' => $inventaris->id,
+        'nama_inventaris' => $inventaris->nama_inventaris,
+        'jumlah' => $newQuantity,
+        'stok_tersedia' => $inventaris->jumlah,
+        'gambar_inventaris' => $inventaris->gambar_inventaris,
+        'timestamp' => now()->toDateTimeString()
+    ];
+
+    Session::put('cart', $cart);
+    return redirect()->back()->with('success', 'Item berhasil ditambahkan ke keranjang.');
+}
     
     public function remove($id)
     {
