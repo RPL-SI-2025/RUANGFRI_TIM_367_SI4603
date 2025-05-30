@@ -12,7 +12,7 @@ class InventarisSeeder extends Seeder
 {
     public function run()
     {
-        // Get admin logistik ID
+
         if (Schema::hasTable('admin_logistik')) {
             try {
                 $admin = DB::table('admin_logistik')->first();
@@ -24,7 +24,7 @@ class InventarisSeeder extends Seeder
             $adminId = null;
         }
 
-        // Ensure categories exist first
+
         $kategoris = [
             ['nama_kategori' => 'Elektronik', 'deskripsi_kategori' => 'Peralatan elektronik seperti proyektor, laptop, speaker'],
             ['nama_kategori' => 'Furniture', 'deskripsi_kategori' => 'Perabotan seperti meja, kursi, lemari'],
@@ -40,7 +40,7 @@ class InventarisSeeder extends Seeder
             );
         }
 
-        // Get category IDs
+        
         $elektronikId = KategoriInventaris::where('nama_kategori', 'Elektronik')->first()->id;
         $furnitureId = KategoriInventaris::where('nama_kategori', 'Furniture')->first()->id;
         $lainnyaId = KategoriInventaris::where('nama_kategori', 'Lainnya')->first()->id;

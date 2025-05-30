@@ -2,165 +2,264 @@
 @extends('mahasiswa.layouts.app')
 
 @section('content')
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="text-primary mb-0 fw-bold">
-            <i class="fa fa-boxes me-2"></i>Katalog Inventaris
-        </h4>
-        <a href="{{ route('mahasiswa.cart.keranjang_inventaris.index') }}" class="btn btn-outline-primary rounded-pill">
-            <i class="fa fa-shopping-basket me-1"></i> Lihat Keranjang
-        </a>
-    </div>
+<!-- Load CSS khusus catalog -->
+<link rel="stylesheet" href="{{ asset('css/catalog-style.css') }}">
 
-<!-- Add Filter Section -->
-<div class="card shadow-sm mb-4">
-    <div class="card-body">
-        <form method="GET" action="{{ route('mahasiswa.katalog.inventaris.index') }}" class="row g-3 align-items-end">
-            <!-- Search Filter -->
-            <div class="col-md-4">
-                <label for="search" class="form-label text-primary fw-bold">Cari Inventaris</label>
-                <div class="input-group">
-                    <span class="input-group-text border-end-0 bg-white">
-                        <i class="fa fa-search text-muted"></i>
-                    </span>
-                    <input type="text" 
-                           class="form-control border-start-0" 
-                           id="search" 
-                           name="search" 
-                           placeholder="Cari berdasarkan nama atau deskripsi..."
-                           value="{{ request('search') }}">
+<div class="catalog-container">
+    <div class="container py-4">
+        <!-- Header Section -->
+        <div class="catalog-header">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                    <h1 class="catalog-title">
+                        <i class="fa fa-boxes catalog-title-icon"></i>
+                        Katalog Inventaris
+                    </h1>
+                    <p class="catalog-subtitle">Jelajahi koleksi inventaris yang tersedia untuk dipinjam</p>
                 </div>
-            </div>
-
-            <!-- Kategori Filter -->
-            <div class="col-md-4">
-                <label for="kategori_id" class="form-label text-primary fw-bold">Filter Kategori</label>
-                <select name="kategori_id" id="kategori_id" class="form-select rounded-pill">
-                    <option value="">Semua Kategori</option>
-                    @foreach($kategoris as $kategori)
-                        <option value="{{ $kategori->id }}" {{ request('kategori_id') == $kategori->id ? 'selected' : '' }}>
-                            {{ $kategori->nama_kategori }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <!-- Filter Buttons -->
-            <div class="col-md-4">
-                <button type="submit" class="btn btn-primary rounded-pill">
-                    <i class="fa fa-filter me-2"></i>Filter
-                </button>
-                @if(request()->hasAny(['kategori_id', 'search']))
-                    <a href="{{ route('mahasiswa.katalog.inventaris.index') }}" class="btn btn-outline-secondary rounded-pill">
-                        <i class="fa fa-times me-2"></i>Reset
+                <div class="d-flex align-items-center gap-3">
+                    <div class="catalog-stats">
+                        <i class="fa fa-list"></i>
+                        <span>{{ $inventaris->count() }} Item Tersedia</span>
+                    </div>
+                    <a href="{{ route('mahasiswa.cart.keranjang_inventaris.index') }}" 
+                       class="catalog-cart-button">
+                        <i class="fa fa-shopping-basket"></i>
+                        Keranjang
+                        @if(session()->has('cart') && count(session('cart')) > 0)
+                            <span class="catalog-cart-badge">{{ count(session('cart')) }}</span>
+                        @endif
                     </a>
-                @endif
+                </div>
             </div>
-        </form>
-    </div>
-</div>
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
-            <i class="fa fa-check-circle me-2"></i>{{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-    
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert" id="errorAlert">
-            <i class="fa fa-exclamation-circle me-2"></i>{{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    <div class="row g-4">
-        @foreach($inventaris as $item)
-        <div class="col-md-4 mb-2">
-            <div class="card h-100 shadow-sm border-0 rounded-lg overflow-hidden">
-                <div class="position-relative">
-                    @if($item->gambar_inventaris)
-                        <img src="{{ asset('storage/katalog_inventaris/' . $item->gambar_inventaris) }}" 
-                             class="card-img-top" alt="{{ $item->nama_inventaris }}" 
-                             style="height: 200px; object-fit: cover;">
-                    @else
-                        <div class="bg-light d-flex justify-content-center align-items-center" style="height: 200px;">
-                            <i class="fa fa-box text-muted" style="font-size: 4rem;"></i>
-                        </div>
-                    @endif
-                    <div class="position-absolute bottom-0 start-0 end-0 p-2 bg-gradient-dark">
-                        <div class="d-flex align-items-center">
-                            <div class="stock-badge me-2">
-                                <span class="badge bg-info rounded-pill">
-                                    <i class="fa fa-cubes"></i> Stok: {{ $item->jumlah }}
-                                </span>
-                            </div>
-                            <div class="kategori-badge">
-                                <span class="badge bg-secondary rounded-pill">
-                                    <i class="fa fa-tag"></i> {{ $item->kategori->nama_kategori ?? 'N/A' }}
-                                </span>
-                            </div>
+            <!-- Search and Filter Section -->
+            <div class="catalog-filters">
+                <div class="row align-items-center">
+                    <div class="col-md-5">
+                        <div class="catalog-search-container">
+                            <i class="fa fa-search catalog-search-icon"></i>
+                            <input type="text" 
+                                   class="catalog-search-input" 
+                                   placeholder="Cari inventaris berdasarkan nama atau deskripsi..."
+                                   id="catalogSearchInput"
+                                   autocomplete="off">
                         </div>
                     </div>
-                    <div class="position-absolute top-0 end-0 mt-2 me-2">
-                        <span class="badge {{ $item->status === 'Tersedia' ? 'bg-success' : 'bg-danger' }}">
+                    <div class="col-md-7 text-md-end mt-3 mt-md-0">
+                        <div class="d-flex justify-content-md-end align-items-center gap-3">
+                            <!-- Category Filter -->
+                            <select class="catalog-filter-select" id="catalogCategoryFilter">
+                                <option value="">Semua Kategori</option>
+                                @foreach($kategoris as $kategori)
+                                    <option value="{{ $kategori->nama_kategori }}">{{ $kategori->nama_kategori }}</option>
+                                @endforeach
+                            </select>
+                            
+                            <!-- Status Filter -->
+                            <select class="catalog-filter-select" id="catalogStatusFilter">
+                                <option value="">Semua Status</option>
+                                <option value="Tersedia">Tersedia</option>
+                                <option value="Tidak Tersedia">Tidak Tersedia</option>
+                            </select>
+                            
+                            <span class="catalog-results-count">
+                                <i class="fa fa-filter"></i>
+                                <span id="resultsCount">{{ $inventaris->count() }}</span> dari {{ $inventaris->count() }} item
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert Messages -->
+        @if(session('success'))
+            <div class="catalog-alert catalog-alert-success" role="alert" id="successAlert">
+                <i class="fa fa-check-circle"></i>
+                <span>{{ session('success') }}</span>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        
+        @if(session('error'))
+            <div class="catalog-alert catalog-alert-error" role="alert" id="errorAlert">
+                <i class="fa fa-exclamation-circle"></i>
+                <span>{{ session('error') }}</span>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <!-- Catalog Grid -->
+        @if($inventaris->count() > 0)
+            <div class="catalog-grid" id="catalogGrid">
+                @foreach($inventaris as $item)
+                <div class="catalog-card" 
+                     data-name="{{ strtolower($item->nama_inventaris) }}" 
+                     data-status="{{ $item->status }}"
+                     data-category="{{ $item->kategori->nama_kategori ?? 'Lainnya' }}"
+                     data-description="{{ strtolower($item->deskripsi ?? '') }}">
+                    
+                    <!-- Image Container -->
+                    <div class="catalog-card-image-container">
+                        @if($item->gambar_inventaris)
+                            <img src="{{ asset('storage/katalog_inventaris/' . $item->gambar_inventaris) }}" 
+                                 class="catalog-card-image" 
+                                 alt="{{ $item->nama_inventaris }}"
+                                 loading="lazy">
+                        @else
+                            <div class="catalog-card-image-placeholder">
+                                <i class="fa fa-box"></i>
+                            </div>
+                        @endif
+                        
+                        <!-- Status Badge -->
+                        <div class="catalog-status-badge {{ $item->status === 'Tersedia' ? 'catalog-status-available' : 'catalog-status-unavailable' }}">
                             {{ $item->status }}
-                        </span>
+                        </div>
+                        
+                        <!-- Category Badge -->
+                        <div class="catalog-category-badge">
+                            <i class="fa fa-tag"></i>
+                            {{ $item->kategori->nama_kategori ?? 'Lainnya' }}
+                        </div>
+                    </div>
+                    
+                    <!-- Card Content -->
+                    <div class="catalog-card-content">
+                        <h3 class="catalog-card-title">{{ $item->nama_inventaris }}</h3>
+                        
+                        <p class="catalog-card-description">
+                            {{ $item->deskripsi ?: 'Deskripsi tidak tersedia untuk item ini.' }}
+                        </p>
+                        
+                        <!-- Stock Information -->
+                        <div class="catalog-info-section catalog-stock-info">
+                            <div class="catalog-stock-label">
+                                <i class="fa fa-cubes"></i>
+                                Stok Tersedia
+                            </div>
+                            <div class="catalog-stock-count {{ $item->jumlah <= 2 ? 'catalog-stock-low' : '' }} {{ $item->jumlah == 0 ? 'catalog-stock-out' : '' }}">
+                                {{ $item->jumlah }} unit
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="catalog-card-actions">
+                            <a href="{{ route('mahasiswa.katalog.inventaris.show', $item->id) }}"
+                               class="catalog-btn-detail"
+                               aria-label="Lihat detail {{ $item->nama_inventaris }}">
+                                <i class="fa fa-info-circle"></i>
+                                Detail
+                            </a>
+                            
+                            @if($item->status === 'Tersedia' && $item->jumlah > 0)
+                                <form action="{{ route('mahasiswa.cart.keranjang_inventaris.add') }}" 
+                                      method="POST" 
+                                      class="d-flex flex-fill">
+                                    @csrf
+                                    <input type="hidden" name="id_inventaris" value="{{ $item->id }}">
+                                    <input type="hidden" name="jumlah" value="1">
+                                    <button type="submit" 
+                                            class="catalog-btn-primary w-100"
+                                            aria-label="Tambahkan {{ $item->nama_inventaris }} ke keranjang">
+                                        <i class="fa fa-cart-plus"></i>
+                                        Tambah ke Keranjang
+                                    </button>
+                                </form>
+                            @else
+                                <button class="catalog-btn-primary w-100" 
+                                        disabled
+                                        aria-label="Item tidak tersedia">
+                                    <i class="fa fa-ban"></i>
+                                    Tidak Tersedia
+                                </button>
+                            @endif
+                        </div>
                     </div>
                 </div>
-                <div class="card-body d-flex flex-column">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h5 class="card-title fw-bold mb-0">{{ $item->nama_inventaris }}</h5>
-                    </div>
-                    <p class="card-text text-muted flex-grow-1 mb-3">{{ Str::limit($item->deskripsi, 80) }}</p>
-                    <div class="d-flex justify-content-between">
-    <a href="{{ route('mahasiswa.katalog.inventaris.show', $item->id) }}"
-       class="btn btn-sm btn-outline-primary rounded-pill">
-        <i class="fa fa-info-circle me-1"></i> Detail
-    </a>
-    @if($item->status === 'Tersedia' && $item->jumlah > 0)
-        <form action="{{ route('mahasiswa.cart.keranjang_inventaris.add') }}" method="POST">
-            @csrf
-            <input type="hidden" name="id_inventaris" value="{{ $item->id }}">
-            <input type="hidden" name="jumlah" value="1">
-            <button class="btn btn-sm btn-primary rounded-pill">
-                <i class="fa fa-cart-plus me-1"></i> Tambahkan
-            </button>
-        </form>
-    @else
-        <button class="btn btn-sm btn-secondary rounded-pill" disabled>
-            <i class="fa fa-ban me-1"></i> Tidak Tersedia
-        </button>
-    @endif
-</div>
-                </div>
+                @endforeach
             </div>
-        </div>
-        @endforeach
+        @else
+            <!-- Empty State -->
+            <div class="catalog-empty-state">
+                <div class="catalog-empty-icon">
+                    <i class="fa fa-box-open"></i>
+                </div>
+                <h3 class="catalog-empty-title">Katalog Inventaris Kosong</h3>
+                <p class="catalog-empty-description">
+                    Saat ini tidak ada inventaris yang tersedia untuk dipinjam. Silakan coba lagi nanti atau hubungi administrator.
+                </p>
+                <a href="{{ route('mahasiswa.dashboard') }}" class="catalog-empty-action">
+                    <i class="fa fa-home"></i>
+                    Kembali ke Dashboard
+                </a>
+            </div>
+        @endif
     </div>
 </div>
 
 @endsection
+
 @push('scripts')
+<script src="{{ asset('js/catalog-functionality.js') }}"></script>
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('catalogSearchInput');
+    const categoryFilter = document.getElementById('catalogCategoryFilter');
+    const statusFilter = document.getElementById('catalogStatusFilter');
+    const catalogGrid = document.getElementById('catalogGrid');
+    const resultsCount = document.getElementById('resultsCount');
     
-    document.addEventListener('DOMContentLoaded', function() {
-        const successAlert = document.getElementById('successAlert');
-        const errorAlert = document.getElementById('errorAlert');
+    function filterCatalog() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedCategory = categoryFilter.value;
+        const selectedStatus = statusFilter.value;
+        const cards = catalogGrid.querySelectorAll('.catalog-card');
+        let visibleCount = 0;
         
-        if (successAlert) {
-            setTimeout(function() {
-                const bsAlert = new bootstrap.Alert(successAlert);
-                bsAlert.close();
-            }, 2000);
-        }
+        cards.forEach(card => {
+            const name = card.dataset.name;
+            const description = card.dataset.description;
+            const category = card.dataset.category;
+            const status = card.dataset.status;
+            
+            const matchesSearch = !searchTerm || 
+                name.includes(searchTerm) || 
+                description.includes(searchTerm);
+            
+            const matchesCategory = !selectedCategory || category === selectedCategory;
+            const matchesStatus = !selectedStatus || status === selectedStatus;
+            
+            if (matchesSearch && matchesCategory && matchesStatus) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
         
-        if (errorAlert) {
-            setTimeout(function() {
-                const bsAlert = new bootstrap.Alert(errorAlert);
-                bsAlert.close();
-            }, 3000);
-        }
-    });
+        resultsCount.textContent = visibleCount;
+    }
+    searchInput.addEventListener('input', filterCatalog);
+    categoryFilter.addEventListener('change', filterCatalog);
+    statusFilter.addEventListener('change', filterCatalog);
+    const successAlert = document.getElementById('successAlert');
+    const errorAlert = document.getElementById('errorAlert');
+    
+    if (successAlert) {
+        setTimeout(() => {
+            const bsAlert = new bootstrap.Alert(successAlert);
+            bsAlert.close();
+        }, 3000);
+    }
+    
+    if (errorAlert) {
+        setTimeout(() => {
+            const bsAlert = new bootstrap.Alert(errorAlert);
+            bsAlert.close();
+        }, 4000);
+    }
+});
 </script>
 @endpush

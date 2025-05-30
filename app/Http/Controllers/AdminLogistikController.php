@@ -29,21 +29,21 @@ class AdminLogistikController extends Controller
         $inventarisTersedia = Inventaris::where('status', 'Tersedia')->count();
         $inventarisTidakTersedia = Inventaris::where('status', 'Tidak Tersedia')->count();
 
-        // Initialize arrays for chart data
+
         $grafik = [
             'bulan' => [],
             'jumlah' => [],
             'jumlah_inventaris' => []
         ];
 
-        // Generate data for last 6 months - GROUPED PEMINJAMAN
+
         for ($i = 5; $i >= 0; $i--) {
             $bulan = Carbon::now()->subMonths($i)->format('M Y');
             $tanggal = Carbon::now()->subMonths($i);
             
             $grafik['bulan'][] = $bulan;
-            
-            // Count grouped room borrowings - PERBAIKAN DISINI
+
+
             $ruanganBorrowings = PinjamRuangan::whereMonth('created_at', $tanggal->month)
                                     ->whereYear('created_at', $tanggal->year)
                                     ->get()
@@ -52,8 +52,8 @@ class AdminLogistikController extends Controller
                                                 $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan . '-' . $item->id_mahasiswa;
                                     });
             $ruanganCount = $ruanganBorrowings->count();
-            
-            // Count grouped inventory borrowings - PERBAIKAN DISINI  
+
+
             $inventarisBorrowings = PinjamInventaris::whereMonth('created_at', $tanggal->month)
                                             ->whereYear('created_at', $tanggal->year)
                                             ->get()
@@ -67,10 +67,9 @@ class AdminLogistikController extends Controller
             $grafik['jumlah_inventaris'][] = $inventarisCount;
         }
 
-        // Get recent activities - GROUPED
+
         $aktivitasTerbaru = collect();
-        
-        // Add recent room borrowings - GROUPED
+
         $recentRoomBorrowings = PinjamRuangan::with('mahasiswa', 'ruangan')
             ->latest()
             ->take(50) // Take more to ensure we get enough groups
@@ -92,7 +91,7 @@ class AdminLogistikController extends Controller
                 ];
             });
 
-        // Add recent inventory borrowings - GROUPED
+
         $recentInventoryBorrowings = PinjamInventaris::with('mahasiswa', 'inventaris')
             ->latest()
             ->take(50) // Take more to ensure we get enough groups
@@ -120,7 +119,7 @@ class AdminLogistikController extends Controller
                 ];
             });
 
-        // Add recent reports
+
         $recentReports = LaporInventaris::with('mahasiswa')
             ->latest()
             ->take(2)
@@ -133,7 +132,7 @@ class AdminLogistikController extends Controller
                 ];
             });
 
-        // Add recent room reports
+
         $recentRoomReports = Pelaporan::with('mahasiswa')
             ->latest()
             ->take(2)
@@ -146,7 +145,7 @@ class AdminLogistikController extends Controller
                 ];
             });
 
-        // Merge and sort all activities
+
         $aktivitasTerbaru = $aktivitasTerbaru
             ->merge($recentRoomBorrowings)
             ->merge($recentInventoryBorrowings)
@@ -155,7 +154,7 @@ class AdminLogistikController extends Controller
             ->sortByDesc('created_at')
             ->take(5);
 
-        // Count pending items - GROUPED - PERBAIKAN DISINI
+            
         $pendingRuanganBorrowings = PinjamRuangan::where('status', 0)
             ->get()
             ->groupBy(function($item) {

@@ -104,12 +104,12 @@ class MahasiswaAuthController extends Controller
             Session::flush();
             return redirect()->route('mahasiswa.login')->with('error', 'Data mahasiswa tidak ditemukan.');
         }
-        
-        // Get latest ruangan and inventaris
+
         $ruangans = Ruangan::latest()->take(3)->get();
+
         $inventaris = Inventaris::latest()->take(3)->get();
 
-        // Get peminjaman with status = 1 (Disetujui) - GROUPED
+
         $peminjamanRuanganDiterima = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
             ->where('status', 1)
             ->with('ruangan')
@@ -157,7 +157,7 @@ class MahasiswaAuthController extends Controller
         $peminjamanDiterima = collect($peminjamanRuanganDiterima->values())
             ->merge($peminjamanInventarisDiterima->values());
 
-        // Get peminjaman with status = 2 (Ditolak) - GROUPED
+
         $peminjamanRuanganDitolak = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
             ->where('status', 2)
             ->with('ruangan')
@@ -205,7 +205,7 @@ class MahasiswaAuthController extends Controller
         $peminjamanDitolak = collect($peminjamanRuanganDitolak->values())
             ->merge($peminjamanInventarisDitolak->values());
 
-        // Get peminjaman with status = 0 (Pending) - GROUPED
+            
         $peminjamanRuanganPending = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
             ->where('status', 0)
             ->with('ruangan')

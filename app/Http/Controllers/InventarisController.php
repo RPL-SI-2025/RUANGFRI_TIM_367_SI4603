@@ -114,7 +114,7 @@ class InventarisController extends Controller
     {
         $query = Inventaris::with('kategori');
 
-        // Apply search filter
+
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -123,7 +123,7 @@ class InventarisController extends Controller
             });
         }
 
-        // Apply kategori filter
+        
         if ($request->has('kategori_id') && $request->kategori_id != '') {
             $query->where('kategori_id', $request->kategori_id);
         }

@@ -23,8 +23,8 @@ class CartController extends Controller
         ]);
         
         $inventaris = Inventaris::with('kategori')->findOrFail($request->id_inventaris);
+
         
-        // Cek status inventaris
         if ($inventaris->status !== 'Tersedia') {
             return redirect()->back()->with('error', 'Inventaris ini sedang tidak tersedia.');
         }
@@ -36,15 +36,16 @@ class CartController extends Controller
         if (isset($cart[$itemId])) {
             $newQuantity = $cart[$itemId]['jumlah'] + $request->jumlah;
         }
-        
-        // Hitung stok yang sudah di-reserve oleh peminjaman yang sedang berjalan
+
+
         $reservedStock = PinjamInventaris::where('id_inventaris', $itemId)
             ->whereIn('status', [0, 1]) // Status: Menunggu atau Disetujui
             ->sum('jumlah_pinjam');
         
         $availableStock = $inventaris->jumlah;
-        
-        // Cek stok tersedia
+
+
+
         if ($newQuantity > $availableStock) {
             return redirect()->back()->with('error', 'Total jumlah yang diminta melebihi stok yang tersedia. Stok tersedia: ' . $availableStock);
         }
@@ -106,17 +107,19 @@ class CartController extends Controller
         
         $cart = Session::get('cart', []);
         
+
         if(isset($cart[$id])) {
             $inventaris = Inventaris::findOrFail($id);
-            
-            // Hitung stok yang sudah di-reserve oleh peminjaman yang sedang berjalan
+
+
+
             $reservedStock = PinjamInventaris::where('id_inventaris', $id)
                 ->whereIn('status', [0, 1]) // Status: Menunggu atau Disetujui
                 ->sum('jumlah_pinjam');
             
+
             $availableStock = $inventaris->jumlah;
-            
-            // Cek stok tersedia (termasuk yang sudah di-reserve)
+
             if ($request->jumlah > $availableStock) {
                 return redirect()->back()->with('error', 'Jumlah yang diminta melebihi stok yang tersedia. Stok tersedia: ' . $availableStock);
             }

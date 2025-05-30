@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Create kategori_inventaris table first
+        
         Schema::create('kategori_inventaris', function (Blueprint $table) {
             $table->id();
             $table->string('nama_kategori');
