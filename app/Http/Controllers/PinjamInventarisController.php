@@ -83,8 +83,8 @@ class PinjamInventarisController extends Controller
         if(empty($cartItems)) {
             return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')->with('error', 'Keranjang Anda kosong!');
         }
-        
-        // Cek ketersediaan stok sebelum menyimpan
+
+
         foreach ($cartItems as $item) {
             $inventaris = \App\Models\Inventaris::find($item['id']);
             if (!$inventaris || $inventaris->jumlah < $item['jumlah']) {
@@ -114,12 +114,12 @@ class PinjamInventarisController extends Controller
                     'file_scan' => $fileName,
                     'status' => 0 
                 ]);
-                
-                // Kurangi stok inventaris ketika peminjaman dibuat (status proses)
+
                 $inventaris = \App\Models\Inventaris::find($item['id']);
+
                 $inventaris->jumlah -= $item['jumlah'];
-                
-                // Update status inventaris jika stok habis
+
+
                 if ($inventaris->jumlah <= 0) {
                     $inventaris->status = 'Tidak Tersedia';
                 }
@@ -210,7 +210,7 @@ class PinjamInventarisController extends Controller
         DB::beginTransaction();
         
         try {
-            // Validasi stok untuk setiap perubahan kuantitas
+
             if ($request->has('inventaris')) {
                 foreach ($request->inventaris as $id => $data) {
                     $pinjamItem = PinjamInventaris::find($id);
@@ -223,8 +223,8 @@ class PinjamInventarisController extends Controller
                         $oldQuantity = $pinjamItem->jumlah_pinjam;
                         $newQuantity = $data['jumlah'];
                         $quantityDiff = $newQuantity - $oldQuantity;
-                        
-                        // Jika kuantitas bertambah, cek apakah stok mencukupi
+
+
                         if ($quantityDiff > 0) {
                             if ($inventaris->jumlah < $quantityDiff) {
                                 throw new \Exception("Stok {$inventaris->nama_inventaris} tidak mencukupi. Stok tersedia: {$inventaris->jumlah}, diperlukan tambahan: {$quantityDiff}");
@@ -243,9 +243,10 @@ class PinjamInventarisController extends Controller
                 $fileName = time() . '_' . $file->getClientOriginalName();
                 $file->storeAs('uploads/file_scan', $fileName, 'public');
             }
-            
-            // Update data peminjaman untuk semua item terkait
+
+
             foreach ($relatedItems as $item) {
+
                 $item->tanggal_pengajuan = $request->tanggal_pengajuan;
                 $item->tanggal_selesai = $request->tanggal_selesai;
                 $item->waktu_mulai = $request->waktu_mulai;
@@ -253,8 +254,8 @@ class PinjamInventarisController extends Controller
                 $item->file_scan = $fileName;
                 $item->save();
             }
-            
-            // Update kuantitas dan kelola stok inventaris
+
+
             if ($request->has('inventaris')) {
                 foreach ($request->inventaris as $id => $data) {
                     $pinjamItem = PinjamInventaris::find($id);
@@ -265,19 +266,20 @@ class PinjamInventarisController extends Controller
                             $oldQuantity = $pinjamItem->jumlah_pinjam;
                             $newQuantity = $data['jumlah'];
                             $quantityDiff = $newQuantity - $oldQuantity;
-                            
-                            // Update kuantitas peminjaman
+
+
                             $pinjamItem->jumlah_pinjam = $newQuantity;
                             $pinjamItem->save();
-                            
-                            // Update stok inventaris berdasarkan perubahan kuantitas
+
+
                             if ($quantityDiff != 0) {
-                                // Jika kuantitas bertambah, kurangi stok
-                                // Jika kuantitas berkurang, tambah stok
+
+
                                 $inventaris->jumlah -= $quantityDiff;
-                                
-                                // Update status inventaris
+
+
                                 if ($inventaris->jumlah <= 0) {
+
                                     $inventaris->status = 'Tidak Tersedia';
                                 } elseif ($inventaris->status == 'Tidak Tersedia' && $inventaris->jumlah > 0) {
                                     $inventaris->status = 'Tersedia';
@@ -323,9 +325,9 @@ class PinjamInventarisController extends Controller
                 $pinjamInventaris->notes = $request->notes;
             }
             
+
             $pinjamInventaris->save();
-            
-            // Get all related items
+
             $relatedItems = PinjamInventaris::where('tanggal_pengajuan', $pinjamInventaris->tanggal_pengajuan)
                 ->where('tanggal_selesai', $pinjamInventaris->tanggal_selesai)
                 ->where('waktu_mulai', $pinjamInventaris->waktu_mulai)
@@ -333,8 +335,7 @@ class PinjamInventarisController extends Controller
                 ->where('file_scan', $pinjamInventaris->file_scan)
                 ->where('id_mahasiswa', $pinjamInventaris->id_mahasiswa)
                 ->get();
-            
-            // Update status untuk semua item terkait
+
             foreach ($relatedItems as $item) {
                 $item->status = $newStatus;
                 if ($request->filled('notes')) {
@@ -342,9 +343,9 @@ class PinjamInventarisController extends Controller
                 }
                 $item->save();
             }
-            
-            // Handle inventory stock based on status change
+
             $this->handleInventoryStock($relatedItems, $oldStatus, $newStatus);
+
             
             DB::commit();
             
@@ -427,7 +428,7 @@ class PinjamInventarisController extends Controller
         DB::beginTransaction();
         
         try {
-            // Get all related items before canceling
+
             $relatedItems = PinjamInventaris::where('tanggal_pengajuan', $pinjamInventaris->tanggal_pengajuan)
                 ->where('tanggal_selesai', $pinjamInventaris->tanggal_selesai)
                 ->where('waktu_mulai', $pinjamInventaris->waktu_mulai)
@@ -436,16 +437,17 @@ class PinjamInventarisController extends Controller
                 ->where('id_mahasiswa', $pinjamInventaris->id_mahasiswa)
                 ->get();
             
+                
             $oldStatus = $pinjamInventaris->status;
-            
-            // Update status to canceled
+
             foreach ($relatedItems as $item) {
+
                 $item->status = 4; // Dibatalkan
                 $item->save();
             }
-            
-            // Return inventory stock when canceled
+
             $this->handleInventoryStock($relatedItems, $oldStatus, 4);
+
             
             DB::commit();
             
@@ -463,25 +465,25 @@ class PinjamInventarisController extends Controller
             $inventaris = \App\Models\Inventaris::find($item->id_inventaris);
             
             if (!$inventaris) continue;
-            
-            // Logic untuk mengembalikan stok jika status berubah dari proses/disetujui ke ditolak/selesai/dibatalkan
+
             if (in_array($oldStatus, [0, 1]) && in_array($newStatus, [2, 3, 4])) {
-                // Kembalikan stok
+
                 $inventaris->jumlah += $item->jumlah_pinjam;
-                
-                // Update status inventaris menjadi tersedia jika sebelumnya tidak tersedia
+
                 if ($inventaris->status == 'Tidak Tersedia' && $inventaris->jumlah > 0) {
+
                     $inventaris->status = 'Tersedia';
                 }
+
             }
-            // Logic untuk mengurangi stok jika status berubah dari ditolak/dibatalkan ke proses/disetujui
+
             elseif (in_array($oldStatus, [2, 4]) && in_array($newStatus, [0, 1])) {
-                // Cek apakah stok mencukupi
+
                 if ($inventaris->jumlah >= $item->jumlah_pinjam) {
                     $inventaris->jumlah -= $item->jumlah_pinjam;
-                    
-                    // Update status inventaris jika stok habis
+
                     if ($inventaris->jumlah <= 0) {
+                        
                         $inventaris->status = 'Tidak Tersedia';
                     }
                 } else {

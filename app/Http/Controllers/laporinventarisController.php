@@ -167,12 +167,12 @@ public function historyShow($id)
         DB::beginTransaction();
         
         try {
-            // Upload foto awal
+
             $fotoAwal = $request->file('foto_awal');
             $fotoAwalFilename = time() . '_awal_' . $fotoAwal->getClientOriginalName();
             $fotoAwalPath = $fotoAwal->storeAs('foto_laporan', $fotoAwalFilename, 'public');
-            
-            // Upload foto akhir
+
+
             $fotoAkhir = $request->file('foto_akhir');
             $fotoAkhirFilename = time() . '_akhir_' . $fotoAkhir->getClientOriginalName();
             $fotoAkhirPath = $fotoAkhir->storeAs('foto_laporan', $fotoAkhirFilename, 'public');
@@ -188,13 +188,13 @@ public function historyShow($id)
                 'oleh' => 'Mahasiswa',
                 'kepada' => 'Admin Logistik'
             ]);
-            
-            // Update status peminjaman menjadi selesai dan kembalikan stok
+
+
             if ($request->id_peminjaman) {
                 $peminjaman = PinjamInventaris::find($request->id_peminjaman);
                 
                 if ($peminjaman && $peminjaman->id_mahasiswa == $mahasiswaId) {
-                    // Get all related items
+
                     $relatedItems = PinjamInventaris::where('tanggal_pengajuan', $peminjaman->tanggal_pengajuan)
                         ->where('tanggal_selesai', $peminjaman->tanggal_selesai)
                         ->where('waktu_mulai', $peminjaman->waktu_mulai)
@@ -205,18 +205,21 @@ public function historyShow($id)
                     
                     $oldStatus = $peminjaman->status;
                     
-                    // Update status to completed
+
                     foreach ($relatedItems as $item) {
+
                         $item->status = 3; // Selesai
                         $item->save();
                         
-                        // Kembalikan stok inventaris
+                        
                         $inventaris = \App\Models\Inventaris::find($item->id_inventaris);
+
                         if ($inventaris) {
                             $inventaris->jumlah += $item->jumlah_pinjam;
                             
-                            // Update status inventaris menjadi tersedia jika sebelumnya tidak tersedia
+                            
                             if ($inventaris->status == 'Tidak Tersedia' && $inventaris->jumlah > 0) {
+
                                 $inventaris->status = 'Tersedia';
                             }
                             $inventaris->save();
