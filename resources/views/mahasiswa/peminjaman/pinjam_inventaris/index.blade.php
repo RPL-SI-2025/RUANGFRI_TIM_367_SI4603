@@ -1,115 +1,267 @@
+
 @extends('mahasiswa.layouts.app')
 
 @section('content')
 <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="text-primary mb-0 fw-bold">
-            <i class="fa fa-box me-2"></i>Daftar Peminjaman Inventaris
-        </h4>
-        <a href="{{ route('mahasiswa.katalog.inventaris.index') }}" class="btn btn-outline-primary rounded-pill">
-            <i class="fa fa-plus me-1"></i> Pinjam Inventaris Baru
-        </a>
+    <!-- Enhanced Header Section -->
+    <div class="header-container">
+        <div class="header-background">
+            <div class="header-pattern"></div>
+            <div class="header-glow"></div>
+        </div>
+        <div class="header-content">
+            <div class="header-left">
+                <div class="header-icon-wrapper">
+                    <div class="header-icon-bg">
+                        <i class="fa fa-box header-icon"></i>
+                    </div>
+                    <div class="header-icon-pulse"></div>
+                </div>
+                <div class="header-text">
+                    <h1 class="header-title">
+                        Daftar Peminjaman
+                        <span class="header-title-highlight">Inventaris</span>
+                    </h1>
+                    <p class="header-subtitle">
+                        <i class="fa fa-chart-line me-2"></i>
+                        Kelola dan pantau status peminjaman inventaris Anda secara real-time
+                    </p>
+                    <div class="header-breadcrumb">
+                        <span class="breadcrumb-item">
+                            <i class="fa fa-home"></i> Dashboard
+                        </span>
+                        <i class="fa fa-chevron-right breadcrumb-separator"></i>
+                        <span class="breadcrumb-item active">Peminjaman Inventaris</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="header-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">{{ $pinjamInventaris->where('status', 0)->count() }}</div>
+                        <div class="stat-label">Menunggu</div>
+                        <div class="stat-indicator stat-warning"></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">{{ $pinjamInventaris->where('status', 1)->count() }}</div>
+                        <div class="stat-label">Disetujui</div>
+                        <div class="stat-indicator stat-success"></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">{{ $pinjamInventaris->where('status', 3)->count() }}</div>
+                        <div class="stat-label">Selesai</div>
+                        <div class="stat-indicator stat-info"></div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <a href="{{ route('mahasiswa.katalog.inventaris.index') }}" class="btn-futuristic btn-primary-futuristic">
+                        <div class="btn-bg"></div>
+                        <div class="btn-content">
+                            <i class="fa fa-plus btn-icon"></i>
+                            <span class="btn-text">Pinjam Inventaris</span>
+                            <div class="btn-glow"></div>
+                        </div>
+                        <div class="btn-particles">
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="header-wave">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,60 C300,0 600,120 900,60 C1050,30 1150,90 1200,60 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.1)"></path>
+            </svg>
+        </div>
     </div>
 
+    <!-- Alert Messages -->
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fa fa-check-circle me-2"></i>{{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-lg alert-futuristic" role="alert">
+            <div class="alert-bg"></div>
+            <div class="d-flex align-items-center position-relative">
+                <div class="alert-icon-wrapper me-3">
+                    <div class="alert-icon-bg bg-success">
+                        <i class="fa fa-check"></i>
+                    </div>
+                    <div class="alert-icon-pulse"></div>
+                </div>
+                <div class="alert-content">
+                    <div class="alert-title">Berhasil!</div>
+                    <div class="alert-message">{{ session('success') }}</div>
+                </div>
+                <button type="button" class="btn-close btn-close-futuristic" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         </div>
     @endif
 
     @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="fa fa-exclamation-circle me-2"></i>{{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-lg alert-futuristic" role="alert">
+            <div class="alert-bg alert-bg-danger"></div>
+            <div class="d-flex align-items-center position-relative">
+                <div class="alert-icon-wrapper me-3">
+                    <div class="alert-icon-bg bg-danger">
+                        <i class="fa fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="alert-icon-pulse"></div>
+                </div>
+                <div class="alert-content">
+                    <div class="alert-title">Error!</div>
+                    <div class="alert-message">{{ session('error') }}</div>
+                </div>
+                <button type="button" class="btn-close btn-close-futuristic" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         </div>
     @endif
 
-    <div class="card shadow-sm border-0">
+    <!-- Main Content Card -->
+    <div class="card border-0 shadow-lg main-card">
+        <div class="card-header bg-gradient-primary text-white py-3 border-0 card-header-futuristic">
+            <div class="card-header-bg"></div>
+            <div class="d-flex align-items-center position-relative">
+                <div class="icon-circle bg-white text-primary me-3">
+                    <i class="fa fa-list"></i>
+                </div>
+                <h5 class="mb-0 fw-bold">Riwayat Peminjaman</h5>
+                <div class="card-header-glow"></div>
+            </div>
+        </div>
+        
         <div class="card-body p-0">
+            @php
+                $groupedPinjamInventaris = $pinjamInventaris->groupBy(function($item) {
+                    return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                           $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . 
+                           ($item->file_scan ?? 'no-file') . '-' . $item->id_mahasiswa;
+                });
+            @endphp
+            
             @if($pinjamInventaris->count() > 0)
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0">
+                    <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th class="px-3 py-3">No</th>
-                                <th class="px-3 py-3">Tanggal</th>
-                                <th class="px-3 py-3">Daftar Inventaris</th>
-                                <th class="px-3 py-3">Waktu</th>
-                                <th class="px-3 py-3">Status</th>
-                                <th class="px-3 py-3 text-center">Aksi</th>
+                                <th class="px-4 py-3 fw-bold">
+                                    <div class="d-flex align-items-center">
+                                        <div class="number-circle bg-primary text-white me-2">
+                                            #
+                                        </div>
+                                        No
+                                    </div>
+                                </th>
+                                <th class="px-4 py-3 fw-bold">
+                                    <i class="fa fa-calendar text-primary me-2"></i>Tanggal
+                                </th>
+                                <th class="px-4 py-3 fw-bold">
+                                    <i class="fa fa-box text-primary me-2"></i>Daftar Inventaris
+                                </th>
+                                <th class="px-4 py-3 fw-bold">
+                                    <i class="fa fa-clock text-primary me-2"></i>Waktu
+                                </th>
+                                <th class="px-4 py-3 fw-bold">
+                                    <i class="fa fa-info-circle text-primary me-2"></i>Status
+                                </th>
+                                <th class="px-4 py-3 fw-bold text-center">
+                                    <i class="fa fa-cogs text-primary me-2"></i>Aksi
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            @php 
-
-                                $groupedPinjam = $pinjamInventaris->groupBy(function($item) {
-                                    return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
-                                          $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
-                                });
-                                $i = 1;
-                            @endphp
-
-                            @foreach($groupedPinjam as $group)
+                            @foreach($groupedPinjamInventaris as $index => $group)
                                 @php
                                     $firstItem = $group->first();
                                 @endphp
-                                <tr>
-                                    <td class="px-3 py-3">{{ $i++ }}</td>
-                                    <td class="px-3 py-3">
-                                        {{ \Carbon\Carbon::parse($firstItem->tanggal_pengajuan)->format('d M Y') }}
-                                        <span class="text-muted"> s/d </span>
-                                        {{ \Carbon\Carbon::parse($firstItem->tanggal_selesai)->format('d M Y') }}
+                                <tr class="hover-row">
+                                    <td class="px-4 py-3">
+                                        <div class="number-circle bg-light text-dark">
+                                            {{ $loop->iteration }}
+                                        </div>
                                     </td>
-                                    <td class="px-3 py-3">
-                                        <ul class="list-unstyled mb-0">
+                                    <td class="px-4 py-3">
+                                        <div class="d-flex flex-column">
+                                            <span class="fw-bold text-dark">{{ \Carbon\Carbon::parse($firstItem->tanggal_pengajuan)->format('d M Y') }}</span>
+                                            <small class="text-muted">s/d {{ \Carbon\Carbon::parse($firstItem->tanggal_selesai)->format('d M Y') }}</small>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <div class="item-list">
                                             @foreach($group as $pinjam)
-                                                <li><i class="fa fa-circle-o text-primary me-2 small"></i>{{ $pinjam->inventaris->nama_inventaris ?? 'Inventaris tidak ditemukan' }} ({{ $pinjam->jumlah_pinjam }})</li>
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <div class="item-bullet bg-primary"></div>
+                                                    <span class="fw-medium">{{ $pinjam->inventaris->nama_inventaris ?? 'Inventaris tidak ditemukan' }}</span>
+                                                    <span class="badge bg-light text-dark ms-2">({{ $pinjam->jumlah_pinjam }})</span>
+                                                </div>
                                             @endforeach
-                                        </ul>
+                                        </div>
                                     </td>
-                                    <td class="px-3 py-3">
-                                        {{ \Carbon\Carbon::parse($firstItem->waktu_mulai)->format('H:i') }} - 
-                                        {{ \Carbon\Carbon::parse($firstItem->waktu_selesai)->format('H:i') }}
+                                    <td class="px-4 py-3">
+                                        <div class="time-range">
+                                            <i class="fa fa-clock text-muted me-1"></i>
+                                            <span class="fw-medium">{{ \Carbon\Carbon::parse($firstItem->waktu_mulai)->format('H:i') }}</span>
+                                            <span class="text-muted mx-1">-</span>
+                                            <span class="fw-medium">{{ \Carbon\Carbon::parse($firstItem->waktu_selesai)->format('H:i') }}</span>
+                                        </div>
                                     </td>
-                                    <td class="px-3 py-3">
+                                    <td class="px-4 py-3">
                                         @if($firstItem->status == 0)
-                                            <span class="badge bg-warning text-dark">Menunggu</span>
+                                            <span class="badge bg-warning-gradient text-dark px-3 py-2 rounded-pill">
+                                                <i class="fa fa-clock me-1"></i>Menunggu
+                                            </span>
                                         @elseif($firstItem->status == 1)
-                                            <span class="badge bg-success">Disetujui</span>
+                                            <span class="badge bg-success-gradient text-white px-3 py-2 rounded-pill">
+                                                <i class="fa fa-check me-1"></i>Disetujui
+                                            </span>
                                         @elseif($firstItem->status == 2)
-                                            <span class="badge bg-danger">Ditolak</span>
+                                            <span class="badge bg-danger-gradient text-white px-3 py-2 rounded-pill">
+                                                <i class="fa fa-times me-1"></i>Ditolak
+                                            </span>
                                         @elseif($firstItem->status == 3)
-                                            <span class="badge bg-info">Selesai</span>
+                                            <span class="badge bg-info-gradient text-white px-3 py-2 rounded-pill">
+                                                <i class="fa fa-flag-checkered me-1"></i>Selesai
+                                            </span>
                                         @else
-                                            <span class="badge bg-secondary">Dibatalkan</span>
+                                            <span class="badge bg-secondary-gradient text-white px-3 py-2 rounded-pill">
+                                                <i class="fa fa-ban me-1"></i>Dibatalkan
+                                            </span>
                                         @endif
                                     </td>
-                                    <td class="px-3 py-3 text-center">
-                                        <div class="btn-group">
+                                    <td class="px-4 py-3">
+                                        <div class="action-buttons d-flex justify-content-center gap-1">
                                             <a href="{{ route('mahasiswa.peminjaman.pinjam-inventaris.show', $firstItem->id) }}" 
-                                               class="btn btn-sm btn-outline-primary">
-                                                <i class="fa fa-eye"></i>
+                                               class="btn-link-action text-primary text-decoration-none fw-medium" 
+                                               data-bs-toggle="tooltip" title="Lihat Detail">
+                                                Detail
                                             </a>
+                                            
                                             @if($firstItem->status == 0)
+                                                <span class="text-muted mx-1">/</span>
                                                 <a href="{{ route('mahasiswa.peminjaman.pinjam-inventaris.edit', $firstItem->id) }}" 
-                                                   class="btn btn-sm btn-outline-success">
-                                                    <i class="fa fa-edit"></i>
+                                                   class="btn-link-action text-success text-decoration-none fw-medium"
+                                                   data-bs-toggle="tooltip" title="Edit Peminjaman">
+                                                    Edit
                                                 </a>
+                                                <span class="text-muted mx-1">/</span>
                                                 <form action="{{ route('mahasiswa.peminjaman.pinjam-inventaris.destroy', $firstItem->id) }}" 
                                                       method="POST" class="d-inline" 
                                                       onsubmit="return confirm('Apakah Anda yakin ingin membatalkan peminjaman ini?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                        <i class="fa fa-times"></i>
+                                                    <button type="submit" 
+                                                            class="btn-link-action text-danger border-0 bg-transparent p-0 fw-medium"
+                                                            data-bs-toggle="tooltip" title="Batalkan Peminjaman">
+                                                        Hapus
                                                     </button>
                                                 </form>
                                             @endif
+                                            
                                             @if($firstItem->status == 1)
+                                                <span class="text-muted mx-1">/</span>
                                                 <a href="{{ route('mahasiswa.pelaporan.lapor_inventaris.create', ['id_peminjaman' => $firstItem->id]) }}" 
-                                                class="btn btn-sm btn-outline-warning">
-                                                    <i class="fa fa-flag"></i> Lapor
+                                                   class="btn-link-action text-warning text-decoration-none fw-medium"
+                                                   data-bs-toggle="tooltip" title="Buat Laporan">
+                                                    Lapor
                                                 </a>
                                             @endif
                                         </div>
@@ -119,13 +271,31 @@
                         </tbody>
                     </table>
                 </div>
+                
+                <!-- Pagination -->
+            <div class="d-flex justify-content-center py-4 border-top pagination-wrapper">
+                <div class="pagination-container">
+                    {{ $pinjamInventaris->links('pagination.custom-pagination') }}
+                </div>
+            </div>
             @else
-                <div class="text-center py-5">
-                    <i class="fa fa-box-open text-muted" style="font-size: 4rem;"></i>
-                    <p class="mt-3 text-muted">Belum ada peminjaman inventaris</p>
-                    <a href="{{ route('mahasiswa.katalog.inventaris.index') }}" class="btn btn-primary mt-2">
-                        <i class="fa fa-plus me-1"></i> Mulai Peminjaman Inventaris
-                    </a>
+                <!-- Empty State -->
+                <div class="empty-state text-center py-5">
+                    <div class="py-4">
+                        <div class="mb-4">
+                            <i class="fa fa-box-open display-1 text-muted opacity-50"></i>
+                        </div>
+                        <h4 class="text-muted mb-3 fw-bold">Belum ada peminjaman inventaris</h4>
+                        <p class="text-muted mb-4 lead">
+                            Mulai pinjam inventaris untuk kebutuhan akademik Anda
+                        </p>
+                        <div class="empty-state-actions">
+                            <a href="{{ route('mahasiswa.katalog.inventaris.index') }}" 
+                               class="btn btn-primary rounded-pill px-4 py-2 shadow-sm">
+                                <i class="fa fa-plus me-2"></i> Mulai Peminjaman Inventaris
+                            </a>
+                        </div>
+                    </div>
                 </div>
             @endif
         </div>
@@ -133,16 +303,930 @@
 </div>
 
 <style>
-.btn-group .btn {
-    border-radius: 0;
+:root {
+    --primary-gradient: linear-gradient(135deg, #1e1e2e 0%, #2a2a3a 100%);
+    --success-gradient: linear-gradient(135deg, #1a4d4d 0%, #2d6666 100%);
+    --warning-gradient: linear-gradient(135deg, #4d3319 0%, #664d33 100%);
+    --danger-gradient: linear-gradient(135deg, #4d1a1a 0%, #662d2d 100%);
+    --info-gradient: linear-gradient(135deg, #1a3d4d 0%, #2d5266 100%);
+    --secondary-gradient: linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 100%);
+    --futuristic-blue: linear-gradient(135deg, #1a2332 0%, #2d3748 100%);
+    --futuristic-purple: linear-gradient(135deg, #1e1e2e 0%, #2a2a3a 100%);
+    --neon-blue: #1e293b;
+    --neon-purple: #334155;
+    --glass-bg: rgba(0, 0, 0, 0.3);
+    --glass-border: rgba(255, 255, 255, 0.1);
 }
-.btn-group .btn:first-child {
-    border-top-left-radius: 0.25rem;
-    border-bottom-left-radius: 0.25rem;
+
+/* Enhanced Header Section */
+.header-container {
+    position: relative;
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+    border-radius: 25px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
-.btn-group .btn:last-child {
-    border-top-right-radius: 0.25rem;
-    border-bottom-right-radius: 0.25rem;
+
+.header-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(45, 55, 72, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(74, 85, 104, 0.4) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(26, 32, 44, 0.3) 0%, transparent 50%);
+}
+
+.header-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(30deg, rgba(255, 255, 255, 0.02) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.02) 87.5%, rgba(255, 255, 255, 0.02)),
+        linear-gradient(150deg, rgba(255, 255, 255, 0.02) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.02) 87.5%, rgba(255, 255, 255, 0.02));
+    background-size: 40px 40px;
+}
+
+.header-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    background: radial-gradient(circle, rgba(30, 41, 59, 0.15) 0%, transparent 70%);
+    animation: headerGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes headerGlow {
+    0% { transform: rotate(0deg) scale(1); }
+    100% { transform: rotate(180deg) scale(1.1); }
+}
+
+.header-content {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.5rem;
+    gap: 2rem;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex: 1;
+}
+
+.header-icon-wrapper {
+    position: relative;
+}
+
+.header-icon-bg {
+    width: 80px;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+.header-icon {
+    font-size: 2rem;
+    color: #e2e8f0;
+    filter: drop-shadow(0 0 10px rgba(226, 232, 240, 0.3));
+}
+
+.header-icon-pulse {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border: 2px solid #1e293b;
+    border-radius: 25px;
+    animation: iconPulse 2s infinite;
+}
+
+@keyframes iconPulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.2); opacity: 0; }
+}
+
+.header-text {
+    flex: 1;
+}
+
+.header-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #e2e8f0;
+    margin: 0;
+    text-shadow: 0 0 20px rgba(226, 232, 240, 0.3);
+    letter-spacing: -0.02em;
+}
+
+.header-title-highlight {
+    background: linear-gradient(135deg, #1e293b, #334155);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 10px rgba(30, 41, 59, 0.3));
+}
+
+.header-subtitle {
+    color: rgba(226, 232, 240, 0.7);
+    font-size: 1.1rem;
+    margin: 0.5rem 0 1rem 0;
+    font-weight: 400;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.header-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: rgba(226, 232, 240, 0.5);
+}
+
+.breadcrumb-item.active {
+    color: #1e293b;
+    font-weight: 600;
+}
+
+.breadcrumb-separator {
+    font-size: 0.7rem;
+    opacity: 0.5;
+}
+
+.header-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-end;
+}
+
+.header-stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat-card {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #1e293b, transparent);
+    animation: statGlow 2s infinite;
+}
+
+@keyframes statGlow {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.stat-number {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    text-shadow: 0 0 10px rgba(226, 232, 240, 0.3);
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: rgba(226, 232, 240, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.25rem;
+}
+
+.stat-indicator {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: indicatorBlink 1.5s infinite;
+}
+
+.stat-warning { background: #ed8936; }
+.stat-success { background: #38a169; }
+.stat-info { background: #1e293b; }
+
+@keyframes indicatorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Futuristic Button */
+.btn-futuristic {
+    position: relative;
+    padding: 0;
+    border: none;
+    background: none;
+    text-decoration: none;
+    overflow: hidden;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary-futuristic .btn-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.btn-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 1rem;
+    z-index: 2;
+}
+
+.btn-icon {
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-text {
+    transition: all 0.3s ease;
+}
+
+.btn-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.btn-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #e2e8f0;
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.particle:nth-child(1) {
+    top: 20%;
+    left: 20%;
+    animation: particleFloat 3s infinite;
+}
+
+.particle:nth-child(2) {
+    top: 60%;
+    left: 70%;
+    animation: particleFloat 3s infinite 0.5s;
+}
+
+.particle:nth-child(3) {
+    top: 80%;
+    left: 40%;
+    animation: particleFloat 3s infinite 1s;
+}
+
+@keyframes particleFloat {
+    0%, 100% { opacity: 0; transform: translateY(0px); }
+    50% { opacity: 1; transform: translateY(-10px); }
+}
+
+.btn-futuristic:hover .btn-bg {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%);
+    box-shadow: 0 10px 30px rgba(30, 41, 59, 0.4);
+}
+
+.btn-futuristic:hover .btn-glow {
+    transform: translateX(100%);
+}
+
+.btn-futuristic:hover .btn-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.btn-futuristic:hover {
+    transform: translateY(-2px);
+}
+
+/* Header Wave */
+.header-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    overflow: hidden;
+}
+
+.header-wave svg {
+    width: 100%;
+    height: 100%;
+}
+
+.header-wave path {
+    fill: rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced Alert Messages */
+.alert-futuristic {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 1.5rem;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.alert-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(56, 161, 105, 0.2), rgba(56, 161, 105, 0.1));
+}
+
+.alert-bg-danger {
+    background: linear-gradient(135deg, rgba(229, 62, 62, 0.2), rgba(229, 62, 62, 0.1));
+}
+
+.alert-icon-wrapper {
+    position: relative;
+}
+
+.alert-icon-bg {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.alert-icon-pulse {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: alertPulse 2s infinite;
+}
+
+@keyframes alertPulse {
+    0% { transform: scale(1); opacity: 0.3; }
+    100% { transform: scale(1.3); opacity: 0; }
+}
+
+.alert-content {
+    flex: 1;
+    color: #e2e8f0;
+}
+
+.alert-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    color: #e2e8f0;
+}
+
+.alert-message {
+    opacity: 0.9;
+    color: #cbd5e0;
+}
+
+.btn-close-futuristic {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: #e2e8f0;
+}
+
+.btn-close-futuristic:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
+/* Enhanced Main Card */
+.main-card {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    background: #ffffff;
+}
+
+.card-header-futuristic {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+}
+
+.card-header-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+}
+
+.card-header-glow {
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    right: -100%;
+    bottom: -100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 70%);
+    animation: cardGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes cardGlow {
+    0% { transform: scale(1) rotate(0deg); }
+    100% { transform: scale(1.1) rotate(180deg); }
+}
+
+/* Card Header Title Fix - Kontras dengan Background Gelap */
+.card-header h5 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.card-header .icon-circle {
+    background: #ffffff !important;
+    color: #2d3748 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+}
+
+.bg-success-gradient {
+    background: linear-gradient(135deg, #276749 0%, #38a169 100%);
+}
+
+.bg-warning-gradient {
+    background: linear-gradient(135deg, #b7791f 0%, #ed8936 100%);
+}
+
+.bg-danger-gradient {
+    background: linear-gradient(135deg, #c53030 0%, #e53e3e 100%);
+}
+
+.bg-info-gradient {
+    background: linear-gradient(135deg, #2a4365 0%, #3182ce 100%);
+}
+
+.bg-secondary-gradient {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+}
+
+/* Icon Circle */
+.icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+    background: #e2e8f0;
+    color: #2d3748;
+}
+
+/* Number Circle */
+.number-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.875rem;
+}
+
+.number-circle.bg-light {
+    background: #f8f9fa !important;
+    color: #333 !important;
+}
+
+.number-circle.bg-primary {
+    background: #1e293b !important;
+    color: #e2e8f0 !important;
+}
+
+/* Table Styles - WHITE BACKGROUND */
+.table {
+    border: none;
+    background: #ffffff;
+    color: #333;
+}
+
+.table thead th {
+    border-bottom: 2px solid #e9ecef;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    background-color: #f8f9fa !important;
+    color: #333;
+}
+
+.table thead th .text-primary {
+    color: #1e293b !important;
+}
+
+.table-light {
+    background-color: #f8f9fa !important;
+    color: #333;
+}
+
+.hover-row {
+    transition: all 0.3s ease;
+    background-color: #ffffff;
+    color: #333;
+}
+
+.hover-row:hover {
+    background-color: #f8f9fa !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Item List Styles */
+.item-list {
+    max-width: 250px;
+}
+
+.item-bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.item-bullet.bg-primary {
+    background: #1e293b !important;
+}
+
+/* Time Range - Improved Contrast */
+.time-range {
+    font-family: 'Courier New', monospace;
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border-left: 3px solid #1e293b;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.time-range:hover {
+    background-color: #1e293b;
+    color: #ffffff !important;
+    border-left: 3px solid #0f172a;
+    box-shadow: 0 4px 12px rgba(30, 41, 59, 0.4);
+    transform: translateY(-2px);
+    font-weight: bold;
+}
+
+.time-range:hover .fa-clock {
+    color: #ffffff !important;
+}
+
+.time-range:hover .fw-medium {
+    font-weight: 700;
+    color: #ffffff !important;
+}
+
+.time-range:hover .text-muted {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.time-range:hover * {
+    color: #ffffff !important;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+.text-dark {
+    color: #333 !important;
+}
+
+.fw-bold, .fw-medium {
+    color: #333 !important;
+}
+
+/* Action Buttons - New Style */
+.action-buttons {
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+.btn-link-action {
+    font-size: 0.875rem;
+    font-weight: 600 !important;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-transform: capitalize;
+}
+
+.btn-link-action:hover {
+    opacity: 0.8;
+    text-decoration: underline !important;
+}
+
+.btn-link-action.text-primary {
+    color: #1e293b !important;
+}
+
+.btn-link-action.text-primary:hover {
+    color: #0f172a !important;
+}
+
+.btn-link-action.text-success:hover {
+    color: #276749 !important;
+}
+
+.btn-link-action.text-danger:hover {
+    color: #c53030 !important;
+}
+
+.btn-link-action.text-warning:hover {
+    color: #b7791f !important;
+}
+
+/* Badge Enhancements */
+.badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge.bg-light {
+    background: #e9ecef !important;
+    color: #333 !important;
+}
+
+/* Empty State */
+.empty-state {
+    padding: 3rem 1rem;
+    background: #ffffff;
+    color: #333;
+}
+
+.empty-state .text-muted {
+    color: #6c757d !important;
+}
+
+.empty-state-actions .btn {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: #1e293b;
+    border-color: #1e293b;
+    color: #e2e8f0;
+}
+
+.empty-state-actions .btn:hover {
+    background: #0f172a;
+    border-color: #0f172a;
+}
+
+/* Card Enhancements */
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+}
+
+.card-body {
+    background: #ffffff;
+    color: #333;
+}
+
+.card-header {
+    border-bottom: none;
+    background: #2d3748;
+    color: #e2e8f0;
+}
+
+.border-top {
+    border-top: 1px solid #e9ecef !important;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 2rem;
+    }
+    
+    .header-left {
+        justify-content: center;
+    }
+    
+    .header-right {
+        align-items: center;
+    }
+    
+    .header-stats {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        padding: 2rem 1.5rem;
+    }
+    
+    .header-title {
+        font-size: 2rem;
+    }
+    
+    .header-icon-bg {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .header-icon {
+        font-size: 1.5rem;
+    }
+    
+    .stat-card {
+        padding: 0.75rem 1rem;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.25rem !important;
+        align-items: center;
+    }
+    
+    .action-buttons .text-muted {
+        display: none;
+    }
+    
+    .btn-link-action {
+        font-size: 0.8rem;
+        padding: 0.1rem 0;
+    }
+    
+    .item-list {
+        max-width: 200px;
+        font-size: 0.875rem;
+    }
+    
+    .time-range {
+        font-size: 0.875rem;
+        padding: 6px 10px;
+    }
+    
+    .time-range:hover {
+        font-weight: bold;
+        box-shadow: 0 2px 8px rgba(30, 41, 59, 0.3);
+    }
+    
+    .time-range:hover * {
+        color: #ffffff !important;
+    }
+}
+
+/* Mobile specific adjustments */
+@media (max-width: 576px) {
+    .header-title {
+        font-size: 1.75rem;
+    }
+    
+    .header-subtitle {
+        font-size: 1rem;
+    }
+    
+    .header-stats {
+        gap: 0.5rem;
+    }
+    
+    .stat-card {
+        padding: 0.5rem 0.75rem;
+        min-width: 80px;
+    }
+    
+    .btn-content {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .action-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem !important;
+    }
+    
+    .action-buttons .text-muted {
+        display: inline;
+        font-size: 0.75rem;
+    }
+    
+    .time-range {
+        font-size: 0.8rem;
+        padding: 6px 8px;
+    }
+    
+    .time-range:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(30, 41, 59, 0.3);
+    }
+    
+    .time-range:hover * {
+        color: #ffffff !important;
+    }
 }
 </style>
+
 @endsection
