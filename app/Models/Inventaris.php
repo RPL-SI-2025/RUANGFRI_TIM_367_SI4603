@@ -13,11 +13,12 @@ class Inventaris extends Model
 
     protected $fillable = [
         'nama_inventaris',
-        'jenis',
+        'kategori_id', 
         'deskripsi',
         'jumlah',
         'status',
         'gambar_inventaris',
+        'id_logistik'
     ];
 
 
@@ -26,6 +27,10 @@ class Inventaris extends Model
         return $this->belongsTo(AdminLogistik::class, 'id_logistik');
     }
 
+    public function kategori()
+    {
+        return $this->belongsTo(KategoriInventaris::class, 'kategori_id');
+    }
 
     public function peminjaman()
     {

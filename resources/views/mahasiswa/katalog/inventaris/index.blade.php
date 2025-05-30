@@ -17,7 +17,7 @@
     <div class="card-body">
         <form method="GET" action="{{ route('mahasiswa.katalog.inventaris.index') }}" class="row g-3 align-items-end">
             <!-- Search Filter -->
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <label for="search" class="form-label text-primary fw-bold">Cari Inventaris</label>
                 <div class="input-group">
                     <span class="input-group-text border-end-0 bg-white">
@@ -32,24 +32,25 @@
                 </div>
             </div>
 
-            <!-- Jenis Filter -->
+            <!-- Kategori Filter -->
             <div class="col-md-4">
-                <label for="jenis" class="form-label text-primary fw-bold">Filter Jenis</label>
-                <select name="jenis" id="jenis" class="form-select rounded-pill">
-                    <option value="">Semua Jenis</option>
-                    <option value="Elektronik" {{ request('jenis') == 'Elektronik' ? 'selected' : '' }}>Elektronik</option>
-                    <option value="Furniture" {{ request('jenis') == 'Furniture' ? 'selected' : '' }}>Furniture</option>
-                    <option value="Alat Lab" {{ request('jenis') == 'Alat Lab' ? 'selected' : '' }}>Alat Lab</option>
-                    <option value="Lainnya" {{ request('jenis') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                <label for="kategori_id" class="form-label text-primary fw-bold">Filter Kategori</label>
+                <select name="kategori_id" id="kategori_id" class="form-select rounded-pill">
+                    <option value="">Semua Kategori</option>
+                    @foreach($kategoris as $kategori)
+                        <option value="{{ $kategori->id }}" {{ request('kategori_id') == $kategori->id ? 'selected' : '' }}>
+                            {{ $kategori->nama_kategori }}
+                        </option>
+                    @endforeach
                 </select>
             </div>
 
             <!-- Filter Buttons -->
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <button type="submit" class="btn btn-primary rounded-pill">
                     <i class="fa fa-filter me-2"></i>Filter
                 </button>
-                @if(request()->hasAny(['jenis', 'search']))
+                @if(request()->hasAny(['kategori_id', 'search']))
                     <a href="{{ route('mahasiswa.katalog.inventaris.index') }}" class="btn btn-outline-secondary rounded-pill">
                         <i class="fa fa-times me-2"></i>Reset
                     </a>
@@ -92,6 +93,11 @@
                             <div class="stock-badge me-2">
                                 <span class="badge bg-info rounded-pill">
                                     <i class="fa fa-cubes"></i> Stok: {{ $item->jumlah }}
+                                </span>
+                            </div>
+                            <div class="kategori-badge">
+                                <span class="badge bg-secondary rounded-pill">
+                                    <i class="fa fa-tag"></i> {{ $item->kategori->nama_kategori ?? 'N/A' }}
                                 </span>
                             </div>
                         </div>
@@ -137,7 +143,7 @@
 @endsection
 @push('scripts')
 <script>
-
+    
     document.addEventListener('DOMContentLoaded', function() {
         const successAlert = document.getElementById('successAlert');
         const errorAlert = document.getElementById('errorAlert');
@@ -153,7 +159,7 @@
             setTimeout(function() {
                 const bsAlert = new bootstrap.Alert(errorAlert);
                 bsAlert.close();
-            }, 2000);
+            }, 3000);
         }
     });
 </script>

@@ -89,81 +89,175 @@ class MahasiswaAuthController extends Controller
 
 
 
+
     public function dashboard()
     {
         $mahasiswaId = Session::get('mahasiswa_id');
         
+        if (!$mahasiswaId) {
+            return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+        
+        $mahasiswa = Mahasiswa::find($mahasiswaId);
+        
+        if (!$mahasiswa) {
+            Session::flush();
+            return redirect()->route('mahasiswa.login')->with('error', 'Data mahasiswa tidak ditemukan.');
+        }
+        
         // Get latest ruangan and inventaris
         $ruangans = Ruangan::latest()->take(3)->get();
         $inventaris = Inventaris::latest()->take(3)->get();
-    
-        // Get peminjaman with status = 1 (Disetujui)
-        $peminjamanDiterima = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
-    ->where('status', 1)
-    ->with('ruangan')
-    ->get()
-    ->merge(
-        PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
-        ->where('status', 1)
-        ->with('inventaris')
-        ->get()
-    )
-    ->map(function($item) {
-        return (object)[
-            'id' => $item->id, // Add this line
-            'nama' => $item->ruangan ? $item->ruangan->nama_ruangan : $item->inventaris->nama_inventaris,
-            'jenis' => $item->ruangan ? 'Ruangan' : 'Inventaris',
-            'tanggal' => $item->tanggal_pengajuan
-        ];
-    });
 
-// Do the same for $peminjamanDitolak and $peminjamanPending
-$peminjamanDitolak = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
-    ->where('status', 2)
-    ->with('ruangan')
-    ->get()
-    ->merge(
-        PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
-        ->where('status', 2)
-        ->with('inventaris')
-        ->get()
-    )
-    ->map(function($item) {
-        return (object)[
-            'id' => $item->id, // Add this line
-            'nama' => $item->ruangan ? $item->ruangan->nama_ruangan : $item->inventaris->nama_inventaris,
-            'jenis' => $item->ruangan ? 'Ruangan' : 'Inventaris',
-            'tanggal' => $item->tanggal_pengajuan,
-            'notes' => $item->notes
-        ];
-    });
+        // Get peminjaman with status = 1 (Disetujui) - GROUPED
+        $peminjamanRuanganDiterima = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
+            ->where('status', 1)
+            ->with('ruangan')
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
+            })
+            ->map(function($group, $key) {
+                $firstItem = $group->first();
+                $roomNames = $group->pluck('ruangan.nama_ruangan')->filter()->implode(', ');
+                return [
+                    'key' => $key,
+                    'id' => $firstItem->id,
+                    'nama' => $roomNames ?: 'Ruangan tidak ditemukan',
+                    'jenis' => 'Ruangan',
+                    'tanggal' => $firstItem->tanggal_pengajuan,
+                    'notes' => $firstItem->notes,
+                    'count' => $group->count()
+                ];
+            });
 
-$peminjamanPending = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
-    ->where('status', 0)
-    ->with('ruangan')
-    ->get()
-    ->merge(
-        PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
-        ->where('status', 0)
-        ->with('inventaris')
-        ->get()
-    )
-    ->map(function($item) {
-        return (object)[
-            'id' => $item->id, // Add this line
-            'nama' => $item->ruangan ? $item->ruangan->nama_ruangan : $item->inventaris->nama_inventaris,
-            'jenis' => $item->ruangan ? 'Ruangan' : 'Inventaris',
-            'tanggal' => $item->tanggal_pengajuan
-        ];
-    });
-    
+        $peminjamanInventarisDiterima = PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
+            ->where('status', 1)
+            ->with('inventaris')
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
+            })
+            ->map(function($group, $key) {
+                $firstItem = $group->first();
+                $inventoryNames = $group->pluck('inventaris.nama_inventaris')->filter()->implode(', ');
+                return [
+                    'key' => $key,
+                    'id' => $firstItem->id,
+                    'nama' => $inventoryNames ?: 'Inventaris tidak ditemukan',
+                    'jenis' => 'Inventaris',
+                    'tanggal' => $firstItem->tanggal_pengajuan,
+                    'notes' => $firstItem->notes,
+                    'count' => $group->count()
+                ];
+            });
+
+        $peminjamanDiterima = collect($peminjamanRuanganDiterima->values())
+            ->merge($peminjamanInventarisDiterima->values());
+
+        // Get peminjaman with status = 2 (Ditolak) - GROUPED
+        $peminjamanRuanganDitolak = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
+            ->where('status', 2)
+            ->with('ruangan')
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
+            })
+            ->map(function($group, $key) {
+                $firstItem = $group->first();
+                $roomNames = $group->pluck('ruangan.nama_ruangan')->filter()->implode(', ');
+                return [
+                    'key' => $key,
+                    'id' => $firstItem->id,
+                    'nama' => $roomNames ?: 'Ruangan tidak ditemukan',
+                    'jenis' => 'Ruangan',
+                    'tanggal' => $firstItem->tanggal_pengajuan,
+                    'notes' => $firstItem->notes,
+                    'count' => $group->count()
+                ];
+            });
+
+        $peminjamanInventarisDitolak = PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
+            ->where('status', 2)
+            ->with('inventaris')
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
+            })
+            ->map(function($group, $key) {
+                $firstItem = $group->first();
+                $inventoryNames = $group->pluck('inventaris.nama_inventaris')->filter()->implode(', ');
+                return [
+                    'key' => $key,
+                    'id' => $firstItem->id,
+                    'nama' => $inventoryNames ?: 'Inventaris tidak ditemukan',
+                    'jenis' => 'Inventaris',
+                    'tanggal' => $firstItem->tanggal_pengajuan,
+                    'notes' => $firstItem->notes,
+                    'count' => $group->count()
+                ];
+            });
+
+        $peminjamanDitolak = collect($peminjamanRuanganDitolak->values())
+            ->merge($peminjamanInventarisDitolak->values());
+
+        // Get peminjaman with status = 0 (Pending) - GROUPED
+        $peminjamanRuanganPending = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
+            ->where('status', 0)
+            ->with('ruangan')
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
+            })
+            ->map(function($group, $key) {
+                $firstItem = $group->first();
+                $roomNames = $group->pluck('ruangan.nama_ruangan')->filter()->implode(', ');
+                return [
+                    'key' => $key,
+                    'id' => $firstItem->id,
+                    'nama' => $roomNames ?: 'Ruangan tidak ditemukan',
+                    'jenis' => 'Ruangan',
+                    'tanggal' => $firstItem->tanggal_pengajuan,
+                    'notes' => $firstItem->notes,
+                    'count' => $group->count()
+                ];
+            });
+
+        $peminjamanInventarisPending = PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
+            ->where('status', 0)
+            ->with('inventaris')
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
+            })
+            ->map(function($group, $key) {
+                $firstItem = $group->first();
+                $inventoryNames = $group->pluck('inventaris.nama_inventaris')->filter()->implode(', ');
+                return [
+                    'key' => $key,
+                    'id' => $firstItem->id,
+                    'nama' => $inventoryNames ?: 'Inventaris tidak ditemukan',
+                    'jenis' => 'Inventaris',
+                    'tanggal' => $firstItem->tanggal_pengajuan,
+                    'notes' => $firstItem->notes,
+                    'count' => $group->count()
+                ];
+            });
+
+        $peminjamanPending = collect($peminjamanRuanganPending->values())
+            ->merge($peminjamanInventarisPending->values());
+
         return view('mahasiswa.page.dashboard', compact(
-            'ruangans', 
-            'inventaris', 
-            'peminjamanDiterima', 
-            'peminjamanDitolak', 
-            'peminjamanPending'
+            'mahasiswa', 'ruangans', 'inventaris', 
+            'peminjamanDiterima', 'peminjamanDitolak', 'peminjamanPending'
         ));
     }
+
 
 }

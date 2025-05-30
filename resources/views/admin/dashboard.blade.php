@@ -1,4 +1,4 @@
-<!-- filepath: c:\Users\ali\Documents\GitHub\RUANGFRI_TIM_367_SI4603\resources\views\admin\dashboard.blade.php -->
+
 @extends('admin.layouts.admin')
 
 @section('title', 'Dashboard Admin')
@@ -77,9 +77,9 @@
                         </div>
                     </div>
                 </div>
-                        <div class="progress" style="height: 4px;">
-                            <div class="progress-bar bg-success" style="width: {{ $totalInventaris > 0 ? ($inventarisTersedia/$totalInventaris)*100 : 0 }}%"></div>
-                        </div>
+                <div class="progress" style="height: 4px;">
+                    <div class="progress-bar bg-success" style="width: {{ $totalInventaris > 0 ? ($inventarisTersedia/$totalInventaris)*100 : 0 }}%"></div>
+                </div>
             </div>
         </div>
 
@@ -150,7 +150,7 @@
         </div>
 
         <!-- Recent Activities -->
-        <div class="col-lg-4">
+      <div class="col-lg-4">
             <div class="card border-0 shadow-sm rounded-3">
                 <div class="card-header bg-white py-3 border-bottom">
                     <h5 class="fw-bold text-success mb-0">
@@ -163,7 +163,17 @@
                             <div class="activity-item p-3 border-bottom">
                                 <div class="d-flex align-items-center mb-2">
                                     <span class="activity-icon bg-light rounded-circle p-2 me-3">
-                                        <i class="fas fa-bell text-primary"></i>
+                                        @if($aktivitas->type == 'peminjaman_ruangan')
+                                            <i class="fas fa-building text-primary"></i>
+                                        @elseif($aktivitas->type == 'peminjaman_inventaris')
+                                            <i class="fas fa-boxes text-success"></i>
+                                        @elseif($aktivitas->type == 'laporan_inventaris')
+                                            <i class="fas fa-flag text-warning"></i>
+                                        @elseif($aktivitas->type == 'laporan_ruangan')
+                                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                                        @else
+                                            <i class="fas fa-bell text-info"></i>
+                                        @endif
                                     </span>
                                     <p class="mb-0 flex-grow-1">{{ $aktivitas->deskripsi }}</p>
                                 </div>
@@ -185,7 +195,7 @@
                                 <a href="{{ route('admin.pinjam-ruangan.index') }}" class="text-decoration-none">
                                     <div class="quick-stat p-2 rounded-3 bg-primary bg-opacity-10 text-primary">
                                         <i class="fas fa-clock fa-fw mb-1"></i>
-                                        <div class="small fw-medium">Peminjaman Pending</div>
+                                        <div class="small fw-medium">Pengajuan Pending</div>
                                         <div class="fw-bold">{{ $pendingPeminjaman ?? 0 }}</div>
                                     </div>
                                 </a>
@@ -208,6 +218,7 @@
 </div>
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const ctx = document.getElementById('peminjamanChart').getContext('2d');
 let currentChart = null;
@@ -215,8 +226,8 @@ let currentChart = null;
 const chartData = {
     ruangan: {
         month: {
-            labels: {!! json_encode($grafik['bulan']) !!},
-            data: {!! json_encode($grafik['jumlah']) !!}
+            labels: @json($grafik['bulan'] ?? []),
+            data: @json($grafik['jumlah'] ?? [])
         },
         week: {
             labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
@@ -225,8 +236,8 @@ const chartData = {
     },
     inventaris: {
         month: {
-            labels: {!! json_encode($grafik['bulan']) !!},
-            data: {!! json_encode($grafik['jumlah_inventaris'] ?? array_fill(0, 6, 0)) !!}
+            labels: @json($grafik['bulan'] ?? []),
+            data: @json($grafik['jumlah_inventaris'] ?? [])
         },
         week: {
             labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
@@ -285,26 +296,31 @@ updateChart();
 
 // Add event listeners for buttons
 document.querySelectorAll('[data-type]').forEach(button => {
-    button.addEventListener('click', (e) => {
-        document.querySelectorAll('[data-type]').forEach(btn => btn.classList.remove('active'));
-        e.target.classList.add('active');
-        updateChart(
-            e.target.dataset.type,
-            document.querySelector('[data-period].active').dataset.period
-        );
+    button.addEventListener('click', function() {
+        const type = this.dataset.type;
+        const period = document.querySelector('[data-period].active').dataset.period;
+        
+        // Update active state
+        document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        updateChart(type, period);
     });
 });
 
 document.querySelectorAll('[data-period]').forEach(button => {
-    button.addEventListener('click', (e) => {
-        document.querySelectorAll('[data-period]').forEach(btn => btn.classList.remove('active'));
-        e.target.classList.add('active');
-        updateChart(
-            document.querySelector('[data-type].active').dataset.type,
-            e.target.dataset.period
-        );
+    button.addEventListener('click', function() {
+        const period = this.dataset.period;
+        const type = document.querySelector('[data-type].active').dataset.type;
+        
+        // Update active state
+        document.querySelectorAll('[data-period]').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        updateChart(type, period);
     });
 });
 </script>
 @endpush
+
 @endsection
