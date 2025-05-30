@@ -12,6 +12,53 @@
         </a>
     </div>
 
+<!-- Add Filter Section -->
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form method="GET" action="{{ route('mahasiswa.katalog.inventaris.index') }}" class="row g-3 align-items-end">
+            <!-- Search Filter -->
+            <div class="col-md-5">
+                <label for="search" class="form-label text-primary fw-bold">Cari Inventaris</label>
+                <div class="input-group">
+                    <span class="input-group-text border-end-0 bg-white">
+                        <i class="fa fa-search text-muted"></i>
+                    </span>
+                    <input type="text" 
+                           class="form-control border-start-0" 
+                           id="search" 
+                           name="search" 
+                           placeholder="Cari berdasarkan nama atau deskripsi..."
+                           value="{{ request('search') }}">
+                </div>
+            </div>
+
+            <!-- Jenis Filter -->
+            <div class="col-md-4">
+                <label for="jenis" class="form-label text-primary fw-bold">Filter Jenis</label>
+                <select name="jenis" id="jenis" class="form-select rounded-pill">
+                    <option value="">Semua Jenis</option>
+                    <option value="Elektronik" {{ request('jenis') == 'Elektronik' ? 'selected' : '' }}>Elektronik</option>
+                    <option value="Furniture" {{ request('jenis') == 'Furniture' ? 'selected' : '' }}>Furniture</option>
+                    <option value="Alat Lab" {{ request('jenis') == 'Alat Lab' ? 'selected' : '' }}>Alat Lab</option>
+                    <option value="Lainnya" {{ request('jenis') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                </select>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary rounded-pill">
+                    <i class="fa fa-filter me-2"></i>Filter
+                </button>
+                @if(request()->hasAny(['jenis', 'search']))
+                    <a href="{{ route('mahasiswa.katalog.inventaris.index') }}" class="btn btn-outline-secondary rounded-pill">
+                        <i class="fa fa-times me-2"></i>Reset
+                    </a>
+                @endif
+            </div>
+        </form>
+    </div>
+</div>
+
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
             <i class="fa fa-check-circle me-2"></i>{{ session('success') }}
@@ -61,25 +108,25 @@
                     </div>
                     <p class="card-text text-muted flex-grow-1 mb-3">{{ Str::limit($item->deskripsi, 80) }}</p>
                     <div class="d-flex justify-content-between">
-                        <a href="{{ route('mahasiswa.katalog.inventaris.show', $item->id) }}"
-                           class="btn btn-sm btn-outline-primary rounded-pill">
-                            <i class="fa fa-info-circle me-1"></i> Detail
-                        </a>
-                        @if($item->status === 'Tersedia' && $item->jumlah > 0)
-                        <form action="{{ route('mahasiswa.cart.keranjang_inventaris.add') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="id_inventaris" value="{{ $item->id }}">
-                            <input type="hidden" name="jumlah" value="1">
-                            <button class="btn btn-sm btn-primary rounded-pill">
-                                <i class="fa fa-cart-plus me-1"></i> Tambahkan
-                            </button>
-                        </form>
-                        @else
-                        <button class="btn btn-sm btn-secondary rounded-pill" disabled>
-                            <i class="fa fa-ban me-1"></i> Tidak Tersedia
-                        </button>
-                        @endif
-                    </div>
+    <a href="{{ route('mahasiswa.katalog.inventaris.show', $item->id) }}"
+       class="btn btn-sm btn-outline-primary rounded-pill">
+        <i class="fa fa-info-circle me-1"></i> Detail
+    </a>
+    @if($item->status === 'Tersedia' && $item->jumlah > 0)
+        <form action="{{ route('mahasiswa.cart.keranjang_inventaris.add') }}" method="POST">
+            @csrf
+            <input type="hidden" name="id_inventaris" value="{{ $item->id }}">
+            <input type="hidden" name="jumlah" value="1">
+            <button class="btn btn-sm btn-primary rounded-pill">
+                <i class="fa fa-cart-plus me-1"></i> Tambahkan
+            </button>
+        </form>
+    @else
+        <button class="btn btn-sm btn-secondary rounded-pill" disabled>
+            <i class="fa fa-ban me-1"></i> Tidak Tersedia
+        </button>
+    @endif
+</div>
                 </div>
             </div>
         </div>

@@ -25,6 +25,7 @@ class InventarisController extends Controller
     $data = $request->validate([
         'gambar_inventaris' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         'nama_inventaris'   => 'required|string|unique:inventaris,nama_inventaris',
+        'jenis'            => 'required|in:Elektronik,Furniture,Alat Lab,Lainnya',
         'deskripsi'         => 'required|string',
         'jumlah'            => 'required|integer',
         'status'            => 'required|in:Tersedia,Tidak Tersedia',
@@ -61,6 +62,7 @@ class InventarisController extends Controller
         $data = $request->validate([
             'gambar_inventaris' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'nama_inventaris'   => 'required|string',
+             'jenis'            => 'required|in:Elektronik,Furniture,Alat Lab,Lainnya',
             'deskripsi'         => 'required|string',
             'jumlah'            => 'required|integer',
             'status'            => 'required|in:Tersedia,Tidak Tersedia',
@@ -103,9 +105,25 @@ class InventarisController extends Controller
             ->with('success', 'Inventaris dan gambarnya berhasil dihapus.');
     }
 
-    public function mahasiswaIndex()
+    public function mahasiswaIndex(Request $request)
     {
-        $inventaris = Inventaris::all(); 
+        $query = Inventaris::query();
+
+        // Apply search filter
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_inventaris', 'like', "%{$search}%")
+                ->orWhere('deskripsi', 'like', "%{$search}%");
+            });
+        }
+
+        // Apply jenis filter
+        if ($request->has('jenis') && $request->jenis != '') {
+            $query->where('jenis', $request->jenis);
+        }
+
+        $inventaris = $query->latest()->get();
         return view('mahasiswa.katalog.inventaris.index', compact('inventaris'));
     }
 

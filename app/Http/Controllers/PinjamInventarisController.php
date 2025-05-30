@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PinjamInventarisController extends Controller
 {
@@ -76,22 +77,28 @@ class PinjamInventarisController extends Controller
         }
         
         $cartItems = Session::get('cart', []);
-        
-        if(empty($cartItems)) {
-            return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')->with('error', 'Keranjang Anda kosong!');
+    
+    // Check stock availability for all items
+    foreach ($cartItems as $item) {
+        $inventaris = Inventaris::find($item['id']);
+        if (!$inventaris || $inventaris->jumlah < $item['jumlah']) {
+            return redirect()->back()
+                ->with('error', "Stok {$item['nama_inventaris']} tidak mencukupi.");
         }
-        
+    }
 
-        $fileName = null;
-        if ($request->hasFile('file_scan')) {
-            $file = $request->file('file_scan');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('uploads/file_scan', $fileName, 'public');
-        }
-        
+    // Process the file upload
+    $fileName = null;
+    if ($request->hasFile('file_scan')) {
+        $file = $request->file('file_scan');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $file->storeAs('uploads/file_scan', $fileName, 'public');
+    }
 
+    DB::beginTransaction();
+    try {
         foreach ($cartItems as $item) {
-
+            // Create peminjaman record
             PinjamInventaris::create([
                 'id_inventaris' => $item['id'],
                 'jumlah_pinjam' => $item['jumlah'],
@@ -101,12 +108,31 @@ class PinjamInventarisController extends Controller
                 'waktu_mulai' => $request->waktu_mulai,
                 'waktu_selesai' => $request->waktu_selesai,
                 'file_scan' => $fileName,
-                'status' => 0 
+                'status' => 0 // Pending
             ]);
-        }
-        
 
+            // Update inventory stock
+            $inventaris = Inventaris::find($item['id']);
+            $inventaris->jumlah -= $item['jumlah'];
+            
+            // Update status if no stock left
+            if ($inventaris->jumlah <= 0) {
+                $inventaris->status = 'Tidak Tersedia';
+            }
+            
+            $inventaris->save();
+        }
+
+        DB::commit();
         Session::forget('cart');
+        
+        return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
+            ->with('success', 'Pengajuan peminjaman inventaris berhasil ditambahkan.');
+    } catch (\Exception $e) {
+        DB::rollback();
+        return redirect()->back()
+            ->with('error', 'Terjadi kesalahan saat memproses peminjaman.');
+    }
         
         return redirect()->route('mahasiswa.peminjaman.pinjam-inventaris.index')
             ->with('success', 'Pengajuan peminjaman inventaris berhasil ditambahkan.');
@@ -218,32 +244,67 @@ class PinjamInventarisController extends Controller
     }
     
 
+
+
     public function updateStatus(Request $request, PinjamInventaris $pinjamInventaris)
     {
+        // Validate request
         $request->validate([
-            'status' => 'required|integer|min:0|max:3',
-            'notes' => 'nullable|string|max:500', 
+            'status' => 'required|in:0,1,2,3,4',
+            'notes' => 'nullable|string|max:500',
         ]);
-        
-        $pinjamInventaris->status = $request->status;
     
-        if ($request->filled('notes')) {
-            $pinjamInventaris->notes = $request->notes;
+        // Get related items
+        $relatedItems = PinjamInventaris::where('tanggal_pengajuan', $pinjamInventaris->tanggal_pengajuan)
+            ->where('tanggal_selesai', $pinjamInventaris->tanggal_selesai)
+            ->where('waktu_mulai', $pinjamInventaris->waktu_mulai)
+            ->where('waktu_selesai', $pinjamInventaris->waktu_selesai)
+            ->where('file_scan', $pinjamInventaris->file_scan)
+            ->where('id_mahasiswa', $pinjamInventaris->id_mahasiswa)
+            ->get();
+    
+        // If status is being changed to "Disetujui" (1)
+        if ($request->status == 1) {
+            // Tidak perlu cek stok lagi karena sudah dikurangi saat pengajuan
+            foreach ($relatedItems as $item) {
+                $inventaris = Inventaris::find($item->id_inventaris);
+                if (!$inventaris) {
+                    return back()->with('error', "Inventaris tidak ditemukan.");
+                }
+                
+                // Update status inventaris jika stok habis
+                if ($inventaris->jumlah <= 0) {
+                    $inventaris->status = 'Tidak Tersedia';
+                    $inventaris->save();
+                }
+            }
         }
-        
-        $pinjamInventaris->save();
-        
-
-        if ($request->status == 2 && $request->filled('notes')) {  
-            PinjamInventaris::where('tanggal_pengajuan', $pinjamInventaris->tanggal_pengajuan)
-                ->where('tanggal_selesai', $pinjamInventaris->tanggal_selesai)
-                ->where('waktu_mulai', $pinjamInventaris->waktu_mulai)
-                ->where('waktu_selesai', $pinjamInventaris->waktu_selesai)
-                ->where('file_scan', $pinjamInventaris->file_scan)
-                ->where('id_mahasiswa', $pinjamInventaris->id_mahasiswa)
-                ->update(['status' => $request->status, 'notes' => $request->notes]);
+    
+        // If status is being changed to "Selesai" (3) or "Ditolak" (2)
+        if (($request->status == 3 || $request->status == 2) && $pinjamInventaris->status == 1) {
+            // Return stock for all items
+            foreach ($relatedItems as $item) {
+                $inventaris = Inventaris::find($item->id_inventaris);
+                if ($inventaris) {
+                    $inventaris->jumlah += $item->jumlah_pinjam;
+                    
+                    // Set status back to "Tersedia"
+                    if ($inventaris->jumlah > 0) {
+                        $inventaris->status = 'Tersedia';
+                    }
+                    
+                    $inventaris->save();
+                }
+            }
         }
-        
+    
+        // Update status for all related items
+        foreach ($relatedItems as $item) {
+            $item->status = $request->status;
+            $item->notes = $request->notes;
+            $item->save();
+        }
+    
         $statusText = match($request->status) {
             0 => 'menunggu persetujuan',
             1 => 'disetujui',
@@ -251,7 +312,7 @@ class PinjamInventarisController extends Controller
             3 => 'selesai',
             default => 'diperbarui'
         };
-        
+    
         return back()->with('success', "Status peminjaman berhasil $statusText.");
     }
     

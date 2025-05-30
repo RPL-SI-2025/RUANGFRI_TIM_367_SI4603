@@ -29,6 +29,20 @@
             </div>
 
             <div class="mb-3">
+                <label for="jenis" class="form-label">Jenis</label>
+                <select name="jenis" class="form-select" required>
+                    <option value="">Pilih Jenis</option>
+                    <option value="Elektronik">Elektronik</option>
+                    <option value="Furniture">Furniture</option>
+                    <option value="Alat Lab">Alat Lab</option> 
+                    <option value="Lainnya">Lainnya</option>
+                </select>
+                @error('jenis')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
                 <label for="deskripsi" class="form-label">Deskripsi</label>
                 <textarea name="deskripsi" class="form-control" rows="3" required></textarea>
                 @error('deskripsi')

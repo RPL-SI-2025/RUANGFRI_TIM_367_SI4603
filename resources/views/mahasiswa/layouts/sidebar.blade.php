@@ -7,6 +7,15 @@
         </div>
     </div>
     <ul class="nav flex-column mt-4">
+            <!-- Dashboard Link - Add this first -->
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('mahasiswa/dashboard') ? 'active' : '' }}" 
+            href="{{ route('mahasiswa.dashboard') }}">
+                <i class="fas fa-tachometer-alt"></i>
+                <span class="ms-2">Dashboard</span>
+            </a>
+        </li>
+        
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center {{ request()->is('mahasiswa/katalog*') ? 'active' : '' }}" 
                href="#katalogSubmenu" 
