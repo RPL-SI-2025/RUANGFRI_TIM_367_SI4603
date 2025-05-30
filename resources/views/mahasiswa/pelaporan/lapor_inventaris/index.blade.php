@@ -27,9 +27,9 @@
                     <table class="table table-hover align-middle">
                         <thead class="table-light">
                             <tr>
-                                <th>ID Laporan</th>
-                                <th>ID Peminjaman</th>
-                                <th>Tanggal</th>
+                                <th>No</th>
+                                <th>Laporan Dibuat</th>
+                                <th>Tanggal Peminjaman</th>
                                 <th>Deskripsi</th>
                                 <th>Admin Logistik</th>
                                 <th class="text-center">Aksi</th>
@@ -39,8 +39,12 @@
                             @foreach($laporan as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td><strong>{{ $item->peminjaman->id }}</strong></td>
-                                    <td>{{ \Carbon\Carbon::parse($item->datetime)->format('d/m/Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y H:i') }}</td>
+                                    <td class="px-3 py-3">
+                                        {{ \Carbon\Carbon::parse($item->peminjaman->tanggal_pengajuan)->format('d M Y') }}
+                                        <span class="text-muted"> s/d </span>
+                                        {{ \Carbon\Carbon::parse($item->peminjaman->tanggal_pengajuan)->format('d M Y') }}
+                                    </td>
                                     <td>{{ \Str::limit($item->deskripsi, 50) }}</td>
                                     <td>{{ $item->logistik->nama ?? 'N/A' }}</td>
                                     <td class="text-center">

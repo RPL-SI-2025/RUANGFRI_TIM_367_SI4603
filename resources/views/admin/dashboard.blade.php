@@ -291,16 +291,16 @@ function updateChart(type = 'ruangan', period = 'month') {
     });
 }
 
-// Initialize chart
+
 updateChart();
 
-// Add event listeners for buttons
+
 document.querySelectorAll('[data-type]').forEach(button => {
     button.addEventListener('click', function() {
         const type = this.dataset.type;
+
         const period = document.querySelector('[data-period].active').dataset.period;
-        
-        // Update active state
+
         document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         
@@ -311,10 +311,11 @@ document.querySelectorAll('[data-type]').forEach(button => {
 document.querySelectorAll('[data-period]').forEach(button => {
     button.addEventListener('click', function() {
         const period = this.dataset.period;
+
         const type = document.querySelector('[data-type].active').dataset.type;
-        
-        // Update active state
+
         document.querySelectorAll('[data-period]').forEach(b => b.classList.remove('active'));
+
         this.classList.add('active');
         
         updateChart(type, period);
