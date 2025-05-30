@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Pelaporan;
 use App\Models\PinjamRuangan;
 use App\Models\AdminLogistik;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;

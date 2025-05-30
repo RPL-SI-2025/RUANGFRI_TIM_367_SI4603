@@ -11,9 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Create kategori_inventaris table first
+        Schema::create('kategori_inventaris', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama_kategori');
+            $table->string('deskripsi_kategori')->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('inventaris', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_logistik')->nullable();
+            $table->unsignedBigInteger('kategori_id');
             $table->string('gambar_inventaris')->nullable();
             $table->string('nama_inventaris');
             $table->string('deskripsi');
@@ -22,6 +31,7 @@ return new class extends Migration
             $table->timestamps();
     
             $table->foreign('id_logistik')->references('id')->on('admin_logistik');
+            $table->foreign('kategori_id')->references('id')->on('kategori_inventaris');
         });
     }
 
@@ -31,6 +41,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('inventaris');
+        Schema::dropIfExists('kategori_inventaris');
     }
 
 };

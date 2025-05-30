@@ -1,3 +1,4 @@
+
 @extends('mahasiswa.layouts.app')
 
 @section('content')
@@ -102,33 +103,38 @@
             <h5 class="mb-0 fw-bold text-primary">
                 <i class="fas fa-clipboard-check me-2"></i>Status Peminjaman
             </h5>
+            <small class="text-muted">Peminjaman dikelompokkan berdasarkan pengajuan yang sama</small>
         </div>
         <div class="card-body">
-            <!-- In the Status Peminjaman section -->
-        <div class="row g-4">
-            <!-- Diterima Card -->
-            <div class="col-md-4">
-                <div class="status-card bg-success-subtle p-4 rounded-3 border border-success border-opacity-25">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="status-icon bg-success text-white rounded-circle p-3 me-3">
-                            <i class="fas fa-check-circle fa-lg"></i>
+            <div class="row g-4">
+                <!-- Diterima Card -->
+                <div class="col-md-4">
+                    <div class="status-card bg-success-subtle p-4 rounded-3 border border-success border-opacity-25">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="status-icon bg-success text-white rounded-circle p-3 me-3">
+                                <i class="fas fa-check-circle fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-success mb-0">Diterima</h6>
+                                <small class="text-success opacity-75">{{ $peminjamanDiterima->count() }} pengajuan</small>
+                            </div>
                         </div>
-                        <div>
-                            <h6 class="fw-bold text-success mb-0">Diterima</h6>
-                            <small class="text-success opacity-75">{{ $peminjamanDiterima->count() }} peminjaman</small>
-                        </div>
-                    </div>
                         <ul class="list-unstyled mb-0">
                             @forelse($peminjamanDiterima as $peminjaman)
                                 <li class="mb-2">
-                                    <a href="{{ $peminjaman->jenis == 'Ruangan' ? 
-                                        route('mahasiswa.peminjaman.pinjam-ruangan.show', $peminjaman->id) : 
-                                        route('mahasiswa.peminjaman.pinjam-inventaris.show', $peminjaman->id) }}" 
+                                    <a href="{{ $peminjaman['jenis'] == 'Ruangan' ? 
+                                        route('mahasiswa.peminjaman.pinjam-ruangan.show', $peminjaman['id']) : 
+                                        route('mahasiswa.peminjaman.pinjam-inventaris.show', $peminjaman['id']) }}" 
                                         class="text-success text-decoration-none d-flex align-items-center p-2 rounded-2 hover-bg">
-                                        <i class="fas {{ $peminjaman->jenis == 'Ruangan' ? 'fa-building' : 'fa-box' }} me-2"></i>
-                                        <div>
-                                            <span class="d-block">{{ $peminjaman->nama }}</span>
-                                            <small class="opacity-75">{{ \Carbon\Carbon::parse($peminjaman->tanggal)->format('d M Y') }}</small>
+                                        <i class="fas {{ $peminjaman['jenis'] == 'Ruangan' ? 'fa-building' : 'fa-box' }} me-2"></i>
+                                        <div class="flex-grow-1">
+                                            <span class="d-block">{{ Str::limit($peminjaman['nama'], 50) }}</span>
+                                            <small class="opacity-75">
+                                                {{ \Carbon\Carbon::parse($peminjaman['tanggal'])->format('d M Y') }}
+                                                @if($peminjaman['count'] > 1)
+                                                    <span class="badge bg-success-subtle text-success ms-1">{{ $peminjaman['count'] }} item</span>
+                                                @endif
+                                            </small>
                                         </div>
                                     </a>
                                 </li>
@@ -136,35 +142,40 @@
                                 <li class="text-success opacity-75">Belum ada peminjaman yang disetujui</li>
                             @endforelse
                         </ul>
-                </div>
-            </div>
-
-            <!-- Ditolak Card -->
-            <div class="col-md-4">
-                <div class="status-card bg-danger-subtle p-4 rounded-3 border border-danger border-opacity-25">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="status-icon bg-danger text-white rounded-circle p-3 me-3">
-                            <i class="fas fa-times-circle fa-lg"></i>
-                        </div>
-                        <div>
-                            <h6 class="fw-bold text-danger mb-0">Ditolak</h6>
-                            <small class="text-danger opacity-75">{{ $peminjamanDitolak->count() }} peminjaman</small>
-                        </div>
                     </div>
-                        <ul class="list-unstyled mb-0">
+                </div>
+
+                <!-- Ditolak Card -->
+                <div class="col-md-4">
+                    <div class="status-card bg-danger-subtle p-4 rounded-3 border border-danger border-opacity-25">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="status-icon bg-danger text-white rounded-circle p-3 me-3">
+                                <i class="fas fa-times-circle fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-danger mb-0">Ditolak</h6>
+                                <small class="text-danger opacity-75">{{ $peminjamanDitolak->count() }} pengajuan</small>
+                            </div>
+                        </div>
+                       <ul class="list-unstyled mb-0">
                             @forelse($peminjamanDitolak as $peminjaman)
                                 <li class="mb-2">
-                                    <a href="{{ $peminjaman->jenis == 'Ruangan' ? 
-                                        route('mahasiswa.peminjaman.pinjam-ruangan.show', $peminjaman->id) : 
-                                        route('mahasiswa.peminjaman.pinjam-inventaris.show', $peminjaman->id) }}" 
+                                    <a href="{{ $peminjaman['jenis'] == 'Ruangan' ? 
+                                        route('mahasiswa.peminjaman.pinjam-ruangan.show', $peminjaman['id']) : 
+                                        route('mahasiswa.peminjaman.pinjam-inventaris.show', $peminjaman['id']) }}" 
                                         class="text-danger text-decoration-none d-flex align-items-center p-2 rounded-2 hover-bg">
-                                        <i class="fas {{ $peminjaman->jenis == 'Ruangan' ? 'fa-building' : 'fa-box' }} me-2"></i>
-                                        <div>
-                                            <span class="d-block">{{ $peminjaman->nama }}</span>
-                                            <small class="opacity-75">{{ \Carbon\Carbon::parse($peminjaman->tanggal)->format('d M Y') }}</small>
-                                            @if($peminjaman->notes)
+                                        <i class="fas {{ $peminjaman['jenis'] == 'Ruangan' ? 'fa-building' : 'fa-box' }} me-2"></i>
+                                        <div class="flex-grow-1">
+                                            <span class="d-block">{{ Str::limit($peminjaman['nama'], 50) }}</span>
+                                            <small class="opacity-75">
+                                                {{ \Carbon\Carbon::parse($peminjaman['tanggal'])->format('d M Y') }}
+                                                @if($peminjaman['count'] > 1)
+                                                    <span class="badge bg-danger-subtle text-danger ms-1">{{ $peminjaman['count'] }} item</span>
+                                                @endif
+                                            </small>
+                                            @if(isset($peminjaman['notes']) && $peminjaman['notes'])
                                                 <small class="d-block mt-1 text-danger-emphasis bg-danger-subtle rounded-1 p-1">
-                                                    <i class="fas fa-info-circle me-1"></i>{{ Str::limit($peminjaman->notes, 50) }}
+                                                    <i class="fas fa-info-circle me-1"></i>{{ Str::limit($peminjaman['notes'], 50) }}
                                                 </small>
                                             @endif
                                         </div>
@@ -174,55 +185,73 @@
                                 <li class="text-danger opacity-75">Tidak ada peminjaman yang ditolak</li>
                             @endforelse
                         </ul>
-                </div>
-            </div>
-
-            <!-- Pending Card -->
-            <div class="col-md-4">
-                <div class="status-card bg-warning-subtle p-4 rounded-3 border border-warning border-opacity-25">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="status-icon bg-warning text-white rounded-circle p-3 me-3">
-                            <i class="fas fa-clock fa-lg"></i>
-                        </div>
-                        <div>
-                            <h6 class="fw-bold text-warning mb-0">Pending</h6>
-                            <small class="text-warning opacity-75">{{ $peminjamanPending->count() }} peminjaman</small>
-                        </div>
                     </div>
-                    <ul class="list-unstyled mb-0">
-    @forelse($peminjamanPending as $peminjaman)
-        <li class="mb-2">
-            <a href="{{ $peminjaman->jenis == 'Ruangan' ? 
-                route('mahasiswa.peminjaman.pinjam-ruangan.show', $peminjaman->id) : 
-                route('mahasiswa.peminjaman.pinjam-inventaris.show', $peminjaman->id) }}" 
-                class="text-warning text-decoration-none d-flex align-items-center p-2 rounded-2 hover-bg">
-                <i class="fas {{ $peminjaman->jenis == 'Ruangan' ? 'fa-building' : 'fa-box' }} me-2"></i>
-                <div>
-                    <span class="d-block">{{ $peminjaman->nama }}</span>
-                    <small class="opacity-75">{{ \Carbon\Carbon::parse($peminjaman->tanggal)->format('d M Y') }}</small>
                 </div>
-            </a>
-        </li>
-    @empty
-        <li class="text-warning opacity-75">Tidak ada peminjaman yang pending</li>
-    @endforelse
-</ul>
+
+                <!-- Pending Card -->
+                <div class="col-md-4">
+                    <div class="status-card bg-warning-subtle p-4 rounded-3 border border-warning border-opacity-25">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="status-icon bg-warning text-white rounded-circle p-3 me-3">
+                                <i class="fas fa-clock fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-warning mb-0">Pending</h6>
+                                <small class="text-warning opacity-75">{{ $peminjamanPending->count() }} pengajuan</small>
+                            </div>
+                        </div>
+                    <ul class="list-unstyled mb-0">
+                        @forelse($peminjamanPending as $peminjaman)
+                            <li class="mb-2">
+                                <a href="{{ $peminjaman['jenis'] == 'Ruangan' ? 
+                                    route('mahasiswa.peminjaman.pinjam-ruangan.show', $peminjaman['id']) : 
+                                    route('mahasiswa.peminjaman.pinjam-inventaris.show', $peminjaman['id']) }}" 
+                                    class="text-warning text-decoration-none d-flex align-items-center p-2 rounded-2 hover-bg">
+                                    <i class="fas {{ $peminjaman['jenis'] == 'Ruangan' ? 'fa-building' : 'fa-box' }} me-2"></i>
+                                    <div class="flex-grow-1">
+                                        <span class="d-block">{{ Str::limit($peminjaman['nama'], 50) }}</span>
+                                        <small class="opacity-75">
+                                            {{ \Carbon\Carbon::parse($peminjaman['tanggal'])->format('d M Y') }}
+                                            @if($peminjaman['count'] > 1)
+                                                <span class="badge bg-warning-subtle text-warning ms-1">{{ $peminjaman['count'] }} item</span>
+                                            @endif
+                                        </small>
+                                    </div>
+                                </a>
+                            </li>
+                        @empty
+                            <li class="text-warning opacity-75">Tidak ada peminjaman yang pending</li>
+                        @endforelse
+                    </ul>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     </div>
 </div>
 
 <style>
-
+/* Enhanced styles for grouped borrowing display */
 .hover-bg {
     transition: all 0.2s ease;
+    border-left: 3px solid transparent;
 }
 
 .hover-bg:hover {
     background-color: rgba(0,0,0,0.05);
     transform: translateX(5px);
+}
+
+.text-success .hover-bg:hover {
+    border-left-color: #198754;
+}
+
+.text-danger .hover-bg:hover {
+    border-left-color: #dc3545;
+}
+
+.text-warning .hover-bg:hover {
+    border-left-color: #ffc107;
 }
 
 .text-success:hover {
@@ -266,11 +295,54 @@
 
 .status-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
 .badge {
     font-weight: 500;
-    padding: 0.5em 0.75em;
+    padding: 0.4em 0.6em;
+    font-size: 0.75em;
+}
+
+/* Custom badge styles for item count */
+.badge.bg-success-subtle {
+    background-color: rgba(25, 135, 84, 0.1) !important;
+    border: 1px solid rgba(25, 135, 84, 0.2);
+}
+
+.badge.bg-danger-subtle {
+    background-color: rgba(220, 53, 69, 0.1) !important;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.badge.bg-warning-subtle {
+    background-color: rgba(255, 193, 7, 0.1) !important;
+    border: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+/* Tooltip for grouped items */
+.status-card ul li a {
+    position: relative;
+}
+
+.status-card ul li a:hover .badge {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .status-card {
+        margin-bottom: 1rem;
+    }
+    
+    .hover-bg:hover {
+        transform: none;
+    }
+    
+    .list-group-item:hover {
+        transform: none;
+    }
 }
 </style>
 @endsection

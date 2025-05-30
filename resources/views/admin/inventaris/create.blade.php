@@ -1,4 +1,4 @@
-{{-- filepath: c:\Users\ali\Documents\GitHub\RUANGFRI_TIM_367_SI4603\resources\views\admin\inventaris\create.blade.php --}}
+
 @extends('admin.layouts.admin')
 
 @section('title', 'Tambah Inventaris')
@@ -22,29 +22,30 @@
 
             <div class="mb-3">
                 <label for="nama_inventaris" class="form-label">Nama Inventaris</label>
-                <input type="text" class="form-control" name="nama_inventaris" required>
+                <input type="text" class="form-control" name="nama_inventaris" value="{{ old('nama_inventaris') }}" required>
                 @error('nama_inventaris')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="mb-3">
-                <label for="jenis" class="form-label">Jenis</label>
-                <select name="jenis" class="form-select" required>
-                    <option value="">Pilih Jenis</option>
-                    <option value="Elektronik">Elektronik</option>
-                    <option value="Furniture">Furniture</option>
-                    <option value="Alat Lab">Alat Lab</option> 
-                    <option value="Lainnya">Lainnya</option>
+                <label for="kategori_id" class="form-label">Kategori</label>
+                <select name="kategori_id" class="form-select" required>
+                    <option value="">Pilih Kategori</option>
+                    @foreach($kategoris as $kategori)
+                        <option value="{{ $kategori->id }}" {{ old('kategori_id') == $kategori->id ? 'selected' : '' }}>
+                            {{ $kategori->nama_kategori }}
+                        </option>
+                    @endforeach
                 </select>
-                @error('jenis')
+                @error('kategori_id')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="mb-3">
                 <label for="deskripsi" class="form-label">Deskripsi</label>
-                <textarea name="deskripsi" class="form-control" rows="3" required></textarea>
+                <textarea name="deskripsi" class="form-control" rows="3" required>{{ old('deskripsi') }}</textarea>
                 @error('deskripsi')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -52,7 +53,7 @@
 
             <div class="mb-3">
                 <label for="jumlah" class="form-label">Jumlah</label>
-                <input type="number" class="form-control" name="jumlah" required>
+                <input type="number" class="form-control" name="jumlah" value="{{ old('jumlah') }}" required>
                 @error('jumlah')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -61,8 +62,8 @@
             <div class="mb-3">
                 <label for="status" class="form-label">Status</label>
                 <select name="status" class="form-select" required>
-                    <option value="Tersedia">Tersedia</option>
-                    <option value="Tidak Tersedia">Tidak Tersedia</option>
+                    <option value="Tersedia" {{ old('status') == 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
+                    <option value="Tidak Tersedia" {{ old('status') == 'Tidak Tersedia' ? 'selected' : '' }}>Tidak Tersedia</option>
                 </select>
                 @error('status')
                     <div class="text-danger">{{ $message }}</div>
@@ -75,5 +76,6 @@
     </div>
 </div>
 @endsection
+
 
 
