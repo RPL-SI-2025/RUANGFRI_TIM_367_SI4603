@@ -229,7 +229,6 @@
     </section>
 
     <!-- Process Section -->
-        <!-- Process Section -->
     <section id="process" class="process-section">
         <div class="container">
             <div class="row justify-content-center">
@@ -239,68 +238,83 @@
                 </div>
             </div>
             
-            <div class="row g-4 mt-4 justify-content-center">
-                <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
-                    <div class="process-card">
-                        <div class="process-icon">
-                            <div class="process-number">1</div>
-                            <img src="{{ asset('storage/webaset/login.jpg') }}" alt="Login" class="img-fluid">
-                        </div>
-                        <div class="process-content">
-                            <h5>Login</h5>
-                            <p>Masuk ke dalam sistem menggunakan akun mahasiswa</p>
+            <div class="process-wave-container mt-4">
+                <!-- Wave Background Elements -->
+                <div class="process-wave-path"></div>
+                
+                <div class="row g-4 justify-content-center">
+                    <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
+                        <div class="process-card">
+                            <div class="process-icon">
+                                <div class="process-number">1</div>
+                                <div class="process-icon-circle">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </div>
+                            </div>
+                            <div class="process-content">
+                                <h5>Login</h5>
+                                <p>Masuk ke dalam sistem menggunakan akun mahasiswa</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
-                    <div class="process-card">
-                        <div class="process-icon">
-                            <div class="process-number">2</div>
-                            <img src="{{ asset('storage/webaset/memilih.jpg') }}" alt="Pilih" class="img-fluid">
-                        </div>
-                        <div class="process-content">
-                            <h5>Pilih</h5>
-                            <p>Pilih ruangan atau inventaris yang tersedia</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="300">
-                    <div class="process-card">
-                        <div class="process-icon">
-                            <div class="process-number">3</div>
-                            <img src="{{ asset('storage/webaset/formulir.jpg') }}" alt="Formulir" class="img-fluid">
-                        </div>
-                        <div class="process-content">
-                            <h5>Ajukan</h5>
-                            <p>Isi formulir peminjaman dengan lengkap</p>
+                    
+                    <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+                        <div class="process-card">
+                            <div class="process-icon">
+                                <div class="process-number">2</div>
+                                <div class="process-icon-circle">
+                                    <i class="fas fa-hand-pointer"></i>
+                                </div>
+                            </div>
+                            <div class="process-content">
+                                <h5>Pilih</h5>
+                                <p>Pilih ruangan atau inventaris yang tersedia</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="400">
-                    <div class="process-card">
-                        <div class="process-icon">
-                            <div class="process-number">4</div>
-                            <img src="{{ asset('storage/webaset/persetujuan.jpg') }}" alt="Persetujuan" class="img-fluid">
-                        </div>
-                        <div class="process-content">
-                            <h5>Tunggu</h5>
-                            <p>Menunggu persetujuan dari admin FRI</p>
+                    
+                    <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="300">
+                        <div class="process-card">
+                            <div class="process-icon">
+                                <div class="process-number">3</div>
+                                <div class="process-icon-circle">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                            </div>
+                            <div class="process-content">
+                                <h5>Ajukan</h5>
+                                <p>Isi formulir peminjaman dengan lengkap</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="500">
-                    <div class="process-card">
-                        <div class="process-icon">
-                            <div class="process-number">5</div>
-                            <img src="{{ asset('storage/webaset/gunakan.jpg') }}" alt="Gunakan" class="img-fluid">
+                    
+                    <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="400">
+                        <div class="process-card">
+                            <div class="process-icon">
+                                <div class="process-number">4</div>
+                                <div class="process-icon-circle">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                            </div>
+                            <div class="process-content">
+                                <h5>Tunggu</h5>
+                                <p>Menunggu persetujuan dari admin FRI</p>
+                            </div>
                         </div>
-                        <div class="process-content">
-                            <h5>Gunakan</h5>
-                            <p>Gunakan fasilitas sesuai jadwal yang disetujui</p>
+                    </div>
+                    
+                    <div class="col-lg-2 col-md-4 col-6" data-aos="fade-up" data-aos-duration="600" data-aos-delay="500">
+                        <div class="process-card">
+                            <div class="process-icon">
+                                <div class="process-number">5</div>
+                                <div class="process-icon-circle">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                            </div>
+                            <div class="process-content">
+                                <h5>Gunakan</h5>
+                                <p>Gunakan fasilitas sesuai jadwal yang disetujui</p>
+                            </div>
                         </div>
                     </div>
                 </div>

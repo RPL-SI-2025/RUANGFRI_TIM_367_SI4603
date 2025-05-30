@@ -76,7 +76,7 @@ body::before {
     z-index: 1030;
     transition: var(--transition-smooth);
     scrollbar-width: thin;
-    scrollbar-color: rgba(8, 145, 178, 0.5) transparent;
+    scrollbar-color: rgba(8, 144, 178, 0.176) transparent;
 }
 
 
@@ -726,21 +726,7 @@ body::before {
     z-index: 1100 !important;
 }
 
-.dropdown-menu::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, 
-        var(--primary-green) 0%, 
-        var(--accent-blue) 50%,
-        var(--secondary-green) 100%);
-    background-size: 200% 100%;
-    animation: shimmerFlow 3s ease-in-out infinite;
-    z-index: 1;
-}
+
 
 .dropdown-item {
     color: rgba(255, 255, 255, 0.9);

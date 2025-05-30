@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Auth;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [AdminLogistikController::class, 'landing'])->name('landing');
+Route::get('/', [MahasiswaAuthController::class, 'landing'])->name('landing');
 
 Route::middleware(['auth:mahasiswa'])->group(function () {
     Route::get('/mahasiswa/dashboard', [MahasiswaAuthController::class, 'dashboard'])->name('mahasiswa.dashboard');

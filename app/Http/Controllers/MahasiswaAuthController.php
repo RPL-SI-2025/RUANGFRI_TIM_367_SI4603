@@ -258,6 +258,27 @@ class MahasiswaAuthController extends Controller
             'peminjamanDiterima', 'peminjamanDitolak', 'peminjamanPending'
         ));
     }
+    public function landing()
+    {
+        // Ambil data statistik untuk landing page
+        $totalRuangan = \App\Models\Ruangan::count();
+        $ruanganTersedia = \App\Models\Ruangan::where('status', 'Tersedia')->count();
+        $totalInventaris = \App\Models\Inventaris::count();
+        $inventarisTersedia = \App\Models\Inventaris::where('status', 'Tersedia')->count();
+        
+        // Ambil data untuk katalog
+        $ruangans = \App\Models\Ruangan::latest()->take(6)->get();
+        $inventaris = \App\Models\Inventaris::latest()->take(6)->get();
+        
+        return view('landing', compact(
+            'ruangans', 
+            'inventaris', 
+            'totalRuangan', 
+            'ruanganTersedia', 
+            'totalInventaris', 
+            'inventarisTersedia'
+        ));
+    }
 
 
 }
