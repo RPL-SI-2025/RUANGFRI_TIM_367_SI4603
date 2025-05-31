@@ -28,9 +28,7 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [MahasiswaAuthController::class, 'landing'])->name('landing');
 
-Route::middleware(['auth:mahasiswa'])->group(function () {
-    Route::get('/mahasiswa/dashboard', [MahasiswaAuthController::class, 'dashboard'])->name('mahasiswa.dashboard');
-});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -169,7 +167,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.')->group(function() {
     
     // Dashboard
-
+    Route::get('/dashboard', [MahasiswaAuthController::class, 'dashboard'])->name('dashboard');
 
     // Profile Management
     Route::prefix('profile')->name('profile.')->group(function () {

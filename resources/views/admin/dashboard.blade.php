@@ -231,7 +231,7 @@ const chartData = {
         },
         week: {
             labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
-            data: [4, 6, 8, 5, 7, 3, 2] // Example data, replace with actual weekly data
+            data: [4, 6, 8, 5, 7, 3, 2]    
         }
     },
     inventaris: {
@@ -241,7 +241,7 @@ const chartData = {
         },
         week: {
             labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
-            data: [3, 5, 7, 4, 6, 2, 1] // Example data, replace with actual weekly data
+            data: [3, 5, 7, 4, 6, 2, 1]    
         }
     }
 };

@@ -1,17 +1,17 @@
 
 
-/* Typography - Inter font family untuk konsistensi */
+  
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* Color Palette - Selaras dengan sidebar admin */
+  
 :root {
-    /* Primary Colors - Selaras dengan sidebar dark navy blue */
+      
     --catalog-primary: #1e293b;
     --catalog-secondary: #334155;
     --catalog-accent: #0ea5e9;
     --catalog-blue: #0369a1;
     
-    /* Neutral Colors */
+      
     --catalog-charcoal: #0f172a;
     --catalog-gray-light: #f8fafc;
     --catalog-gray-medium: #64748b;
@@ -19,13 +19,13 @@
     --catalog-white: #ffffff;
     --catalog-border: #e2e8f0;
     
-    /* Status Colors */
+      
     --catalog-success: #059669;
     --catalog-warning: #d97706;
     --catalog-danger: #dc2626;
     --catalog-info: #0284c7;
     
-    /* Effects */
+      
     --catalog-shadow-soft: 0 4px 12px rgba(15, 23, 42, 0.08);
     --catalog-shadow-hover: 0 8px 24px rgba(15, 23, 42, 0.12);
     --catalog-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -33,7 +33,7 @@
     --catalog-border-radius-sm: 8px;
 }
 
-/* Base Catalog Container */
+  
 .catalog-container {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     color: var(--catalog-charcoal);
@@ -231,7 +231,7 @@ CARD DESIGN
     border-color: var(--catalog-primary);
 }
 
-/* Card Image */
+  
 .catalog-card-image-container {
     position: relative;
     height: 240px;
@@ -259,7 +259,7 @@ CARD DESIGN
     font-size: 3rem;
 }
 
-/* Status Badge */
+  
 .catalog-status-badge {
     position: absolute;
     top: 0.75rem;
@@ -291,7 +291,7 @@ CARD DESIGN
     border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
-/* Card Content */
+  
 .catalog-card-content {
     padding: 1.5rem;
     flex-grow: 1;
@@ -335,7 +335,7 @@ INFO SECTIONS
     border-left: 4px solid var(--catalog-accent);
 }
 
-/* Stock Info */
+  
 .catalog-stock-info {
     background: var(--catalog-gray-light);
     display: flex;
@@ -366,7 +366,7 @@ INFO SECTIONS
     color: var(--catalog-gray-medium);
 }
 
-/* Capacity Info (untuk ruangan) */
+  
 .catalog-capacity-info {
     background: rgba(59, 130, 246, 0.1);
     border-left-color: var(--catalog-info);
@@ -577,7 +577,7 @@ EMPTY STATE
     font-size: 0.7rem;
 }
 
-/* Adjust filter select styling */
+  
 .catalog-filter-select {
     min-width: 140px;
 }
@@ -622,14 +622,14 @@ RESPONSIVE DESIGN
 ==================================================
 */
 
-/* Large screens */
+  
 @media (min-width: 1200px) {
     .catalog-grid {
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     }
 }
 
-/* Medium screens */
+  
 @media (max-width: 992px) {
     .catalog-header .d-flex {
         flex-direction: column;
@@ -647,7 +647,7 @@ RESPONSIVE DESIGN
     }
 }
 
-/* Small screens */
+  
 @media (max-width: 768px) {
     .catalog-container {
         padding: 0 1rem;
@@ -698,7 +698,7 @@ RESPONSIVE DESIGN
     }
 }
 
-/* Extra small screens */
+  
 @media (max-width: 480px) {
     .catalog-title {
         font-size: 20px;
@@ -725,7 +725,7 @@ RESPONSIVE DESIGN
     }
     
     .catalog-search-input {
-        font-size: 16px; /* Prevent zoom on iOS */
+        font-size: 16px;   
     }
 }
 
@@ -747,7 +747,7 @@ ACCESSIBILITY
     outline-offset: 2px;
 }
 
-/* High contrast mode */
+  
 @media (prefers-contrast: high) {
     .catalog-card {
         border: 2px solid var(--catalog-charcoal);
@@ -759,7 +759,7 @@ ACCESSIBILITY
     }
 }
 
-/* Reduced motion */
+  
 @media (prefers-reduced-motion: reduce) {
     .catalog-card,
     .catalog-card-image,

@@ -231,7 +231,7 @@
 </div>
 
 <style>
-/* Enhanced styles for grouped borrowing display */
+  
 .hover-bg {
     transition: all 0.2s ease;
     border-left: 3px solid transparent;
@@ -304,7 +304,7 @@
     font-size: 0.75em;
 }
 
-/* Custom badge styles for item count */
+  
 .badge.bg-success-subtle {
     background-color: rgba(25, 135, 84, 0.1) !important;
     border: 1px solid rgba(25, 135, 84, 0.2);
@@ -320,7 +320,7 @@
     border: 1px solid rgba(255, 193, 7, 0.2);
 }
 
-/* Tooltip for grouped items */
+  
 .status-card ul li a {
     position: relative;
 }
@@ -330,7 +330,7 @@
     transition: transform 0.2s ease;
 }
 
-/* Responsive adjustments */
+  
 @media (max-width: 768px) {
     .status-card {
         margin-bottom: 1rem;
