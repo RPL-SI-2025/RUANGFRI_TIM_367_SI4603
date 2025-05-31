@@ -250,7 +250,7 @@
     background: var(--dark-gradient);
 }
 
-/* Card Styles */
+  
 .card {
     border-radius: 1rem;
     overflow: hidden;
@@ -266,7 +266,7 @@
     border-bottom: none;
 }
 
-/* Icon Circle */
+  
 .icon-circle {
     width: 50px;
     height: 50px;
@@ -278,7 +278,7 @@
     font-weight: bold;
 }
 
-/* Number Circle */
+  
 .number-circle {
     width: 35px;
     height: 35px;
@@ -290,7 +290,7 @@
     font-size: 0.875rem;
 }
 
-/* Table Styles */
+  
 .table {
     border: none;
 }
@@ -313,7 +313,7 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
-/* Badge Styles */
+  
 .badge {
     font-weight: 500;
     border: 1px solid transparent;
@@ -327,7 +327,7 @@
     border-color: rgba(25, 135, 84, 0.2);
 }
 
-/* Button Styles */
+  
 .btn {
     font-weight: 600;
     transition: all 0.3s ease;
@@ -343,28 +343,28 @@
     transform: scale(1.05) translateY(-2px);
 }
 
-/* Alert Styles */
+  
 .alert {
     border-radius: 1rem;
     border: none;
 }
 
-/* Room Info */
+  
 .room-info {
     max-width: 200px;
 }
 
-/* Description Preview */
+  
 .description-preview {
     max-width: 250px;
 }
 
-/* Admin Info */
+  
 .admin-info {
     max-width: 180px;
 }
 
-/* Empty State */
+  
 .empty-state {
     padding: 3rem 2rem;
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -381,12 +381,12 @@
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
-/* Text Colors */
+  
 .text-purple {
     color: #6f42c1 !important;
 }
 
-/* Responsive */
+  
 @media (max-width: 768px) {
     .container-fluid {
         padding: 1rem;
@@ -423,7 +423,7 @@
     }
 }
 
-/* Animation */
+  
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -449,7 +449,7 @@
 .hover-row:nth-child(4) { animation-delay: 0.25s; }
 .hover-row:nth-child(5) { animation-delay: 0.3s; }
 
-/* Badge Hover Effects */
+  
 .badge {
     transition: all 0.3s ease;
 }
@@ -459,12 +459,12 @@
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-/* Table Header Gradient */
+  
 .table-light {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
-/* Smooth scroll */
+  
 html {
     scroll-behavior: smooth;
 }

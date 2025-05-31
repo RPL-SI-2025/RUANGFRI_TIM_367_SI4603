@@ -25,7 +25,7 @@
       padding: 2rem 1rem;
     }
 
-    /* Modern Navbar Styles */
+      
     .navbar {
         display: flex;
         justify-content: space-between;
@@ -104,7 +104,7 @@
         transform: translateY(-2px);
     }
     
-    /* Hamburger Menu Styles */
+      
     .hamburger {
         display: none;
         background: none;
@@ -124,7 +124,7 @@
         transition: all 0.3s ease;
     }
     
-    /* Responsive Styles */
+      
     @media (max-width: 768px) {
         .navbar {
             padding: 1rem 1.5rem;
@@ -237,7 +237,7 @@
       margin-left: 35px;
     }
 
-        /* Scroll Indicator Styles */
+          
         .scroll-indicator {
         position: absolute;
         bottom: 40px;
@@ -247,21 +247,21 @@
         flex-direction: column;
         align-items: center;
         gap: 8px;
-        cursor: pointer; /* Add cursor pointer */
-        padding: 10px; /* Add padding for better touch target */
-        transition: transform 0.3s ease; /* Add transition for hover effect */
+        cursor: pointer;   
+        padding: 10px;   
+        transition: transform 0.3s ease;   
     }
     
     .scroll-indicator:hover {
-        transform: translateX(-50%) translateY(-5px); /* Add hover effect */
+        transform: translateX(-50%) translateY(-5px);   
     }
     
-    /* Add active state */
+      
     .scroll-indicator:active {
         transform: translateX(-50%) translateY(0);
     }
     
-    /* Make the mouse animation more prominent on hover */
+      
     .scroll-indicator:hover .wheel {
         animation: scroll 1.5s ease infinite;
     }
@@ -270,7 +270,7 @@
         animation: arrow 1.5s ease infinite;
     }
     
-    /* Add focus outline for accessibility */
+      
     .scroll-indicator:focus {
         outline: none;
     }
@@ -350,10 +350,10 @@
         }
     }
     
-    /* Update hero section to support scroll indicator */
+      
 
     
-    /* Media query for smaller screens */
+      
     @media (max-width: 768px) {
         .scroll-indicator {
             bottom: 20px;
@@ -392,10 +392,10 @@
 
 .tentang-sistem {
     display: flex;
-    justify-content: center; /* Pusatkan secara horizontal */
-    align-items: center; /* Pusatkan secara vertikal */
-    flex-wrap: wrap; /* Agar elemen tetap responsif */
-    gap: 2rem; /* Jarak antar elemen */
+    justify-content: center;   
+    align-items: center;   
+    flex-wrap: wrap;   
+    gap: 2rem;   
 }
 
     .tentang-sistem-container h2 {
@@ -449,7 +449,7 @@
     
     
   .stat-card {
-      margin: 0 auto; /* Pusatkan elemen secara horizontal */
+      margin: 0 auto;   
       margin-top: 7rem;
       background: #f9fafb;
       border: 1px solid #e5e7eb;
@@ -471,21 +471,21 @@
 
 
   .stat-card h3 {
-      font-size: 1.5rem; /* Perbesar ukuran font judul */
+      font-size: 1.5rem;   
       color: #111827;
       margin-top: 1rem;
       font-size: 1.5rem;
   }
       
   .stat-card p {
-      font-size: 2rem; /* Perbesar ukuran angka */
+      font-size: 2rem;   
       font-weight: bold;
       color: #3AA17E;
       text-align: center;
   }
 
   .stat-card i {
-      font-size: 3rem; /* Perbesar ukuran ikon */
+      font-size: 3rem;   
       color: #1e40af;
       margin-bottom: 1rem;
       display: block;
@@ -719,18 +719,18 @@
     padding: 1.5rem;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 100%; /* Pastikan card mengambil tinggi penuh */
+    height: 100%;   
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Pastikan konten di dalam card terdistribusi */
+    justify-content: space-between;   
 }
 
 .alur-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* Buat 5 kolom sebaris */
-    gap: 2rem; /* Jarak antar card */
-    justify-content: center; /* Pusatkan grid secara horizontal */
-    align-items: stretch; /* Pastikan semua card memiliki tinggi yang sama */
+    grid-template-columns: repeat(5, 1fr);   
+    gap: 2rem;   
+    justify-content: center;   
+    align-items: stretch;   
 }
 
 
@@ -772,7 +772,7 @@
       text-align: left;
       flex-wrap: wrap;
       max-width: 1200px;
-      margin: 0 auto; /* untuk membuat konten di tengah layar */
+      margin: 0 auto;   
       gap: 2rem;
   }
 
@@ -818,8 +818,8 @@
   .footer-section .social-icons {
       display: flex;
       gap: 1rem;
-      margin-top: 0.5rem; /* Tambahkan jarak kecil dari email */
-      justify-content: flex-start; /* Pastikan ikon rata kiri */
+      margin-top: 0.5rem;   
+      justify-content: flex-start;   
   }
 
   .social-icons a {
@@ -836,9 +836,9 @@
 
 
     
-    /* ...existing styles... */
+      
   
-    /* Media Queries for Responsiveness */
+      
     @media (max-width: 768px) {
       .navbar {
         flex-direction: column;
@@ -899,39 +899,39 @@
       }
   
       .room-grid, .inventory-grid {
-        grid-template-columns: 1fr; /* Satu kolom untuk layar kecil */
-        gap: 1rem; /* Kurangi jarak antar elemen */
+        grid-template-columns: 1fr;   
+        gap: 1rem;   
       }
 
       .room-card, .inventory-card {
-        padding: 1rem; /* Kurangi padding untuk elemen kartu */
-        text-align: center; /* Pastikan teks tetap di tengah */
+        padding: 1rem;   
+        text-align: center;   
       }
 
       .room-card img, .inventory-card img {
-          height: 120px; /* Sesuaikan tinggi gambar */
-          object-fit: cover; /* Pastikan gambar tetap proporsional */
+          height: 120px;   
+          object-fit: cover;   
       }
 
       .room-card strong, .inventory-card strong {
-          font-size: 1rem; /* Kurangi ukuran font untuk judul */
+          font-size: 1rem;   
       }
 
       .room-card p, .inventory-card p {
-          font-size: 0.9rem; /* Kurangi ukuran font untuk deskripsi */
+          font-size: 0.9rem;   
       }
   }
 
   
     footer .footer-container {
-        flex-direction: column; /* Ubah tata letak menjadi kolom */
-        align-items: center; /* Pusatkan elemen */
-        text-align: center; /* Pusatkan teks */
-        gap: 1.5rem; /* Tambahkan jarak antar elemen */
+        flex-direction: column;   
+        align-items: center;   
+        text-align: center;   
+        gap: 1.5rem;   
     }
 
     footer .footer-section {
-        min-width: 100%; /* Pastikan setiap bagian mengambil lebar penuh */
+        min-width: 100%;   
     }
 
     footer .footer-section ul {
@@ -939,23 +939,23 @@
     }
 
     footer .footer-section ul li {
-        margin-bottom: 0.8rem; /* Tambahkan jarak antar item */
+        margin-bottom: 0.8rem;   
     }
 
     footer .social-icons {
-        justify-content: center; /* Pusatkan ikon media sosial */
+        justify-content: center;   
     }
     
     @media (min-width: 769px) {
     footer .footer-container {
-        flex-direction: row; /* Kembali ke tata letak horizontal */
-        justify-content: space-between; /* Sebarkan elemen secara merata */
-        text-align: left; /* Kembalikan teks ke rata kiri */
-        align-items: flex-start; /* Pastikan elemen sejajar di bagian atas */
+        flex-direction: row;   
+        justify-content: space-between;   
+        text-align: left;   
+        align-items: flex-start;   
     }
 
     footer .footer-section {
-        min-width: 250px; /* Pastikan setiap bagian memiliki lebar minimum */
+        min-width: 250px;   
     }
 }
 
@@ -966,19 +966,19 @@
       }
 
       .room-grid, .inventory-grid {
-        grid-template-columns: 1fr; /* Tetap satu kolom untuk layar sangat kecil */
+        grid-template-columns: 1fr;   
     }
 
     .room-card img, .inventory-card img {
-        height: 100px; /* Kurangi tinggi gambar lebih lanjut */
+        height: 100px;   
     }
 
     .room-card strong, .inventory-card strong {
-        font-size: 0.9rem; /* Kurangi ukuran font lebih lanjut */
+        font-size: 0.9rem;   
     }
 
     .room-card p, .inventory-card p {
-        font-size: 0.8rem; /* Kurangi ukuran font lebih lanjut */
+        font-size: 0.8rem;   
     }
   
       .hero-text h1 {
@@ -1003,20 +1003,20 @@
       }
   
     footer {
-        padding: 1.5rem 1rem; /* Kurangi padding untuk layar sangat kecil */
+        padding: 1.5rem 1rem;   
     }
 
     footer .footer-section h5 {
-        font-size: 1rem; /* Kurangi ukuran font judul */
+        font-size: 1rem;   
     }
 
     footer .footer-section p,
     footer .footer-section ul {
-        font-size: 0.85rem; /* Kurangi ukuran font teks */
+        font-size: 0.85rem;   
     }
 
     footer .social-icons a {
-        font-size: 1.2rem; /* Kurangi ukuran ikon media sosial */
+        font-size: 1.2rem;   
     }
     }
    

@@ -13,7 +13,7 @@
     --glass-border: rgba(255, 255, 255, 0.1);
 }
 
-/* Enhanced Header Section */
+  
 .header-container {
     position: relative;
     background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
@@ -247,7 +247,7 @@
     50% { opacity: 0.3; }
 }
 
-/* Futuristic Button */
+  
 .btn-futuristic {
     position: relative;
     padding: 0;
@@ -360,7 +360,7 @@
     transform: translateY(-2px);
 }
 
-/* Header Wave */
+  
 .header-wave {
     position: absolute;
     bottom: 0;
@@ -379,7 +379,7 @@
     fill: rgba(0, 0, 0, 0.1);
 }
 
-/* Enhanced Alert Messages */
+  
 .alert-futuristic {
     position: relative;
     border-radius: 15px;
@@ -469,7 +469,7 @@
     transform: scale(1.1);
 }
 
-/* Enhanced Main Card */
+  
 .main-card {
     border-radius: 20px;
     overflow: hidden;
@@ -509,7 +509,7 @@
     100% { transform: scale(1.1) rotate(180deg); }
 }
 
-/* Card Header Title Fix - Kontras dengan Background Gelap */
+  
 .card-header h5 {
     color: #ffffff !important;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
@@ -547,7 +547,7 @@
     background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
 }
 
-/* Icon Circle */
+  
 .icon-circle {
     width: 40px;
     height: 40px;
@@ -561,7 +561,7 @@
     color: #2d3748;
 }
 
-/* Number Circle */
+  
 .number-circle {
     width: 30px;
     height: 30px;
@@ -583,7 +583,7 @@
     color: #e2e8f0 !important;
 }
 
-/* Table Styles - WHITE BACKGROUND */
+  
 .table {
     border: none;
     background: #ffffff;
@@ -621,7 +621,7 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* Item List Styles */
+  
 .item-list {
     max-width: 250px;
 }
@@ -638,7 +638,7 @@
     background: #1e293b !important;
 }
 
-/* Time Range - Improved Contrast */
+  
 .time-range {
     font-family: 'Courier New', monospace;
     background-color: #f8f9fa;
@@ -688,7 +688,7 @@
     color: #333 !important;
 }
 
-/* Action Buttons - New Style */
+  
 .action-buttons {
     font-size: 0.875rem;
     white-space: nowrap;
@@ -727,7 +727,7 @@
     color: #b7791f !important;
 }
 
-/* Badge Enhancements */
+  
 .badge {
     font-size: 0.75rem;
     font-weight: 600;
@@ -740,7 +740,7 @@
     color: #333 !important;
 }
 
-/* Empty State */
+  
 .empty-state {
     padding: 3rem 1rem;
     background: #ffffff;
@@ -765,7 +765,7 @@
     border-color: #0f172a;
 }
 
-/* Card Enhancements */
+  
 .card {
     border-radius: 15px;
     overflow: hidden;
@@ -789,7 +789,7 @@
 }
 
 
-/* Responsive adjustments */
+  
 @media (max-width: 1024px) {
     .header-content {
         flex-direction: column;
@@ -872,7 +872,7 @@
     }
 }
 
-/* Mobile specific adjustments */
+  
 @media (max-width: 576px) {
     .header-title {
         font-size: 1.75rem;

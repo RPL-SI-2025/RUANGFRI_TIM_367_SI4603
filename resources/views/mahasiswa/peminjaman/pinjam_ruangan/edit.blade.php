@@ -191,7 +191,7 @@
     vertical-align: middle;
 }
 
-/* Time slot styles */
+  
 .time-slot {
     display: block;
     padding: 12px;

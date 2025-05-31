@@ -21,15 +21,17 @@ class MahasiswaAuthController extends Controller
     }
 
     
+
     public function register(Request $request)
     {
         $request->validate([
-            'nim' => 'required|string|unique:mahasiswa,nim',
+            'nim' => 'required|unique:mahasiswa,nim',
             'nama_mahasiswa' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:mahasiswa,email',
+            'email' => 'required|email|unique:mahasiswa,email',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
+        // Buat mahasiswa baru
         $mahasiswa = Mahasiswa::create([
             'nim' => $request->nim,
             'nama_mahasiswa' => $request->nama_mahasiswa,
@@ -37,14 +39,20 @@ class MahasiswaAuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // Login mahasiswa setelah register
         Auth::guard('mahasiswa')->login($mahasiswa);
         
+        // Regenerate session untuk keamanan
+        $request->session()->regenerate();
+        
+        // Set session data
         Session::put('mahasiswa_id', $mahasiswa->id);
         Session::put('mahasiswa_name', $mahasiswa->nama_mahasiswa);
         Session::put('mahasiswa_nim', $mahasiswa->nim);
         Session::put('mahasiswa_email', $mahasiswa->email);
         Session::put('is_logged_in', true);
         
+        // Redirect ke dashboard dengan pesan sukses
         return redirect()->route('mahasiswa.dashboard')
             ->with('success', 'Akun berhasil dibuat! Selamat datang di Sistem Peminjaman Inventaris.');
     }

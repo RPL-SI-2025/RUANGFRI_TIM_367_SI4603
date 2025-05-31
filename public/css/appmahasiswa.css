@@ -1,13 +1,13 @@
-/* Enhanced Layout Fix for Sidebar, Navbar, and Content - Navy Blue with Green Accent Theme */
+  
 :root {
-    /* Navy Blue with Green Accent Color Palette */
-    --primary-green: #0891b2; /* Teal Blue */
-    --secondary-green: #059669; /* Forest Green */
-    --accent-blue: #1e40af; /* Navy Blue */
-    --dark-slate: #1e293b; /* Dark Navy */
-    --charcoal: #0f172a; /* Very Dark Navy */
-    --light-gray: #f1f5f9; /* Light Blue Gray */
-    --medium-gray: #94a3b8; /* Blue Gray */
+      
+    --primary-green: #0891b2;   
+    --secondary-green: #059669;   
+    --accent-blue: #1e40af;   
+    --dark-slate: #1e293b;   
+    --charcoal: #0f172a;   
+    --light-gray: #f1f5f9;   
+    --medium-gray: #94a3b8;   
     --white: #ffffff;
     --shadow-soft: 0 4px 20px rgba(30, 58, 138, 0.08);
     --shadow-medium: 0 8px 30px rgba(30, 58, 138, 0.12);
@@ -17,7 +17,7 @@
     --sidebar-width: 280px;
 }
 
-/* Body and Background */
+  
 body {
     background: linear-gradient(-45deg, #f1f5f9, #e2e8f0, #f8fafc, #ffffff);
     background-size: 400% 400%;
@@ -50,14 +50,14 @@ body::before {
     100% { background-position: 0% 50%; }
 }
 
-/* Main Layout Container */
+  
 .app-layout {
     display: flex;
     min-height: 100vh;
     position: relative;
 }
 
-/* Sidebar Fixed Layout */
+  
 .sidebar {
     position: fixed;
     top: 0;
@@ -86,7 +86,7 @@ body::before {
     50% { background-position: 200% 0; }
 }
 
-/* Sidebar Header */
+  
 .sidebar-header {
     padding: 2rem 1.5rem;
     background: linear-gradient(135deg, 
@@ -135,7 +135,7 @@ body::before {
     color: rgba(255, 255, 255, 0.8);
 }
 
-/* Main Content Area */
+  
 .main-content {
     margin-left: var(--sidebar-width);
     min-height: 100vh;
@@ -144,10 +144,10 @@ body::before {
     flex-direction: column;
     position: relative;
     transition: var(--transition-smooth);
-    z-index: 1; /* Lower z-index than navbar dropdown */
+    z-index: 1;   
 }
 
-/* Top Navbar - White Background Design */
+  
 .top-navbar {
     background: #ffffff;
     backdrop-filter: blur(30px);
@@ -158,11 +158,11 @@ body::before {
     padding: 1.2rem 2rem;
     position: sticky;
     top: 0;
-    z-index: 1030; /* Higher than content but lower than dropdown */
+    z-index: 1030;   
     margin: 0;
     width: 100%;
     border-radius: 0;
-    overflow: visible; /* Allow dropdown to overflow */
+    overflow: visible;   
     min-height: 80px;
     display: flex;
     align-items: center;
@@ -171,7 +171,7 @@ body::before {
 
 
 
-/* Bottom Glow Effect - Disesuaikan untuk background putih */
+  
 .top-navbar::after {
     content: '';
     position: absolute;
@@ -192,7 +192,7 @@ body::before {
     50% { background-position: 300% 0; }
 }
 
-/* Navbar Title Enhancement - Disesuaikan untuk background putih */
+  
 .top-navbar h5 {
     color: transparent;
     font-weight: 800;
@@ -237,7 +237,7 @@ body::before {
     letter-spacing: 0.5px;
 }
 
-/* Sidebar Toggle Button - Disesuaikan untuk background putih */
+  
 .sidebar-toggle {
     background: linear-gradient(135deg, 
         rgba(8, 145, 178, 0.1) 0%, 
@@ -315,18 +315,18 @@ body::before {
     transform: translateY(-1px) scale(1.02);
 }
 
-/* Content Wrapper */
+  
 .content-wrapper {
     flex: 1;
     padding: 0;
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(10px);
-    min-height: calc(100vh - 80px); /* Adjust based on navbar height */
+    min-height: calc(100vh - 80px);   
     position: relative;
-    z-index: 1; /* Lower z-index than dropdown */
+    z-index: 1;   
 }
 
-/* Navigation Links Enhancement */
+  
 .sidebar .nav-link {
     color: rgba(255, 255, 255, 0.85);
     border-radius: 12px;
@@ -394,7 +394,7 @@ body::before {
     border-radius: 0 2px 2px 0;
 }
 
-/* Icon Enhancements */
+  
 .sidebar .fas, .sidebar .fa {
     width: 20px;
     margin-right: 12px;
@@ -416,7 +416,7 @@ body::before {
     transform: scale(1.15);
 }
 
-/* Chevron Animation */
+  
 .sidebar .fa-chevron-down {
     transition: var(--transition-smooth);
     margin-left: auto;
@@ -428,7 +428,7 @@ body::before {
     color: var(--primary-green);
 }
 
-/* Submenu Styling */
+  
 .sidebar .collapse .nav-link {
     padding: 0.6rem 1rem 0.6rem 2.5rem;
     font-size: 0.9rem;
@@ -449,7 +449,7 @@ body::before {
     color: var(--white);
 }
 
-/* Logout Button Special Styling */
+  
 .sidebar .nav-link.text-danger {
     margin-top: 1rem;
     background: linear-gradient(135deg, 
@@ -468,7 +468,7 @@ body::before {
     transform: translateX(5px) scale(1.02);
 }
 
-/* Notification Button - Disesuaikan untuk background putih */
+  
 .notification-btn {
     background: linear-gradient(135deg, 
         rgba(8, 145, 178, 0.08) 0%, 
@@ -532,7 +532,7 @@ body::before {
     color: var(--primary-green);
 }
 
-/* Notification Badge - Enhanced */
+  
 .notification-btn .badge {
     position: absolute;
     top: -6px;
@@ -573,7 +573,7 @@ body::before {
     }
 }
 
-/* User Avatar - Disesuaikan untuk background putih */
+  
 .user-avatar {
     width: 50px;
     height: 50px;
@@ -649,18 +649,18 @@ body::before {
     animation: rotate 3s linear infinite;
 }
 
-/* User Dropdown Container Enhancement */
+  
 .user-dropdown {
     position: relative;
-    z-index: 1050; /* Ensure dropdown container has proper z-index */
+    z-index: 1050;   
 }
 
 .user-dropdown .dropdown-toggle {
-    z-index: 1051; /* Toggle button above container */
+    z-index: 1051;   
     position: relative;
 }
 
-/* Dropdown Menu - Tetap dengan dark theme untuk kontras */
+  
 .dropdown-menu {
     background: linear-gradient(135deg, 
         rgba(15, 23, 42, 0.97) 0%, 
@@ -677,15 +677,15 @@ body::before {
     margin-top: 0.75rem;
     overflow: hidden;
     min-width: 280px;
-    z-index: 1100; /* Increased z-index to be above content */
-    position: relative; /* Ensure positioning context */
+    z-index: 1100;   
+    position: relative;   
     opacity: 0;
     transform: translateY(-10px) scale(0.95);
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
 }
 
-/* Dropdown positioning fix */
+  
 .dropdown-menu.dropdown-menu-end {
     right: 0 !important;
     left: auto !important;
@@ -693,7 +693,7 @@ body::before {
     z-index: 1100;
 }
 
-/* Ensure dropdown doesn't interfere with content scrolling */
+  
 .dropdown-menu.show {
     position: absolute;
     will-change: transform;
@@ -709,7 +709,7 @@ body::before {
     pointer-events: auto;
 }
 
-/* Additional safety for dropdown positioning */
+  
 .navbar-nav .dropdown-menu {
     position: absolute;
     top: 100%;
@@ -719,7 +719,7 @@ body::before {
     margin-top: 0.75rem;
 }
 
-/* Fix for Bootstrap dropdown positioning conflict */
+  
 .dropdown-menu[data-bs-popper] {
     right: 0 !important;
     left: auto !important;
@@ -738,7 +738,7 @@ body::before {
     overflow: hidden;
     border: 1px solid transparent;
     font-weight: 500;
-    z-index: 2; /* Above dropdown background */
+    z-index: 2;   
 }
 
 .dropdown-item::before {
@@ -784,14 +784,14 @@ body::before {
     color: var(--primary-green);
 }
 
-/* Dropdown Divider */
+  
 .dropdown-divider {
     border-color: rgba(8, 145, 178, 0.4);
     margin: 0.75rem 0;
     opacity: 0.6;
 }
 
-/* User Info in Dropdown */
+  
 .dropdown-item-text {
     color: rgba(255, 255, 255, 0.95);
     padding: 1rem 1.2rem;
@@ -815,7 +815,7 @@ body::before {
     font-weight: 500;
 }
 
-/* Special styling for logout item */
+  
 .dropdown-item.text-danger {
     color: #ef4444 !important;
 }
@@ -828,7 +828,7 @@ body::before {
     color: #fca5a5 !important;
 }
 
-/* Mobile Responsive */
+  
 @media (max-width: 768px) {
     .sidebar {
         transform: translateX(-100%);
@@ -866,7 +866,7 @@ body::before {
         visibility: visible;
     }
     
-    /* Mobile hamburger button */
+      
     .mobile-sidebar-toggle {
         display: block;
         background: none;
@@ -954,7 +954,7 @@ body::before {
     }
 }
 
-/* Extra small screens */
+  
 @media (max-width: 480px) {
     .top-navbar {
         padding: 0.8rem 1rem;
@@ -997,14 +997,14 @@ body::before {
     }
 }
 
-/* Prevent body scroll when dropdown is open on mobile */
+  
 @media (max-width: 768px) {
     body.dropdown-open {
         overflow: hidden;
     }
 }
 
-/* Dark theme adjustments - Tetap putih untuk konsistensi */
+  
 @media (prefers-color-scheme: dark) {
     .top-navbar {
         background: #ffffff;
@@ -1012,7 +1012,7 @@ body::before {
     }
 }
 
-/* High contrast mode */
+  
 @media (prefers-contrast: high) {
     .top-navbar {
         border-bottom: 3px solid rgba(8, 145, 178, 0.4);
@@ -1026,7 +1026,7 @@ body::before {
     }
 }
 
-/* Reduced motion */
+  
 @media (prefers-reduced-motion: reduce) {
     .sidebar-toggle,
     .notification-btn,
@@ -1060,7 +1060,7 @@ body::before {
     }
 }
 
-/* Enhanced Cards and Components */
+  
 .card {
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(15px);
@@ -1070,7 +1070,7 @@ body::before {
     overflow: hidden;
     position: relative;
     border-radius: 12px;
-    z-index: 1; /* Below dropdown */
+    z-index: 1;   
 }
 
 .card::before {
@@ -1096,7 +1096,7 @@ body::before {
     border-color: rgba(8, 145, 178, 0.2);
 }
 
-/* Button Enhancements */
+  
 .btn-primary {
     background: linear-gradient(135deg, 
         var(--primary-green) 0%, 
@@ -1132,7 +1132,7 @@ body::before {
     box-shadow: var(--shadow-strong);
 }
 
-/* Sidebar Scrollbar */
+  
 .sidebar::-webkit-scrollbar {
     width: 6px;
 }
@@ -1154,7 +1154,7 @@ body::before {
         var(--primary-green));
 }
 
-/* Accessibility Improvements */
+  
 .sidebar .nav-link:focus,
 .btn:focus,
 .dropdown-item:focus {
@@ -1162,7 +1162,7 @@ body::before {
     outline-offset: 2px;
 }
 
-/* Loading Animation */
+  
 @keyframes pulse {
     0%, 100% {
         transform: scale(1);
@@ -1178,7 +1178,7 @@ body::before {
     animation: pulse 1.5s ease-in-out infinite;
 }
 
-/* Page Transition */
+  
 .content-wrapper {
     animation: fadeInContent 0.3s ease-out;
 }
@@ -1194,13 +1194,13 @@ body::before {
     }
 }
 
-/* Container Spacing */
+  
 .container, .container-fluid {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
 }
 
-/* Fix for specific layout issues */
+  
 body.animated-bg {
     margin: 0;
     padding: 0;
@@ -1213,7 +1213,7 @@ body.animated-bg {
     padding: 1.5rem;
 }
 
-/* Alert Enhancements */
+  
 .alert {
     border-radius: 10px;
     border: none;

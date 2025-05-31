@@ -76,12 +76,12 @@
     color: var(--accent-blue);
 }
 
-/* Simple Avatar Styling */
+  
 .user-avatar-simple {
     width: 50px;
     height: 50px;
     border-radius: 12px;
-    background: #1e293b; /* Dark navy blue solid color */
+    background: #1e293b;   
     display: flex;
     align-items: center;
     justify-content: center;
@@ -99,7 +99,7 @@
     box-shadow: 0 4px 12px rgba(30, 41, 59, 0.25);
 }
 
-/* Simple Dropdown Menu */
+  
 .dropdown-simple {
     background: #ffffff !important;
     border: 1px solid #e9ecef;
@@ -109,7 +109,7 @@
     margin-top: 0.5rem;
 }
 
-/* Simple Dropdown Items */
+  
 .dropdown-item-simple {
     color: #333 !important;
     border-radius: 8px;
@@ -136,7 +136,7 @@
     color: #dc3545 !important;
 }
 
-/* Profile Section in Dropdown */
+  
 .dropdown-profile {
     background: #f8f9fa;
     border-radius: 8px;
@@ -148,13 +148,13 @@
     color: #333 !important;
 }
 
-/* Divider */
+  
 .dropdown-divider {
     border-color: #e9ecef;
     margin: 0.5rem 0;
 }
 
-/* Icon colors */
+  
 .dropdown-item-simple .text-primary {
     color: #1e293b !important;
 }
