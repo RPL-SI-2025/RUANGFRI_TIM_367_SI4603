@@ -105,11 +105,13 @@
                 </tr>
             </thead>
             <tbody>
+                {{-- @dd($ruangans); --}}
                 @foreach ($ruangans as $ruangan)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>
                         @if ($ruangan->gambar)
+
                             <img src="{{ asset('storage/katalog_ruangan/' . $ruangan->gambar) }}" alt="{{ $ruangan->nama_ruangan }}" width="250">
                         @else
                             Tidak ada gambar

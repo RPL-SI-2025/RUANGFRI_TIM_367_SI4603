@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masuk | Daftar - RUANGFRI</title>
-    
+
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- Bootstrap 5.3 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Custom CSS -->
     <link href="{{ asset('css/single-auth.css') }}" rel="stylesheet">
     <title>Login Mahasiswa - RuangFri</title>
@@ -109,7 +109,7 @@
 
                     <form method="POST" action="{{ route('mahasiswa.login.submit') }}" id="loginForm">
                         @csrf
-                        
+
                         <!-- Email Field -->
                         <div class="form-group">
                             <label for="login-email" class="form-label">
@@ -117,12 +117,12 @@
                                 Email Address
                             </label>
                             <div class="input-wrapper">
-                                <input type="email" 
-                                       class="form-control @error('email') is-invalid @enderror" 
-                                       id="login-email" 
-                                       name="email" 
-                                       value="{{ old('email') }}" 
-                                       required 
+                                <input type="email"
+                                       class="form-control @error('email') is-invalid @enderror"
+                                       id="login-email"
+                                       name="email"
+                                       value="{{ old('email') }}"
+                                       required
                                        placeholder="Masukkan alamat email Anda">
                                 <span class="input-focus"></span>
                             </div>
@@ -138,11 +138,11 @@
                                 Password
                             </label>
                             <div class="input-wrapper">
-                                <input type="password" 
-                                       class="form-control @error('password') is-invalid @enderror" 
-                                       id="login-password" 
-                                       name="password" 
-                                       required 
+                                <input type="password"
+                                       class="form-control @error('password') is-invalid @enderror"
+                                       id="login-password"
+                                       name="password"
+                                       required
                                        placeholder="Masukkan password Anda">
                                 <button type="button" class="password-toggle" onclick="togglePassword('login-password')">
                                     <i class="fas fa-eye"></i>
@@ -221,12 +221,12 @@
                                 Nomor Induk Mahasiswa (NIM)
                             </label>
                             <div class="input-wrapper">
-                                <input type="text" 
-                                       class="form-control @error('nim') is-invalid @enderror" 
-                                       id="nim" 
-                                       name="nim" 
-                                       value="{{ old('nim') }}" 
-                                       required 
+                                <input type="text"
+                                       class="form-control @error('nim') is-invalid @enderror"
+                                       id="nim"
+                                       name="nim"
+                                       value="{{ old('nim') }}"
+                                       required
                                        placeholder="Masukkan NIM Anda">
                                 <span class="input-focus"></span>
                             </div>
@@ -242,12 +242,12 @@
                                 Nama Lengkap
                             </label>
                             <div class="input-wrapper">
-                                <input type="text" 
-                                       class="form-control @error('nama_mahasiswa') is-invalid @enderror" 
-                                       id="nama_mahasiswa" 
-                                       name="nama_mahasiswa" 
-                                       value="{{ old('nama_mahasiswa') }}" 
-                                       required 
+                                <input type="text"
+                                       class="form-control @error('nama_mahasiswa') is-invalid @enderror"
+                                       id="nama_mahasiswa"
+                                       name="nama_mahasiswa"
+                                       value="{{ old('nama_mahasiswa') }}"
+                                       required
                                        placeholder="Masukkan nama lengkap Anda">
                                 <span class="input-focus"></span>
                             </div>
@@ -263,12 +263,12 @@
                                 Email Address
                             </label>
                             <div class="input-wrapper">
-                                <input type="email" 
-                                       class="form-control @error('email') is-invalid @enderror" 
-                                       id="register-email" 
-                                       name="email" 
-                                       value="{{ old('email') }}" 
-                                       required 
+                                <input type="email"
+                                       class="form-control @error('email') is-invalid @enderror"
+                                       id="register-email"
+                                       name="email"
+                                       value="{{ old('email') }}"
+                                       required
                                        placeholder="Masukkan alamat email Anda">
                                 <span class="input-focus"></span>
                             </div>
@@ -284,11 +284,11 @@
                                 Password
                             </label>
                             <div class="input-wrapper">
-                                <input type="password" 
-                                       class="form-control @error('password') is-invalid @enderror" 
-                                       id="register-password" 
-                                       name="password" 
-                                       required 
+                                <input type="password"
+                                       class="form-control @error('password') is-invalid @enderror"
+                                       id="register-password"
+                                       name="password"
+                                       required
                                        placeholder="Buat password yang kuat">
                                 <button type="button" class="password-toggle" onclick="togglePassword('register-password')">
                                     <i class="fas fa-eye"></i>
@@ -323,11 +323,11 @@
                                 Konfirmasi Password
                             </label>
                             <div class="input-wrapper">
-                                <input type="password" 
-                                       class="form-control" 
-                                       id="password_confirmation" 
-                                       name="password_confirmation" 
-                                       required 
+                                <input type="password"
+                                       class="form-control"
+                                       id="password_confirmation"
+                                       name="password_confirmation"
+                                       required
                                        placeholder="Ulangi password Anda">
                                 <span class="input-focus"></span>
                             </div>
@@ -345,7 +345,7 @@
                         <div class="form-check mb-4">
                             <input type="checkbox" class="form-check-input" id="terms" required>
                             <label class="form-check-label" for="terms">
-                                Saya setuju dengan <a href="#" class="terms-link">Syarat & Ketentuan</a> 
+                                Saya setuju dengan <a href="#" class="terms-link">Syarat & Ketentuan</a>
                                 dan <a href="#" class="terms-link">Kebijakan Privasi</a>
                             </label>
                         </div>
@@ -379,7 +379,7 @@
             </div>
             <div class="card-footer text-center">
                 <p class="mb-0">Belum punya akun?
-                    <a href="{{ route('mahasiswa.register') }}" class="register-link">
+                    <a href="{{ route('register') }}" class="register-link">
                         <i class="fas fa-user-plus me-1"></i>Daftar sekarang
                     </a>
                 </p>

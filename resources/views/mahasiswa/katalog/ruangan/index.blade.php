@@ -1,176 +1,237 @@
 @extends('mahasiswa.layouts.app')
 
 @section('content')
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="mb-0 fw-bold" style="color: #3AA17E;">
-            Katalog Ruangan
-        </h4>
-        <a href="{{ route('mahasiswa.cart.keranjang_ruangan.index') }}" class="btn btn-outline-primary rounded-pill">
-            <i class="fa fa-shopping-basket me-1"></i> Lihat Keranjang
-        </a>
-    </div>
+<!-- Load CSS khusus catalog -->
+<link rel="stylesheet" href="{{ asset('css/catalog-style.css') }}">
 
-    <form method="GET" action="{{ route('mahasiswa.katalog.ruangan.index') }}" class="row mb-4 g-2 align-items-center">
-        <div class="col-md-4">
-            <input type="text" name="search" class="form-control" placeholder="Cari nama ruangan..." value="{{ request('search') }}">
-        </div>
-        <div class="col-md-2">
-            <select name="lokasi" class="form-select">
-                <option value="">Lokasi</option>
-                <option value="Gedung B (Cacuk)" {{ request('lokasi') == 'Gedung B (Cacuk)' ? 'selected' : '' }}>Gedung B (Cacuk)</option>
-                <option value="Telkom University Landmark Tower (TULT)" {{ request('lokasi') == 'Telkom University Landmark Tower (TULT)' ? 'selected' : '' }}>Telkom University Landmark Tower (TULT)</option>
-                <option value="Gedung Kuliah Umum (GKU)" {{ request('lokasi') == 'Gedung Kuliah Umum (GKU)' ? 'selected' : '' }}>Gedung Kuliah Umum (GKU)</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <select name="status" class="form-select">
-                <option value="">Status</option>
-                <option value="Tersedia" {{ request('status') == 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
-                <option value="Tidak Tersedia" {{ request('status') == 'Tidak Tersedia' ? 'selected' : '' }}>Tidak Tersedia</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn w-100" style="background-color: #3AA17E; color: white;">
-                <i class="fa fa-search me-1"></i> Cari
-            </button>
-        </div>
-        <div class="col-md-2">
-            <a href="{{ route('mahasiswa.katalog.ruangan.index') }}" class="btn btn-secondary w-100">Reset</a>
-        </div>
-    </form>
+<div class="catalog-container">
+    <div class="container py-4">
+        <!-- Header Section -->
+        <div class="catalog-header">
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div>
+                    <h1 class="catalog-title">
+                        <i class="fa fa-door-open catalog-title-icon"></i>
+                        Katalog Ruangan
+                    </h1>
+                    <p class="catalog-subtitle">Lihat daftar ruangan yang tersedia untuk dipinjam</p>
+                </div>
+                <div class="catalog-stats">
+                    <i class="fa fa-list"></i>
+                    <span>{{ $ruangans->count() }} Ruangan Tersedia</span>
+                </div>
+                <a href="{{ route('mahasiswa.cart.keranjang_ruangan.index') }}"
+                    class="catalog-cart-button">
+                    <i class="fa fa-shopping-basket"></i>
+                    Keranjang
+                    @if(session()->has('cart_ruangan') && count(session('cart_ruangan')) > 0)
+                        <span class="catalog-cart-badge">{{ count(session('cart_ruangan')) }}</span>
+                    @endif
+                </a>
+            </div>
+
+            <!-- Search and Filter Section -->
+            <div class="catalog-filters">
+                <div class="row align-items-center">
+                    <div class="col-md-5">
+                        <div class="catalog-search-container">
+                            <i class="fa fa-search catalog-search-icon"></i>
+                            <input type="text"
+                                   class="catalog-search-input"
+                                   placeholder="Cari ruangan berdasarkan nama atau deskripsi..."
+                                   id="catalogSearchInput"
+                                   autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-md-7 text-md-end mt-3 mt-md-0">
+                        <div class="d-flex justify-content-md-end align-items-center gap-3">
+                            <!-- Lokasi Filter -->
+                            <select class="catalog-filter-select" id="catalogLokasiFilter" name="lokasi">
+                                <option value="">Semua Lokasi</option>
+
+                                @foreach($lokasiOptions as $lok)
+                                    <option value="{{ $lok }}" {{ request('lokasi') == $lok ? 'selected' : '' }}>
+                                        {{ $lok }}
+                                    </option>
+                                @endforeach
+                            </select>
 
 
+                            <!-- Status Filter -->
+                            <select class="catalog-filter-select" id="catalogStatusFilter">
+                                <option value="">Semua Status</option>
+                                <option value="Tersedia">Tersedia</option>
+                                <option value="Tidak Tersedia">Tidak Tersedia</option>
+                            </select>
 
-    @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert"
-         style="transition: all 0.3s ease; border-radius: 10px; border: none; box-shadow: 0 3px 10px rgba(0,0,0,0.08);"
-         onmouseover="this.style.opacity='0.9'; this.style.transform='scale(1.01)';"
-         onmouseout="this.style.opacity='1'; this.style.transform='scale(1)';">
-        <i class="fa fa-check-circle me-2"></i>{{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    @endif
-
-    @if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert" id="errorAlert"
-         style="transition: all 0.3s ease; border-radius: 10px; border: none; box-shadow: 0 3px 10px rgba(0,0,0,0.08);"
-         onmouseover="this.style.opacity='0.9'; this.style.transform='scale(1.01)';"
-         onmouseout="this.style.opacity='1'; this.style.transform='scale(1)';">
-        <i class="fa fa-exclamation-circle me-2"></i>{{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    @endif
-
-    <div class="row g-4">
-        @foreach($ruangans as $item)
-        <div class="col-md-4 mb-2">
-            <div class="card h-100 shadow-sm border-0 rounded-lg overflow-hidden">
-                <div class="position-relative">
-                    <img src="{{ $item->gambar ? asset('storage/katalog_ruangan/' . $item->gambar) : asset('images/default-room.jpg') }}"
-                         class="card-img-top" alt="{{ $item->nama_ruangan }}"
-                         style="height: 200px; object-fit: cover;">
-                    <div class="position-absolute bottom-0 start-0 end-0 p-2"
-                        style="background-color: #3AA17E; opacity: 0.9; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem;">
-                        <div class="d-flex align-items-center">
-                            <span class="badge rounded-pill bg-light text-dark mb-0 small fw-medium">
-                                <i class="fa fa-building me-1"></i>
-                                Lokasi: {{ Str::limit($item->lokasi, 20) }}
+                            <span class="catalog-results-count">
+                                <i class="fa fa-filter"></i>
+                                <span id="resultsCount">{{ $ruangans->count() }}</span> dari {{ $ruangans->count() }} ruangan
                             </span>
                         </div>
-                    </div>
-
-
-                    <div class="position-absolute top-0 end-0 mt-2 me-2">
-                        <span class="badge rounded-pill {{ $item->status === 'Tersedia' ? 'bg-success' : 'bg-danger' }}">
-                            {{ $item->status }}
-                        </span>
-                    </div>
-                </div>
-                <div class="card-body d-flex flex-column">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h5 class="card-title fw-bold mb-0">{{ $item->nama_ruangan }}</h5>
-                        <span class="badge bg-light text-dark border ms-2">
-                            <i class="fa fa-users text-primary me-1"></i>{{ $item->kapasitas }} orang
-                        </span>
-                    </div>
-                    <p class="card-text text-muted flex-grow-1 mb-3">{{ Str::limit($item->deskripsi, 80) }}</p>
-                    <div class="mb-3">
-                        <h6 class="text-secondary small fw-bold mb-2">
-                            <i class="fa fa-check-circle text-primary me-1"></i>Fasilitas
-                        </h6>
-                        <div class="d-flex flex-wrap gap-1">
-                            @php
-                                $facilities = explode(',', $item->fasilitas);
-                                $maxFacilities = 3;
-                            @endphp
-
-                            @foreach(array_slice($facilities, 0, $maxFacilities) as $facility)
-                                <span class="badge border rounded-pill" style="color: #3AA17E; border-color: #3AA17E;">
-                                    <i class="fa fa-check me-1"></i>{{ trim($facility) }}
-                                </span>
-                            @endforeach
-
-                            @if(count($facilities) > $maxFacilities)
-                                <span class="badge bg-light-subtle text-primary">
-                                    +{{ count($facilities) - $maxFacilities }} lainnya
-                                </span>
-                            @endif
-                        </div>
-                    </div>
-
-                </div>
-                <div class="card-footer bg-white border-top-0 pt-0">
-                    <div class="d-flex justify-content-between">
-                        <a href="{{ route('mahasiswa.katalog.ruangan.show', $item->id) }}"
-                           class="btn btn-sm btn-outline-primary rounded-pill">
-                            <i class="fa fa-info-circle me-1"></i> Detail
-                        </a>
-                        @if($item->status === 'Tersedia')
-                        <form action="{{ route('mahasiswa.cart.keranjang_ruangan.add') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="id_ruangan" value="{{ $item->id }}">
-                            <input type="hidden" name="tanggal_booking" value="{{ date('Y-m-d') }}">
-                            <input type="hidden" name="waktu_mulai" value="08:00:00">
-                            <input type="hidden" name="waktu_selesai" value="10:00:00">
-                            <button class="btn btn-sm btn-primary rounded-pill">
-                                <i class="fa fa-cart-plus me-1"></i> Tambahkan
-                            </button>
-                        </form>
-                        @else
-                        <button class="btn btn-sm btn-secondary rounded-pill" disabled>
-                            <i class="fa fa-ban me-1"></i> Tidak Tersedia
-                        </button>
-                        @endif
                     </div>
                 </div>
             </div>
         </div>
-        @endforeach
+
+        <!-- Alert Messages -->
+        @if(session('success'))
+            <div class="catalog-alert catalog-alert-success" role="alert" id="successAlert">
+                <i class="fa fa-check-circle"></i>
+                <span>{{ session('success') }}</span>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="catalog-alert catalog-alert-error" role="alert" id="errorAlert">
+                <i class="fa fa-exclamation-circle"></i>
+                <span>{{ session('error') }}</span>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        <!-- Catalog Grid -->
+        {{-- @dd($ruangans->items()); --}}
+        @if($ruangans->count() > 0)
+
+
+            <div class="catalog-grid" id="catalogGrid">
+                @foreach($ruangans as $ruangan)
+
+                {{-- @dd($ruangan->gambar); --}}
+                    <div class="catalog-card"
+                         data-name="{{ strtolower($ruangan->nama_ruangan) }}"
+                         data-status="{{ $ruangan->status }}"
+                         data-description="{{ strtolower($ruangan->deskripsi ?? '') }}">
+
+                        <!-- Image Container -->
+                        <div class="catalog-card-image-container">
+                            {{-- @dd($ruangan) --}}
+                            @if($ruangan->gambar)
+
+                                <img src="{{ asset('storage/katalog_ruangan/' . $ruangan->gambar) }}"
+                                     class="catalog-card-image"
+                                     alt="{{ $ruangan->nama_ruangan }}"
+                                     loading="lazy">
+                            @else
+                                <div class="catalog-card-image-placeholder">
+                                    <i class="fa fa-door-closed"></i>
+                                </div>
+                            @endif
+
+                            <!-- Status Badge -->
+                            <div class="catalog-status-badge {{ $ruangan->status === 'Tersedia' ? 'catalog-status-available' : 'catalog-status-unavailable' }}">
+                                {{ $ruangan->status }}
+                            </div>
+                        </div>
+
+                        <!-- Card Content -->
+                        <div class="catalog-card-content">
+                            <h3 class="catalog-card-title">{{ $ruangan->nama_ruangan }}</h3>
+
+                            <p class="catalog-card-description">
+                                {{ $ruangan->deskripsi ?: 'Deskripsi tidak tersedia untuk ruangan ini.' }}
+                            </p>
+
+                            <!-- Kapasitas Info -->
+                            <div class="catalog-info-section">
+                                <div class="catalog-stock-label">
+                                    <i class="fa fa-users"></i>
+                                    Kapasitas
+                                </div>
+                                <div class="catalog-stock-count">
+                                    {{ $ruangan->kapasitas }} orang
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="catalog-card-actions">
+                                <a href="{{ route('mahasiswa.katalog.ruangan.show', $ruangan->id) }}"
+                                   class="catalog-btn-detail"
+                                   aria-label="Lihat detail {{ $ruangan->nama_ruangan }}">
+                                    <i class="fa fa-info-circle"></i>
+                                    Detail
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <!-- Empty State -->
+            <div class="catalog-empty-state">
+                <div class="catalog-empty-icon">
+                    <i class="fa fa-door-closed"></i>
+                </div>
+                <h3 class="catalog-empty-title">Tidak Ada Ruangan</h3>
+                <p class="catalog-empty-description">
+                    Saat ini tidak ada ruangan yang tersedia. Silakan coba lagi nanti atau hubungi administrator.
+                </p>
+                <a href="{{ route('mahasiswa.dashboard') }}" class="catalog-empty-action">
+                    <i class="fa fa-home"></i>
+                    Kembali ke Dashboard
+                </a>
+            </div>
+        @endif
     </div>
 </div>
-
 @endsection
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const successAlert = document.getElementById('successAlert');
-        const errorAlert = document.getElementById('errorAlert');
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('catalogSearchInput');
+    const statusFilter = document.getElementById('catalogStatusFilter');
+    const catalogGrid = document.getElementById('catalogGrid');
+    const resultsCount = document.getElementById('resultsCount');
 
-        if (successAlert) {
-            setTimeout(function() {
-                const bsAlert = new bootstrap.Alert(successAlert);
-                bsAlert.close();
-            }, 2000);
-        }
+    function filterCatalog() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedStatus = statusFilter.value;
+        const cards = catalogGrid.querySelectorAll('.catalog-card');
+        let visibleCount = 0;
 
-        if (errorAlert) {
-            setTimeout(function() {
-                const bsAlert = new bootstrap.Alert(errorAlert);
-                bsAlert.close();
-            }, 2000);
-        }
-    });
+        cards.forEach(card => {
+            const name = card.dataset.name;
+            const description = card.dataset.description;
+            const status = card.dataset.status;
+
+            const matchesSearch = !searchTerm ||
+                name.includes(searchTerm) ||
+                description.includes(searchTerm);
+
+            const matchesStatus = !selectedStatus || status === selectedStatus;
+
+            if (matchesSearch && matchesStatus) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        resultsCount.textContent = visibleCount;
+    }
+
+    searchInput.addEventListener('input', filterCatalog);
+    statusFilter.addEventListener('change', filterCatalog);
+
+    const successAlert = document.getElementById('successAlert');
+    const errorAlert = document.getElementById('errorAlert');
+
+    if (successAlert) {
+        setTimeout(() => {
+            const bsAlert = new bootstrap.Alert(successAlert);
+            bsAlert.close();
+        }, 3000);
+    }
+
+    if (errorAlert) {
+        setTimeout(() => {
+            const bsAlert = new bootstrap.Alert(errorAlert);
+            bsAlert.close();
+        }, 4000);
+    }
+});
 </script>
 @endpush

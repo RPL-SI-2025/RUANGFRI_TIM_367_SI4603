@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 class RuanganController extends Controller
 {
 
-    private $lokasiOptions = [
+    public $lokasiOptions = [
         'Gedung B (Cacuk)',
         'Telkom University Landmark Tower (TULT)',
         'Gedung Kuliah Umum (GKU)',
@@ -19,13 +19,19 @@ class RuanganController extends Controller
 
     public function mahasiswaIndex(Request $request)
     {
+        $lokasiOptions = [
+        'Gedung B (Cacuk)',
+        'Telkom University Landmark Tower (TULT)',
+        'Gedung Kuliah Umum (GKU)',
+    ];
+
         $query = Ruangan::query();
 
         if ($request->filled('search')) {
             $query->where('nama_ruangan', 'like', '%' . $request->search . '%');
         }
 
-        if ($request->filled('lokasi')) {
+        if ($request->filled('lokasi') && in_array($request->lokasi, $this->lokasiOptions)) {
             $query->where('lokasi', $request->lokasi);
         }
 
@@ -34,7 +40,7 @@ class RuanganController extends Controller
         }
 
         $ruangans = $query->paginate(9)->withQueryString();
-        return view('mahasiswa.katalog.ruangan.index', compact('ruangans'));
+        return view('mahasiswa.katalog.ruangan.index', compact('ruangans', 'lokasiOptions'));
     }
 
 
@@ -50,8 +56,8 @@ class RuanganController extends Controller
 
     public function index(Request $request)
     {
-        $query = Ruangan::query();
 
+        $query = Ruangan::query();
         if ($request->has('search') && $request->search != '') {
             $query->where('nama_ruangan', 'like', '%' . $request->search . '%');
         }
@@ -65,6 +71,8 @@ class RuanganController extends Controller
         }
 
         $ruangans = $query->get();
+        // dd($ruangans);
+
 
         return view('admin.katalog_ruangan.index', compact('ruangans'));
     }
@@ -101,7 +109,7 @@ class RuanganController extends Controller
     if ($request->hasFile('gambar')) {
         $file     = $request->file('gambar');
         $filename = time() . '_' . $file->getClientOriginalName();
-
+        dd($file);
         Storage::disk('public')->makeDirectory('katalog_ruangan');
         Storage::disk('public')->putFileAs('katalog_ruangan', $file, $filename);
 
