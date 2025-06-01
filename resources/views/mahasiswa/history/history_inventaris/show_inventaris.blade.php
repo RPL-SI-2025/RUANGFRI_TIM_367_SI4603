@@ -7,7 +7,7 @@
         <h4>
             <i class="fas fa-info-circle me-2"></i>Detail Riwayat Peminjaman Inventaris
         </h4>
-        <a href="{{ route('mahasiswa.history.mahasiswa.history.history_inventaris.index') }}" class="btn btn-secondary">
+        <a href="{{ route('mahasiswa.history.inventaris.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left me-2"></i>Kembali
         </a>
     </div>

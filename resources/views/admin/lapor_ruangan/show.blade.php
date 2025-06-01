@@ -238,7 +238,7 @@
 </div>
 
 <style>
-/* Primary Styles */
+  
 :root {
     --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -267,7 +267,7 @@
     background: var(--dark-gradient);
 }
 
-/* Card Styles */
+  
 .card {
     border-radius: 1rem;
     overflow: hidden;
@@ -283,7 +283,7 @@
     border-bottom: none;
 }
 
-/* Enhanced Icon Circle */
+  
 .icon-circle {
     width: 50px;
     height: 50px;
@@ -296,7 +296,7 @@
     transition: all 0.3s ease;
 }
 
-/* Enhanced Info List Styles */
+  
 .info-list .info-item {
     transition: all 0.3s ease;
     border: 1px solid #e9ecef !important;
@@ -311,7 +311,7 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* Enhanced Description Content */
+  
 .description-content .border-start {
     transition: all 0.3s ease;
     background-color: #ffffff !important;
@@ -324,7 +324,7 @@
     background-color: #f8f9fa !important;
 }
 
-/* Photo Styles */
+  
 .photo-card {
     border-radius: 1rem;
     overflow: hidden;
@@ -348,14 +348,14 @@
     transform: scale(1.05);
 }
 
-/* Badge Styles */
+  
 .badge {
     font-weight: 600;
     letter-spacing: 0.5px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-/* Button Styles */
+  
 .btn {
     font-weight: 600;
     transition: all 0.3s ease;
@@ -367,7 +367,7 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* Empty Photo Styles */
+  
 .empty-photo {
     transition: all 0.3s ease;
 }
@@ -377,17 +377,17 @@
     background-color: rgba(var(--bs-primary-rgb), 0.05);
 }
 
-/* Text Colors */
+  
 .text-purple {
     color: #6f42c1 !important;
 }
 
-/* Card Body Background */
+  
 .card-body {
     background-color: #f8f9fa;
 }
 
-/* Responsive */
+  
 @media (max-width: 768px) {
     .container-fluid {
         padding: 1rem;
@@ -404,7 +404,7 @@
     }
 }
 
-/* Animation */
+  
 @keyframes fadeInUp {
     from {
         opacity: 0;

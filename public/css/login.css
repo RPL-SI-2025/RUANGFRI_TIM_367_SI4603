@@ -31,7 +31,7 @@ body {
 }
 
 
-/* Background decoration */
+  
 body::before {
     content: '';
     position: fixed;
@@ -357,7 +357,7 @@ body::after {
     text-decoration: underline;
 }
 
-/* Responsive Design */
+  
 @media (max-width: 768px) {
     .login-container {
         margin: 1rem;
@@ -414,7 +414,7 @@ body::after {
     }
 }
 
-/* Animation for form validation */
+  
 .shake {
     animation: shake 0.5s ease-in-out;
 }
@@ -425,17 +425,17 @@ body::after {
     75% { transform: translateX(5px); }
 }
 
-/* Enhanced focus states */
+  
 .form-control:focus + .input-icon {
     color: var(--primary-green);
 }
 
-/* Loading state for button */
+  
 .btn-login.loading {
     pointer-events: none;
 }
 
-/* Floating label animation */
+  
 .floating-label {
     position: relative;
 }

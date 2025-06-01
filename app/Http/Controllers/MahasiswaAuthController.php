@@ -21,15 +21,17 @@ class MahasiswaAuthController extends Controller
     }
 
     
+
     public function register(Request $request)
     {
         $request->validate([
-            'nim' => 'required|string|unique:mahasiswa,nim',
+            'nim' => 'required|unique:mahasiswa,nim',
             'nama_mahasiswa' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:mahasiswa,email',
+            'email' => 'required|email|unique:mahasiswa,email',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
+        // Buat mahasiswa baru
         $mahasiswa = Mahasiswa::create([
             'nim' => $request->nim,
             'nama_mahasiswa' => $request->nama_mahasiswa,
@@ -37,14 +39,20 @@ class MahasiswaAuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // Login mahasiswa setelah register
         Auth::guard('mahasiswa')->login($mahasiswa);
         
+        // Regenerate session untuk keamanan
+        $request->session()->regenerate();
+        
+        // Set session data
         Session::put('mahasiswa_id', $mahasiswa->id);
         Session::put('mahasiswa_name', $mahasiswa->nama_mahasiswa);
         Session::put('mahasiswa_nim', $mahasiswa->nim);
         Session::put('mahasiswa_email', $mahasiswa->email);
         Session::put('is_logged_in', true);
         
+        // Redirect ke dashboard dengan pesan sukses
         return redirect()->route('mahasiswa.dashboard')
             ->with('success', 'Akun berhasil dibuat! Selamat datang di Sistem Peminjaman Inventaris.');
     }
@@ -89,81 +97,196 @@ class MahasiswaAuthController extends Controller
 
 
 
+
     public function dashboard()
     {
         $mahasiswaId = Session::get('mahasiswa_id');
         
-        // Get latest ruangan and inventaris
+        if (!$mahasiswaId) {
+            return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+        
+        $mahasiswa = Mahasiswa::find($mahasiswaId);
+        
+        if (!$mahasiswa) {
+            Session::flush();
+            return redirect()->route('mahasiswa.login')->with('error', 'Data mahasiswa tidak ditemukan.');
+        }
+
         $ruangans = Ruangan::latest()->take(3)->get();
+
         $inventaris = Inventaris::latest()->take(3)->get();
-    
-        // Get peminjaman with status = 1 (Disetujui)
-        $peminjamanDiterima = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
-    ->where('status', 1)
-    ->with('ruangan')
-    ->get()
-    ->merge(
-        PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
-        ->where('status', 1)
-        ->with('inventaris')
-        ->get()
-    )
-    ->map(function($item) {
-        return (object)[
-            'id' => $item->id, // Add this line
-            'nama' => $item->ruangan ? $item->ruangan->nama_ruangan : $item->inventaris->nama_inventaris,
-            'jenis' => $item->ruangan ? 'Ruangan' : 'Inventaris',
-            'tanggal' => $item->tanggal_pengajuan
-        ];
-    });
 
-// Do the same for $peminjamanDitolak and $peminjamanPending
-$peminjamanDitolak = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
-    ->where('status', 2)
-    ->with('ruangan')
-    ->get()
-    ->merge(
-        PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
-        ->where('status', 2)
-        ->with('inventaris')
-        ->get()
-    )
-    ->map(function($item) {
-        return (object)[
-            'id' => $item->id, // Add this line
-            'nama' => $item->ruangan ? $item->ruangan->nama_ruangan : $item->inventaris->nama_inventaris,
-            'jenis' => $item->ruangan ? 'Ruangan' : 'Inventaris',
-            'tanggal' => $item->tanggal_pengajuan,
-            'notes' => $item->notes
-        ];
-    });
 
-$peminjamanPending = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
-    ->where('status', 0)
-    ->with('ruangan')
-    ->get()
-    ->merge(
-        PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
-        ->where('status', 0)
-        ->with('inventaris')
-        ->get()
-    )
-    ->map(function($item) {
-        return (object)[
-            'id' => $item->id, // Add this line
-            'nama' => $item->ruangan ? $item->ruangan->nama_ruangan : $item->inventaris->nama_inventaris,
-            'jenis' => $item->ruangan ? 'Ruangan' : 'Inventaris',
-            'tanggal' => $item->tanggal_pengajuan
-        ];
-    });
-    
+        $peminjamanRuanganDiterima = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
+            ->where('status', 1)
+            ->with('ruangan')
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
+            })
+            ->map(function($group, $key) {
+                $firstItem = $group->first();
+                $roomNames = $group->pluck('ruangan.nama_ruangan')->filter()->implode(', ');
+                return [
+                    'key' => $key,
+                    'id' => $firstItem->id,
+                    'nama' => $roomNames ?: 'Ruangan tidak ditemukan',
+                    'jenis' => 'Ruangan',
+                    'tanggal' => $firstItem->tanggal_pengajuan,
+                    'notes' => $firstItem->notes,
+                    'count' => $group->count()
+                ];
+            });
+
+        $peminjamanInventarisDiterima = PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
+            ->where('status', 1)
+            ->with('inventaris')
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
+            })
+            ->map(function($group, $key) {
+                $firstItem = $group->first();
+                $inventoryNames = $group->pluck('inventaris.nama_inventaris')->filter()->implode(', ');
+                return [
+                    'key' => $key,
+                    'id' => $firstItem->id,
+                    'nama' => $inventoryNames ?: 'Inventaris tidak ditemukan',
+                    'jenis' => 'Inventaris',
+                    'tanggal' => $firstItem->tanggal_pengajuan,
+                    'notes' => $firstItem->notes,
+                    'count' => $group->count()
+                ];
+            });
+
+        $peminjamanDiterima = collect($peminjamanRuanganDiterima->values())
+            ->merge($peminjamanInventarisDiterima->values());
+
+
+        $peminjamanRuanganDitolak = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
+            ->where('status', 2)
+            ->with('ruangan')
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
+            })
+            ->map(function($group, $key) {
+                $firstItem = $group->first();
+                $roomNames = $group->pluck('ruangan.nama_ruangan')->filter()->implode(', ');
+                return [
+                    'key' => $key,
+                    'id' => $firstItem->id,
+                    'nama' => $roomNames ?: 'Ruangan tidak ditemukan',
+                    'jenis' => 'Ruangan',
+                    'tanggal' => $firstItem->tanggal_pengajuan,
+                    'notes' => $firstItem->notes,
+                    'count' => $group->count()
+                ];
+            });
+
+        $peminjamanInventarisDitolak = PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
+            ->where('status', 2)
+            ->with('inventaris')
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
+            })
+            ->map(function($group, $key) {
+                $firstItem = $group->first();
+                $inventoryNames = $group->pluck('inventaris.nama_inventaris')->filter()->implode(', ');
+                return [
+                    'key' => $key,
+                    'id' => $firstItem->id,
+                    'nama' => $inventoryNames ?: 'Inventaris tidak ditemukan',
+                    'jenis' => 'Inventaris',
+                    'tanggal' => $firstItem->tanggal_pengajuan,
+                    'notes' => $firstItem->notes,
+                    'count' => $group->count()
+                ];
+            });
+
+        $peminjamanDitolak = collect($peminjamanRuanganDitolak->values())
+            ->merge($peminjamanInventarisDitolak->values());
+
+            
+        $peminjamanRuanganPending = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
+            ->where('status', 0)
+            ->with('ruangan')
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
+            })
+            ->map(function($group, $key) {
+                $firstItem = $group->first();
+                $roomNames = $group->pluck('ruangan.nama_ruangan')->filter()->implode(', ');
+                return [
+                    'key' => $key,
+                    'id' => $firstItem->id,
+                    'nama' => $roomNames ?: 'Ruangan tidak ditemukan',
+                    'jenis' => 'Ruangan',
+                    'tanggal' => $firstItem->tanggal_pengajuan,
+                    'notes' => $firstItem->notes,
+                    'count' => $group->count()
+                ];
+            });
+
+        $peminjamanInventarisPending = PinjamInventaris::where('id_mahasiswa', $mahasiswaId)
+            ->where('status', 0)
+            ->with('inventaris')
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
+            })
+            ->map(function($group, $key) {
+                $firstItem = $group->first();
+                $inventoryNames = $group->pluck('inventaris.nama_inventaris')->filter()->implode(', ');
+                return [
+                    'key' => $key,
+                    'id' => $firstItem->id,
+                    'nama' => $inventoryNames ?: 'Inventaris tidak ditemukan',
+                    'jenis' => 'Inventaris',
+                    'tanggal' => $firstItem->tanggal_pengajuan,
+                    'notes' => $firstItem->notes,
+                    'count' => $group->count()
+                ];
+            });
+
+        $peminjamanPending = collect($peminjamanRuanganPending->values())
+            ->merge($peminjamanInventarisPending->values());
+
         return view('mahasiswa.page.dashboard', compact(
-            'ruangans', 
-            'inventaris', 
-            'peminjamanDiterima', 
-            'peminjamanDitolak', 
-            'peminjamanPending'
+            'mahasiswa', 'ruangans', 'inventaris', 
+            'peminjamanDiterima', 'peminjamanDitolak', 'peminjamanPending'
         ));
     }
+    public function landing()
+    {
+        // Ambil data statistik untuk landing page
+        $totalRuangan = \App\Models\Ruangan::count();
+        $ruanganTersedia = \App\Models\Ruangan::where('status', 'Tersedia')->count();
+        $totalInventaris = \App\Models\Inventaris::count();
+        $inventarisTersedia = \App\Models\Inventaris::where('status', 'Tersedia')->count();
+        
+        // Ambil data untuk katalog
+        $ruangans = \App\Models\Ruangan::latest()->take(6)->get();
+        $inventaris = \App\Models\Inventaris::latest()->take(6)->get();
+        
+        return view('landing', compact(
+            'ruangans', 
+            'inventaris', 
+            'totalRuangan', 
+            'ruanganTersedia', 
+            'totalInventaris', 
+            'inventarisTersedia'
+        ));
+    }
+
 
 }

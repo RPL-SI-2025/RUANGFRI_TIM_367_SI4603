@@ -9,6 +9,7 @@ use App\Models\PinjamInventaris;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class laporinventarisController extends Controller
 {
@@ -146,7 +147,7 @@ public function historyShow($id)
     }
 
 
-    public function mahasiswaStore(Request $request)
+   public function mahasiswaStore(Request $request)
     {
         $mahasiswaId = Session::get('mahasiswa_id');
         
@@ -163,53 +164,79 @@ public function historyShow($id)
             'id_peminjaman' => 'required|integer',
         ]);
         
-       
-        $fotoAwalPath = null;
-        if ($request->hasFile('foto_awal')) {
+        DB::beginTransaction();
+        
+        try {
+
             $fotoAwal = $request->file('foto_awal');
             $fotoAwalFilename = time() . '_awal_' . $fotoAwal->getClientOriginalName();
             $fotoAwalPath = $fotoAwal->storeAs('foto_laporan', $fotoAwalFilename, 'public');
-        }
-        
-        
-        $fotoAkhirPath = null;
-        if ($request->hasFile('foto_akhir')) {
+
+
             $fotoAkhir = $request->file('foto_akhir');
             $fotoAkhirFilename = time() . '_akhir_' . $fotoAkhir->getClientOriginalName();
             $fotoAkhirPath = $fotoAkhir->storeAs('foto_laporan', $fotoAkhirFilename, 'public');
-        }
-        
-        
-        $laporan = laporinventaris::create([
-            'id_logistik' => $request->id_logistik,
-            'id_mahasiswa' => $mahasiswaId,
-            'id_pinjam_inventaris' => $request->id_peminjaman,
-            'datetime' => $request->datetime,
-            'foto_awal' => $fotoAwalPath,
-            'foto_akhir' => $fotoAkhirPath,
-            'deskripsi' => $request->deskripsi,
-            'oleh' => 'Mahasiswa',
-            'kepada' => 'Admin Logistik'
-        ]);
-        
-        
-        if ($request->id_peminjaman) {
-            $peminjaman = PinjamInventaris::find($request->id_peminjaman);
             
-            if ($peminjaman && $peminjaman->id_mahasiswa == $mahasiswaId) {
+            $laporan = laporinventaris::create([
+                'id_logistik' => $request->id_logistik,
+                'id_mahasiswa' => $mahasiswaId,
+                'id_pinjam_inventaris' => $request->id_peminjaman, // FIX: Tambahkan field yang hilang
+                'datetime' => $request->datetime,
+                'foto_awal' => $fotoAwalPath,
+                'foto_akhir' => $fotoAkhirPath,
+                'deskripsi' => $request->deskripsi,
+                'oleh' => 'Mahasiswa',
+                'kepada' => 'Admin Logistik'
+            ]);
+
+
+            if ($request->id_peminjaman) {
+                $peminjaman = PinjamInventaris::find($request->id_peminjaman);
                 
-                PinjamInventaris::where('tanggal_pengajuan', $peminjaman->tanggal_pengajuan)
-                    ->where('tanggal_selesai', $peminjaman->tanggal_selesai)
-                    ->where('waktu_mulai', $peminjaman->waktu_mulai)
-                    ->where('waktu_selesai', $peminjaman->waktu_selesai)
-                    ->where('file_scan', $peminjaman->file_scan)
-                    ->where('id_mahasiswa', $mahasiswaId)
-                    ->update(['status' => 3]); 
+                if ($peminjaman && $peminjaman->id_mahasiswa == $mahasiswaId) {
+
+                    $relatedItems = PinjamInventaris::where('tanggal_pengajuan', $peminjaman->tanggal_pengajuan)
+                        ->where('tanggal_selesai', $peminjaman->tanggal_selesai)
+                        ->where('waktu_mulai', $peminjaman->waktu_mulai)
+                        ->where('waktu_selesai', $peminjaman->waktu_selesai)
+                        ->where('file_scan', $peminjaman->file_scan)
+                        ->where('id_mahasiswa', $mahasiswaId)
+                        ->get();
+                    
+                    $oldStatus = $peminjaman->status;
+                    
+
+                    foreach ($relatedItems as $item) {
+
+                        $item->status = 3; // Selesai
+                        $item->save();
+                        
+                        
+                        $inventaris = \App\Models\Inventaris::find($item->id_inventaris);
+
+                        if ($inventaris) {
+                            $inventaris->jumlah += $item->jumlah_pinjam;
+                            
+                            
+                            if ($inventaris->status == 'Tidak Tersedia' && $inventaris->jumlah > 0) {
+
+                                $inventaris->status = 'Tersedia';
+                            }
+                            $inventaris->save();
+                        }
+                    }
+                }
             }
+            
+            DB::commit();
+            
+            return redirect()->route('mahasiswa.pelaporan.lapor_inventaris.index')
+                ->with('success', 'Laporan inventaris berhasil dibuat dan status peminjaman telah diperbarui.');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-        
-        return redirect()->route('mahasiswa.pelaporan.lapor_inventaris.index')
-            ->with('success', 'Laporan berhasil dikirim dan peminjaman ditandai selesai.');
     }
 
     public function mahasiswaEdit($id)

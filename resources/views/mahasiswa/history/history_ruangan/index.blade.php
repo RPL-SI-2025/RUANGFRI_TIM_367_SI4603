@@ -83,7 +83,7 @@
                                         <span class="badge bg-info">Selesai</span>
                                     </td>
                                     <td class="text-center">
-                                        <a href="{{ route('mahasiswa.history.mahasiswa.history.history_ruangan.show', ['ruangan', $item->id_lapor_ruangan]) }}" class="btn btn-info btn-sm">
+                                        <a href="{{ route('mahasiswa.history.ruangan.show', ['ruangan', $item->id_lapor_ruangan]) }}" class="btn btn-info btn-sm">
                                             <i class="fas fa-eye"></i> Detail
                                         </a>
                                     </td>

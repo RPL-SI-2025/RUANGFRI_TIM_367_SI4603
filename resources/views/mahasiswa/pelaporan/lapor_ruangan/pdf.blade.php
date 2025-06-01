@@ -43,7 +43,7 @@
             margin-top: 15px;
         }
         .image-container img {
-            max-width: 300px; /* Ukuran gambar lebih kecil */
+            max-width: 300px;   
             height: auto;
             border: 1px solid #ddd;
             padding: 5px;

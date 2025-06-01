@@ -12,27 +12,12 @@ use App\Models\LaporanRuangan;
 use App\Models\PinjamRuangan;
 use App\Models\PinjamInventaris;
 use App\Models\LaporRuangan;
+use App\Models\Pelaporan;
 use Illuminate\Support\Carbon;
 
 class AdminLogistikController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-
-
-    public function landing()
-    {
-        $totalRuangan = Ruangan::count();
-        $totalInventaris = Inventaris::count();
-        $ruanganTersedia = Ruangan::where('status', 'Tersedia')->count();
-        $inventarisTersedia = Inventaris::where('status', 'Tersedia')->count();
-        $ruangans = Ruangan::latest()->get();
-        $inventaris = Inventaris::latest()->get();
-        return view('landing', compact('totalRuangan', 'totalInventaris', 'ruanganTersedia', 'inventarisTersedia', 'ruangans', 'inventaris'));
-    }
-
-
+    
     public function index()
     {
 
@@ -44,40 +29,156 @@ class AdminLogistikController extends Controller
         $inventarisTersedia = Inventaris::where('status', 'Tersedia')->count();
         $inventarisTidakTersedia = Inventaris::where('status', 'Tidak Tersedia')->count();
 
+
         $grafik = [
-    'bulan' => [],
-    'jumlah' => [], // for rooms
-    'jumlah_inventaris' => [] // for inventory
-    ];
+            'bulan' => [],
+            'jumlah' => [],
+            'jumlah_inventaris' => []
+        ];
 
-    for ($i = 5; $i >= 0; $i--) {
-        $bulan = Carbon::now()->subMonths($i)->format('F');
-        $tanggal = Carbon::now()->subMonths($i);
+
+        for ($i = 5; $i >= 0; $i--) {
+            $bulan = Carbon::now()->subMonths($i)->format('M Y');
+            $tanggal = Carbon::now()->subMonths($i);
+            
+            $grafik['bulan'][] = $bulan;
+
+
+            $ruanganBorrowings = PinjamRuangan::whereMonth('created_at', $tanggal->month)
+                                    ->whereYear('created_at', $tanggal->year)
+                                    ->get()
+                                    ->groupBy(function($item) {
+                                        return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                                                $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan . '-' . $item->id_mahasiswa;
+                                    });
+            $ruanganCount = $ruanganBorrowings->count();
+
+
+            $inventarisBorrowings = PinjamInventaris::whereMonth('created_at', $tanggal->month)
+                                            ->whereYear('created_at', $tanggal->year)
+                                            ->get()
+                                            ->groupBy(function($item) {
+                                                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                                                        $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan . '-' . $item->id_mahasiswa;
+                                            });
+            $inventarisCount = $inventarisBorrowings->count();
+            
+            $grafik['jumlah'][] = $ruanganCount;
+            $grafik['jumlah_inventaris'][] = $inventarisCount;
+        }
+
+
+        $aktivitasTerbaru = collect();
+
+        $recentRoomBorrowings = PinjamRuangan::with('mahasiswa', 'ruangan')
+            ->latest()
+            ->take(50) // Take more to ensure we get enough groups
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan . '-' . $item->id_mahasiswa;
+            })
+            ->take(3) // Only take 3 groups
+            ->map(function($group) {
+                $firstItem = $group->first();
+                $roomNames = $group->pluck('ruangan.nama_ruangan')->filter()->implode(', ');
+                $roomCount = $group->count();
+                
+                return (object)[
+                    'deskripsi' => "Peminjaman " . ($roomCount > 1 ? "{$roomCount} ruangan" : "ruangan {$roomNames}") . " oleh " . ($firstItem->mahasiswa->nama_mahasiswa ?? 'Mahasiswa'),
+                    'created_at' => $firstItem->created_at,
+                    'type' => 'peminjaman_ruangan'
+                ];
+            });
+
+
+        $recentInventoryBorrowings = PinjamInventaris::with('mahasiswa', 'inventaris')
+            ->latest()
+            ->take(50) // Take more to ensure we get enough groups
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan . '-' . $item->id_mahasiswa;
+            })
+            ->take(2) // Only take 2 groups
+            ->map(function($group) {
+                $firstItem = $group->first();
+                $inventoryNames = $group->pluck('inventaris.nama_inventaris')->filter();
+                $inventoryCount = $group->count();
+                
+                if ($inventoryCount > 1) {
+                    $description = "Peminjaman {$inventoryCount} inventaris oleh " . ($firstItem->mahasiswa->nama_mahasiswa ?? 'Mahasiswa');
+                } else {
+                    $description = "Peminjaman inventaris {$inventoryNames->first()} oleh " . ($firstItem->mahasiswa->nama_mahasiswa ?? 'Mahasiswa');
+                }
+                
+                return (object)[
+                    'deskripsi' => $description,
+                    'created_at' => $firstItem->created_at,
+                    'type' => 'peminjaman_inventaris'
+                ];
+            });
+
+
+        $recentReports = LaporInventaris::with('mahasiswa')
+            ->latest()
+            ->take(2)
+            ->get()
+            ->map(function($item) {
+                return (object)[
+                    'deskripsi' => "Laporan inventaris oleh " . ($item->mahasiswa->nama_mahasiswa ?? 'Mahasiswa'),
+                    'created_at' => $item->created_at,
+                    'type' => 'laporan_inventaris'
+                ];
+            });
+
+
+        $recentRoomReports = Pelaporan::with('mahasiswa')
+            ->latest()
+            ->take(2)
+            ->get()
+            ->map(function($item) {
+                return (object)[
+                    'deskripsi' => "Laporan ruangan oleh " . ($item->mahasiswa->nama_mahasiswa ?? 'Mahasiswa'),
+                    'created_at' => $item->created_at,
+                    'type' => 'laporan_ruangan'
+                ];
+            });
+
+
+        $aktivitasTerbaru = $aktivitasTerbaru
+            ->merge($recentRoomBorrowings)
+            ->merge($recentInventoryBorrowings)
+            ->merge($recentReports)
+            ->merge($recentRoomReports)
+            ->sortByDesc('created_at')
+            ->take(5);
+
+            
+        $pendingRuanganBorrowings = PinjamRuangan::where('status', 0)
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan . '-' . $item->id_mahasiswa;
+            });
+        $pendingRuangan = $pendingRuanganBorrowings->count();
+            
+        $pendingInventarisBorrowings = PinjamInventaris::where('status', 0)
+            ->get()
+            ->groupBy(function($item) {
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
+                    $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan . '-' . $item->id_mahasiswa;
+            });
+        $pendingInventaris = $pendingInventarisBorrowings->count();
         
-        $grafik['bulan'][] = $bulan;
-        $grafik['jumlah'][] = PinjamRuangan::whereMonth('created_at', $tanggal->month)->count();
-        $grafik['jumlah_inventaris'][] = PinjamInventaris::whereMonth('created_at', $tanggal->month)->count();
-    }
-
-    
-    $aktivitasTerbaru = collect([
-        ...PinjamRuangan::latest()->take(3)->get()->map(fn($item) => (object)[
-            'deskripsi' => "Peminjaman ruangan oleh {$item->mahasiswa->nama}",
-            'created_at' => $item->created_at
-        ]),
-        ...LaporInventaris::latest()->take(2)->get()->map(fn($item) => (object)[
-            'deskripsi' => "Laporan kerusakan inventaris oleh {$item->mahasiswa->nama}",
-            'created_at' => $item->created_at
-        ]),
-    ])->sortByDesc('created_at')->take(5);
+        $pendingPeminjaman = $pendingRuangan + $pendingInventaris;
+        
+        $newLaporan = LaporInventaris::whereDate('created_at', today())->count() +
+                    Pelaporan::whereDate('created_at', today())->count();
 
 
 
-
-        $pendingPeminjaman = PinjamRuangan::where('status', 0)->count();
-        // $newLaporan = LaporanRuangan::where('status', 0)->count();
-
-        // Add these to your compact statement
+                    
         return view('admin.dashboard', compact(
             'totalRuangan',
             'ruanganTersedia',
@@ -87,11 +188,12 @@ class AdminLogistikController extends Controller
             'inventarisTidakTersedia',
             'grafik',
             'aktivitasTerbaru',
-            'pendingPeminjaman', // Add this
-            // 'newLaporan'        // And this
+            'pendingPeminjaman',
+            'newLaporan'
         ));
-    
+
     }
+
 
     /**
      * Show the form for creating a new resource.

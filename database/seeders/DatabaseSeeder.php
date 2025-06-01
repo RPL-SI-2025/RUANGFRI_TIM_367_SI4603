@@ -13,24 +13,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // Buat user untuk testing
-        // User::create([
-        //     'name' => 'Admin User',
-        //     'email' => 'admin@example.com',
-        //     'password' => bcrypt('password'),
-        //     'role' => 'admin',
-        // ]);
-
-        // User::create([
-        //     'name' => 'Mahasiswa User',
-        //     'email' => 'mahasiswa@example.com',
-        //     'password' => bcrypt('password'),
-        //     'role' => 'mahasiswa',
-        // ]);
-
+        
         // Jalankan seeders secara berurutan
         $this->call([
             AdminLogistikSeeder::class,
+            KategoriInventarisSeeder::class, // Add this line
             InventarisSeeder::class,
             MahasiswaSeeder::class
         ]);
