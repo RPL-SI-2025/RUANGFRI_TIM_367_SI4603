@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\HistoryRuanganController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\PinjamInventarisController;
@@ -25,11 +26,9 @@ use Illuminate\Support\Facades\Auth;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [AdminLogistikController::class, 'landing'])->name('landing');
+Route::get('/', [MahasiswaAuthController::class, 'landing'])->name('landing');
 
-Route::middleware(['auth:mahasiswa'])->group(function () {
-    Route::get('/mahasiswa/dashboard', [MahasiswaAuthController::class, 'dashboard'])->name('mahasiswa.dashboard');
-});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +62,7 @@ Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
     Route::get('/login', [MahasiswaAuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [MahasiswaAuthController::class, 'login'])->name('login.submit');
     Route::post('/logout', [MahasiswaAuthController::class, 'logout'])->name('logout');
-    Route::get('/register', [MahasiswaAuthController::class, 'showRegistrationForm'])->name('register');
+    
     Route::post('/register', [MahasiswaAuthController::class, 'register'])->name('register.submit');
 });
 
@@ -103,6 +102,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [PinjamRuanganController::class, 'adminIndex'])->name('index');
         Route::get('/{pinjamRuangan}', [PinjamRuanganController::class, 'adminShow'])->name('show');
         Route::put('/{pinjamRuangan}/update-status', [PinjamRuanganController::class, 'updateStatus'])->name('update-status');
+        Route::put('/{pinjamRuangan}/update-notes', [PinjamRuanganController::class, 'updateNotes'])->name('update-notes');
     });
 
     // Laporan Inventaris Management
@@ -114,6 +114,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/{lapor_inventaris}/edit', [laporinventarisController::class, 'edit'])->name('edit');
         Route::put('/{lapor_inventaris}', [laporinventarisController::class, 'update'])->name('update');
         Route::delete('/{lapor_inventaris}', [laporinventarisController::class, 'destroy'])->name('destroy');
+        Route::get('/{id}/download-pdf', [laporInventarisController::class, 'admindownloadPDF'])->name('download-pdf');
     });
 
     // Laporan Ruangan Management
@@ -144,8 +145,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/{jadwal}', [App\Http\Controllers\JadwalRuanganController::class, 'destroy'])->name('destroy');
         Route::post('/generate', [App\Http\Controllers\JadwalRuanganController::class, 'generateJadwal'])->name('generate');
     });
-});
 
+    // history admin
+   Route::prefix('history')->name('history_inventaris.')->group(function () {
+        Route::get('/', [HistoryController::class, 'adminindex'])->name('index');
+        Route::get('/{type}/{id}', [HistoryController::class, 'adminshow'])->name('show');
+    });
+
+    Route::prefix('historyRuangan')->name('history_ruangan.')->group(function () {
+        Route::get('/', [HistoryRuanganController::class, 'adminindex'])->name('index');
+        Route::get('/{type}/{id}', [HistoryRuanganController::class, 'adminshow'])->name('show');
+ 
+    });
+    
+});
 /*
 |--------------------------------------------------------------------------
 | Mahasiswa Protected Routes
@@ -154,7 +167,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.')->group(function() {
     
     // Dashboard
-
+    Route::get('/dashboard', [MahasiswaAuthController::class, 'dashboard'])->name('dashboard');
 
     // Profile Management
     Route::prefix('profile')->name('profile.')->group(function () {
@@ -237,6 +250,7 @@ Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.
             Route::get('/{id}', [laporinventarisController::class, 'mahasiswaShow'])->name('show');
             Route::get('/{id}/edit', [laporinventarisController::class, 'mahasiswaEdit'])->name('edit');
             Route::put('/{id}', [laporinventarisController::class, 'mahasiswaUpdate'])->name('update');
+            Route::get('/{id}/download-pdf', [laporinventarisController::class, 'downloadPDF'])->name('download-pdf');
         });
 
         // Ruangan Pelaporan
@@ -247,19 +261,23 @@ Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.
             Route::get('/{id}', [PelaporanController::class, 'mahasiswaShow'])->name('show');
             Route::get('/{id}/edit', [PelaporanController::class, 'mahasiswaEdit'])->name('edit');
             Route::put('/{id}', [PelaporanController::class, 'mahasiswaUpdate'])->name('update');
+            Route::get('/{id}/download-pdf', [PelaporanController::class, 'downloadPdf'])->name('download-pdf');
         });
     });
 
     // History Management
     Route::prefix('history')->name('history.')->group(function () {
-        Route::get('/', [HistoryController::class, 'index'])->name('index');
-        Route::get('/{type}/{id}', [HistoryController::class, 'show'])->name('show');
-    });
-
-    // Jadwal API Routes
-    Route::prefix('jadwal')->group(function () {
-        Route::get('/ruangan/{id_ruangan}', [App\Http\Controllers\JadwalRuanganController::class, 'getRuanganJadwal']);
-        Route::get('/timeslots', [App\Http\Controllers\JadwalRuanganController::class, 'getTimeSlots']);
+        // Inventaris History
+        Route::prefix('inventaris')->name('inventaris.')->group(function () {
+            Route::get('/', [HistoryController::class, 'index'])->name('index');
+            Route::get('/{type}/{id}', [HistoryController::class, 'show'])->name('show');
+        });
+        
+        // Ruangan History  
+        Route::prefix('ruangan')->name('ruangan.')->group(function () {
+            Route::get('/', [HistoryRuanganController::class, 'index'])->name('index');
+            Route::get('/{type}/{id}', [HistoryRuanganController::class, 'show'])->name('show');
+        });
     });
 });
 
@@ -269,4 +287,4 @@ Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.
 | Debug Routes
 |--------------------------------------------------------------------------
 */
-Route::get('/debug/operational-days/{id_ruangan}', [App\Http\Controllers\JadwalRuanganController::class, 'debugOperationalDays'])->name('debug.operational-days');
+// Route::get('/debug/operational-days/{id_ruangan}', [App\Http\Controllers\JadwalRuanganController::class, 'debugOperationalDays'])->name('debug.operational-days');

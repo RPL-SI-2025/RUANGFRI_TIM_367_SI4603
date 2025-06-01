@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Pelaporan;
 use App\Models\PinjamRuangan;
 use App\Models\AdminLogistik;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
@@ -160,7 +162,7 @@ class PelaporanController extends Controller
                     ->where('waktu_selesai', $peminjaman->waktu_selesai)
                     ->where('file_scan', $peminjaman->file_scan)
                     ->where('id_mahasiswa', $mahasiswaId)
-                    ->update(['status' => 3]); // Status selesai
+                    ->update(['status' => 3]); 
                     
 
                 $affectedJadwals = \App\Models\Jadwal::whereIn('id_pinjam_ruangan', function($query) use ($peminjaman, $mahasiswaId) {
@@ -315,5 +317,28 @@ class PelaporanController extends Controller
         }
         
         return view('mahasiswa.pelaporan.lapor_ruangan.show', compact('laporan'));
+    }
+
+    public function downloadPdf($id)
+    {
+        $mahasiswaId = Session::get('mahasiswa_id');
+        $pelaporan = Pelaporan::where('id_lapor_ruangan', $id)
+        ->where('id_mahasiswa', $mahasiswaId)
+        ->firstOrFail();
+
+
+        $pdf = PDF::loadView('mahasiswa.pelaporan.lapor_ruangan.pdf', compact('pelaporan'));
+
+        return $pdf->download('laporan_' . $pelaporan->id_lapor_ruangan . '.pdf');
+    }
+
+    public function downloadPdfAdmin($id)
+    {
+        $pelaporan = Pelaporan::with(['mahasiswa', 'logistik', 'ruangan', 'peminjaman'])
+                        ->findOrFail($id);
+
+        $pdf = PDF::loadView('mahasiswa.pelaporan.lapor_ruangan.pdf', compact('pelaporan'));
+
+        return $pdf->download('laporan_' . $pelaporan->id_lapor_ruangan . '.pdf');
     }
 }

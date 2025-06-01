@@ -49,99 +49,58 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
-@if (session('error'))
-    <div class="alert alert-danger">{{ session('error') }}</div>
-@endif
-
-<div class="card shadow-sm">
-    <div class="card-body">
-        <style>
-            thead th {
-                text-align: center;
-                background-color: #198754;
-                color: white;
-                vertical-align: middle;
-            }
-
-            tbody td {
-                text-align: center;
-                vertical-align: middle;
-            }
-
-            .col-foto {
-                width: 250px;
-            }
-
-            .btn-rounded-hover {
-                border-radius: 0.5rem;
-                transition: 0.3s ease;
-                transform: scale(1);
-            }
-
-            .btn-rounded-hover:hover {
-                transform: scale(1.05);
-            }
-        </style>
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>No</th>
-            <th class="col-foto">Foto</th>
-            <th>Nama Inventaris</th>
-            <th>Deskripsi</th>
-            <th>Jumlah</th>
-            <th>Status</th>
-            <th style="width: 180px;">Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($inventaris as $item)
-        <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>
-                @if ($item->gambar_inventaris)
-                <img src="{{ asset('storage/katalog_inventaris/' . $item->gambar_inventaris) }}" alt="{{ $item->nama_inventaris }}" width="100">
-            @else
-                Tidak ada gambar
-            @endif
-
-            </td>
-
-            <td>{{ $item->nama_inventaris }}</td>
-            <td>{{ $item->deskripsi }}</td>
-            <td>{{ $item->jumlah }}</td>
-            <td>{{ $item->status }}</td>
-            <td>
-                <a href="{{ route('admin.inventaris.edit', $item) }}"
-                           class="btn btn-secondary btn-sm d-inline-flex align-items-center gap-2 px-2 py-1 mb-1 btn-rounded-hover">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                 stroke="currentColor" width="16" height="16">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M16 4h4v4M6 14l3 3h8l3-3M9 4l5 5 5-5M5 20h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"/>
-                            </svg>
-                            <span>Edit</span>
-                        </a>
-
-                        <form action="{{ route('admin.inventaris.destroy', $item) }}" method="POST"
-                              class="d-inline"
-                              onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                    class="btn btn-danger btn-sm d-inline-flex align-items-center gap-2 px-2 py-1 btn-rounded-hover">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     stroke="currentColor" width="16" height="16">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                                <span>Hapus</span>
-                            </button>
-                        </form>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Foto</th>
+                <th>Nama Inventaris</th>
+                <th>Kategori</th>
+                <th>Deskripsi</th>
+                <th>Jumlah</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($inventaris as $item)
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>
+                    @if ($item->gambar_inventaris)
+                        <img src="{{ asset('storage/katalog_inventaris/' . $item->gambar_inventaris) }}" 
+                             alt="{{ $item->nama_inventaris }}" width="100" class="img-thumbnail">
+                    @else
+                        <span class="text-muted">Tidak ada gambar</span>
+                    @endif
+                </td>
+                <td>{{ $item->nama_inventaris }}</td>
+                <td>
+                    <span class="badge bg-secondary">
+                        {{ $item->kategori->nama_kategori ?? 'Tidak ada kategori' }}
+                    </span>
+                </td>
+                <td>{{ Str::limit($item->deskripsi, 50) }}</td>
+                <td>{{ $item->jumlah }}</td>
+                <td>
+                    <span class="badge {{ $item->status == 'Tersedia' ? 'bg-success' : 'bg-danger' }}">
+                        {{ $item->status }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{{ route('admin.inventaris.edit', $item) }}" class="btn btn-sm btn-warning">Edit</a>
+                    <form action="{{ route('admin.inventaris.destroy', $item) }}" method="POST" class="d-inline"
+                          onsubmit="return confirm('Yakin ingin menghapus?')">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-sm btn-danger">Hapus</button>
+                    </form>
                 </td>
             </tr>
-        @endforeach
-    </tbody>
-</table>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 @endsection
 

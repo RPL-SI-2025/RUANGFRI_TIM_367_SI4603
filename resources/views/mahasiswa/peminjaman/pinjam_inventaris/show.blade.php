@@ -162,7 +162,7 @@
                            class="btn btn-success me-2">
                             <i class="fa fa-edit me-1"></i> Edit
                         </a>
-                        <form action="{{ route('pinjam-inventaris.destroy', $pinjamInventaris->id) }}" 
+                        <form action="{{ route('mahasiswa.peminjaman.pinjam-inventaris.destroy', $pinjamInventaris->id) }}" 
                               method="POST" onsubmit="return confirm('Apakah Anda yakin ingin membatalkan peminjaman ini?')">
                             @csrf
                             @method('DELETE')
