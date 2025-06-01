@@ -19,7 +19,7 @@
 
   
 body {
-    background: linear-gradient(-45deg, #f1f5f9, #e2e8f0, #f8fafc, #ffffff);
+    background: #f1f5f9;
     background-size: 400% 400%;
     animation: gradientShift 15s ease infinite;
     position: relative;
@@ -36,10 +36,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-        radial-gradient(circle at 20% 80%, rgba(8, 145, 178, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(30, 64, 175, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(5, 150, 105, 0.02) 0%, transparent 50%);
+    background: rgba(8, 145, 178, 0.02);
     pointer-events: none;
     z-index: -1;
 }
@@ -68,12 +65,12 @@ body::before {
         rgba(30, 41, 59, 0.98) 0%, 
         rgba(15, 23, 42, 0.98) 50%, 
         rgba(30, 41, 59, 0.98) 100%);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(10px);
     border-right: 1px solid rgba(8, 145, 178, 0.15);
     box-shadow: var(--shadow-strong);
     overflow-y: auto;
     overflow-x: hidden;
-    z-index: 1030;
+    z-index: 1010;
     transition: var(--transition-smooth);
     scrollbar-width: thin;
     scrollbar-color: rgba(8, 144, 178, 0.176) transparent;
@@ -150,7 +147,7 @@ body::before {
   
 .top-navbar {
     background: #ffffff;
-    backdrop-filter: blur(30px);
+    backdrop-filter: blur(15px);
     border-bottom: 2px solid rgba(8, 145, 178, 0.15);
     box-shadow: 
         0 4px 20px rgba(0, 0, 0, 0.08),
@@ -158,7 +155,7 @@ body::before {
     padding: 1.2rem 2rem;
     position: sticky;
     top: 0;
-    z-index: 1030;   
+    z-index: 1015;   
     margin: 0;
     width: 100%;
     border-radius: 0;
@@ -321,7 +318,7 @@ body::before {
     padding: 0;
     background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(10px);
-    min-height: calc(100vh - 80px);   
+    /* min-height: calc(100vh - 80px);    */
     position: relative;
     z-index: 1;   
 }
@@ -677,7 +674,7 @@ body::before {
     margin-top: 0.75rem;
     overflow: hidden;
     min-width: 280px;
-    z-index: 1100;   
+    z-index: 1035;   
     position: relative;   
     opacity: 0;
     transform: translateY(-10px) scale(0.95);
@@ -700,7 +697,7 @@ body::before {
     top: 100%;
     right: 0;
     left: auto;
-    z-index: 1100;
+    z-index: 1035;
     display: block;
     min-width: 280px;
     margin: 0.75rem 0 0 0;
@@ -833,7 +830,7 @@ body::before {
     .sidebar {
         transform: translateX(-100%);
         position: fixed;
-        z-index: 1050;
+        z-index: 1010;
         width: var(--sidebar-width);
         height: 100vh;
     }
@@ -855,7 +852,7 @@ body::before {
         height: 100%;
         background: rgba(30, 58, 138, 0.5);
         backdrop-filter: blur(4px);
-        z-index: 1040;
+        z-index: 1015;
         opacity: 0;
         visibility: hidden;
         transition: var(--transition-smooth);
@@ -935,7 +932,7 @@ body::before {
     
     .user-dropdown {
         position: relative;
-        z-index: 1060;
+        z-index: 1035;
     }
     
     .main-content {
@@ -1091,7 +1088,7 @@ body::before {
 }
 
 .card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-strong);
     border-color: rgba(8, 145, 178, 0.2);
 }
@@ -1099,8 +1096,8 @@ body::before {
   
 .btn-primary {
     background: linear-gradient(135deg, 
-        var(--primary-green) 0%, 
-        var(--accent-blue) 100%);
+            var(--charcoal) 0%, 
+            var(--dark-slate) 100%);
     border: none;
     box-shadow: var(--shadow-medium);
     transition: var(--transition-smooth);
@@ -1240,7 +1237,40 @@ body.animated-bg {
 }
 
 .alert-info {
-    background: rgba(30, 64, 175, 0.1);
-    color: #1e40af;
-    border-left: 4px solid var(--accent-blue);
+    background: rgba(30, 41, 59, 0.9);
+    color: #ffffff;
+    border-left: 4px solid #1e293b;
+}
+
+body.modal-open .sidebar {
+    z-index: 1020 !important;
+}
+
+body.modal-open .sidebar-overlay {
+    z-index: 1025 !important;
+}
+
+body.modal-open .top-navbar {
+    z-index: 1025 !important;
+}
+
+body.modal-open .dropdown-menu {
+    z-index: 1050 !important;
+}
+
+
+.modal {
+    z-index: 1055 !important;
+}
+
+.modal-backdrop {
+    z-index: 1054 !important;
+}
+
+.modal-dialog {
+    z-index: 1056 !important;
+}
+
+.modal-content {
+    z-index: 1057 !important;
 }
