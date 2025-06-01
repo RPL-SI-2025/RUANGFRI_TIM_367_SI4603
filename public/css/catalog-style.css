@@ -228,7 +228,7 @@ CARD DESIGN
 .catalog-card:hover {
     transform: translateY(-4px) scale(1.02);
     box-shadow: var(--catalog-shadow-hover);
-    border-color: var(--catalog-primary);
+
 }
 
   
@@ -332,7 +332,7 @@ INFO SECTIONS
     padding: 0.75rem;
     margin-bottom: 1rem;
     border-radius: var(--catalog-border-radius-sm);
-    border-left: 4px solid var(--catalog-accent);
+    border-left: 4px solid var(--catalog-blue);
 }
 
   
@@ -355,8 +355,9 @@ INFO SECTIONS
 .catalog-stock-count {
     font-size: 16px;
     font-weight: 700;
-    color: var(--catalog-accent);
+    color: #1e293b; 
 }
+
 
 .catalog-stock-low {
     color: var(--catalog-danger);
@@ -426,9 +427,9 @@ ACTION BUTTONS
 .catalog-btn-primary {
     flex: 2;
     padding: 0.75rem 1rem;
-    background: var(--catalog-accent);
+    background: #1e293b; 
     color: var(--catalog-white);
-    border: 2px solid var(--catalog-accent);
+    border: 2px solid #1e293b; 
     border-radius: var(--catalog-border-radius-sm);
     font-size: 14px;
     font-weight: 600;
@@ -441,11 +442,11 @@ ACTION BUTTONS
 }
 
 .catalog-btn-primary:hover {
-    background: #0284c7;
-    border-color: #0284c7;
+    background: #0f172a; 
+    border-color: #0f172a;
     color: var(--catalog-white);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+    box-shadow: 0 4px 12px rgba(30, 41, 59, 0.3);
 }
 
 .catalog-btn-primary:disabled {
@@ -561,7 +562,7 @@ EMPTY STATE
     position: absolute;
     top: 8px;
     left: 8px;
-    background: rgba(52, 152, 219, 0.9);
+    background: rgba(0, 55, 84, 0.9);
     color: white;
     padding: 4px 8px;
     border-radius: 12px;
