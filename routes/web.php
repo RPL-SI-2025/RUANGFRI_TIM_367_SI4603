@@ -10,6 +10,7 @@ use App\Http\Controllers\laporinventarisController;
 use App\Models\laporinventaris;
 use App\Http\Controllers\MahasiswaAuthController;
 use App\Http\Controllers\AdminLogistikController;
+use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\RuanganCartController;
 use App\Http\Controllers\PelaporanController;
 use App\Http\Controllers\ProfileController;
@@ -40,7 +41,12 @@ Route::controller(RuanganController::class)->group(function () {
 // Admin approval interface
 Route::prefix('admin')->group(function () {
     // Admin Dashboard
+    Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+
     Route::get('/dashboard', [AdminLogistikController::class, 'index'])->name('admin.dashboard');
+
 
     // Admin Inventaris CRUD
     Route::get('/inventaris', [InventarisController::class, 'index'])->name('admin.inventaris.index');
