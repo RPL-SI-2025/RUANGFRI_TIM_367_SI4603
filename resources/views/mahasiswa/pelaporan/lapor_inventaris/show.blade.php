@@ -26,12 +26,15 @@
                                     <td>{{ $laporan->id_lapor_inventaris }}</td>
                                 </tr>
                                 <tr>
+                                    <td><strong>ID Peminjaman:</strong></td>
+                                    <td><strong>{{ $laporan->peminjaman->id }}</strong></td>
+                                <tr>
                                     <td><strong>Tanggal Laporan:</strong></td>
                                     <td>{{ \Carbon\Carbon::parse($laporan->datetime)->format('d F Y') }}</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Dibuat Oleh:</strong></td>
-                                    <td>{{ $laporan->oleh }}</td>
+                                    <td>{{ $laporan->mahasiswa->nama_mahasiswa ?? 'N/A' }}</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Ditujukan Kepada:</strong></td>
@@ -79,6 +82,9 @@
                     <div class="d-flex justify-content-end mt-4 pt-3 border-top">
                         <a href="{{ route('mahasiswa.pelaporan.lapor_inventaris.edit', $laporan->id_lapor_inventaris) }}" class="btn btn-warning rounded-pill px-4 me-2">
                             <i class="fas fa-edit me-2"></i> Edit Laporan
+                        </a>
+                         <a href="{{ route('mahasiswa.pelaporan.lapor_inventaris.download-pdf', $laporan->id_lapor_inventaris) }}" class="btn btn-success rounded-pill px-4">
+                            <i class="fas fa-file-pdf me-2"></i> Download PDF
                         </a>
                     </div>
                 </div>

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
-        // Create the 'mahasiswa' table
+
+
         Schema::create('mahasiswa', function (Blueprint $table) {
             $table->id();
             $table->string('nim')->unique();
@@ -28,8 +28,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
-        // Drop the 'mahasiswa' table
+
+
         Schema::dropIfExists('mahasiswa');
     }
 };

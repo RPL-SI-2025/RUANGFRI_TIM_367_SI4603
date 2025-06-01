@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-4">
     <h4 class="mb-4">
-        <i class="fas fa-clipboard-list me-2"></i>Daftar Laporan Inventaris
+        <i class="fas fa-toolbox fa-sm me-2"></i> Daftar Laporan Inventaris
     </h4>
     
     @if(session('success'))
@@ -28,7 +28,8 @@
                         <thead class="table-light">
                             <tr>
                                 <th>No</th>
-                                <th>Tanggal</th>
+                                <th>Laporan Dibuat</th>
+                                <th>Tanggal Peminjaman</th>
                                 <th>Deskripsi</th>
                                 <th>Admin Logistik</th>
                                 <th class="text-center">Aksi</th>
@@ -38,7 +39,12 @@
                             @foreach($laporan as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($item->datetime)->format('d/m/Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d M Y H:i') }}</td>
+                                    <td class="px-3 py-3">
+                                        {{ \Carbon\Carbon::parse($item->peminjaman->tanggal_pengajuan)->format('d M Y') }}
+                                        <span class="text-muted"> s/d </span>
+                                        {{ \Carbon\Carbon::parse($item->peminjaman->tanggal_pengajuan)->format('d M Y') }}
+                                    </td>
                                     <td>{{ \Str::limit($item->deskripsi, 50) }}</td>
                                     <td>{{ $item->logistik->nama ?? 'N/A' }}</td>
                                     <td class="text-center">

@@ -1,3 +1,4 @@
+
 @extends('mahasiswa.layouts.app')
 
 @section('content')
@@ -62,72 +63,37 @@
                             
                             <div class="card mb-4 border shadow-sm">
                                 <div class="card-body">
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="tanggal_pengajuan" class="form-label fw-bold">Tanggal Pengajuan</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-text bg-light border-end-0">
-                                                        <i class="fa fa-calendar-check-o text-primary"></i>
-                                                    </span>
-                                                    <input type="date" class="form-control @error('tanggal_pengajuan') is-invalid @enderror border-start-0" 
-                                                        id="tanggal_pengajuan" name="tanggal_pengajuan" value="{{ old('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan) }}" required>
-                                                </div>
-                                                @error('tanggal_pengajuan')
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="tanggal_selesai" class="form-label fw-bold">Tanggal Selesai</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-text bg-light border-end-0">
-                                                        <i class="fa fa-calendar-times-o text-primary"></i>
-                                                    </span>
-                                                    <input type="date" class="form-control @error('tanggal_selesai') is-invalid @enderror border-start-0" 
-                                                        id="tanggal_selesai" name="tanggal_selesai" value="{{ old('tanggal_selesai', $pinjamRuangan->tanggal_selesai) }}" required>
-                                                </div>
-                                                @error('tanggal_selesai')
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
+                                    <div class="mb-3">
+                                        <label for="tanggal_booking" class="form-label">Tanggal Booking</label>
+                                        <input type="date" class="form-control date-picker" id="tanggal_booking" 
+                                            name="tanggal_pengajuan" value="{{ old('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan) }}" required>
+                                        <small class="form-text text-muted">Pilih tanggal untuk memperbarui booking</small>
+                                    </div>
+                                    
+                                    <div id="loadingSlots" style="display: none;" class="text-center my-3">
+                                        <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                                        <p class="mt-2 text-muted">Memuat slot waktu tersedia...</p>
+                                    </div>
+                                    
+                                    <div id="timeSlots" class="mt-4">
+                                        <!-- Time slots will be loaded here -->
+                                    </div>
+                                    
+                                    <input type="hidden" name="waktu_mulai" id="waktu_mulai" value="{{ old('waktu_mulai', $pinjamRuangan->waktu_mulai) }}">
+                                    <input type="hidden" name="waktu_selesai" id="waktu_selesai" value="{{ old('waktu_selesai', $pinjamRuangan->waktu_selesai) }}">
+                                    <input type="hidden" name="selected_slots_json" id="selected_slots_json" value="">
+                                    <input type="hidden" name="tanggal_selesai" value="{{ old('tanggal_selesai', $pinjamRuangan->tanggal_selesai) }}">
+                                    
+                                    <div class="mt-3" id="timeRangeSummary">
+                                        <div class="alert alert-info">
+                                            <strong>Waktu terpilih:</strong> {{ date('H:i', strtotime($pinjamRuangan->waktu_mulai)) }} - {{ date('H:i', strtotime($pinjamRuangan->waktu_selesai)) }}
                                         </div>
                                     </div>
-
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="waktu_mulai" class="form-label fw-bold">Waktu Mulai</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-text bg-light border-end-0">
-                                                        <i class="fa fa-clock-o text-primary"></i>
-                                                    </span>
-                                                    <input type="time" class="form-control @error('waktu_mulai') is-invalid @enderror border-start-0" 
-                                                        id="waktu_mulai" name="waktu_mulai" value="{{ old('waktu_mulai', $pinjamRuangan->waktu_mulai) }}" required>
-                                                </div>
-                                                @error('waktu_mulai')
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="waktu_selesai" class="form-label fw-bold">Waktu Selesai</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-text bg-light border-end-0">
-                                                        <i class="fa fa-clock-o text-primary"></i>
-                                                    </span>
-                                                    <input type="time" class="form-control @error('waktu_selesai') is-invalid @enderror border-start-0" 
-                                                        id="waktu_selesai" name="waktu_selesai" value="{{ old('waktu_selesai', $pinjamRuangan->waktu_selesai) }}" required>
-                                                </div>
-                                                @error('waktu_selesai')
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                </div>
+                            </div>
+                            
+                            <div class="card mb-4 border shadow-sm">
+                                <div class="card-body">
                                     <div class="form-group mb-3">
                                         <label for="tujuan_peminjaman" class="form-label fw-bold">Tujuan Peminjaman</label>
                                         <div class="input-group">
@@ -182,7 +148,7 @@
                                 <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.show', $pinjamRuangan->id) }}" class="btn btn-secondary">
                                     <i class="fa fa-times me-1"></i> Batal
                                 </a>
-                                <button type="submit" class="btn btn-success px-5">
+                                <button type="submit" class="btn btn-success px-5" id="submitBtn">
                                     <i class="fa fa-save me-2"></i> Simpan Perubahan
                                 </button>
                             </div>
@@ -224,5 +190,59 @@
 .table th, .table td {
     vertical-align: middle;
 }
+
+  
+.time-slot {
+    display: block;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    background-color: #f8f9fa;
+    font-weight: 500;
+}
+
+.time-slot:hover {
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+    transform: translateY(-2px);
+}
+
+.time-slot.selected {
+    background-color: #cfe2ff;
+    border-color: #9ec5fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    color: #0d6efd;
+    font-weight: bold;
+}
 </style>
+
+@push('scripts')
+<script src="{{ asset('js/timeslot-selector.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const datePicker = document.getElementById('tanggal_booking');
+    
+
+    const timeSlotSelector = new TimeSlotSelector({
+        containerId: 'timeSlots',
+        loadingId: 'loadingSlots',
+        startTimeInputId: 'waktu_mulai',
+        endTimeInputId: 'waktu_selesai',
+        slotsJsonInputId: 'selected_slots_json',
+        summaryId: 'timeRangeSummary',
+        submitButtonId: 'submitBtn',
+        initialSlots: [],
+        ruanganId: {{ $relatedBookings[0]->id_ruangan }}
+    });
+    
+
+    datePicker.addEventListener('change', function() {
+        timeSlotSelector.loadTimeSlots(this.value);
+    });
+});
+</script>
+@endpush
 @endsection

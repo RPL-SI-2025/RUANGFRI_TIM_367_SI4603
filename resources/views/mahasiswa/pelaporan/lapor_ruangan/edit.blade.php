@@ -49,34 +49,21 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="datetime" class="form-label fw-medium">Tanggal Laporan <span class="text-danger">*</span></label>
+                              <div class="form-group mb-3">
+                                    <label for="lokasi" class="form-label fw-medium">Lokasi Ruangan <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-light border-end-0">
-                                            <i class="fas fa-calendar-alt text-primary"></i>
+                                            <i class="fas fa-map-marker-alt text-primary"></i>
                                         </span>
-                                        <input type="date" class="form-control @error('datetime') is-invalid @enderror border-start-0" 
-                                            id="datetime" name="datetime" value="{{ old('datetime') ?? $laporan->datetime }}" required>
+                                        <input type="text" class="form-control border-start-0" 
+                                            id="lokasi" name="lokasi" value="{{ $laporan->ruangan->lokasi ?? '' }}" disabled>
+                                        <input type="hidden" name="lokasi" value="{{ $laporan->ruangan->lokasi ?? '' }}">
                                     </div>
-                                    @error('datetime')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
+                                    <small class="text-muted">Lokasi ruangan tidak dapat diubah</small>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="form-group mb-4">
-                            <label for="deskripsi" class="form-label fw-medium">Deskripsi Masalah <span class="text-danger">*</span></label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-end-0">
-                                    <i class="fas fa-comment-alt text-primary"></i>
-                                </span>
-                                <textarea class="form-control @error('deskripsi') is-invalid @enderror border-start-0" 
-                                    id="deskripsi" name="deskripsi" rows="4" required>{{ old('deskripsi') ?? $laporan->deskripsi }}</textarea>
-                            </div>
-                            @error('deskripsi')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
+                            
                         </div>
 
                         <div class="row mb-4">

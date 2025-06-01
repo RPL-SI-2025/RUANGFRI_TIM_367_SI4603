@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 class Mahasiswa extends Authenticatable
 {
@@ -13,10 +13,10 @@ class Mahasiswa extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $table = 'mahasiswa';
-    protected $primaryKey = 'id';
+
     protected $fillable = [
         'nim',
-        'nama_mahasiswa',
+        'nama_mahasiswa', 
         'email',
         'password',
     ];
@@ -26,36 +26,25 @@ class Mahasiswa extends Authenticatable
         'remember_token',
     ];
 
-    // Relasi ke pinjam ruangan
-    // public function pinjamRuangan()
-    // {
-    //     return $this->hasMany(PinjamRuangan::class, 'id_mahasiswa');
-    // }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 
-    // Relasi ke pinjam inventaris
+    // Relationships
+    public function pinjamRuangan()
+    {
+        return $this->hasMany(PinjamRuangan::class, 'id_mahasiswa');
+    }
+
     public function pinjamInventaris()
     {
         return $this->hasMany(PinjamInventaris::class, 'id_mahasiswa');
     }
 
-    // Relasi ke status peminjaman
-    // public function statusPeminjaman()
-    // {
-    //     return $this->hasMany(StatusPeminjaman::class, 'id_mahasiswa');
-    // }
-
-    // // Relasi ke laporan ruangan
-    // public function laporanRuangan()
-    // {
-    //     return $this->hasMany(LaporanRuangan::class, 'id_mahasiswa');
-    // }
-
-    // Relasi ke lapor inventaris
-    public function laporInventaris()
+    public function pelaporan()
     {
-        return $this->hasMany(LaporInventaris::class, 'id_mahasiswa');
+        return $this->hasMany(Pelaporan::class, 'id_mahasiswa');
     }
 }
 
-
-?>

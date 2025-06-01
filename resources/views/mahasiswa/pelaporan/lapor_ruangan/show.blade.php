@@ -22,12 +22,18 @@
                             <h5 class="text-secondary fw-bold mb-3">Informasi Laporan</h5>
                             <table class="table table-borderless">
                                 <tr>
-                                    <td width="40%"><strong>ID Laporan:</strong></td>
-                                    <td>{{ $laporan->id_lapor_ruangan }}</td>
+                                    <td><strong>Tanggal Pelaporan</strong></td>
+                                    <td class="px-3 py-3">
+                                        {{ \Carbon\Carbon::parse($laporan->created_at)->format('d M Y H:i') }}
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Tanggal Laporan:</strong></td>
-                                    <td>{{ \Carbon\Carbon::parse($laporan->datetime)->format('d F Y, H:i') }}</td>
+                                    <td><strong>Tanggal Peminjaman</strong></td>
+                                    <td class="px-3 py-3">
+                                        {{ \Carbon\Carbon::parse($laporan->peminjaman->tanggal_pengajuan)->format('d M Y') }}
+                                        <span class="text-muted"> s/d </span>
+                                        {{ \Carbon\Carbon::parse($laporan->peminjaman->tanggal_pengajuan)->format('d M Y') }}
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td><strong>Ruangan:</strong></td>
@@ -42,7 +48,7 @@
                                     <td>{{ $laporan->oleh }}</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Admin Logistik:</strong></td>
+                                    <td><strong>Diberikan Kepada:</strong></td>
                                     <td>{{ $laporan->logistik->nama ?? 'N/A' }}</td>
                                 </tr>
                             </table>
@@ -99,6 +105,10 @@
                     <div class="d-flex justify-content-end mt-4 pt-3 border-top">
                         <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.edit', $laporan->id_lapor_ruangan) }}" class="btn btn-warning rounded-pill px-4 me-2">
                             <i class="fas fa-edit me-2"></i> Edit Laporan
+                        </a>
+                        <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.download-pdf', $laporan->id_lapor_ruangan) }}" 
+                         class="btn btn-success rounded-pill px-4">
+                            <i class="fas fa-download me-2"></i> Download Laporan
                         </a>
                     </div>
 

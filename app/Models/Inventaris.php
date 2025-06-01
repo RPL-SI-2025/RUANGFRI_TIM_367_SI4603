@@ -13,27 +13,28 @@ class Inventaris extends Model
 
     protected $fillable = [
         'nama_inventaris',
+        'kategori_id', 
         'deskripsi',
         'jumlah',
         'status',
         'gambar_inventaris',
+        'id_logistik'
     ];
 
-    // Relasi ke AdminLogistik
+
     public function logistik()
     {
         return $this->belongsTo(AdminLogistik::class, 'id_logistik');
     }
 
-    // Relasi ke pinjam_inventaris
+    public function kategori()
+    {
+        return $this->belongsTo(KategoriInventaris::class, 'kategori_id');
+    }
+
     public function peminjaman()
     {
         return $this->hasMany(PinjamInventaris::class, 'id_inventaris');
     }
 
-    // Relasi ke laporan inventaris
-    // public function laporan()
-    // {
-    //     return $this->hasMany(LaporInventaris::class, 'id_inventaris');
-    // }
 }

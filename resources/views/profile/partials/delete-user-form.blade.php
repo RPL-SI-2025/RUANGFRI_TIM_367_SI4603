@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
         deleteSection.style.display = 'block';
         toggleBtn.style.display = 'none';
         
-        // Smoothly scroll to the delete section
+
         deleteSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
     
@@ -66,10 +66,10 @@ document.addEventListener('DOMContentLoaded', function() {
         deleteSection.style.display = 'none';
         toggleBtn.style.display = 'inline-block';
         
-        // Clear password field when canceling
+
         document.getElementById('delete-password').value = '';
         
-        // Scroll back to the toggle button
+
         toggleBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 });

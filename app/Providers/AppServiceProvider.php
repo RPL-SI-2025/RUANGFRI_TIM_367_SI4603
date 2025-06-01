@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
             $routeName = Route::currentRouteName();
             $pageTitle = 'Sistem Peminjaman Inventaris';
             
-            // Map route patterns to titles
+            
             $titleMap = [
                 'mahasiswa.katalog.inventaris' => 'Katalog Inventaris',
                 'mahasiswa.katalog.ruangan' => 'Katalog Ruangan',
@@ -33,12 +33,13 @@ class AppServiceProvider extends ServiceProvider
                 'mahasiswa.peminjaman.pinjam-ruangan' => 'Peminjaman Ruangan',
                 'mahasiswa.pelaporan.lapor_inventaris' => 'Pelaporan Inventaris',
                 'mahasiswa.pelaporan.lapor_ruangan' => 'Pelaporan Ruangan',
+                'mahasiswa.history' => 'Riwayat Peminjaman',
                 'profile' => 'Profil Saya',
                 'cart' => 'Keranjang Peminjaman',
                 'mahasiswa.dashboard' => 'Dashboard',
             ];
             
-            // Check for matching routes
+            
             foreach ($titleMap as $route => $title) {
                 if (strpos($routeName, $route) !== false) {
                     $pageTitle = $title;

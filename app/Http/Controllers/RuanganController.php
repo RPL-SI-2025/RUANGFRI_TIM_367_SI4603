@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class RuanganController extends Controller
 {
-    // Tampilkan daftar ruangan
+
     public function mahasiswaIndex(Request $request)
     {
         $query = Ruangan::query();
@@ -25,7 +25,7 @@ class RuanganController extends Controller
         return view('mahasiswa.katalog.ruangan.index', compact('ruangans'));
     }
 
-    // Tampilkan detail satu ruangan
+
     public function mahasiswaShow($id)
     {
         $ruangan = Ruangan::findOrFail($id);
@@ -36,28 +36,28 @@ class RuanganController extends Controller
 
 
 
-    // public function mahasiswaindex(Request $request)
-    // {
-    //     $query = Ruangan::query();
 
-    //     if ($request->filled('search')) {
-    //         $search = $request->search;
-    //         $query->where('nama_ruangan', 'like', "%{$search}%")
-    //               ->orWhere('lokasi', 'like', "%{$search}%");
-    //     }
 
-    //     $ruangans = $query->orderBy('nama_ruangan')->get();
-    //     return view('mahasiswa.katalog.ruangan.index', compact('ruangans'));
-    // }
 
-    // public function mahasiswashow($id)
-    // {
-    //     $ruangan = Ruangan::find($id);
-    //     if (is_null($ruangan)) {
-    //         return redirect()->route('admin.katalog_ruangan.index')->with('error', 'Ruangan tidak ditemukan');
-    //     }
-    //     return view('mahasiswa.katalog.ruangan.show', compact('ruangan'));
-    // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public function index(Request $request)
@@ -107,7 +107,7 @@ class RuanganController extends Controller
         Storage::disk('public')->makeDirectory('katalog_ruangan');
         Storage::disk('public')->putFileAs('katalog_ruangan', $file, $filename);
 
-        // Simpan hanya nama file, nanti di view dipanggil via asset('storage/…')
+
         $validatedData['gambar'] = $filename;
     }
 
@@ -133,9 +133,9 @@ class RuanganController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request->all(), $id);
+
         $ruangan = Ruangan::find($id);
-        // dd($ruangan);
+
 
         if (is_null($ruangan)) {
             return redirect()->route('admin.katalog_ruangan.index')->with('error', 'Ruangan tidak ditemukan');

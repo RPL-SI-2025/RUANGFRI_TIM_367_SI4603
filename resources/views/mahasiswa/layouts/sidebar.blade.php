@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<div class="sidebar col-md-3 col-lg-2 d-md-block" style="width: 250px;">
+<div class="sidebar col-md-3 col-lg-2 d-md-block" style="width: 280px;">
     <div class="sidebar-header">
         <div class="text-center">
             <h5 class="text-white mb-0">SISTEM PEMINJAMAN</h5>
@@ -7,6 +7,14 @@
         </div>
     </div>
     <ul class="nav flex-column mt-4">
+
+        <li class="nav-item">
+            <a class="nav-link {{ request()->is('mahasiswa/dashboard') ? 'active' : '' }}" 
+               href="{{ route('mahasiswa.dashboard') }}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+        </li>
+        
         <li class="nav-item">
             <a class="nav-link d-flex justify-content-between align-items-center {{ request()->is('mahasiswa/katalog*') ? 'active' : '' }}" 
                href="#katalogSubmenu" 
@@ -140,6 +148,36 @@
             </div>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link d-flex justify-content-between align-items-center {{ request()->is('mahasiswa/history*') ? 'active' : '' }}" 
+            href="#historySubmenu" 
+            data-bs-toggle="collapse" 
+            aria-expanded="{{ request()->is('mahasiswa/history*') ? 'true' : 'false' }}">
+                <div>
+                    <i class="fas fa-history"></i> Riwayat Peminjaman
+                </div>
+                <i class="fas fa-chevron-down small"></i>
+            </a>
+            <div class="collapse {{ request()->is('mahasiswa/history*') ? 'show' : '' }}" id="historySubmenu">
+                <ul class="nav flex-column ms-3 mt-1">
+                    <li class="nav-item">
+                        <a class="nav-link py-2 {{ request()->is('mahasiswa/history/inventaris*') ? 'active' : '' }}" 
+                        href="{{ route('mahasiswa.history.inventaris.index') }}">
+                            <i class="fas fa-toolbox fa-sm"></i>
+                            <span class="ms-2">Riwayat Inventaris</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link py-2 {{ request()->is('mahasiswa/history/ruangan*') ? 'active' : '' }}" 
+                        href="{{ route('mahasiswa.history.ruangan.index') }}">
+                            <i class="fas fa-door-closed fa-sm"></i>
+                            <span class="ms-2">Riwayat Ruangan</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
         <li class="nav-item mt-3">
             <form action="{{ route('mahasiswa.logout') }}" method="POST" id="logout-form">
                 @csrf
@@ -150,3 +188,6 @@
         </li>
     </ul>
 </div>
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+@endpush
