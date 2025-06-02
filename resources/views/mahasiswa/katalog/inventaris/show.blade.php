@@ -1,3 +1,4 @@
+
 @extends('mahasiswa.layouts.app')
 
 @section('content')
@@ -5,10 +6,11 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4 class="text-primary mb-0 fw-bold">
-                    <i class="fa fa-box me-2"></i>Detail Inventaris
+                <h4 class="mb-0 fw-bold" style="color: #1e293b;">
+                    <i class="fa fa-box me-2" style="color: #1e293b;"></i>Detail Inventaris
                 </h4>
-                <a href="{{ route('mahasiswa.katalog.inventaris.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
+                <a href="{{ route('mahasiswa.katalog.inventaris.index') }}" class="btn rounded-pill px-4" 
+                   style="background-color: #1e293b; border-color: #1e293b; color: white;">
                     <i class="fa fa-arrow-left me-1"></i> Kembali
                 </a>
             </div>
@@ -30,18 +32,18 @@
                         </div>
                         <div class="col-md-7">
                             <div class="card-body">
-                                <h4 class="card-title text-primary fw-bold mb-3">{{ $inventaris->nama_inventaris }}</h4>
+                                <h4 class="card-title fw-bold mb-3" style="color: #1e293b;">{{ $inventaris->nama_inventaris }}</h4>
                                 
                                 <div class="mb-3">
-                                    <span class="badge bg-info rounded-pill">
+                                    <span class="badge rounded-pill" style="background-color: #1e293b; color: white;">
                                         <i class="fa fa-cubes me-1"></i> Stok: {{ $inventaris->jumlah }} unit
                                     </span>
                                 </div>
                                 
-                                <h6 class="fw-bold text-secondary mt-4 mb-2">Deskripsi:</h6>
+                                <h6 class="fw-bold mt-4 mb-2" style="color: #1e293b;">Deskripsi:</h6>
                                 <p class="card-text text-muted">{{ $inventaris->deskripsi }}</p>
                                 
-                                <h6 class="fw-bold text-secondary mt-4 mb-2">Status:</h6>
+                                <h6 class="fw-bold mt-4 mb-2" style="color: #1e293b;">Status:</h6>
                                 @if($inventaris->status == 'Tersedia')
                                     <span class="badge bg-success">Tersedia</span>
                                 @else
@@ -55,12 +57,12 @@
                                         
                                         <div class="row mb-3 align-items-center">
                                             <div class="col-md-3">
-                                                <label for="jumlah" class="form-label fw-medium mb-0">Jumlah</label>
+                                                <label for="jumlah" class="form-label fw-medium mb-0" style="color: #1e293b;">Jumlah</label>
                                             </div>
                                             <div class="col-md-9">
                                                 <div class="input-group">
                                                     <span class="input-group-text bg-light">
-                                                        <i class="fa fa-hashtag text-primary"></i>
+                                                        <i class="fa fa-hashtag" style="color: #1e293b;"></i>
                                                     </span>
                                                     <input type="number" id="jumlah" name="jumlah" 
                                                            class="form-control" min="1" 
@@ -71,10 +73,13 @@
                                         </div>
                                         
                                         <div class="d-flex mt-4">
-                                            <button type="submit" class="btn btn-outline-primary rounded-pill me-2 flex-grow-1">
+                                            <button type="submit" class="btn me-2 flex-grow-1" 
+                                                    style="background-color: white; border: 2px solid #1e293b; color: #1e293b; border-radius: 8px;">
                                                 <i class="fa fa-cart-plus me-1"></i> Tambah ke Keranjang
                                             </button>
-                                            <a href="{{ route('mahasiswa.cart.keranjang_inventaris.index') }}" class="btn btn-primary rounded-pill flex-grow-1">
+                                            <a href="{{ route('mahasiswa.cart.keranjang_inventaris.index') }}" 
+                                               class="btn flex-grow-1" 
+                                               style="background-color: #1e293b; border-color: #1e293b; color: white; border-radius: 8px;">
                                                 <i class="fa fa-shopping-basket me-1"></i> Lihat Keranjang
                                             </a>
                                         </div>
@@ -93,4 +98,17 @@
         </div>
     </div>
 </div>
+
+<style>
+
+.btn[style*="background-color: #1e293b"]:hover {
+    background-color: #0f172a !important;
+    border-color: #0f172a !important;
+}
+
+.btn[style*="border: 2px solid #1e293b"]:hover {
+    background-color: #1e293b !important;
+    color: white !important;
+}
+</style>
 @endsection
