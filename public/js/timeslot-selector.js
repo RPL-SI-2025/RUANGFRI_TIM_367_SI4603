@@ -31,7 +31,7 @@ class TimeSlotSelector {
         this.initialSlots = config.initialSlots || [];
         this.ruanganId = config.ruanganId;
         
-        // DOM elements
+   
         this.container = document.getElementById(this.containerId);
         this.loadingIndicator = document.getElementById(this.loadingId);
         this.startTimeInput = document.getElementById(this.startTimeInputId);
@@ -40,13 +40,13 @@ class TimeSlotSelector {
         this.summaryElement = document.getElementById(this.summaryId);
         this.submitButton = document.getElementById(this.submitButtonId);
         
-        // State management
+   
         this.selectedSlots = [...this.initialSlots];
         this.availableSlots = [];
         this.isShiftPressed = false;
         this.lastSelectedIndex = -1;
         
-        // Initialize keyboard listeners for smart selection
+   
         this.initKeyboardListeners();
     }
     
@@ -67,10 +67,10 @@ class TimeSlotSelector {
     loadTimeSlots(date) {
         if (!this.container || !this.loadingIndicator) return;
         
-        // Show loading state
+   
         this.showLoading();
         
-        // Fetch time slots
+   
         fetch(`/mahasiswa/jadwal/timeslots?id_ruangan=${this.ruanganId}&tanggal=${date}`)
             .then(response => {
                 if (!response.ok) {
@@ -131,7 +131,7 @@ class TimeSlotSelector {
             return;
         }
         
-        // Create container with legend and smart selection info
+   
         this.container.innerHTML = `
             <div class="slots-header mb-4">
                 <div class="alert alert-info mb-3">
@@ -164,13 +164,13 @@ class TimeSlotSelector {
         const slotsList = document.getElementById(`slotsList-${this.containerId}`);
         if (!slotsList) return;
         
-        // Render individual slots
+   
         slots.forEach((slot, index) => {
             const slotElement = this.createSlotElement(slot, index);
             slotsList.appendChild(slotElement);
         });
         
-        // Update initial state
+   
         this.updateTimeRange();
     }
     
@@ -185,10 +185,10 @@ class TimeSlotSelector {
         slotElement.dataset.status = slot.status;
         slotElement.dataset.index = index;
         
-        // Set slot appearance based on status
+   
         this.setSlotAppearance(slotElement, slot);
         
-        // Add slot content
+   
         slotElement.innerHTML = `
             <div class="slot-content">
                 <i class="fa fa-clock-o me-2"></i>
@@ -197,7 +197,7 @@ class TimeSlotSelector {
             </div>
         `;
         
-        // Check if slot is initially selected
+   
         const isSelected = this.selectedSlots.some(s => 
             s.start === slot.start && s.end === slot.end);
             
@@ -206,7 +206,7 @@ class TimeSlotSelector {
             this.setSelectedAppearance(slotElement);
         }
         
-        // Add click listener for available slots
+   
         if (slot.status === 'tersedia') {
             slotElement.addEventListener('click', (e) => this.handleSlotClick(e, slot, index));
             slotElement.style.cursor = 'pointer';
@@ -269,10 +269,10 @@ class TimeSlotSelector {
         if (slot.status !== 'tersedia') return;
         
         if (this.isShiftPressed && this.lastSelectedIndex !== -1) {
-            // Smart range selection
+   
             this.selectRange(this.lastSelectedIndex, index);
         } else {
-            // Single slot toggle
+   
             this.toggleSingleSlot(event.target.closest('.time-slot'), slot, index);
         }
         
@@ -284,10 +284,10 @@ class TimeSlotSelector {
         const minIndex = Math.min(startIndex, endIndex);
         const maxIndex = Math.max(startIndex, endIndex);
         
-        // Clear current selection
+   
         this.clearAllSelections();
         
-        // Select range of available slots
+   
         for (let i = minIndex; i <= maxIndex; i++) {
             const slot = this.availableSlots[i];
             if (slot && slot.status === 'tersedia') {
@@ -314,7 +314,7 @@ class TimeSlotSelector {
             slotElement.classList.add('selected');
             this.setSelectedAppearance(slotElement);
             
-            // Add to selectedSlots if not already present
+   
             const exists = this.selectedSlots.some(s => 
                 s.start === slot.start && s.end === slot.end);
             if (!exists) {
@@ -330,7 +330,7 @@ class TimeSlotSelector {
         if (slotElement.classList.contains('selected')) {
             this.resetSlotAppearance(slotElement, slot);
             
-            // Remove from selectedSlots
+   
             const index = this.selectedSlots.findIndex(s => 
                 s.start === slot.start && s.end === slot.end);
             if (index !== -1) {
@@ -352,29 +352,29 @@ class TimeSlotSelector {
     
     updateTimeRange() {
         if (this.selectedSlots.length > 0) {
-            // Sort selected slots by start time
+   
             const sortedSlots = [...this.selectedSlots].sort((a, b) => 
                 a.start.localeCompare(b.start));
             
-            // Check if slots are contiguous
+   
             const isContiguous = this.checkContiguity(sortedSlots);
             
             if (isContiguous) {
-                // Update form inputs
+   
                 if (this.startTimeInput) this.startTimeInput.value = sortedSlots[0].start;
                 if (this.endTimeInput) this.endTimeInput.value = sortedSlots[sortedSlots.length - 1].end;
                 if (this.slotsJsonInput) this.slotsJsonInput.value = JSON.stringify(sortedSlots);
                 
-                // Enable submit button
+   
                 if (this.submitButton) {
                     this.submitButton.disabled = false;
                     this.submitButton.classList.remove('btn-disabled');
                 }
                 
-                // Show success summary
+   
                 this.showSuccessSummary(sortedSlots);
             } else {
-                // Disable submit and show error
+   
                 if (this.submitButton) {
                     this.submitButton.disabled = true;
                     this.submitButton.classList.add('btn-disabled');
@@ -382,7 +382,7 @@ class TimeSlotSelector {
                 this.showErrorSummary('Slot waktu harus berurutan tanpa jeda!');
             }
         } else {
-            // No slots selected
+   
             if (this.submitButton) {
                 this.submitButton.disabled = true;
                 this.submitButton.classList.add('btn-disabled');
@@ -454,14 +454,14 @@ class TimeSlotSelector {
         }
     }
     
-    // Public method to clear selections
+   
     clearSelections() {
         this.clearAllSelections();
         this.lastSelectedIndex = -1;
         this.updateTimeRange();
     }
     
-    // Public method to select all available slots
+   
     selectAllAvailable() {
         this.clearAllSelections();
         
@@ -478,5 +478,5 @@ class TimeSlotSelector {
     }
 }
 
-// Make TimeSlotSelector available globally
+   
 window.TimeSlotSelector = TimeSlotSelector;

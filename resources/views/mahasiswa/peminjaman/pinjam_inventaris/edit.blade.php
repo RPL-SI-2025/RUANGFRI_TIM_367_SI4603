@@ -343,17 +343,17 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Date validation
+   
     const tanggalMulai = document.getElementById('tanggal_pengajuan');
     const tanggalSelesai = document.getElementById('tanggal_selesai');
     const waktuMulai = document.getElementById('waktu_mulai');
     const waktuSelesai = document.getElementById('waktu_selesai');
     
-    // Set minimum date to today
+   
     const today = new Date().toISOString().split('T')[0];
     tanggalMulai.min = today;
     
-    // Update end date minimum when start date changes
+   
     tanggalMulai.addEventListener('change', function() {
         tanggalSelesai.min = this.value;
         if (tanggalSelesai.value < this.value) {
@@ -361,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Time validation
+   
     function validateTime() {
         if (tanggalMulai.value === tanggalSelesai.value) {
             if (waktuSelesai.value <= waktuMulai.value) {
@@ -379,17 +379,17 @@ document.addEventListener('DOMContentLoaded', function() {
     tanggalMulai.addEventListener('change', validateTime);
     tanggalSelesai.addEventListener('change', validateTime);
     
-    // File upload enhancement
+   
     const fileInput = document.getElementById('file_scan');
     const uploadBox = document.querySelector('.upload-box');
     
     if (fileInput && uploadBox) {
-        // Click to upload
+   
         uploadBox.addEventListener('click', function() {
             fileInput.click();
         });
         
-        // Drag and drop functionality
+   
         uploadBox.addEventListener('dragover', function(e) {
             e.preventDefault();
             uploadBox.style.borderColor = 'var(--primary-color)';
@@ -428,7 +428,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Form validation enhancement
+   
     const form = document.getElementById('editForm');
     form.addEventListener('submit', function(e) {
         const submitButton = document.getElementById('submitBtn');
@@ -438,7 +438,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Initialize form validation
+   
     validateTime();
 });
 </script>

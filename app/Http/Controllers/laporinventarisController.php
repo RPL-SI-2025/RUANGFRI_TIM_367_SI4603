@@ -180,7 +180,7 @@ public function historyShow($id)
             $laporan = laporinventaris::create([
                 'id_logistik' => $request->id_logistik,
                 'id_mahasiswa' => $mahasiswaId,
-                'id_pinjam_inventaris' => $request->id_peminjaman, // FIX: Tambahkan field yang hilang
+                'id_pinjam_inventaris' => $request->id_peminjaman,   
                 'datetime' => $request->datetime,
                 'foto_awal' => $fotoAwalPath,
                 'foto_akhir' => $fotoAkhirPath,
@@ -208,7 +208,7 @@ public function historyShow($id)
 
                     foreach ($relatedItems as $item) {
 
-                        $item->status = 3; // Selesai
+                        $item->status = 3;   
                         $item->save();
                         
                         

@@ -16,7 +16,7 @@ class LoginTest extends DuskTestCase
     {
         parent::setUp();
         
-        // Setup database for testing
+   
         $this->artisan('migrate:fresh');
     }
 
@@ -35,8 +35,8 @@ class LoginTest extends DuskTestCase
                     ->scrollIntoView('button[type="submit"]')
                     ->pause(500)
                     ->click('button[type="submit"]')
-                    ->waitForLocation('/mahasiswa/dashboard', 20) // Wait for redirect
-                    ->assertSee('Selamat datang'); // Check if dashboard loads successfully
+                    ->waitForLocation('/mahasiswa/dashboard', 20)   
+                    ->assertSee('Selamat datang');   
         });
     }
 

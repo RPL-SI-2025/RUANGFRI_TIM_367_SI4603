@@ -323,19 +323,21 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // File upload enhancement
+   
     const fileInputs = document.querySelectorAll('input[type="file"]');
     
     fileInputs.forEach(function(fileInput) {
         const uploadBox = fileInput.closest('.upload-box');
         
         if (uploadBox) {
-            // Click to upload
+   
             uploadBox.addEventListener('click', function() {
-                fileInput.click();
+            if (e.target !== fileInput) {
+                    fileInput.click();
+                }
             });
             
-            // Drag and drop functionality
+   
             uploadBox.addEventListener('dragover', function(e) {
                 e.preventDefault();
                 uploadBox.style.borderColor = 'var(--primary-color)';
@@ -359,10 +361,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     updateFileDisplay(uploadBox, files[0]);
                 }
             });
-            
+            let isProcessing = false;
             fileInput.addEventListener('change', function(e) {
+                if (isProcessing) return;
+                
                 if (e.target.files.length > 0) {
+                    isProcessing = true;
                     updateFileDisplay(uploadBox, e.target.files[0]);
+                    
+                   
+                    setTimeout(() => {
+                        isProcessing = false;
+                    }, 100);
                 }
             });
         }
@@ -375,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Form validation enhancement
+   
     const form = document.getElementById('reportForm');
     if (form) {
         form.addEventListener('submit', function(e) {
@@ -387,14 +397,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Date validation - set minimum date to today
+   
     const dateInput = document.getElementById('datetime');
     if (dateInput) {
         const today = new Date().toISOString().split('T')[0];
-        dateInput.max = today; // Cannot report future dates
+        dateInput.max = today;   
     }
     
-    // Enhanced select styling
+   
     const selectInputs = document.querySelectorAll('select');
     selectInputs.forEach(function(select) {
         select.addEventListener('change', function() {

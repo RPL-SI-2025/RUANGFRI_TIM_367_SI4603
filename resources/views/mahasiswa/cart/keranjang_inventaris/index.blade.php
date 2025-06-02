@@ -480,13 +480,13 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize tooltips
+   
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
     
-    // Add smooth hover effects untuk cart items
+   
     const cartRows = document.querySelectorAll('.cart-item-row');
     cartRows.forEach(row => {
         row.addEventListener('mouseenter', function() {
@@ -499,7 +499,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Add loading animation for form submissions
+   
     document.querySelectorAll('form').forEach(form => {
         form.addEventListener('submit', function() {
             const submitBtn = this.querySelector('button[type="submit"]');
@@ -508,7 +508,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin me-2"></i>Memproses...';
                 submitBtn.disabled = true;
                 
-                // Re-enable after 3 seconds as fallback
+   
                 setTimeout(() => {
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
@@ -517,7 +517,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Animate elements on scroll
+   
     const observeElements = document.querySelectorAll('.section-card, .room-card-detailed');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -535,7 +535,7 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(el);
     });
     
-    // Auto-focus pada input quantity saat hover
+   
     document.querySelectorAll('.quantity-group input, .quantity-group-card input').forEach(input => {
         input.addEventListener('focus', function() {
             this.select();

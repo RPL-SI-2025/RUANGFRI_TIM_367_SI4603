@@ -710,7 +710,7 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Animate statistics on page load
+   
     const statNumbers = document.querySelectorAll('.stat-number, .status-count');
     statNumbers.forEach(stat => {
         const finalValue = parseInt(stat.textContent);
@@ -727,14 +727,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 50);
     });
     
-    // Smooth scroll for catalog items
+   
     const catalogItems = document.querySelectorAll('.catalog-item');
     catalogItems.forEach((item, index) => {
         item.style.animationDelay = `${index * 0.1}s`;
         item.style.animation = 'fadeInUp 0.6s ease forwards';
     });
     
-    // Add parallax effect to header
+   
     window.addEventListener('scroll', function() {
         const scrolled = window.pageYOffset;
         const headerBg = document.querySelector('.header-background');

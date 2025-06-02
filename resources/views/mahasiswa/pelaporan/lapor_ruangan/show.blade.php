@@ -313,10 +313,10 @@
 let currentZoom = 1;
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize modal elements
+   
     initializeImageModal();
     
-    // Add smooth scroll behavior for better UX
+   
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -377,7 +377,7 @@ function updateZoom() {
     }
 }
 
-// Add keyboard shortcuts
+   
 document.addEventListener('keydown', function(e) {
     const imageModal = document.getElementById('imageModal');
     if (imageModal && imageModal.classList.contains('show')) {
@@ -396,7 +396,7 @@ document.addEventListener('keydown', function(e) {
                 resetZoom();
                 break;
             case 'Escape':
-                // Let Bootstrap handle this
+   
                 break;
         }
     }
