@@ -105,12 +105,17 @@
                   method="POST" enctype="multipart/form-data" id="bookingForm">
                 @csrf
                 @foreach($cartItems as $id => $item)
-                    <input type="hidden" name="ruangan_ids[]" value="{{ $id }}">
+                    <input type="hidden" name="ruangan_data[{{ $id }}][id]" value="{{ $id }}">
+                    <input type="hidden" name="ruangan_data[{{ $id }}][waktu_mulai]" value="{{ $item['waktu_mulai'] }}">
+                    <input type="hidden" name="ruangan_data[{{ $id }}][waktu_selesai]" value="{{ $item['waktu_selesai'] }}">
+                    <input type="hidden" name="ruangan_data[{{ $id }}][tanggal_booking]" value="{{ $item['tanggal_booking'] }}">
+                    @if(isset($item['selected_slots']))
+                        <input type="hidden" name="ruangan_data[{{ $id }}][selected_slots]" value="{{ json_encode($item['selected_slots']) }}">
+                    @endif
                 @endforeach
                 <input type="hidden" name="tanggal_pengajuan" value="{{ reset($cartItems)['tanggal_booking'] }}">
                 <input type="hidden" name="tanggal_selesai" value="{{ reset($cartItems)['tanggal_booking'] }}">
-                <input type="hidden" name="waktu_mulai" value="{{ reset($cartItems)['waktu_mulai'] }}">
-                <input type="hidden" name="waktu_selesai" value="{{ reset($cartItems)['waktu_selesai'] }}">
+                
                 
                 <!-- Purpose Section -->
                 <div class="section-card mb-4">
