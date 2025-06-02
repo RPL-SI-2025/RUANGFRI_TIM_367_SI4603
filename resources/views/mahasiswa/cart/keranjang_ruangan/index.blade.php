@@ -453,13 +453,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing modal handlers...');
     
-    // Initialize tooltips
+   
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 
-    // Enhanced edit modal handler
+   
     document.addEventListener('click', function(e) {
         const editBtn = e.target.closest('[data-modal-target]');
         if (editBtn) {
@@ -472,11 +472,11 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Modal target:', modalTarget);
             
             if (modalTarget) {
-                // Extract modal number dari target
+   
                 const modalNumber = modalTarget.replace('editModal', '');
                 console.log('Modal number:', modalNumber);
                 
-                // Wait untuk CustomModalManager tersedia
+   
                 setTimeout(() => {
                     const customModalManager = window['CustomModalManager' + modalNumber];
                     console.log('CustomModalManager found:', customModalManager);
@@ -487,25 +487,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else {
                         console.error('CustomModalManager not available, using fallback');
                         
-                        // Fallback: buka modal secara manual
+   
                         const customModal = document.getElementById('customModal' + modalNumber);
                         const customBackdrop = document.getElementById('customBackdrop' + modalNumber);
                         
                         if (customModal && customBackdrop) {
                             console.log('Using fallback modal opening for:', modalNumber);
                             
-                            // Reset modal state
+   
                             customModal.classList.remove('show', 'custom-modal-entering', 'custom-modal-leaving');
                             customBackdrop.classList.remove('show');
                             
-                            // Disable body scroll
+   
                             document.body.classList.add('custom-modal-open');
                             document.documentElement.style.overflow = 'hidden';
                             
-                            // Show backdrop first
+   
                             customBackdrop.classList.add('show');
                             
-                            // Show modal with delay
+   
                             setTimeout(() => {
                                 customModal.classList.add('show');
                                 customModal.style.display = 'flex';
@@ -523,7 +523,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Add smooth hover effects untuk cart items
+   
     const cartRows = document.querySelectorAll('.cart-item-row');
     cartRows.forEach(row => {
         row.addEventListener('mouseenter', function() {
@@ -536,7 +536,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Add loading animation for form submissions
+   
     document.querySelectorAll('form').forEach(form => {
         form.addEventListener('submit', function() {
             const submitBtn = this.querySelector('button[type="submit"]');
@@ -545,7 +545,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin me-2"></i>Memproses...';
                 submitBtn.disabled = true;
                 
-                // Re-enable after 3 seconds as fallback
+   
                 setTimeout(() => {
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
@@ -554,7 +554,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Animate elements on scroll
+   
     const observeElements = document.querySelectorAll('.section-card');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {

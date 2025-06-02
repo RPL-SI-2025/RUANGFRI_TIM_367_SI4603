@@ -328,19 +328,19 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // File upload enhancement
+   
     const fileInputs = document.querySelectorAll('input[type="file"]');
     
     fileInputs.forEach(function(fileInput) {
         const uploadBox = fileInput.closest('.upload-box');
         
         if (uploadBox) {
-            // Click to upload
+   
             uploadBox.addEventListener('click', function() {
                 fileInput.click();
             });
             
-            // Drag and drop functionality
+   
             uploadBox.addEventListener('dragover', function(e) {
                 e.preventDefault();
                 uploadBox.style.borderColor = 'var(--primary-color)';
@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Form validation enhancement
+   
     const form = document.getElementById('reportForm');
     if (form) {
         form.addEventListener('submit', function(e) {
@@ -392,7 +392,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Enhanced textarea auto-resize
+   
     const textareas = document.querySelectorAll('textarea');
     textareas.forEach(function(textarea) {
         textarea.addEventListener('input', function() {
@@ -401,7 +401,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Enhanced select styling
+   
     const selectInputs = document.querySelectorAll('select');
     selectInputs.forEach(function(select) {
         select.addEventListener('change', function() {

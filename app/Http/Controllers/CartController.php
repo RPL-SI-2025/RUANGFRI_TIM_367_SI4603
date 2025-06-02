@@ -39,7 +39,7 @@ class CartController extends Controller
 
 
         $reservedStock = PinjamInventaris::where('id_inventaris', $itemId)
-            ->whereIn('status', [0, 1]) // Status: Menunggu atau Disetujui
+            ->whereIn('status', [0, 1])   
             ->sum('jumlah_pinjam');
         
         $availableStock = $inventaris->jumlah;
@@ -114,7 +114,7 @@ class CartController extends Controller
 
 
             $reservedStock = PinjamInventaris::where('id_inventaris', $id)
-                ->whereIn('status', [0, 1]) // Status: Menunggu atau Disetujui
+                ->whereIn('status', [0, 1])   
                 ->sum('jumlah_pinjam');
             
 

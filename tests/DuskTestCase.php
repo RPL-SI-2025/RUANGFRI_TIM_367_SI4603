@@ -23,7 +23,7 @@ abstract class DuskTestCase extends BaseTestCase
             static::startChromeDriver();
         }
         
-        // Setup testing database
+   
         static::setupTestingDatabase();
     }
 
@@ -33,17 +33,17 @@ abstract class DuskTestCase extends BaseTestCase
     protected static function setupTestingDatabase(): void
     {
         try {
-            // Switch ke database testing
+   
             config(['database.default' => 'mysql_testing']);
             
-            // Test koneksi database
+   
             DB::connection()->getPdo();
             
-            // Cek apakah tabel sudah ada
+   
             $tables = DB::select("SHOW TABLES LIKE 'migrations'");
             
             if (empty($tables)) {
-                // Database kosong, jalankan migration dan seeder
+   
                 Artisan::call('migrate:fresh', [
                     '--seed' => true,
                     '--force' => true
@@ -57,7 +57,7 @@ abstract class DuskTestCase extends BaseTestCase
         } catch (\Exception $e) {
             echo "Error setting up testing database: " . $e->getMessage() . "\n";
             
-            // Coba buat database jika belum ada
+   
             try {
                 $connection = config('database.connections.mysql');
                 $pdo = new \PDO(
@@ -68,10 +68,10 @@ abstract class DuskTestCase extends BaseTestCase
                 
                 $pdo->exec("CREATE DATABASE IF NOT EXISTS ruangfri_testing");
                 
-                // Switch ke database testing
+   
                 config(['database.default' => 'mysql_testing']);
                 
-                // Jalankan migration dan seeder
+   
                 Artisan::call('migrate:fresh', [
                     '--seed' => true,
                     '--force' => true
@@ -90,16 +90,16 @@ abstract class DuskTestCase extends BaseTestCase
     {
         parent::setUp();
         
-        // Setup data testing yang konsisten
+   
         $this->setupTestData();
         
-        // Cleanup session lama
+   
         $this->cleanupSessionData();
     }
 
     protected function tearDown(): void
     {
-        // Reset hanya data transaksi, bukan data master
+   
         $this->resetTransactionData();
         
         parent::tearDown();
@@ -120,7 +120,7 @@ abstract class DuskTestCase extends BaseTestCase
         })->all());
 
         return RemoteWebDriver::create(
-            $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515',
+            $_ENV['DUSK_DRIVER_URL'] ?? 'http:   
             DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY, $options
             )

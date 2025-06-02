@@ -662,7 +662,7 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Custom Modal Manager
+   
     const modalId = 'customModal{{ $iteration }}';
     const backdropId = 'customBackdrop{{ $iteration }}';
     
@@ -675,17 +675,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         init() {
-            // Close button handlers
+   
             document.querySelectorAll('[data-close-modal="' + modalId + '"]').forEach(btn => {
                 btn.addEventListener('click', () => this.hide());
             });
             
-            // Backdrop click handler
+   
             if (this.backdrop) {
                 this.backdrop.addEventListener('click', () => this.hide());
             }
             
-            // Escape key handler
+   
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && this.isOpen) {
                     this.hide();
@@ -699,22 +699,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.body.classList.add('custom-modal-open');
                 document.documentElement.style.overflow = 'hidden';
                 
-                // Show backdrop first
+   
                 this.backdrop.classList.add('show');
                 
-                // Then show modal with slight delay
+   
                 setTimeout(() => {
                     this.modal.style.display = 'flex';
                     this.modal.classList.add('show');
                     
-                    // Load initial time slots if date is already selected
+   
                     const datePicker = document.getElementById('tanggal_booking{{ $iteration }}');
                     if (datePicker && datePicker.value) {
                         timeSlotSelector{{ $iteration }}.loadTimeSlots(datePicker.value);
                     }
                 }, 10);
                 
-                // Add scroll detection for modal body
+   
                 const modalBody = this.modal.querySelector('.custom-modal-body');
                 if (modalBody) {
                     this.checkScrollable(modalBody);
@@ -736,7 +736,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.documentElement.style.overflow = '';
                     this.isOpen = false;
                     
-                    // Clear time slot selections when modal closes
+   
                     if (timeSlotSelector{{ $iteration }}) {
                         timeSlotSelector{{ $iteration }}.clearSelections();
                     }
@@ -755,10 +755,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Make it globally accessible
+   
     window['CustomModalManager{{ $iteration }}'] = new CustomModalManager{{ $iteration }}();
     
-    // Initialize Time Slot Selector with enhanced configuration
+   
     const datePicker{{ $iteration }} = document.getElementById('tanggal_booking{{ $iteration }}');
     const timeSlotSelector{{ $iteration }} = new TimeSlotSelector({
         containerId: 'timeSlots{{ $iteration }}',
@@ -772,11 +772,11 @@ document.addEventListener('DOMContentLoaded', function() {
         ruanganId: {{ $item['id'] }}
     });
     
-    // Date picker change handler
+   
     datePicker{{ $iteration }}.addEventListener('change', function() {
         const selectedDate = this.value;
         if (selectedDate) {
-            // Validate date is not in the past
+   
             const today = new Date();
             const selected = new Date(selectedDate);
             
@@ -790,7 +790,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Form submission handler with enhanced validation
+   
     const form = document.getElementById('editForm{{ $iteration }}');
     const submitBtn = document.getElementById('submitBtn{{ $iteration }}');
 
@@ -798,14 +798,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const selectedSlotsJson = document.getElementById('selected_slots_json{{ $iteration }}');
         
-        // Validate that slots are selected
+   
         if (!selectedSlotsJson.value || selectedSlotsJson.value === '[]') {
             e.preventDefault();
             alert('Harap pilih minimal satu slot waktu!');
             return;
         }
         
-        // Show loading state
+   
         if (submitBtn) {
             submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin me-2"></i>Menyimpan...';
             submitBtn.disabled = true;
@@ -815,7 +815,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
     });
     
-    // Add keyboard shortcuts for time slot selection
+   
     document.addEventListener('keydown', function(e) {
         if (!window['CustomModalManager{{ $iteration }}'].isOpen) return;
         
@@ -834,13 +834,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Add date picker enhancement
+   
     if (datePicker{{ $iteration }}) {
-        // Set minimum date to today
+   
         const today = new Date().toISOString().split('T')[0];
         datePicker{{ $iteration }}.min = today;
         
-        // Set maximum date to 30 days from today
+   
         const maxDate = new Date();
         maxDate.setDate(maxDate.getDate() + 30);
         datePicker{{ $iteration }}.max = maxDate.toISOString().split('T')[0];

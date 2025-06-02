@@ -249,20 +249,21 @@
     </div>
 </div>
 
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Date validation
+   
     const tanggalMulai = document.getElementById('tanggal_pengajuan');
     const tanggalSelesai = document.getElementById('tanggal_selesai');
     const waktuMulai = document.getElementById('waktu_mulai');
     const waktuSelesai = document.getElementById('waktu_selesai');
     
-    // Set minimum date to today
+   
     const today = new Date().toISOString().split('T')[0];
     tanggalMulai.min = today;
     
-    // Update end date minimum when start date changes
+   
     tanggalMulai.addEventListener('change', function() {
         tanggalSelesai.min = this.value;
         if (tanggalSelesai.value && tanggalSelesai.value < this.value) {
@@ -270,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Validate time when on same date
+   
     function validateTime() {
         if (tanggalMulai.value === tanggalSelesai.value && waktuMulai.value && waktuSelesai.value) {
             if (waktuSelesai.value <= waktuMulai.value) {
@@ -286,17 +287,19 @@ document.addEventListener('DOMContentLoaded', function() {
     waktuMulai.addEventListener('change', validateTime);
     waktuSelesai.addEventListener('change', validateTime);
     
-    // File upload enhancement
-    const fileInput = document.getElementById('file_scan');
+      const fileInput = document.getElementById('file_scan');
     const uploadBox = document.querySelector('.upload-box');
     
     if (uploadBox && fileInput) {
-        // Click to upload
-        uploadBox.addEventListener('click', function() {
-            fileInput.click();
+   
+        uploadBox.addEventListener('click', function(e) {
+   
+            if (e.target !== fileInput) {
+                fileInput.click();
+            }
         });
         
-        // Drag and drop functionality
+   
         uploadBox.addEventListener('dragover', function(e) {
             e.preventDefault();
             uploadBox.style.borderColor = 'var(--primary-color)';
@@ -321,9 +324,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
+ 
+        let isProcessing = false;
         fileInput.addEventListener('change', function(e) {
+            if (isProcessing) return;
+            
             if (e.target.files.length > 0) {
+                isProcessing = true;
                 updateFileDisplay(uploadBox, e.target.files[0]);
+                
+   
+                setTimeout(() => {
+                    isProcessing = false;
+                }, 100);
             }
         });
     }
@@ -333,9 +346,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (uploadContent) {
             uploadContent.textContent = `File dipilih: ${file.name}`;
         }
+        
+   
+        const uploadIcon = uploadBox.querySelector('.upload-icon i');
+        if (uploadIcon) {
+            uploadIcon.className = 'fa fa-check-circle';
+            uploadIcon.style.color = '#28a745';
+        }
     }
     
-    // Form validation enhancement
+   
     const form = document.getElementById('peminjamanForm');
     if (form) {
         form.addEventListener('submit', function(e) {

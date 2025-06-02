@@ -278,10 +278,10 @@
 let currentZoom = 1;
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize modal elements
+   
     initializeImageModal();
     
-    // Add smooth scroll behavior for better UX
+   
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -304,7 +304,7 @@ function initializeImageModal() {
         return;
     }
     
-    // Mouse wheel zoom
+   
     imageModal.addEventListener('wheel', function(e) {
         if (e.target.id === 'modalImage') {
             e.preventDefault();
@@ -316,7 +316,7 @@ function initializeImageModal() {
         }
     });
     
-    // Click to zoom
+   
     modalImage.addEventListener('click', function() {
         if (currentZoom < 2) {
             zoomIn();
@@ -325,13 +325,13 @@ function initializeImageModal() {
         }
     });
     
-    // Reset zoom when modal is hidden
+   
     imageModal.addEventListener('hidden.bs.modal', function() {
         resetZoom();
     });
 }
 
-// Function to open image in modal
+   
 function openImageModal(img) {
     if (!img || !img.src) {
         console.error('Invalid image element');
@@ -350,12 +350,12 @@ function openImageModal(img) {
     modalImage.src = img.src;
     modalTitle.innerHTML = '<i class="fa fa-search-plus me-2"></i>' + img.alt;
     
-    // Reset zoom when opening modal
+   
     currentZoom = 1;
     modalImage.style.transform = `scale(${currentZoom})`;
     modalImage.style.cursor = 'zoom-in';
     
-    // Show modal using Bootstrap
+   
     const modal = new bootstrap.Modal(imageModal, {
         backdrop: true,
         keyboard: true,
@@ -363,13 +363,13 @@ function openImageModal(img) {
     });
     modal.show();
     
-    // Update zoom info after modal is shown
+   
     setTimeout(() => {
         updateZoomInfo();
     }, 100);
 }
 
-// Zoom functions - PERBAIKAN UTAMA: Tambahkan console.log untuk debugging
+   
 function zoomIn() {
     console.log('zoomIn called, current zoom:', currentZoom);
     const modalImage = document.getElementById('modalImage');
@@ -378,13 +378,13 @@ function zoomIn() {
         return;
     }
     
-    currentZoom = Math.min(currentZoom + 0.25, 3); // Max zoom 3x
+    currentZoom = Math.min(currentZoom + 0.25, 3);   
     modalImage.style.transform = `scale(${currentZoom})`;
     modalImage.style.cursor = currentZoom >= 3 ? 'zoom-out' : 'zoom-in';
     
     console.log('New zoom level:', currentZoom);
     
-    // Update zoom info
+   
     updateZoomInfo();
 }
 
@@ -396,13 +396,13 @@ function zoomOut() {
         return;
     }
     
-    currentZoom = Math.max(currentZoom - 0.25, 0.5); // Min zoom 0.5x
+    currentZoom = Math.max(currentZoom - 0.25, 0.5);   
     modalImage.style.transform = `scale(${currentZoom})`;
     modalImage.style.cursor = currentZoom <= 0.5 ? 'zoom-in' : 'zoom-out';
     
     console.log('New zoom level:', currentZoom);
     
-    // Update zoom info
+   
     updateZoomInfo();
 }
 
@@ -420,7 +420,7 @@ function resetZoom() {
     
     console.log('Zoom reset to:', currentZoom);
     
-    // Update zoom info
+   
     updateZoomInfo();
 }
 
@@ -435,7 +435,7 @@ function updateZoomInfo() {
     }
 }
 
-// Add keyboard shortcuts
+   
 document.addEventListener('keydown', function(e) {
     const imageModal = document.getElementById('imageModal');
     if (imageModal && imageModal.classList.contains('show')) {
@@ -454,27 +454,27 @@ document.addEventListener('keydown', function(e) {
                 resetZoom();
                 break;
             case 'Escape':
-                // Let Bootstrap handle this
+   
                 break;
         }
     }
 });
 
-// PERBAIKAN: Tambahkan event listener langsung untuk tombol zoom
+   
 document.addEventListener('click', function(e) {
-    // Check for zoom in button
+   
     if (e.target.closest('[onclick="zoomIn()"]')) {
         e.preventDefault();
         zoomIn();
     }
     
-    // Check for zoom out button
+   
     if (e.target.closest('[onclick="zoomOut()"]')) {
         e.preventDefault();
         zoomOut();
     }
     
-    // Check for reset zoom button
+   
     if (e.target.closest('[onclick="resetZoom()"]')) {
         e.preventDefault();
         resetZoom();

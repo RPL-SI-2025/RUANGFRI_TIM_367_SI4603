@@ -292,13 +292,13 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize tooltips
+   
     const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
     
-    // Add smooth hover effects
+   
     const hoverRows = document.querySelectorAll('.hover-row');
     hoverRows.forEach(row => {
         row.addEventListener('mouseenter', function() {
@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Animate statistics on page load
+   
     const statNumbers = document.querySelectorAll('.stat-number');
     statNumbers.forEach(stat => {
         const finalValue = parseInt(stat.textContent);
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 50);
     });
     
-    // Add floating effect to action buttons
+   
     const actionButtons = document.querySelectorAll('.btn-link-action');
     actionButtons.forEach(btn => {
         btn.addEventListener('mouseenter', function() {
