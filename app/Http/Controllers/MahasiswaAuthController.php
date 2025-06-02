@@ -20,7 +20,7 @@ class MahasiswaAuthController extends Controller
     return Auth::guard('mahasiswa');
     }
 
-
+    
 
     public function register(Request $request)
     {
@@ -41,31 +41,18 @@ class MahasiswaAuthController extends Controller
 
    
         Auth::guard('mahasiswa')->login($mahasiswa);
-<<<<<<< HEAD
-
-        // Regenerate session untuk keamanan
-        $request->session()->regenerate();
-
-        // Set session data
-=======
         
    
         $request->session()->regenerate();
         
    
->>>>>>> 3a630b6df8387db585390b0653ad252283969237
         Session::put('mahasiswa_id', $mahasiswa->id);
         Session::put('mahasiswa_name', $mahasiswa->nama_mahasiswa);
         Session::put('mahasiswa_nim', $mahasiswa->nim);
         Session::put('mahasiswa_email', $mahasiswa->email);
         Session::put('is_logged_in', true);
-<<<<<<< HEAD
-
-        // Redirect ke dashboard dengan pesan sukses
-=======
         
    
->>>>>>> 3a630b6df8387db585390b0653ad252283969237
         return redirect()->route('mahasiswa.dashboard')
             ->with('success', 'Akun berhasil dibuat! Selamat datang di Sistem Peminjaman Inventaris.');
     }
@@ -83,14 +70,14 @@ class MahasiswaAuthController extends Controller
 
         if (Auth::guard('mahasiswa')->attempt($credentials)) {
             $request->session()->regenerate();
-
+            
             $mahasiswa = Auth::guard('mahasiswa')->user();
             Session::put('mahasiswa_id', $mahasiswa->id);
             Session::put('mahasiswa_name', $mahasiswa->nama_mahasiswa);
             Session::put('mahasiswa_nim', $mahasiswa->nim);
             Session::put('mahasiswa_email', $mahasiswa->email);
             Session::put('is_logged_in', true);
-
+            
             return redirect()->intended('/mahasiswa/dashboard');
         }
 
@@ -103,7 +90,7 @@ class MahasiswaAuthController extends Controller
     {
         Session::forget(['mahasiswa_id', 'mahasiswa_name', 'mahasiswa_email', 'mahasiswa_nim', 'is_logged_in']);
         Session::flush();
-
+        
         return redirect()->route('mahasiswa.login');
     }
 
@@ -114,13 +101,13 @@ class MahasiswaAuthController extends Controller
     public function dashboard()
     {
         $mahasiswaId = Session::get('mahasiswa_id');
-
+        
         if (!$mahasiswaId) {
             return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
         }
-
+        
         $mahasiswa = Mahasiswa::find($mahasiswaId);
-
+        
         if (!$mahasiswa) {
             Session::flush();
             return redirect()->route('mahasiswa.login')->with('error', 'Data mahasiswa tidak ditemukan.');
@@ -136,7 +123,7 @@ class MahasiswaAuthController extends Controller
             ->with('ruangan')
             ->get()
             ->groupBy(function($item) {
-                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' .
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
                     $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
             })
             ->map(function($group, $key) {
@@ -158,7 +145,7 @@ class MahasiswaAuthController extends Controller
             ->with('inventaris')
             ->get()
             ->groupBy(function($item) {
-                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' .
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
                     $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
             })
             ->map(function($group, $key) {
@@ -184,7 +171,7 @@ class MahasiswaAuthController extends Controller
             ->with('ruangan')
             ->get()
             ->groupBy(function($item) {
-                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' .
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
                     $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
             })
             ->map(function($group, $key) {
@@ -206,7 +193,7 @@ class MahasiswaAuthController extends Controller
             ->with('inventaris')
             ->get()
             ->groupBy(function($item) {
-                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' .
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
                     $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
             })
             ->map(function($group, $key) {
@@ -226,13 +213,13 @@ class MahasiswaAuthController extends Controller
         $peminjamanDitolak = collect($peminjamanRuanganDitolak->values())
             ->merge($peminjamanInventarisDitolak->values());
 
-
+            
         $peminjamanRuanganPending = PinjamRuangan::where('id_mahasiswa', $mahasiswaId)
             ->where('status', 0)
             ->with('ruangan')
             ->get()
             ->groupBy(function($item) {
-                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' .
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
                     $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
             })
             ->map(function($group, $key) {
@@ -254,7 +241,7 @@ class MahasiswaAuthController extends Controller
             ->with('inventaris')
             ->get()
             ->groupBy(function($item) {
-                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' .
+                return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
                     $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan;
             })
             ->map(function($group, $key) {
@@ -275,7 +262,7 @@ class MahasiswaAuthController extends Controller
             ->merge($peminjamanInventarisPending->values());
 
         return view('mahasiswa.page.dashboard', compact(
-            'mahasiswa', 'ruangans', 'inventaris',
+            'mahasiswa', 'ruangans', 'inventaris', 
             'peminjamanDiterima', 'peminjamanDitolak', 'peminjamanPending'
         ));
     }
@@ -286,32 +273,20 @@ class MahasiswaAuthController extends Controller
         $ruanganTersedia = \App\Models\Ruangan::where('status', 'Tersedia')->count();
         $totalInventaris = \App\Models\Inventaris::count();
         $inventarisTersedia = \App\Models\Inventaris::where('status', 'Tersedia')->count();
-<<<<<<< HEAD
-
-        // Ambil data untuk katalog
-=======
         
    
->>>>>>> 3a630b6df8387db585390b0653ad252283969237
         $ruangans = \App\Models\Ruangan::latest()->take(6)->get();
         $inventaris = \App\Models\Inventaris::latest()->take(6)->get();
-
+        
         return view('landing', compact(
-            'ruangans',
-            'inventaris',
-            'totalRuangan',
-            'ruanganTersedia',
-            'totalInventaris',
+            'ruangans', 
+            'inventaris', 
+            'totalRuangan', 
+            'ruanganTersedia', 
+            'totalInventaris', 
             'inventarisTersedia'
         ));
     }
-
-    public function edit(Request $request): View
-    {
-        $mahasiswa = Auth::guard('mahasiswa')->user();
-        return view('profile.edit', compact('mahasiswa'));
-    }
-
 
 
 }
