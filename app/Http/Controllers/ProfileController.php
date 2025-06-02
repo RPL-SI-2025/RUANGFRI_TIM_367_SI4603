@@ -91,7 +91,7 @@ class ProfileController extends Controller
         $mahasiswa->password = Hash::make($request->password);
         $mahasiswa->save();
 
-        return redirect()->route('profile.edit')->with('status', 'Password berhasil diperbarui!');
+        return redirect()->route('mahasiswa.profile.edit')->with('status', 'Password berhasil diperbarui!');
     }
 
     public function showProfile()

@@ -173,8 +173,8 @@ Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.
     // Profile Management
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
-        Route::patch('/update', [ProfileController::class, 'updateProfile'])->name('update');
-        Route::patch('/update-password', [ProfileController::class, 'updatePassword'])->name('update-password');
+        Route::put('/update', [ProfileController::class, 'updateProfile'])->name('update');
+        Route::get('/update-password', [ProfileController::class, 'updatePassword'])->name('update-password');
         Route::delete('/delete', [ProfileController::class, 'destroy'])->name('delete');
     });
 
