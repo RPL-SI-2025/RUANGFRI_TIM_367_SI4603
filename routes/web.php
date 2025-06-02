@@ -11,6 +11,7 @@ use App\Http\Controllers\laporinventarisController;
 use App\Models\laporinventaris;
 use App\Http\Controllers\MahasiswaAuthController;
 use App\Http\Controllers\AdminLogistikController;
+use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\RuanganCartController;
 use App\Http\Controllers\PelaporanController;
 use App\Http\Controllers\ProfileController;
@@ -25,8 +26,8 @@ use Illuminate\Support\Facades\Auth;
 | Default Routes
 |--------------------------------------------------------------------------
 */
-
 Route::get('/', [MahasiswaAuthController::class, 'landing'])->name('landing');
+
 
 
 

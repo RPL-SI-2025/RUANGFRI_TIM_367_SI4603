@@ -15,10 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string("nama");
             $table->string("email")->unique();
-            $table->string('password')->nullable();
-            $table->string("role")->default("admin");
-            $table->timestamps();
-        }); 
+            $table->string('password')->nullable();            $table->timestamps();
+        });
     }
 
     /**
