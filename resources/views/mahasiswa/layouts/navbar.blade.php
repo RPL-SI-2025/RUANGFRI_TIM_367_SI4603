@@ -61,7 +61,6 @@
                 </li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item py-2 dropdown-item-simple" href="{{ route('mahasiswa.profile.edit') }}"><i class="fas fa-user-circle me-2 text-primary"></i> Profil Saya</a></li>
-                <li><a class="dropdown-item py-2 dropdown-item-simple" href="#"><i class="fas fa-question-circle me-2 text-primary"></i> Bantuan</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
                     <form action="{{ route('mahasiswa.logout') }}" method="POST" id="logout-form">

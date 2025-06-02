@@ -77,8 +77,8 @@ class RuanganCalendar {
             error: function(xhr, status, error) {
                 console.error('Error fetching jadwal data:', error);
                 console.log('Response:', xhr.responseText);
+                console.log('Requested URL:', that.jadwalUrl + '/' + that.ruanganId);
                 
-
                 document.getElementById('calendar-loading')?.remove();
                 
 
@@ -97,7 +97,7 @@ class RuanganCalendar {
                 that.jadwalData = [];
                 that.initializeCalendar();
                 
-
+                
                 document.getElementById('retry-fetch')?.addEventListener('click', function(e) {
                     e.preventDefault();
                     errorAlert.remove();

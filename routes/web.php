@@ -279,7 +279,12 @@ Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.
         Route::prefix('ruangan')->name('ruangan.')->group(function () {
             Route::get('/', [HistoryRuanganController::class, 'index'])->name('index');
             Route::get('/{type}/{id}', [HistoryRuanganController::class, 'show'])->name('show');
-        });
+            });
+    
+    });
+    Route::prefix('jadwal')->name('jadwal.')->group(function () {
+        Route::get('/ruangan/{id}', [App\Http\Controllers\JadwalRuanganController::class, 'getRuanganJadwal'])->name('ruangan');
+        Route::get('/timeslots', [App\Http\Controllers\JadwalRuanganController::class, 'getTimeSlots'])->name('timeslots');
     });
 });
 

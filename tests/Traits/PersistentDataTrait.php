@@ -78,7 +78,7 @@ trait PersistentDataTrait
      */
     protected function setupTestData(): void
     {
-        // Pastikan ada admin logistik untuk testing
+   
         if (DB::table('admin_logistik')->count() == 0) {
             DB::table('admin_logistik')->insert([
                 'nama' => 'Admin Test',
@@ -89,7 +89,7 @@ trait PersistentDataTrait
             ]);
         }
 
-        // Pastikan ada mahasiswa untuk testing
+   
         if (DB::table('mahasiswa')->count() == 0) {
             DB::table('mahasiswa')->insert([
                 'nim' => '12345678',
@@ -123,7 +123,7 @@ trait PersistentDataTrait
         
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        // Reset status ruangan dan inventaris
+   
         DB::table('ruangan')->update(['status' => 'Tersedia']);
         DB::table('inventaris')->update(['status' => 'Tersedia']);
     }

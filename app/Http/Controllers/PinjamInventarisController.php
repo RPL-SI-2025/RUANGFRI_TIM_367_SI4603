@@ -442,7 +442,7 @@ class PinjamInventarisController extends Controller
 
             foreach ($relatedItems as $item) {
 
-                $item->status = 4; // Dibatalkan
+                $item->status = 4;   
                 $item->save();
             }
 

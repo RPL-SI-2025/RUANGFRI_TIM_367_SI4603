@@ -24,6 +24,8 @@ abstract class DuskTestCase extends BaseTestCase
         }
 
         // Setup testing database
+
+
         static::setupTestingDatabase();
     }
 
@@ -33,17 +35,17 @@ abstract class DuskTestCase extends BaseTestCase
     protected static function setupTestingDatabase(): void
     {
         try {
-            // Switch to testing database
+
             config(['database.default' => 'mysql_testing']);
 
-            // Test database connection
+
             DB::connection()->getPdo();
 
-            // Check if the migrations table exists
+
             $tables = DB::select("SHOW TABLES LIKE 'migrations'");
 
             if (empty($tables)) {
-                // Database is empty, run migrations and seeders
+
                 Artisan::call('migrate:fresh', [
                     '--seed' => true,
                     '--force' => true
@@ -57,7 +59,7 @@ abstract class DuskTestCase extends BaseTestCase
         } catch (\Exception $e) {
             echo "Error setting up testing database: " . $e->getMessage() . "\n";
 
-            // Attempt to create the database if it doesn't exist
+
             try {
                 $connection = config('database.connections.mysql');
                 $pdo = new \PDO(
@@ -68,10 +70,10 @@ abstract class DuskTestCase extends BaseTestCase
 
                 $pdo->exec("CREATE DATABASE IF NOT EXISTS ruangfri_testing");
 
-                // Switch to testing database
+
                 config(['database.default' => 'mysql_testing']);
 
-                // Run migrations and seeders
+
                 Artisan::call('migrate:fresh', [
                     '--seed' => true,
                     '--force' => true
@@ -90,16 +92,16 @@ abstract class DuskTestCase extends BaseTestCase
     {
         parent::setUp();
 
-        // Setup consistent test data
+
         $this->setupTestData();
 
-        // Cleanup old session data
+
         $this->cleanupSessionData();
     }
 
     protected function tearDown(): void
     {
-        // Reset only transaction data, not master data
+
         $this->resetTransactionData();
 
         parent::tearDown();
@@ -118,6 +120,7 @@ abstract class DuskTestCase extends BaseTestCase
                 '--headless=new',
             ]);
         })->all());
+
         return RemoteWebDriver::create(
             $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515',
             DesiredCapabilities::chrome()->setCapability(
