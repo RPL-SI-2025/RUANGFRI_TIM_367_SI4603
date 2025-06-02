@@ -5,18 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin Dashboard')</title>
-    
+
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- Animation Libraries -->
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
@@ -61,7 +61,7 @@
             <div class="nav-section">
                 <div class="nav-section-title">Room Management</div>
                 <div class="nav-item">
-                    <a href="#ruanganMenu" class="nav-link" data-bs-toggle="collapse" 
+                    <a href="#ruanganMenu" class="nav-link" data-bs-toggle="collapse"
                     aria-expanded="{{ request()->is('admin/katalog_ruangan*') || request()->is('admin/pinjam-ruangan*') || request()->is('admin/lapor_ruangan*') || request()->is('admin/jadwal_ruangan*') || request()->is('admin/history_ruangan*') ? 'true' : 'false' }}">
                         <div class="nav-icon">
                             <i class="fas fa-building"></i>
@@ -196,12 +196,6 @@
                     <small>Administrator</small>
                 </div>
                 <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-user me-2"></i> Profile
-                    </a>
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-cog me-2"></i> Settings
-                    </a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="fas fa-sign-out-alt me-2"></i> Logout
@@ -222,7 +216,7 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 

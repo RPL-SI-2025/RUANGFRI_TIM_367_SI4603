@@ -26,11 +26,9 @@ use Illuminate\Support\Facades\Auth;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [AdminLogistikController::class, 'landing'])->name('landing');
+Route::get('/', [MahasiswaAuthController::class, 'landing'])->name('landing');
 
-Route::middleware(['auth:mahasiswa'])->group(function () {
-    Route::get('/mahasiswa/dashboard', [MahasiswaAuthController::class, 'dashboard'])->name('mahasiswa.dashboard');
-});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -64,7 +62,7 @@ Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
     Route::get('/login', [MahasiswaAuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [MahasiswaAuthController::class, 'login'])->name('login.submit');
     Route::post('/logout', [MahasiswaAuthController::class, 'logout'])->name('logout');
-    
+
     Route::post('/register', [MahasiswaAuthController::class, 'register'])->name('register.submit');
 });
 
@@ -157,9 +155,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::prefix('historyRuangan')->name('history_ruangan.')->group(function () {
         Route::get('/', [HistoryRuanganController::class, 'adminindex'])->name('index');
         Route::get('/{type}/{id}', [HistoryRuanganController::class, 'adminshow'])->name('show');
- 
+
     });
-    
+
 });
 /*
 |--------------------------------------------------------------------------
@@ -167,16 +165,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.')->group(function() {
-    
-    // Dashboard
 
+    // Dashboard
+    Route::get('/dashboard', [MahasiswaAuthController::class, 'dashboard'])->name('dashboard');
 
     // Profile Management
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
-        Route::patch('/update', [ProfileController::class, 'updateProfile'])->name('update');
+       Route::patch('/update', [ProfileController::class, 'update'])->name('update');
         Route::patch('/update-password', [ProfileController::class, 'updatePassword'])->name('update-password');
         Route::delete('/delete', [ProfileController::class, 'destroy'])->name('delete');
+        Route::patch('/update-borrowing-info', [ProfileController::class, 'updateBorrowingInfo'])->name('updateBorrowingInfo');
+
     });
 
     // Katalog
@@ -186,7 +186,7 @@ Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.
             Route::get('/', [InventarisController::class, 'mahasiswaIndex'])->name('index');
             Route::get('/{id}', [InventarisController::class, 'mahasiswaShow'])->name('show');
         });
-        
+
         // Ruangan Catalog
         Route::prefix('ruangan')->name('ruangan.')->group(function () {
             Route::get('/', [RuanganController::class, 'mahasiswaIndex'])->name('index');
@@ -269,20 +269,22 @@ Route::middleware([MahasiswaAuth::class])->prefix('mahasiswa')->name('mahasiswa.
 
     // History Management
     Route::prefix('history')->name('history.')->group(function () {
-        Route::get('/', [HistoryController::class, 'index'])->name('index');
-        Route::get('/{type}/{id}', [HistoryController::class, 'show'])->name('show');
-        Route::get('/history', [HistoryController::class, 'index'])->name('mahasiswa.history.history_inventaris.index');
-        Route::get('/history/{type}/{id}', [HistoryController::class, 'show'])->name('mahasiswa.history.history_inventaris.show');
-        Route::get('/historyRuangan', [HistoryRuanganController::class, 'index'])->name('mahasiswa.history.history_ruangan.index');
-        Route::get('/historyRuangan/{type}/{id}', [HistoryRuanganController::class, 'show'])->name('mahasiswa.history.history_ruangan.show');
+        // Inventaris History
+        Route::prefix('inventaris')->name('inventaris.')->group(function () {
+            Route::get('/', [HistoryController::class, 'index'])->name('index');
+            Route::get('/{type}/{id}', [HistoryController::class, 'show'])->name('show');
+        });
 
+        // Ruangan History
+        Route::prefix('ruangan')->name('ruangan.')->group(function () {
+            Route::get('/', [HistoryRuanganController::class, 'index'])->name('index');
+            Route::get('/{type}/{id}', [HistoryRuanganController::class, 'show'])->name('show');
+            });
     
     });
-
-    // Jadwal API Routes
-    Route::prefix('jadwal')->group(function () {
-        Route::get('/ruangan/{id_ruangan}', [App\Http\Controllers\JadwalRuanganController::class, 'getRuanganJadwal']);
-        Route::get('/timeslots', [App\Http\Controllers\JadwalRuanganController::class, 'getTimeSlots']);
+    Route::prefix('jadwal')->name('jadwal.')->group(function () {
+        Route::get('/ruangan/{id}', [App\Http\Controllers\JadwalRuanganController::class, 'getRuanganJadwal'])->name('ruangan');
+        Route::get('/timeslots', [App\Http\Controllers\JadwalRuanganController::class, 'getTimeSlots'])->name('timeslots');
     });
 });
 

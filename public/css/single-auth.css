@@ -31,7 +31,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Background Elements */
+  
 .auth-background {
     position: fixed;
     top: 0;
@@ -80,16 +80,16 @@ body {
     66% { transform: translate(-20px, 20px) rotate(240deg); }
 }
 
-/* Main Container */
+  
 .auth-container {
-    max-width: 520px; /* Increased from 450px */
+    max-width: 520px;   
     width: 100%;
     margin: 2rem;
     position: relative;
     z-index: 1;
 }
 
-/* Back Home Button */
+  
 .back-home {
     margin-bottom: 2rem;
     text-align: center;
@@ -118,7 +118,7 @@ body {
     transform: translateY(-2px);
 }
 
-/* Auth Card */
+  
 .auth-card {
     background: white;
     border-radius: 24px;
@@ -139,7 +139,7 @@ body {
     }
 }
 
-/* Brand Header */
+  
 .auth-header {
     background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
     color: white;
@@ -195,7 +195,7 @@ body {
     font-weight: 400;
 }
 
-/* Tab Navigation */
+  
 .auth-tabs {
     display: flex;
     padding: 0;
@@ -240,11 +240,11 @@ body {
     background: rgba(46, 204, 113, 0.05);
 }
 
-/* Forms Container - DIPERBAIKI */
+  
 .forms-container {
     position: relative;
-    min-height: 600px; /* Increased from 500px */
-    overflow: hidden; /* Prevent content overflow */
+    min-height: 600px;   
+    overflow: hidden;   
 }
 
 .auth-form {
@@ -252,13 +252,13 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    padding: 2rem; /* Reduced from 2.5rem 2rem */
+    padding: 2rem;   
     opacity: 0;
     transform: translateX(30px);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
-    max-height: none; /* Remove height restriction */
-    overflow-y: auto; /* Allow scrolling if needed */
+    max-height: none;   
+    overflow-y: auto;   
 }
 
 .auth-form.active {
@@ -267,14 +267,14 @@ body {
     pointer-events: auto;
 }
 
-/* Form Header */
+  
 .form-header {
     text-align: center;
-    margin-bottom: 1.5rem; /* Reduced from 2rem */
+    margin-bottom: 1.5rem;   
 }
 
 .form-header h2 {
-    font-size: 1.6rem; /* Reduced from 1.75rem */
+    font-size: 1.6rem;   
     font-weight: 700;
     color: var(--dark-gray);
     margin-bottom: 0.5rem;
@@ -286,16 +286,16 @@ body {
     font-weight: 400;
 }
 
-/* Form Groups - DIPERBAIKI */
+  
 .form-group {
-    margin-bottom: 1.25rem; /* Reduced from 1.5rem */
+    margin-bottom: 1.25rem;   
 }
 
 .form-label {
-    font-size: 0.9rem; /* Reduced from 0.95rem */
+    font-size: 0.9rem;   
     font-weight: 600;
     color: var(--dark-gray);
-    margin-bottom: 0.4rem; /* Reduced from 0.5rem */
+    margin-bottom: 0.4rem;   
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -307,7 +307,7 @@ body {
     font-size: 0.9rem;
 }
 
-/* Input Wrapper */
+  
 .input-wrapper {
     position: relative;
 }
@@ -315,12 +315,12 @@ body {
 .form-control {
     border: 2px solid var(--light-gray);
     border-radius: 12px;
-    padding: 0.75rem 1rem; /* Reduced from 0.875rem 1rem */
-    font-size: 0.95rem; /* Reduced from 1rem */
+    padding: 0.75rem 1rem;   
+    font-size: 0.95rem;   
     transition: all 0.3s ease;
     background: #fafafa;
     width: 100%;
-    line-height: 1.4; /* Add line-height for better spacing */
+    line-height: 1.4;   
 }
 
 .form-control:focus {
@@ -341,7 +341,7 @@ body {
     box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.15);
 }
 
-/* Input Focus Animation */
+  
 .input-focus {
     position: absolute;
     bottom: 0;
@@ -358,7 +358,7 @@ body {
     width: 100%;
 }
 
-/* Password Toggle */
+  
 .password-toggle {
     position: absolute;
     right: 12px;
@@ -379,17 +379,17 @@ body {
     background: rgba(46, 204, 113, 0.1);
 }
 
-/* Password Strength - DIPERBAIKI */
+  
 .password-strength {
-    margin-top: 0.5rem; /* Reduced from 0.75rem */
+    margin-top: 0.5rem;   
 }
 
 .strength-bar {
-    height: 3px; /* Reduced from 4px */
+    height: 3px;   
     background: #e0e0e0;
     border-radius: 2px;
     overflow: hidden;
-    margin-bottom: 0.4rem; /* Reduced from 0.5rem */
+    margin-bottom: 0.4rem;   
 }
 
 .strength-fill {
@@ -420,15 +420,15 @@ body {
 }
 
 .strength-text {
-    font-size: 0.8rem; /* Reduced from 0.875rem */
+    font-size: 0.8rem;   
     color: var(--medium-gray);
     font-weight: 500;
 }
 
-/* Password Match */
+  
 .password-match {
-    margin-top: 0.4rem; /* Reduced from 0.5rem */
-    font-size: 0.8rem; /* Reduced from 0.875rem */
+    margin-top: 0.4rem;   
+    font-size: 0.8rem;   
     font-weight: 500;
 }
 
@@ -440,12 +440,12 @@ body {
     color: #e74c3c;
 }
 
-/* Form Options */
+  
 .form-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem; /* Reduced from 2rem */
+    margin-bottom: 1.5rem;   
     flex-wrap: wrap;
     gap: 0.5rem;
 }
@@ -470,7 +470,7 @@ body {
 }
 
 .form-check-label {
-    font-size: 0.85rem; /* Reduced from 0.9rem */
+    font-size: 0.85rem;   
     color: var(--dark-gray);
     font-weight: 500;
     margin: 0;
@@ -480,7 +480,7 @@ body {
 .forgot-link {
     color: var(--accent-blue);
     text-decoration: none;
-    font-size: 0.85rem; /* Reduced from 0.9rem */
+    font-size: 0.85rem;   
     font-weight: 500;
     transition: all 0.3s ease;
 }
@@ -490,20 +490,20 @@ body {
     text-decoration: underline;
 }
 
-/* Submit Button */
+  
 .btn-submit {
     background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
     color: white;
     border: none;
     border-radius: 12px;
-    padding: 0.875rem 2rem; /* Reduced from 1rem 2rem */
-    font-size: 0.95rem; /* Reduced from 1rem */
+    padding: 0.875rem 2rem;   
+    font-size: 0.95rem;   
     font-weight: 600;
     width: 100%;
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
-    margin-bottom: 1.25rem; /* Reduced from 1.5rem */
+    margin-bottom: 1.25rem;   
 }
 
 .btn-submit::before {
@@ -563,11 +563,11 @@ body {
     to { transform: rotate(360deg); }
 }
 
-/* Divider */
+  
 .divider {
     position: relative;
     text-align: center;
-    margin: 1.25rem 0; /* Reduced from 1.5rem 0 */
+    margin: 1.25rem 0;   
 }
 
 .divider::before {
@@ -584,18 +584,18 @@ body {
     background: white;
     padding: 0 1rem;
     color: var(--medium-gray);
-    font-size: 0.8rem; /* Reduced from 0.875rem */
+    font-size: 0.8rem;   
     font-weight: 500;
 }
 
-/* Social Button */
+  
 .btn-social {
     background: white;
     color: var(--dark-gray);
     border: 2px solid var(--light-gray);
     border-radius: 12px;
-    padding: 0.75rem 2rem; /* Reduced from 0.875rem 2rem */
-    font-size: 0.95rem; /* Reduced from 1rem */
+    padding: 0.75rem 2rem;   
+    font-size: 0.95rem;   
     font-weight: 500;
     width: 100%;
     display: flex;
@@ -603,7 +603,7 @@ body {
     justify-content: center;
     gap: 0.75rem;
     transition: all 0.3s ease;
-    margin-bottom: 0.5rem; /* Reduced from 1rem */
+    margin-bottom: 0.5rem;   
 }
 
 .btn-social:hover {
@@ -614,11 +614,11 @@ body {
 }
 
 .btn-social i {
-    font-size: 1.1rem; /* Reduced from 1.25rem */
+    font-size: 1.1rem;   
     color: #DB4437;
 }
 
-/* Terms Link */
+  
 .terms-link {
     color: var(--primary-green);
     text-decoration: none;
@@ -629,12 +629,12 @@ body {
     text-decoration: underline;
 }
 
-/* Alerts */
+  
 .alert {
     border: none;
     border-radius: 12px;
-    padding: 0.875rem; /* Reduced from 1rem */
-    margin-bottom: 1.25rem; /* Reduced from 1.5rem */
+    padding: 0.875rem;   
+    margin-bottom: 1.25rem;   
     font-weight: 500;
     display: flex;
     align-items: flex-start;
@@ -660,18 +660,18 @@ body {
     font-size: 0.85rem;
 }
 
-/* Invalid Feedback */
+  
 .invalid-feedback {
     display: block;
     color: #e74c3c;
-    font-size: 0.8rem; /* Reduced from 0.875rem */
-    margin-top: 0.4rem; /* Reduced from 0.5rem */
+    font-size: 0.8rem;   
+    margin-top: 0.4rem;   
     font-weight: 500;
 }
 
-/* Form Check for Terms - DIPERBAIKI */
+  
 .form-check {
-    margin-bottom: 1rem; /* Reduced from 1.5rem for the terms section */
+    margin-bottom: 1rem;   
 }
 
 .form-check.mb-4 {
@@ -683,7 +683,7 @@ body {
     line-height: 1.4;
 }
 
-/* Responsive Design - DIPERBAIKI */
+  
 @media (max-width: 768px) {
     .auth-container {
         margin: 1rem;
@@ -708,11 +708,11 @@ body {
     }
 
     .auth-form {
-        padding: 1.5rem; /* Reduced padding on mobile */
+        padding: 1.5rem;   
     }
 
     .forms-container {
-        min-height: 650px; /* Increased for mobile */
+        min-height: 650px;   
     }
 
     .form-header h2 {
@@ -745,11 +745,11 @@ body {
     }
 
     .auth-form {
-        padding: 1.25rem; /* Further reduced padding */
+        padding: 1.25rem;   
     }
 
     .forms-container {
-        min-height: 700px; /* Increased for small mobile */
+        min-height: 700px;   
     }
 
     .form-control {
@@ -785,7 +785,7 @@ body {
 
 @media (max-width: 380px) {
     .forms-container {
-        min-height: 750px; /* Even more height for very small screens */
+        min-height: 750px;   
     }
     
     .auth-form {
@@ -797,7 +797,7 @@ body {
     }
 }
 
-/* Animation for form validation */
+  
 .shake {
     animation: shake 0.5s ease-in-out;
 }
@@ -808,13 +808,13 @@ body {
     75% { transform: translateX(5px); }
 }
 
-/* Loading state for button */
+  
 .btn-submit.loading,
 .btn-social.loading {
     pointer-events: none;
 }
 
-/* Focus visible for accessibility */
+  
 .tab-btn:focus-visible,
 .btn-submit:focus-visible,
 .btn-social:focus-visible,
@@ -823,7 +823,7 @@ body {
     outline-offset: 2px;
 }
 
-/* Scrollbar styling for forms container */
+  
 .auth-form::-webkit-scrollbar {
     width: 4px;
 }
