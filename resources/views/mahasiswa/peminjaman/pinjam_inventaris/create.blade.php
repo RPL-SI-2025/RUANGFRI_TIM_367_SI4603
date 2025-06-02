@@ -1,181 +1,352 @@
+
 @extends('mahasiswa.layouts.app')
 
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/edit_peminjaman.css') }}">
 <div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card shadow-sm border-0 rounded-lg">
-                <div class="card-header bg-white border-bottom-0 pt-4 pb-3">
+        <div class="col-md-12 col-lg-10 col-xl-9">
+            <!-- Enhanced Header Card -->
+            <div class="card border-0 shadow-lg mb-4 header-card">
+                <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h4 class="text-primary mb-0 fw-bold">
-                            <i class="fa fa-file-text me-2"></i>Pengajuan Peminjaman
-                        </h4>
-                        <a href="{{ route('mahasiswa.cart.keranjang_inventaris.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
-                            <i class="fa fa-arrow-left me-1"></i> Kembali ke Keranjang
+                        <div class="d-flex align-items-center">
+                            <div class="icon-wrapper me-3">
+                                <i class="fa fa-file-text"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white mb-1 fw-bold">Pengajuan Peminjaman Inventaris</h4>
+                                <p class="text-white-50 mb-0">Ajukan peminjaman inventaris untuk kebutuhan akademik Anda</p>
+                            </div>
+                        </div>
+                        <a href="{{ route('mahasiswa.cart.keranjang_inventaris.index') }}" 
+                           class="btn btn-outline-light btn-floating">
+                            <i class="fa fa-arrow-left me-2"></i>Kembali ke Keranjang
                         </a>
                     </div>
                 </div>
+            </div>
 
-                <div class="card-body px-4">
-                    @if (session('error'))
-                        <div class="alert alert-danger border-0 shadow-sm">
-                            <i class="fa fa-exclamation-circle me-2"></i>{{ session('error') }}
+            <!-- Progress Indicator -->
+            <div class="progress-indicator mb-4">
+                <div class="progress-step active">
+                    <div class="step-number">1</div>
+                    <span>Detail Inventaris</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step active">
+                    <div class="step-number">2</div>
+                    <span>Waktu & Tanggal</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step active">
+                    <div class="step-number">3</div>
+                    <span>Dokumen Pendukung</span>
+                </div>
+            </div>
+
+            <!-- Alert Messages -->
+            @if (session('error'))
+                <div class="alert alert-danger alert-modern border-0 shadow-sm mb-4">
+                    <div class="d-flex align-items-center">
+                        <div class="alert-icon me-3">
+                            <i class="fa fa-exclamation-triangle"></i>
                         </div>
-                    @endif
-
-                    <div class="mb-4">
-                        <h5 class="text-secondary fw-bold mb-3">
-                            <i class="fa fa-list-alt me-2"></i>Daftar Item
-                        </h5>
-                        <div class="table-responsive">
-                            <table class="table table-hover border">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="py-3">No</th>
-                                        <th class="py-3">Nama Inventaris</th>
-                                        <th class="py-3">Jumlah</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($cartItems as $id => $item)
-                                        <tr class="align-middle">
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td class="fw-medium">{{ $item['nama_inventaris'] }}</td>
-                                            <td>{{ $item['jumlah'] }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                        <div>
+                            <strong>Kesalahan!</strong>
+                            <p class="mb-0 mt-1">{{ session('error') }}</p>
                         </div>
                     </div>
+                </div>
+            @endif
 
-                    <div class="mt-5">
-                        <h5 class="text-secondary fw-bold mb-4">
-                            <i class="fa fa-calendar me-2"></i>Informasi Pengajuan
-                        </h5>
-                        
-                        <form action="{{ route('mahasiswa.peminjaman.pinjam-inventaris.store') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="tanggal_pengajuan" class="form-label fw-medium">Tanggal Pengajuan</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0">
-                                                <i class="fa fa-calendar-check-o text-primary"></i>
-                                            </span>
-                                            <input type="date" class="form-control @error('tanggal_pengajuan') is-invalid @enderror border-start-0" 
-                                                id="tanggal_pengajuan" name="tanggal_pengajuan" value="{{ old('tanggal_pengajuan', date('Y-m-d')) }}" required>
-                                        </div>
-                                        @error('tanggal_pengajuan')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="tanggal_selesai" class="form-label fw-medium">Tanggal Selesai</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0">
-                                                <i class="fa fa-calendar-times-o text-primary"></i>
-                                            </span>
-                                            <input type="date" class="form-control @error('tanggal_selesai') is-invalid @enderror border-start-0" 
-                                                id="tanggal_selesai" name="tanggal_selesai" value="{{ old('tanggal_selesai') }}" required>
-                                        </div>
-                                        @error('tanggal_selesai')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
+            <!-- Inventaris Details Section -->
+            <div class="section-card mb-4">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fa fa-box"></i>
+                    </div>
+                    <div>
+                        <h5 class="section-title">Detail Inventaris</h5>
+                        <p class="section-subtitle">Inventaris yang akan dipinjam</p>
+                    </div>
+                </div>
+                
+                <div class="section-content">
+                    <div class="room-grid">
+                        @foreach($cartItems as $id => $item)
+                            <div class="room-card">
+                                <div class="room-number">{{ $loop->iteration }}</div>
+                                <div class="room-info">
+                                    <h6 class="room-name">{{ $item['nama_inventaris'] }}</h6>
+                                    <div class="room-details">
+                                        <span class="detail-item">
+                                            <i class="fa fa-cubes"></i>
+                                            {{ $item['jumlah'] }} unit
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="waktu_mulai" class="form-label fw-medium">Waktu Mulai</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0">
-                                                <i class="fa fa-clock-o text-primary"></i>
-                                            </span>
-                                            <input type="time" class="form-control @error('waktu_mulai') is-invalid @enderror border-start-0" 
-                                                id="waktu_mulai" name="waktu_mulai" value="{{ old('waktu_mulai') }}" required>
-                                        </div>
-                                        @error('waktu_mulai')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="waktu_selesai" class="form-label fw-medium">Waktu Selesai</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0">
-                                                <i class="fa fa-clock-o text-primary"></i>
-                                            </span>
-                                            <input type="time" class="form-control @error('waktu_selesai') is-invalid @enderror border-start-0" 
-                                                id="waktu_selesai" name="waktu_selesai" value="{{ old('waktu_selesai') }}" required>
-                                        </div>
-                                        @error('waktu_selesai')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group mb-5">
-                                <label for="file_scan" class="form-label fw-medium">File Scan </label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0">
-                                        <i class="fa fa-file-pdf-o text-primary"></i>
-                                    </span>
-                                    <input type="file" class="form-control @error('file_scan') is-invalid @enderror border-start-0" 
-                                        id="file_scan" name="file_scan">
-                                </div>
-                                <small class="form-text text-muted mt-1">
-                                    Upload surat permohonan atau dokumen pendukung (PDF, JPG, PNG, max 2MB)
-                                </small>
-                                @error('file_scan')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-
-                            <div class="d-flex justify-content-end mt-5 pt-3 border-top">
-                                <button type="submit" class="btn btn-success rounded-pill px-5">
-                                    <i class="fa fa-paper-plane me-2"></i> Ajukan Peminjaman
-                                </button>
-                            </div>
-                        </form>
+                        @endforeach
                     </div>
                 </div>
             </div>
+
+            <!-- Form -->
+            <form action="{{ route('mahasiswa.peminjaman.pinjam-inventaris.store') }}" 
+                  method="POST" enctype="multipart/form-data" id="peminjamanForm">
+                @csrf
+                
+                <!-- Date & Time Section -->
+                <div class="section-card mb-4">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fa fa-calendar-alt"></i>
+                        </div>
+                        <div>
+                            <h5 class="section-title">Waktu & Tanggal</h5>
+                            <p class="section-subtitle">Tentukan periode peminjaman inventaris</p>
+                        </div>
+                    </div>
+                    
+                    <div class="section-content">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group-modern">
+                                    <label for="tanggal_pengajuan" class="form-label-modern">
+                                        <i class="fa fa-calendar me-2"></i>Tanggal Pengajuan
+                                    </label>
+                                    <div class="input-group-modern">
+                                        <input type="date" 
+                                               class="form-control form-control-modern @error('tanggal_pengajuan') is-invalid @enderror" 
+                                               id="tanggal_pengajuan" 
+                                               name="tanggal_pengajuan" 
+                                               value="{{ old('tanggal_pengajuan', date('Y-m-d')) }}" 
+                                               required>
+                                    </div>
+                                    <small class="form-help">Tanggal mulai peminjaman inventaris</small>
+                                    @error('tanggal_pengajuan')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group-modern">
+                                    <label for="tanggal_selesai" class="form-label-modern">
+                                        <i class="fa fa-calendar-check me-2"></i>Tanggal Selesai
+                                    </label>
+                                    <div class="input-group-modern">
+                                        <input type="date" 
+                                               class="form-control form-control-modern @error('tanggal_selesai') is-invalid @enderror" 
+                                               id="tanggal_selesai" 
+                                               name="tanggal_selesai" 
+                                               value="{{ old('tanggal_selesai') }}" 
+                                               required>
+                                    </div>
+                                    <small class="form-help">Tanggal berakhir peminjaman inventaris</small>
+                                    @error('tanggal_selesai')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group-modern">
+                                    <label for="waktu_mulai" class="form-label-modern">
+                                        <i class="fa fa-clock me-2"></i>Waktu Mulai
+                                    </label>
+                                    <div class="input-group-modern">
+                                        <input type="time" 
+                                               class="form-control form-control-modern @error('waktu_mulai') is-invalid @enderror" 
+                                               id="waktu_mulai" 
+                                               name="waktu_mulai" 
+                                               value="{{ old('waktu_mulai') }}" 
+                                               required>
+                                    </div>
+                                    <small class="form-help">Waktu mulai penggunaan inventaris</small>
+                                    @error('waktu_mulai')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group-modern">
+                                    <label for="waktu_selesai" class="form-label-modern">
+                                        <i class="fa fa-clock me-2"></i>Waktu Selesai
+                                    </label>
+                                    <div class="input-group-modern">
+                                        <input type="time" 
+                                               class="form-control form-control-modern @error('waktu_selesai') is-invalid @enderror" 
+                                               id="waktu_selesai" 
+                                               name="waktu_selesai" 
+                                               value="{{ old('waktu_selesai') }}" 
+                                               required>
+                                    </div>
+                                    <small class="form-help">Waktu selesai penggunaan inventaris</small>
+                                    @error('waktu_selesai')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documents Section -->
+                <div class="section-card mb-4">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fa fa-paperclip"></i>
+                        </div>
+                        <div>
+                            <h5 class="section-title">Dokumen Pendukung</h5>
+                            <p class="section-subtitle">Upload dokumen yang diperlukan</p>
+                        </div>
+                    </div>
+                    
+                    <div class="section-content">
+                        <div class="file-upload-area">
+                            <div class="upload-box">
+                                <div class="upload-icon">
+                                    <i class="fa fa-cloud-upload"></i>
+                                </div>
+                                <div class="upload-content">
+                                    <h6>Upload Dokumen</h6>
+                                    <p>Upload surat permohonan atau dokumen pendukung</p>
+                                    <input type="file" 
+                                           class="form-control-file @error('file_scan') is-invalid @enderror" 
+                                           id="file_scan" 
+                                           name="file_scan" 
+                                           accept=".pdf,.jpg,.jpeg,.png">
+                                    <small class="file-info">Format: PDF, JPG, PNG (Max: 2MB)</small>
+                                </div>
+                            </div>
+                            @error('file_scan')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-section">
+                    <div class="action-buttons">
+                        <a href="{{ route('mahasiswa.cart.keranjang_inventaris.index') }}" 
+                           class="btn btn-secondary btn-lg">
+                            <i class="fa fa-times me-2"></i>Batal
+                        </a>
+                        <button type="submit" class="btn btn-success btn-lg" id="submitBtn">
+                            <i class="fa fa-paper-plane me-2"></i>Ajukan Peminjaman
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
-<style>
-.input-group-text {
-    border-radius: 0.375rem 0 0 0.375rem;
-}
-.form-control {
-    border-radius: 0 0.375rem 0.375rem 0;
-}
-.table th, .table td {
-    vertical-align: middle;
-}
-.card {
-    transition: all 0.3s ease;
-}
-.btn {
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-.btn-success {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-.form-label {
-    margin-bottom: 0.5rem;
-    color: #444;
-}
-</style>
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Date validation
+    const tanggalMulai = document.getElementById('tanggal_pengajuan');
+    const tanggalSelesai = document.getElementById('tanggal_selesai');
+    const waktuMulai = document.getElementById('waktu_mulai');
+    const waktuSelesai = document.getElementById('waktu_selesai');
+    
+    // Set minimum date to today
+    const today = new Date().toISOString().split('T')[0];
+    tanggalMulai.min = today;
+    
+    // Update end date minimum when start date changes
+    tanggalMulai.addEventListener('change', function() {
+        tanggalSelesai.min = this.value;
+        if (tanggalSelesai.value && tanggalSelesai.value < this.value) {
+            tanggalSelesai.value = this.value;
+        }
+    });
+    
+    // Validate time when on same date
+    function validateTime() {
+        if (tanggalMulai.value === tanggalSelesai.value && waktuMulai.value && waktuSelesai.value) {
+            if (waktuSelesai.value <= waktuMulai.value) {
+                waktuSelesai.setCustomValidity('Waktu selesai harus lebih dari waktu mulai');
+            } else {
+                waktuSelesai.setCustomValidity('');
+            }
+        }
+    }
+    
+    tanggalMulai.addEventListener('change', validateTime);
+    tanggalSelesai.addEventListener('change', validateTime);
+    waktuMulai.addEventListener('change', validateTime);
+    waktuSelesai.addEventListener('change', validateTime);
+    
+    // File upload enhancement
+    const fileInput = document.getElementById('file_scan');
+    const uploadBox = document.querySelector('.upload-box');
+    
+    if (uploadBox && fileInput) {
+        // Click to upload
+        uploadBox.addEventListener('click', function() {
+            fileInput.click();
+        });
+        
+        // Drag and drop functionality
+        uploadBox.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadBox.style.borderColor = 'var(--primary-color)';
+            uploadBox.style.background = 'rgba(30, 41, 59, 0.05)';
+        });
+        
+        uploadBox.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            uploadBox.style.borderColor = 'var(--border-color)';
+            uploadBox.style.background = 'transparent';
+        });
+        
+        uploadBox.addEventListener('drop', function(e) {
+            e.preventDefault();
+            uploadBox.style.borderColor = 'var(--border-color)';
+            uploadBox.style.background = 'transparent';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                updateFileDisplay(uploadBox, files[0]);
+            }
+        });
+        
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                updateFileDisplay(uploadBox, e.target.files[0]);
+            }
+        });
+    }
+    
+    function updateFileDisplay(uploadBox, file) {
+        const uploadContent = uploadBox.querySelector('.upload-content h6');
+        if (uploadContent) {
+            uploadContent.textContent = `File dipilih: ${file.name}`;
+        }
+    }
+    
+    // Form validation enhancement
+    const form = document.getElementById('peminjamanForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const submitButton = document.getElementById('submitBtn');
+            if (submitButton) {
+                submitButton.innerHTML = '<i class="fa fa-spinner fa-spin me-2"></i>Mengajukan Peminjaman...';
+                submitButton.disabled = true;
+            }
+        });
+    }
+});
+</script>
+@endpush
 @endsection

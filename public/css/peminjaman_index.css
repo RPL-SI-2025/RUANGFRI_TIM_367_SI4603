@@ -134,11 +134,11 @@
 }
 
 .header-title-highlight {
-    background: linear-gradient(135deg, #1e293b, #334155);
+    background: linear-gradient(45deg, #10b981, #3b82f6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 0 10px rgba(30, 41, 59, 0.3));
+    
 }
 
 .header-subtitle {

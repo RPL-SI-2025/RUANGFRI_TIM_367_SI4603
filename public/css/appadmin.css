@@ -29,7 +29,7 @@ body {
     color: var(--dark-color);
 }
 
-/* Page Loader */
+
 .page-loader {
     position: fixed;
     top: 0;
@@ -57,7 +57,7 @@ body {
     to { transform: rotate(360deg); }
 }
 
-/* Sidebar */
+
 .sidebar {
     position: fixed;
     top: 0;
@@ -90,7 +90,7 @@ body {
     width: 80px;
 }
 
-/* Sidebar Header */
+
 .sidebar-header {
     padding: 2rem 1.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -127,7 +127,7 @@ body {
     display: none;
 }
 
-/* Navigation */
+
 .sidebar-nav {
     padding: 1.5rem 0;
 }
@@ -217,7 +217,7 @@ body {
     display: none;
 }
 
-/* Submenu */
+
 .submenu {
     background: rgba(0, 0, 0, 0.2);
     margin: 0.25rem 0;
@@ -241,7 +241,7 @@ body {
     margin-right: 1.5rem;
 }
 
-/* Main Header */
+
 .main-header {
     position: fixed;
     top: 0;
@@ -303,7 +303,7 @@ body {
     gap: 1rem;
 }
 
-/* Notification Button */
+
 .notification-btn {
     position: relative;
     background: none;
@@ -348,7 +348,7 @@ body {
     100% { transform: scale(1); }
 }
 
-/* User Profile */
+
 .user-profile {
     display: flex;
     align-items: center;
@@ -389,7 +389,7 @@ body {
     font-size: 0.75rem;
 }
 
-/* Main Content */
+
 .main-content {
     margin-left: var(--sidebar-width);
     margin-top: var(--header-height);
@@ -402,7 +402,7 @@ body {
     margin-left: 80px;
 }
 
-/* Sidebar Overlay for Mobile */
+
 .sidebar-overlay {
     position: fixed;
     top: 0;
@@ -422,7 +422,7 @@ body {
     visibility: visible;
 }
 
-/* Custom Dropdown */
+
 .dropdown-menu {
     border: none;
     box-shadow: var(--box-shadow-lg);
@@ -449,7 +449,7 @@ body {
     color: var(--danger-color);
 }
 
-/* Responsive Design */
+
 @media (max-width: 1024px) {
     :root {
         --sidebar-width: 260px;
@@ -497,7 +497,7 @@ body {
     }
 }
 
-/* Animation Classes */
+
 .fade-in {
     opacity: 0;
     animation: fadeIn 0.5s ease forwards;
@@ -520,7 +520,7 @@ body {
     }
 }
 
-/* Utility Classes */
+
 .glass-effect {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(20px);
@@ -547,7 +547,7 @@ body {
     background: linear-gradient(135deg, var(--info-color), #0891b2);
 }
 
-/* Dark mode support */
+
 @media (prefers-color-scheme: dark) {
     :root {
         --light-color: #1e293b;

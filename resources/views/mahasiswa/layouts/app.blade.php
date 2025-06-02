@@ -10,9 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/appmahasiswa.css') }}">
     <link href="{{ asset('css/timeslot-styles.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom-modal.css') }}" rel="stylesheet">
     @stack('styles')
 </head>
-<body class="animated-bg">
+<body >
     <div class="app-layout">
         @include('mahasiswa.layouts.sidebar')
         

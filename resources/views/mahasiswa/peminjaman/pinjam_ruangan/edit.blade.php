@@ -2,230 +2,301 @@
 @extends('mahasiswa.layouts.app')
 
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/edit_peminjaman.css') }}">
 <div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card shadow-sm border-0 rounded-lg">
-                <div class="card-header bg-white border-bottom-0 pt-4 pb-3">
+        <div class="col-md-12 col-lg-10 col-xl-9">
+            <!-- Enhanced Header Card -->
+            <div class="card border-0 shadow-lg mb-4 header-card">
+                <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h4 class="text-primary mb-0 fw-bold">
-                            <i class="fa fa-edit me-2"></i>Edit Pengajuan Peminjaman Ruangan
-                        </h4>
-                        <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
-                            <i class="fa fa-arrow-left me-1"></i> Kembali
+                        <div class="d-flex align-items-center">
+                            <div class="icon-wrapper me-3">
+                                <i class="fa fa-edit"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white mb-1 fw-bold">Edit Pengajuan Peminjaman Ruangan</h4>
+                                <p class="text-white-50 mb-0">Perbarui informasi peminjaman ruangan Anda</p>
+                            </div>
+                        </div>
+                        <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.index') }}" 
+                           class="btn btn-outline-light btn-floating">
+                            <i class="fa fa-arrow-left me-2"></i>Kembali
                         </a>
                     </div>
                 </div>
+            </div>
 
-                <div class="card-body px-4">
-                    @if (session('error'))
-                        <div class="alert alert-danger border-0 shadow-sm">
-                            <i class="fa fa-exclamation-circle me-2"></i>{{ session('error') }}
+            <!-- Progress Indicator -->
+            <div class="progress-indicator mb-4">
+                <div class="progress-step active">
+                    <div class="step-number">1</div>
+                    <span>Detail Ruangan</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step active">
+                    <div class="step-number">2</div>
+                    <span>Waktu & Tanggal</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step active">
+                    <div class="step-number">3</div>
+                    <span>Informasi Tambahan</span>
+                </div>
+            </div>
+
+            <!-- Alert Messages -->
+            @if (session('error'))
+                <div class="alert alert-danger alert-modern border-0 shadow-sm mb-4">
+                    <div class="d-flex align-items-center">
+                        <div class="alert-icon me-3">
+                            <i class="fa fa-exclamation-triangle"></i>
                         </div>
-                    @endif
-
-                    <div class="mb-4">
-                        <h5 class="text-secondary fw-bold mb-3">
-                            <i class="fa fa-list-alt me-2"></i>Daftar Ruangan
-                        </h5>
-                        <div class="table-responsive">
-                            <table class="table table-hover border">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="py-3">No</th>
-                                        <th class="py-3">Nama Ruangan</th>
-                                        <th class="py-3">Kapasitas</th>
-                                        <th class="py-3">Lokasi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($relatedBookings as $booking)
-                                        <tr class="align-middle">
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td class="fw-medium">{{ $booking->ruangan->nama_ruangan }}</td>
-                                            <td>{{ $booking->ruangan->kapasitas }} orang</td>
-                                            <td>{{ $booking->ruangan->lokasi }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                        <div>
+                            <strong>Kesalahan!</strong>
+                            <p class="mb-0 mt-1">{{ session('error') }}</p>
                         </div>
                     </div>
+                </div>
+            @endif
 
-                    <div class="mt-5">
-                        <h5 class="text-secondary fw-bold mb-4">
-                            <i class="fa fa-calendar me-2"></i>Informasi Pengajuan
-                        </h5>
-                        
-                        <form action="{{ route('pinjam-ruangan.update', $pinjamRuangan->id) }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            @method('PUT')
-                            
-                            <div class="card mb-4 border shadow-sm">
-                                <div class="card-body">
-                                    <div class="mb-3">
-                                        <label for="tanggal_booking" class="form-label">Tanggal Booking</label>
-                                        <input type="date" class="form-control date-picker" id="tanggal_booking" 
-                                            name="tanggal_pengajuan" value="{{ old('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan) }}" required>
-                                        <small class="form-text text-muted">Pilih tanggal untuk memperbarui booking</small>
-                                    </div>
-                                    
-                                    <div id="loadingSlots" style="display: none;" class="text-center my-3">
-                                        <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
-                                        <p class="mt-2 text-muted">Memuat slot waktu tersedia...</p>
-                                    </div>
-                                    
-                                    <div id="timeSlots" class="mt-4">
-                                        <!-- Time slots will be loaded here -->
-                                    </div>
-                                    
-                                    <input type="hidden" name="waktu_mulai" id="waktu_mulai" value="{{ old('waktu_mulai', $pinjamRuangan->waktu_mulai) }}">
-                                    <input type="hidden" name="waktu_selesai" id="waktu_selesai" value="{{ old('waktu_selesai', $pinjamRuangan->waktu_selesai) }}">
-                                    <input type="hidden" name="selected_slots_json" id="selected_slots_json" value="">
-                                    <input type="hidden" name="tanggal_selesai" value="{{ old('tanggal_selesai', $pinjamRuangan->tanggal_selesai) }}">
-                                    
-                                    <div class="mt-3" id="timeRangeSummary">
-                                        <div class="alert alert-info">
-                                            <strong>Waktu terpilih:</strong> {{ date('H:i', strtotime($pinjamRuangan->waktu_mulai)) }} - {{ date('H:i', strtotime($pinjamRuangan->waktu_selesai)) }}
-                                        </div>
+            <!-- Room Details Section -->
+            <div class="section-card mb-4">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fa fa-building"></i>
+                    </div>
+                    <div>
+                        <h5 class="section-title">Detail Ruangan</h5>
+                        <p class="section-subtitle">Ruangan yang akan dipinjam</p>
+                    </div>
+                </div>
+                
+                <div class="section-content">
+                    <div class="room-grid">
+                        @foreach($relatedBookings as $booking)
+                            <div class="room-card">
+                                <div class="room-number">{{ $loop->iteration }}</div>
+                                <div class="room-info">
+                                    <h6 class="room-name">{{ $booking->ruangan->nama_ruangan }}</h6>
+                                    <div class="room-details">
+                                        <span class="detail-item">
+                                            <i class="fa fa-users"></i>
+                                            {{ $booking->ruangan->kapasitas }} orang
+                                        </span>
+                                        <span class="detail-item">
+                                            <i class="fa fa-map-marker"></i>
+                                            {{ $booking->ruangan->lokasi }}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="card mb-4 border shadow-sm">
-                                <div class="card-body">
-                                    <div class="form-group mb-3">
-                                        <label for="tujuan_peminjaman" class="form-label fw-bold">Tujuan Peminjaman</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0">
-                                                <i class="fa fa-info-circle text-primary"></i>
-                                            </span>
-                                            <textarea class="form-control @error('tujuan_peminjaman') is-invalid @enderror border-start-0" 
-                                                id="tujuan_peminjaman" name="tujuan_peminjaman" rows="3" required>{{ old('tujuan_peminjaman', $pinjamRuangan->tujuan_peminjaman) }}</textarea>
-                                        </div>
-                                        <small class="form-text text-muted">Jelaskan tujuan peminjaman ruangan dengan jelas</small>
-                                        @error('tujuan_peminjaman')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="card mb-4 border shadow-sm">
-                                <div class="card-header bg-light py-3">
-                                    <h6 class="mb-0 fw-bold">Dokumen Pendukung</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="file_scan" class="form-label fw-bold">File Scan</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text bg-light border-end-0">
-                                                <i class="fa fa-file-pdf-o text-primary"></i>
-                                            </span>
-                                            <input type="file" class="form-control @error('file_scan') is-invalid @enderror border-start-0" 
-                                                id="file_scan" name="file_scan">
-                                        </div>
-                                        <small class="form-text text-muted mt-1">
-                                            Upload surat permohonan atau dokumen pendukung baru (PDF, JPG, PNG, max 2MB)
-                                        </small>
-                                        @if($pinjamRuangan->file_scan)
-                                        <div class="mt-3">
-                                            <a href="{{ asset('storage/uploads/file_scan/' . $pinjamRuangan->file_scan) }}" 
-                                            class="btn btn-sm btn-outline-info" target="_blank">
-                                                <i class="fa fa-file-o me-1"></i> Lihat file saat ini
-                                            </a>
-                                            <small class="d-block text-muted mt-1">Biarkan kosong jika tidak ingin mengubah file</small>
-                                        </div>
-                                        @endif
-                                        @error('file_scan')
-                                            <small class="text-danger">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-between mt-4 pt-3 border-top">
-                                <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.show', $pinjamRuangan->id) }}" class="btn btn-secondary">
-                                    <i class="fa fa-times me-1"></i> Batal
-                                </a>
-                                <button type="submit" class="btn btn-success px-5" id="submitBtn">
-                                    <i class="fa fa-save me-2"></i> Simpan Perubahan
-                                </button>
-                            </div>
-                        </form>
+                        @endforeach
                     </div>
                 </div>
             </div>
+
+            <!-- Edit Form -->
+            <form action="{{ route('mahasiswa.peminjaman.pinjam-ruangan.update', $pinjamRuangan->id) }}" 
+                  method="POST" enctype="multipart/form-data" id="editForm">
+                @csrf
+                @method('PUT')
+                
+                <!-- Date & Time Section -->
+                <div class="section-card mb-4">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fa fa-calendar-alt"></i>
+                        </div>
+                        <div>
+                            <h5 class="section-title">Waktu & Tanggal</h5>
+                            <p class="section-subtitle">Pilih tanggal dan waktu peminjaman</p>
+                        </div>
+                    </div>
+                    
+                    <div class="section-content">
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group-modern">
+                                    <label for="tanggal_booking" class="form-label-modern">
+                                        <i class="fa fa-calendar me-2"></i>Tanggal Peminjaman
+                                    </label>
+                                    <div class="input-group-modern">
+                                        <input type="date" 
+                                               class="form-control form-control-modern date-picker" 
+                                               id="tanggal_booking" 
+                                               name="tanggal_pengajuan" 
+                                               value="{{ old('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan) }}" 
+                                               required>
+                                    </div>
+                                    <small class="form-help">Pilih tanggal untuk melihat slot waktu tersedia</small>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="current-selection">
+                                    <h6 class="mb-3 text-primary">
+                                        <i class="fa fa-clock-o me-2"></i>Waktu Terpilih Saat Ini
+                                    </h6>
+                                    <div class="time-display">
+                                        <span class="time-badge">
+                                            {{ date('H:i', strtotime($pinjamRuangan->waktu_mulai)) }} - 
+                                            {{ date('H:i', strtotime($pinjamRuangan->waktu_selesai)) }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Loading Slots -->
+                        <div id="loadingSlots" class="loading-container" style="display: none;">
+                            <div class="loading-spinner">
+                                <div class="spinner"></div>
+                                <p>Memuat slot waktu tersedia...</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Time Slots Container -->
+                        <div id="timeSlots" class="time-slots-container">
+                            <!-- Time slots will be loaded here -->
+                        </div>
+                        
+                        <!-- Hidden Inputs -->
+                        <input type="hidden" name="waktu_mulai" id="waktu_mulai" value="{{ old('waktu_mulai', $pinjamRuangan->waktu_mulai) }}">
+                        <input type="hidden" name="waktu_selesai" id="waktu_selesai" value="{{ old('waktu_selesai', $pinjamRuangan->waktu_selesai) }}">
+                        <input type="hidden" name="selected_slots_json" id="selected_slots_json" value="">
+                        <input type="hidden" name="tanggal_selesai" value="{{ old('tanggal_selesai', $pinjamRuangan->tanggal_selesai) }}">
+                        
+                        <!-- Time Range Summary -->
+                        <div id="timeRangeSummary" class="time-summary">
+                            <div class="alert alert-info alert-modern border-0">
+                                <i class="fa fa-info-circle me-2"></i>
+                                <strong>Waktu terpilih:</strong> 
+                                {{ date('H:i', strtotime($pinjamRuangan->waktu_mulai)) }} - 
+                                {{ date('H:i', strtotime($pinjamRuangan->waktu_selesai)) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Purpose Section -->
+                <div class="section-card mb-4">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fa fa-clipboard-list"></i>
+                        </div>
+                        <div>
+                            <h5 class="section-title">Tujuan Peminjaman</h5>
+                            <p class="section-subtitle">Jelaskan tujuan penggunaan ruangan</p>
+                        </div>
+                    </div>
+                    
+                    <div class="section-content">
+                        <div class="form-group-modern">
+                            <label for="tujuan_peminjaman" class="form-label-modern">
+                                <i class="fa fa-edit me-2"></i>Deskripsi Tujuan
+                            </label>
+                            <div class="input-group-modern">
+                                <textarea class="form-control form-control-modern @error('tujuan_peminjaman') is-invalid @enderror" 
+                                          id="tujuan_peminjaman" 
+                                          name="tujuan_peminjaman" 
+                                          rows="4" 
+                                          placeholder="Contoh: Rapat organisasi, seminar, workshop, dll."
+                                          required>{{ old('tujuan_peminjaman', $pinjamRuangan->tujuan_peminjaman) }}</textarea>
+                            </div>
+                            <small class="form-help">Jelaskan secara detail untuk mempercepat proses persetujuan</small>
+                            @error('tujuan_peminjaman')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documents Section -->
+                <div class="section-card mb-4">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fa fa-paperclip"></i>
+                        </div>
+                        <div>
+                            <h5 class="section-title">Dokumen Pendukung</h5>
+                            <p class="section-subtitle">Upload dokumen yang diperlukan</p>
+                        </div>
+                    </div>
+                    
+                    <div class="section-content">
+                        <div class="file-upload-area">
+                            <div class="upload-box">
+                                <div class="upload-icon">
+                                    <i class="fa fa-cloud-upload"></i>
+                                </div>
+                                <div class="upload-content">
+                                    <h6>Upload File Baru</h6>
+                                    <p>Drag & drop file atau klik untuk browse</p>
+                                    <input type="file" 
+                                           class="form-control-file @error('file_scan') is-invalid @enderror" 
+                                           id="file_scan" 
+                                           name="file_scan" 
+                                           accept=".pdf,.jpg,.jpeg,.png">
+                                    <small class="file-info">Format: PDF, JPG, PNG (Max: 2MB)</small>
+                                </div>
+                            </div>
+                            
+                            @if($pinjamRuangan->file_scan)
+                                <div class="current-file">
+                                    <div class="file-preview">
+                                        <div class="file-icon">
+                                            <i class="fa fa-file-pdf-o"></i>
+                                        </div>
+                                        <div class="file-details">
+                                            <h6>File Saat Ini</h6>
+                                            <p>{{ $pinjamRuangan->file_scan }}</p>
+                                            <a href="{{ asset('storage/uploads/file_scan/' . $pinjamRuangan->file_scan) }}" 
+                                               class="btn btn-sm btn-outline-primary" 
+                                               target="_blank">
+                                                <i class="fa fa-eye me-1"></i>Lihat File
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            
+                            @error('file_scan')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-section">
+                    <div class="action-buttons">
+                        <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.show', $pinjamRuangan->id) }}" 
+                           class="btn btn-secondary btn-lg">
+                            <i class="fa fa-times me-2"></i>Batal
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                            <i class="fa fa-save me-2"></i>Simpan Perubahan
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
-<style>
-.input-group-text {
-    border-radius: 0.375rem 0 0 0.375rem;
-    background-color: #f8f9fa;
-}
-.form-control, .form-select {
-    border-radius: 0 0.375rem 0.375rem 0;
-}
-.card {
-    transition: all 0.3s ease;
-    border-radius: 0.5rem;
-    overflow: hidden;
-}
-.card-header {
-    background-color: rgba(0,0,0,0.03);
-}
-.btn {
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-.btn-success {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-.form-label {
-    margin-bottom: 0.5rem;
-    color: #444;
-}
-.table th, .table td {
-    vertical-align: middle;
-}
-
-  
-.time-slot {
-    display: block;
-    padding: 12px;
-    border-radius: 6px;
-    border: 1px solid #dee2e6;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    background-color: #f8f9fa;
-    font-weight: 500;
-}
-
-.time-slot:hover {
-    background-color: #e2e6ea;
-    border-color: #dae0e5;
-    transform: translateY(-2px);
-}
-
-.time-slot.selected {
-    background-color: #cfe2ff;
-    border-color: #9ec5fe;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-    color: #0d6efd;
-    font-weight: bold;
-}
-</style>
-
+  <!-- Buttons -->
 @push('scripts')
 <script src="{{ asset('js/timeslot-selector.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const datePicker = document.getElementById('tanggal_booking');
     
-
+    // Get existing booking data
+    const existingWaktuMulai = "{{ date('H:i', strtotime($pinjamRuangan->waktu_mulai)) }}";
+    const existingWaktuSelesai = "{{ date('H:i', strtotime($pinjamRuangan->waktu_selesai)) }}";
+    const existingTanggal = "{{ $pinjamRuangan->tanggal_pengajuan }}";
+    
+    // Initialize TimeSlotSelector with existing data
     const timeSlotSelector = new TimeSlotSelector({
         containerId: 'timeSlots',
         loadingId: 'loadingSlots',
@@ -238,9 +309,119 @@ document.addEventListener('DOMContentLoaded', function() {
         ruanganId: {{ $relatedBookings[0]->id_ruangan }}
     });
     
-
+    // Function to preserve existing time selection
+    function preserveExistingSelection() {
+        const summaryElement = document.getElementById('timeRangeSummary');
+        if (summaryElement && datePicker.value === existingTanggal) {
+            summaryElement.innerHTML = `
+                <div class="alert alert-info alert-modern border-0">
+                    <div class="d-flex align-items-center">
+                        <div class="alert-icon me-3">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                        <div>
+                            <strong>Waktu terpilih saat ini:</strong> ${existingWaktuMulai} - ${existingWaktuSelesai}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    }
+    
+    // Load time slots when date changes
     datePicker.addEventListener('change', function() {
-        timeSlotSelector.loadTimeSlots(this.value);
+        if (this.value) {
+            timeSlotSelector.loadTimeSlots(this.value);
+            
+            // If it's the same date as existing booking, preserve the selection
+            if (this.value === existingTanggal) {
+                setTimeout(() => {
+                    preserveExistingSelection();
+                }, 500);
+            }
+        }
+    });
+    
+    // Load initial slots for current date
+    if (datePicker.value) {
+        timeSlotSelector.loadTimeSlots(datePicker.value);
+        
+        // Preserve existing selection for current booking
+        if (datePicker.value === existingTanggal) {
+            setTimeout(() => {
+                preserveExistingSelection();
+            }, 500);
+        }
+    }
+    
+    // Override the summary update to preserve existing selection info
+    const originalUpdateTimeRange = timeSlotSelector.updateTimeRange;
+    timeSlotSelector.updateTimeRange = function() {
+        if (datePicker.value === existingTanggal && this.selectedSlots.length === 0) {
+            preserveExistingSelection();
+            return;
+        }
+        originalUpdateTimeRange.call(this);
+    };
+    
+    // Ensure submit button is enabled for existing valid booking
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn && datePicker.value === existingTanggal) {
+        submitBtn.disabled = false;
+    }
+    
+    // File upload enhancement
+    const fileInput = document.getElementById('file_scan');
+    const uploadBox = document.querySelector('.upload-box');
+    
+    if (fileInput && uploadBox) {
+        // Drag and drop functionality
+        uploadBox.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadBox.style.borderColor = 'var(--primary-color)';
+            uploadBox.style.background = 'rgba(30, 41, 59, 0.05)';
+        });
+        
+        uploadBox.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            uploadBox.style.borderColor = 'var(--border-color)';
+            uploadBox.style.background = 'transparent';
+        });
+        
+        uploadBox.addEventListener('drop', function(e) {
+            e.preventDefault();
+            uploadBox.style.borderColor = 'var(--border-color)';
+            uploadBox.style.background = 'transparent';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                updateFileDisplay(files[0]);
+            }
+        });
+        
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                updateFileDisplay(e.target.files[0]);
+            }
+        });
+        
+        function updateFileDisplay(file) {
+            const uploadContent = document.querySelector('.upload-content h6');
+            if (uploadContent) {
+                uploadContent.textContent = `File dipilih: ${file.name}`;
+            }
+        }
+    }
+    
+    // Form validation enhancement
+    const form = document.getElementById('editForm');
+    form.addEventListener('submit', function(e) {
+        const submitButton = document.getElementById('submitBtn');
+        if (submitButton) {
+            submitButton.innerHTML = '<i class="fa fa-spinner fa-spin me-2"></i>Menyimpan...';
+            submitButton.disabled = true;
+        }
     });
 });
 </script>
