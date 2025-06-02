@@ -1,7 +1,26 @@
+
 <section>
     <div class="mt-2 text-muted">
         <p>Setelah akun Anda dihapus, semua data dan sumber daya yang berkaitan dengan akun tersebut akan terhapus secara permanen. Sebelum menghapus akun, harap unduh data atau informasi apa pun yang ingin Anda simpan.</p>
     </div>
+
+    <!-- Alert untuk error -->
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Error!</strong> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <!-- Alert untuk error validation password -->
+    @if($errors->has('password'))
+        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Error!</strong> {{ $errors->first('password') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
     <button type="button" class="btn btn-danger mt-3" id="toggleDeleteSection">
         <i class="fas fa-trash-alt me-2"></i>Hapus Akun
@@ -30,15 +49,21 @@
                             <span class="input-group-text bg-light border-end-0">
                                 <i class="fas fa-lock text-secondary"></i>
                             </span>
-                            <input type="password" class="form-control border-start-0" id="delete-password" name="password" 
+                            <input type="password" class="form-control border-start-0 @if($errors->has('password')) is-invalid @endif" 
+                                   id="delete-password" name="password" 
                                    placeholder="Masukkan password Anda untuk konfirmasi" required>
+                            @if($errors->has('password'))
+                                <div class="invalid-feedback">
+                                    {{ $errors->first('password') }}
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mt-4">
                         <button type="button" class="btn btn-secondary me-2" id="cancelDelete">
                             <i class="fas fa-times me-1"></i>Batal
                         </button>
-                        <button type="submit" class="btn btn-danger">
+                        <button type="submit" class="btn btn-danger" id="deleteSubmitBtn">
                             <i class="fas fa-trash-alt me-1"></i>Hapus Akun
                         </button>
                     </div>
@@ -53,25 +78,35 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleBtn = document.getElementById('toggleDeleteSection');
     const cancelBtn = document.getElementById('cancelDelete');
     const deleteSection = document.getElementById('deleteAccountSection');
+    const deleteForm = document.getElementById('delete-account-form');
+    const submitBtn = document.getElementById('deleteSubmitBtn');
+    
+    // Jika ada error, otomatis buka section delete
+    @if($errors->has('password') || session('error'))
+        deleteSection.style.display = 'block';
+        toggleBtn.style.display = 'none';
+        deleteSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    @endif
     
     toggleBtn.addEventListener('click', function() {
         deleteSection.style.display = 'block';
         toggleBtn.style.display = 'none';
-        
-
         deleteSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
     
     cancelBtn.addEventListener('click', function() {
         deleteSection.style.display = 'none';
         toggleBtn.style.display = 'inline-block';
-        
-
         document.getElementById('delete-password').value = '';
         
-
+        // Clear any validation errors
+        const passwordInput = document.getElementById('delete-password');
+        passwordInput.classList.remove('is-invalid');
+        
         toggleBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
+    
+
 });
 </script>
 

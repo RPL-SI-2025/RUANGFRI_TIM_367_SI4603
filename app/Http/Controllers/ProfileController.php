@@ -35,30 +35,43 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('mahasiswa.profile.edit')->with('status', 'profile-updated');
     }
 
-    /**
-     * Delete the user's account.
-     */
+    
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+        
+        $request->validate([
+            'password' => 'required',
         ]);
 
-        $user = $request->user();
+        $mahasiswa = Auth::guard('mahasiswa')->user();
 
-        Auth::logout();
+        
+        if (!Hash::check($request->password, $mahasiswa->password)) {
+            return back()->withErrors(['password' => 'Password yang Anda masukkan tidak valid.']);
+        }
 
-        $user->delete();
+        try {
+            
+            Auth::guard('mahasiswa')->logout();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+            
+            $mahasiswa->delete();
 
-        return Redirect::to('/');
+            
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            
+            return redirect('/')->with('success', 'Akun Anda telah berhasil dihapus.');
+            
+        } catch (\Exception $e) {
+            
+            return back()->with('error', 'Terjadi kesalahan saat menghapus akun. Silakan coba lagi atau hubungi administrator.');
+        }
     }
-
      public function updateProfile(Request $request)
     {
         $mahasiswa = Auth::guard('mahasiswa')->user();
@@ -72,7 +85,7 @@ class ProfileController extends Controller
         $mahasiswa->email = $request->email;
         $mahasiswa->save();
 
-        return redirect()->route('profile.edit')->with('status', 'Profil berhasil diperbarui!');
+        return redirect()->route('mahasiswa.profile.edit')->with('status', 'Profil berhasil diperbarui!');
     }
 
     public function updatePassword(Request $request)

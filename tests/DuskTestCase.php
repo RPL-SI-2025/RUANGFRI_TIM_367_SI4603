@@ -108,21 +108,50 @@ abstract class DuskTestCase extends BaseTestCase
     /**
      * Create the RemoteWebDriver instance.
      */
-    protected function driver(): RemoteWebDriver
+
+    protected function driver()
     {
-        $options = (new ChromeOptions)->addArguments(collect([
-            $this->shouldStartMaximized() ? '--start-maximized' : '--window-size=1920,1080',
-        ])->unless($this->hasHeadlessDisabled(), function ($items) {
-            return $items->merge([
-                '--disable-gpu',
-                '--headless=new',
-            ]);
-        })->all());
+        $options = (new ChromeOptions)->addArguments([
+
+            
+            
+            '--disable-password-generation',
+            '--disable-password-manager-reauthentication',
+            '--disable-save-password-bubble',
+            '--password-store=basic',
+            
+            
+            '--disable-autofill',
+            '--disable-autofill-keyboard-accessory-view',
+            '--disable-full-form-autofill-ios',
+            
+            
+            '--disable-features=PasswordManager,AutofillServerCommunication',
+            '--disable-extensions',
+            '--disable-plugins',
+            '--disable-background-timer-throttling',
+            '--disable-renderer-backgrounding',
+            '--disable-backgrounding-occluded-windows',
+        ]);
+
+        
+        $prefs = [
+            'credentials_enable_service' => false,
+            'profile' => [
+                'password_manager_enabled' => false,
+                'default_content_setting_values' => [
+                    'notifications' => 2 
+                ]
+            ]
+        ];
+
+        $options->setExperimentalOption('prefs', $prefs);
 
         return RemoteWebDriver::create(
-            $_ENV['DUSK_DRIVER_URL'] ?? 'http:   
+            $_ENV['DUSK_DRIVER_URL'] ?? 'http:
             DesiredCapabilities::chrome()->setCapability(
-                ChromeOptions::CAPABILITY, $options
+                ChromeOptions::CAPABILITY,
+                $options
             )
         );
     }

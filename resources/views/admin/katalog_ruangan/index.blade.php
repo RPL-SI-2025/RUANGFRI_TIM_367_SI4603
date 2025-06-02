@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="d-flex justify-content-between mb-3">
-    <h4>Katalog Ruangan</h4>
+    <h4 style="color: black;">Katalog Ruangan</h4>
     <a href="{{ route('admin.katalog_ruangan.create') }}" class="btn btn-success">Tambah Ruangan</a>
 </div>
 

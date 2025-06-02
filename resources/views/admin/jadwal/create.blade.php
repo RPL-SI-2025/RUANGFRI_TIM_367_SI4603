@@ -1,3 +1,4 @@
+
 @extends('admin.layouts.admin')
 
 @section('title', 'Tambah Jadwal')
@@ -5,7 +6,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Tambah Jadwal</h2>
+        <h2 class="mb-0 text-dark">Tambah Jadwal</h2>
         <a href="{{ route('admin.jadwal.index') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left me-1"></i> Kembali
         </a>
@@ -19,18 +20,18 @@
     @endif
 
     <div class="card shadow-sm">
-        <div class="card-header bg-light">
+        <div class="card-header bg-light p-0">
             <ul class="nav nav-tabs card-header-tabs" id="jadwalTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="single-tab" data-bs-toggle="tab" data-bs-target="#single-content" 
+                    <button class="nav-link active fw-bold text-primary" id="single-tab" data-bs-toggle="tab" data-bs-target="#single-content" 
                             type="button" role="tab" aria-controls="single-content" aria-selected="true">
-                        Jadwal Tunggal
+                        <i class="bi bi-calendar-plus me-2"></i>Jadwal Tunggal
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="bulk-tab" data-bs-toggle="tab" data-bs-target="#bulk-content" 
+                    <button class="nav-link fw-bold text-secondary" id="bulk-tab" data-bs-toggle="tab" data-bs-target="#bulk-content" 
                             type="button" role="tab" aria-controls="bulk-content" aria-selected="false">
-                        Generate Jadwal
+                        <i class="bi bi-calendar-range me-2"></i>Generate Jadwal
                     </button>
                 </li>
             </ul>
@@ -38,7 +39,13 @@
         <div class="card-body">
             <div class="tab-content" id="jadwalTabsContent">
                 <!-- Jadwal Tunggal Form -->
-                <div class="tab-pane fade show active" id="single-content" role="tabpanel" aria-labelledby="single-tab">
+                <div class="tab-pane fade show active bg-white" id="single-content" role="tabpanel" aria-labelledby="single-tab">
+                    <div class="mb-3">
+                        <h5 class="text-primary mb-3">
+                            <i class="bi bi-calendar-plus me-2"></i>Buat Jadwal Tunggal
+                        </h5>
+                        <p class="text-muted small">Buat satu slot jadwal untuk tanggal dan waktu tertentu</p>
+                    </div>
                     <form action="{{ route('admin.jadwal.store') }}" method="POST">
                         @csrf
                         <div class="row mb-3">
@@ -111,6 +118,12 @@
 
                 <!-- Generate Jadwal Form -->
                 <div class="tab-pane fade" id="bulk-content" role="tabpanel" aria-labelledby="bulk-tab">
+                    <div class="mb-3">
+                        <h5 class="text-success mb-3">
+                            <i class="bi bi-calendar-range me-2"></i>Generate Jadwal Bulk
+                        </h5>
+                        <p class="text-muted small">Buat multiple slot jadwal untuk rentang tanggal dan hari operasional tertentu</p>
+                    </div>
                     <form action="{{ route('admin.jadwal.generate') }}" method="POST">
                         @csrf
                         <div class="row mb-3">
@@ -182,41 +195,63 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label d-block">Hari Operasional</label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="hari_0" name="hari_operasional[]" value="0" 
-                                       {{ in_array('0', old('hari_operasional', [])) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="hari_0">Minggu</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="hari_1" name="hari_operasional[]" value="1" 
-                                       {{ in_array('1', old('hari_operasional', [1,2,3,4,5])) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="hari_1">Senin</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="hari_2" name="hari_operasional[]" value="2" 
-                                       {{ in_array('2', old('hari_operasional', [1,2,3,4,5])) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="hari_2">Selasa</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="hari_3" name="hari_operasional[]" value="3" 
-                                       {{ in_array('3', old('hari_operasional', [1,2,3,4,5])) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="hari_3">Rabu</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="hari_4" name="hari_operasional[]" value="4" 
-                                       {{ in_array('4', old('hari_operasional', [1,2,3,4,5])) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="hari_4">Kamis</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="hari_5" name="hari_operasional[]" value="5" 
-                                       {{ in_array('5', old('hari_operasional', [1,2,3,4,5])) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="hari_5">Jumat</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="hari_6" name="hari_operasional[]" value="6" 
-                                       {{ in_array('6', old('hari_operasional', [])) ? 'checked' : '' }}>
-                                <label class="form-check-label" for="hari_6">Sabtu</label>
+                            <label class="form-label d-block fw-bold">Hari Operasional</label>
+                            <div class="border rounded p-3 bg-light">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="hari_0" name="hari_operasional[]" value="0" 
+                                                   {{ in_array('0', old('hari_operasional', [])) ? 'checked' : '' }}>
+                                            <label class="form-check-label fw-medium" for="hari_0">
+                                                <i class="bi bi-calendar me-1"></i>Minggu
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="hari_1" name="hari_operasional[]" value="1" 
+                                                   {{ in_array('1', old('hari_operasional', [1,2,3,4,5])) ? 'checked' : '' }}>
+                                            <label class="form-check-label fw-medium" for="hari_1">
+                                                <i class="bi bi-calendar me-1"></i>Senin
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="hari_2" name="hari_operasional[]" value="2" 
+                                                   {{ in_array('2', old('hari_operasional', [1,2,3,4,5])) ? 'checked' : '' }}>
+                                            <label class="form-check-label fw-medium" for="hari_2">
+                                                <i class="bi bi-calendar me-1"></i>Selasa
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="hari_3" name="hari_operasional[]" value="3" 
+                                                   {{ in_array('3', old('hari_operasional', [1,2,3,4,5])) ? 'checked' : '' }}>
+                                            <label class="form-check-label fw-medium" for="hari_3">
+                                                <i class="bi bi-calendar me-1"></i>Rabu
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="hari_4" name="hari_operasional[]" value="4" 
+                                                   {{ in_array('4', old('hari_operasional', [1,2,3,4,5])) ? 'checked' : '' }}>
+                                            <label class="form-check-label fw-medium" for="hari_4">
+                                                <i class="bi bi-calendar me-1"></i>Kamis
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="hari_5" name="hari_operasional[]" value="5" 
+                                                   {{ in_array('5', old('hari_operasional', [1,2,3,4,5])) ? 'checked' : '' }}>
+                                            <label class="form-check-label fw-medium" for="hari_5">
+                                                <i class="bi bi-calendar me-1"></i>Jumat
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="hari_6" name="hari_operasional[]" value="6" 
+                                                   {{ in_array('6', old('hari_operasional', [])) ? 'checked' : '' }}>
+                                            <label class="form-check-label fw-medium" for="hari_6">
+                                                <i class="bi bi-calendar me-1"></i>Sabtu
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             @error('hari_operasional')
                                 <div class="text-danger mt-1">{{ $message }}</div>
@@ -227,7 +262,7 @@
                         </div>
 
                         <div class="text-end mt-4">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-success">
                                 <i class="bi bi-calendar-plus me-1"></i> Generate Jadwal
                             </button>
                         </div>
@@ -239,10 +274,75 @@
 </div>
 @endsection
 
+@push('styles')
+<style>
+
+.nav-tabs {
+    border-bottom: 2px solid #dee2e6;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #6c757d;
+    background: transparent;
+    border-radius: 0;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    border-bottom: 3px solid #007bff;
+    background-color: #f8f9fa;
+    color: #007bff;
+}
+
+.nav-tabs .nav-link.active {
+    color: #007bff !important;
+    background-color: #fff;
+    border-bottom: 3px solid #007bff;
+    font-weight: 700;
+}
+
+.nav-tabs .nav-link i {
+    font-size: 1.1rem;
+}
+
+
+.tab-content {
+    min-height: 400px;
+}
+
+.tab-pane h5 {
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 0.5rem;
+}
+
+
+.form-check-label {
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+
+.btn {
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border-radius: 0.375rem;
+}
+</style>
+@endpush
+
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-
+        
         if (!@json(old('hari_operasional'))) {
             document.querySelectorAll('input[name="hari_operasional[]"]').forEach(checkbox => {
                 const value = parseInt(checkbox.value);
@@ -251,6 +351,21 @@
                 }
             });
         }
+
+        
+        const tabButtons = document.querySelectorAll('[data-bs-toggle="tab"]');
+        tabButtons.forEach(button => {
+            button.addEventListener('shown.bs.tab', function(e) {
+                
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('text-primary', 'fw-bold');
+                    btn.classList.add('text-secondary');
+                });
+                
+                this.classList.remove('text-secondary');
+                this.classList.add('text-primary', 'fw-bold');
+            });
+        });
     });
 </script>
 @endpush
