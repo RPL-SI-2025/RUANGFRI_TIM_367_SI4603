@@ -397,10 +397,10 @@
 let currentZoom = 1;
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize modal elements
+   
     initializeImageModal();
     
-    // Add smooth scroll behavior for better UX
+   
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -450,7 +450,7 @@ function zoomIn() {
     
     console.log('New zoom level:', currentZoom);
     
-    // Update zoom info
+   
     updateZoomInfo();
 }
 
@@ -468,7 +468,7 @@ function zoomOut() {
     
     console.log('New zoom level:', currentZoom);
     
-    // Update zoom info
+   
     updateZoomInfo();
 }
 
@@ -486,7 +486,7 @@ function resetZoom() {
     
     console.log('Zoom reset to:', currentZoom);
     
-    // Update zoom info
+   
     updateZoomInfo();
 }
 
@@ -501,9 +501,9 @@ function updateZoomInfo() {
     }
 }
 
-// Enhanced image modal interaction
+   
 document.addEventListener('click', function(e) {
-    // Handle zoom in/out clicks on modal image
+   
     if (e.target.id === 'modalImage') {
         if (e.shiftKey) {
             zoomOut();
@@ -512,7 +512,7 @@ document.addEventListener('click', function(e) {
         }
     }
     
-    // Handle button clicks
+   
     if (e.target.closest('[onclick="zoomIn()"]')) {
         e.preventDefault();
         zoomIn();

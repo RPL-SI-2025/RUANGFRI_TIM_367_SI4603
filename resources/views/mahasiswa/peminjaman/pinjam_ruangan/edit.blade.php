@@ -291,12 +291,12 @@
 document.addEventListener('DOMContentLoaded', function() {
     const datePicker = document.getElementById('tanggal_booking');
     
-    // Get existing booking data
+   
     const existingWaktuMulai = "{{ date('H:i', strtotime($pinjamRuangan->waktu_mulai)) }}";
     const existingWaktuSelesai = "{{ date('H:i', strtotime($pinjamRuangan->waktu_selesai)) }}";
     const existingTanggal = "{{ $pinjamRuangan->tanggal_pengajuan }}";
     
-    // Initialize TimeSlotSelector with existing data
+   
     const timeSlotSelector = new TimeSlotSelector({
         containerId: 'timeSlots',
         loadingId: 'loadingSlots',
@@ -309,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ruanganId: {{ $relatedBookings[0]->id_ruangan }}
     });
     
-    // Function to preserve existing time selection
+   
     function preserveExistingSelection() {
         const summaryElement = document.getElementById('timeRangeSummary');
         if (summaryElement && datePicker.value === existingTanggal) {
@@ -328,12 +328,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Load time slots when date changes
+   
     datePicker.addEventListener('change', function() {
         if (this.value) {
             timeSlotSelector.loadTimeSlots(this.value);
             
-            // If it's the same date as existing booking, preserve the selection
+   
             if (this.value === existingTanggal) {
                 setTimeout(() => {
                     preserveExistingSelection();
@@ -342,11 +342,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Load initial slots for current date
+   
     if (datePicker.value) {
         timeSlotSelector.loadTimeSlots(datePicker.value);
         
-        // Preserve existing selection for current booking
+   
         if (datePicker.value === existingTanggal) {
             setTimeout(() => {
                 preserveExistingSelection();
@@ -354,7 +354,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Override the summary update to preserve existing selection info
+   
     const originalUpdateTimeRange = timeSlotSelector.updateTimeRange;
     timeSlotSelector.updateTimeRange = function() {
         if (datePicker.value === existingTanggal && this.selectedSlots.length === 0) {
@@ -364,18 +364,18 @@ document.addEventListener('DOMContentLoaded', function() {
         originalUpdateTimeRange.call(this);
     };
     
-    // Ensure submit button is enabled for existing valid booking
+   
     const submitBtn = document.getElementById('submitBtn');
     if (submitBtn && datePicker.value === existingTanggal) {
         submitBtn.disabled = false;
     }
     
-    // File upload enhancement
+   
     const fileInput = document.getElementById('file_scan');
     const uploadBox = document.querySelector('.upload-box');
     
     if (fileInput && uploadBox) {
-        // Drag and drop functionality
+   
         uploadBox.addEventListener('dragover', function(e) {
             e.preventDefault();
             uploadBox.style.borderColor = 'var(--primary-color)';
@@ -414,7 +414,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Form validation enhancement
+   
     const form = document.getElementById('editForm');
     form.addEventListener('submit', function(e) {
         const submitButton = document.getElementById('submitBtn');

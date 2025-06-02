@@ -15,7 +15,7 @@ class RegisterTest extends DuskTestCase
     {
         parent::setUp();
         
-        // Setup database for testing
+   
         $this->artisan('migrate:fresh');
     }
 
@@ -29,22 +29,22 @@ class RegisterTest extends DuskTestCase
                     ->waitFor('[data-tab="register"]', 10)
                     ->click('[data-tab="register"]')
                     ->waitFor('#register-form.active', 5)
-                    ->pause(1000) // Give time for animations
+                    ->pause(1000)   
                     
-                    // Fill form data
+   
                     ->type('#nim', '12345678')
                     ->type('#nama_mahasiswa', 'John Doe')
                     ->type('#register-email', 'john.doe@student.univ.ac.id')
                     ->type('#register-password', 'Password123!')
                     ->type('#password_confirmation', 'Password123!')
                     
-                    // Scroll to terms checkbox and check it
+   
                     ->scrollIntoView('#terms')
                     ->pause(500)
                     ->check('#terms')
                     ->pause(500)
                     ->click('button[type="submit"]')
-                    ->waitForLocation('/mahasiswa/dashboard', 20) // Increased timeout
+                    ->waitForLocation('/mahasiswa/dashboard', 20)   
                     ->assertSee('Selamat datang');
         });
     }
@@ -66,9 +66,9 @@ class RegisterTest extends DuskTestCase
                     ->type('#register-email', 'john.doe@student.univ.ac.id')
                     ->type('#register-password', 'Password123!')
                     ->type('#password_confirmation', 'DifferentPassword!')
-                    ->pause(1500) // Wait for password match validation
+                    ->pause(1500)   
                     
-                    // Check for password mismatch indicator
+   
                     ->assertSeeIn('.password-match', 'tidak cocok')
                     ->scrollIntoView('#terms')
                     ->pause(500)

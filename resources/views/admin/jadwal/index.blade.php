@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Manajemen Jadwal</h2>
+        <h4 class="mb-0">Manajemen Jadwal</h4>
         <div>
             <a href="{{ route('admin.jadwal.create') }}" class="btn btn-success">
                 <i class="bi bi-plus-circle me-1"></i> Tambah Slot Jadwal
@@ -67,7 +67,7 @@
 
                 $groupedJadwals = $jadwals->groupBy('id_ruangan');
             @endphp
-            
+
             @if($groupedJadwals->count() > 0)
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
@@ -87,21 +87,21 @@
                                     $ruangan = App\Models\Ruangan::find($ruanganId);
                                     $minDate = $ruanganJadwals->min('tanggal');
                                     $maxDate = $ruanganJadwals->max('tanggal');
-                                    
+
 
                                     $totalSlots = $ruanganJadwals->count();
                                     $availableSlots = $ruanganJadwals->where('status', 'tersedia')->count();
                                     $bookedSlots = $ruanganJadwals->where('status', 'booked')->count();
                                     $processingSlots = $ruanganJadwals->where('status', 'proses')->count();
-                                    
+
 
                                     $startDate = \Carbon\Carbon::parse($minDate);
                                     $endDate = \Carbon\Carbon::parse($maxDate);
                                     $totalDays = $startDate->diffInDays($endDate) + 1;
-                                    
+
 
                                     $availablePercentage = $totalSlots > 0 ? round(($availableSlots / $totalSlots) * 100) : 0;
-                                    
+
 
                                     $dateGroupedSlots = $ruanganJadwals->groupBy('tanggal');
                                     $totalDatesWithSlots = $dateGroupedSlots->count();
@@ -111,8 +111,8 @@
                                     <td class="px-3 py-3 fw-medium">{{ $ruangan->nama_ruangan ?? 'Tidak ada data' }}</td>
                                     <td class="px-3 py-3">{{ $ruangan->lokasi ?? 'Tidak ada data' }}</td>
                                     <td class="px-3 py-3">
-                                        {{ \Carbon\Carbon::parse($minDate)->format('d M Y') }} 
-                                        <span class="text-muted">s/d</span> 
+                                        {{ \Carbon\Carbon::parse($minDate)->format('d M Y') }}
+                                        <span class="text-muted">s/d</span>
                                         {{ \Carbon\Carbon::parse($maxDate)->format('d M Y') }}
                                         <div class="small text-muted mt-1">
                                             Total: {{ $totalDays }} hari, {{ $totalDatesWithSlots }} hari terjadwal
@@ -121,16 +121,16 @@
                                     <td class="px-3 py-3">
                                         <div class="d-flex align-items-center">
                                             <div class="progress flex-grow-1 me-2" style="height: 10px;">
-                                                <div class="progress-bar bg-success" role="progressbar" 
-                                                     style="width: {{ $availablePercentage }}%" 
-                                                     aria-valuenow="{{ $availablePercentage }}" 
+                                                <div class="progress-bar bg-success" role="progressbar"
+                                                     style="width: {{ $availablePercentage }}%"
+                                                     aria-valuenow="{{ $availablePercentage }}"
                                                      aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                             <span class="badge bg-success">{{ $availableSlots }}/{{ $totalSlots }}</span>
                                         </div>
                                         <div class="small mt-1">
-                                            <span class="text-success">{{ $availableSlots }} slot tersedia</span> | 
-                                            <span class="text-warning">{{ $processingSlots }} slot proses</span> | 
+                                            <span class="text-success">{{ $availableSlots }} slot tersedia</span> |
+                                            <span class="text-warning">{{ $processingSlots }} slot proses</span> |
                                             <span class="text-danger">{{ $bookedSlots }} slot booked</span>
                                         </div>
                                         <div class="small text-muted">
@@ -138,7 +138,7 @@
                                         </div>
                                     </td>
                                     <td class="px-3 py-3 text-center">
-                                        <a href="{{ route('admin.jadwal.show', $ruanganId) }}" 
+                                        <a href="{{ route('admin.jadwal.show', $ruanganId) }}"
                                         class="btn btn-sm btn-primary">
                                             <i class="bi bi-calendar-week me-1"></i> Lihat Detail
                                         </a>

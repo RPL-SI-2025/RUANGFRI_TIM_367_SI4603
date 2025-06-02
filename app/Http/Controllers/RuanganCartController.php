@@ -46,14 +46,16 @@ class RuanganCartController extends Controller
                         ->where('tanggal', $request->tanggal_booking)
                         ->where(function($query) use ($startTime, $endTime) {
 
+
                             $query->where(function($q) use ($startTime, $endTime) {
 
                                 $q->where('jam_mulai', '<=', $startTime)
-                                ->where('jam_selesai', '>=', $startTime);
+                                ->where('jam_selesai', '>', $startTime);
                             })
                             ->orWhere(function($q) use ($startTime, $endTime) {
 
-                                $q->where('jam_mulai', '<=', $endTime)
+
+                                $q->where('jam_mulai', '<', $endTime)
                                 ->where('jam_selesai', '>=', $endTime);
                             })
                             ->orWhere(function($q) use ($startTime, $endTime) {
@@ -108,11 +110,11 @@ class RuanganCartController extends Controller
             'waktu_mulai' => $startTime,
             'waktu_selesai' => $endTime,
             'jadwal_ids' => $jadwalIds,
-            'selected_slots' => $selectedSlots, 
+            'selected_slots' => $selectedSlots,
             'timestamp' => now()->toDateTimeString()
         ];
         
-        
+
         $cart[$itemKey] = $itemData;
         Session::put('cart_ruangan', $cart);
         

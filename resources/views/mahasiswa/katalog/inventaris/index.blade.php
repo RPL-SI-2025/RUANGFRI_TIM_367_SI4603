@@ -1,4 +1,3 @@
-
 @extends('mahasiswa.layouts.app')
 
 @section('content')
@@ -198,7 +197,6 @@
         @endif
     </div>
 </div>
-
 @endsection
 
 @push('scripts')

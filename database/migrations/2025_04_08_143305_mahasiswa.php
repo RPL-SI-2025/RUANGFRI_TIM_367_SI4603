@@ -18,7 +18,18 @@ return new class extends Migration
             $table->string('nim')->unique();
             $table->string('nama_mahasiswa');
             $table->string('email')->unique();
-            $table->string('password')->nullable();
+            $table->string('tempat_lahir')->nullable();
+            $table->date('tanggal_lahir')->nullable();
+            $table->string('no_telepon')->nullable();
+            $table->string('wa')->nullable();
+            $table->text('alamat')->nullable();
+            $table->string('angkatan')->nullable();
+            $table->string('tujuan')->nullable();
+            $table->string('instansi')->nullable();
+            $table->string('profile_photo')->nullable();
+            $table->string('ktm')->nullable();
+            $table->string('password');
+            $table->rememberToken();
             $table->timestamps();
         });
     }

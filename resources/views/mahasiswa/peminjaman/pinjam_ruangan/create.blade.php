@@ -105,12 +105,17 @@
                   method="POST" enctype="multipart/form-data" id="bookingForm">
                 @csrf
                 @foreach($cartItems as $id => $item)
-                    <input type="hidden" name="ruangan_ids[]" value="{{ $id }}">
+                    <input type="hidden" name="ruangan_data[{{ $id }}][id]" value="{{ $id }}">
+                    <input type="hidden" name="ruangan_data[{{ $id }}][waktu_mulai]" value="{{ $item['waktu_mulai'] }}">
+                    <input type="hidden" name="ruangan_data[{{ $id }}][waktu_selesai]" value="{{ $item['waktu_selesai'] }}">
+                    <input type="hidden" name="ruangan_data[{{ $id }}][tanggal_booking]" value="{{ $item['tanggal_booking'] }}">
+                    @if(isset($item['selected_slots']))
+                        <input type="hidden" name="ruangan_data[{{ $id }}][selected_slots]" value="{{ json_encode($item['selected_slots']) }}">
+                    @endif
                 @endforeach
                 <input type="hidden" name="tanggal_pengajuan" value="{{ reset($cartItems)['tanggal_booking'] }}">
                 <input type="hidden" name="tanggal_selesai" value="{{ reset($cartItems)['tanggal_booking'] }}">
-                <input type="hidden" name="waktu_mulai" value="{{ reset($cartItems)['waktu_mulai'] }}">
-                <input type="hidden" name="waktu_selesai" value="{{ reset($cartItems)['waktu_selesai'] }}">
+                
                 
                 <!-- Purpose Section -->
                 <div class="section-card mb-4">
@@ -198,20 +203,23 @@
     </div>
 </div>
 
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // File upload enhancement
-    const fileInput = document.getElementById('file_scan');
+      const fileInput = document.getElementById('file_scan');
     const uploadBox = document.querySelector('.upload-box');
     
     if (uploadBox && fileInput) {
-        // Click to upload
-        uploadBox.addEventListener('click', function() {
-            fileInput.click();
+   
+        uploadBox.addEventListener('click', function(e) {
+   
+            if (e.target !== fileInput) {
+                fileInput.click();
+            }
         });
         
-        // Drag and drop functionality
+   
         uploadBox.addEventListener('dragover', function(e) {
             e.preventDefault();
             uploadBox.style.borderColor = 'var(--primary-color)';
@@ -236,9 +244,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
+   
+        let isProcessing = false;
         fileInput.addEventListener('change', function(e) {
+            if (isProcessing) return;
+            
             if (e.target.files.length > 0) {
+                isProcessing = true;
                 updateFileDisplay(uploadBox, e.target.files[0]);
+                
+   
+                setTimeout(() => {
+                    isProcessing = false;
+                }, 100);
             }
         });
     }
@@ -248,9 +266,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (uploadContent) {
             uploadContent.textContent = `File dipilih: ${file.name}`;
         }
+        
+   
+        const uploadIcon = uploadBox.querySelector('.upload-icon i');
+        if (uploadIcon) {
+            uploadIcon.className = 'fa fa-check-circle';
+            uploadIcon.style.color = '#28a745';
+        }
     }
     
-    // Form validation enhancement
+   
     const form = document.getElementById('bookingForm');
     if (form) {
         form.addEventListener('submit', function(e) {
@@ -268,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Enhanced textarea auto-resize
+   
     const textarea = document.getElementById('tujuan_peminjaman');
     if (textarea) {
         textarea.addEventListener('input', function() {

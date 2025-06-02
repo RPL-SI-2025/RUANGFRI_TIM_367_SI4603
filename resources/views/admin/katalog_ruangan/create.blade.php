@@ -27,9 +27,14 @@
                 @enderror
             </div>
 
-            <div class="mb-3">
-                <label for="fasilitas" class="form-label">Fasilitas</label>
-                <textarea name="fasilitas" class="form-control" rows="3" required>{{ old('fasilitas') }}</textarea>
+           <div class="mb-3">
+                <label class="form-label">Fasilitas</label>
+                <div id="fasilitas-wrapper">
+                    <div class="input-group mb-2">
+                        <input type="text" name="fasilitas[]" class="form-control" placeholder="Fasilitas" required>
+                        <button type="button" class="btn btn-success add-fasilitas">+</button>
+                    </div>
+                </div>
                 @error('fasilitas')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -37,7 +42,12 @@
 
             <div class="mb-3">
                 <label for="lokasi" class="form-label">Lokasi</label>
-                <input type="text" class="form-control" name="lokasi" value="{{ old('lokasi') }}" required>
+                <select name="lokasi" class="form-select" required>
+                    <option value="">-- Pilih Lokasi --</option>
+                    <option value="Gedung B (Cacuk)" {{ old('lokasi') == 'Gedung B (Cacuk)' ? 'selected' : '' }}>Gedung B (Cacuk)</option>
+                    <option value="Telkom University Landmark Tower (TULT)" {{ old('lokasi') == 'Telkom University Landmark Tower (TULT)' ? 'selected' : '' }}>Telkom University Landmark Tower (TULT)</option>
+                    <option value="Gedung Kuliah Umum (GKU)" {{ old('lokasi') == 'Gedung Kuliah Umum (GKU)' ? 'selected' : '' }}>Gedung Kuliah Umum (GKU)</option>
+                </select>
                 @error('lokasi')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -65,6 +75,36 @@
             <button type="submit" class="btn btn-success">Simpan</button>
             <a href="{{ route('admin.katalog_ruangan.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
+
+        @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const wrapper = document.getElementById('fasilitas-wrapper');
+
+                wrapper.addEventListener('click', function (e) {
+                    if (e.target.classList.contains('add-fasilitas')) {
+                        e.preventDefault();
+
+                        const newInput = document.createElement('div');
+                        newInput.classList.add('input-group', 'mb-2');
+
+                        newInput.innerHTML = `
+                            <input type="text" name="fasilitas[]" class="form-control" placeholder="Fasilitas" required>
+                            <button type="button" class="btn btn-danger remove-fasilitas">−</button>
+                        `;
+
+                        wrapper.appendChild(newInput);
+                    }
+
+                    if (e.target.classList.contains('remove-fasilitas')) {
+                        e.preventDefault();
+                        e.target.closest('.input-group').remove();
+                    }
+                });
+            });
+        </script>
+        @endpush
+
     </div>
 </div>
 @endsection

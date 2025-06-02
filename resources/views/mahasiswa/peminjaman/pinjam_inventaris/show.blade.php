@@ -329,7 +329,7 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Add smooth scroll behavior for better UX
+   
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Add loading animation for buttons
+   
     document.querySelectorAll('form').forEach(form => {
         form.addEventListener('submit', function() {
             const submitBtn = this.querySelector('button[type="submit"]');
@@ -348,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin me-2"></i>Memproses...';
                 submitBtn.disabled = true;
                 
-                // Re-enable after 3 seconds as fallback
+   
                 setTimeout(() => {
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;

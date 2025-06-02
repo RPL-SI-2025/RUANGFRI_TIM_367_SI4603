@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 class InventarisController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $inventaris = Inventaris::with('kategori')->get();
         return view('admin.inventaris.index', compact('inventaris'));
@@ -55,7 +55,7 @@ class InventarisController extends Controller
             ->with('success', 'Inventaris berhasil ditambahkan.');
     }
 
-    
+
     public function edit(Inventaris $inventaris)
     {
         $kategoris = KategoriInventaris::all();
@@ -72,39 +72,39 @@ class InventarisController extends Controller
             'jumlah'            => 'required|integer',
             'status'            => 'required|in:Tersedia,Tidak Tersedia',
         ]);
-    
+
         if ($request->hasFile('gambar_inventaris')) {
             $file     = $request->file('gambar_inventaris');
             $filename = time() . '_' . $file->getClientOriginalName();
-    
+
             Storage::disk('public')->makeDirectory('katalog_inventaris');
-            
+
             Storage::disk('public')->putFileAs('katalog_inventaris', $file, $filename);
-    
+
             if ($inventaris->gambar_inventaris) {
                 Storage::disk('public')->delete('katalog_inventaris/' . $inventaris->gambar_inventaris);
             }
-    
+
             $data['gambar_inventaris'] = $filename;
         }
-    
+
         $inventaris->update($data);
-    
+
         return redirect()
             ->route('admin.inventaris.index')
             ->with('success', 'Inventaris berhasil diperbarui.');
     }
 
-    
+
 
     public function destroy(Inventaris $inventaris)
     {
         if ($inventaris->gambar_inventaris) {
             Storage::disk('public')->delete('katalog_inventaris/' . $inventaris->gambar_inventaris);
         }
-    
+
         $inventaris->delete();
-    
+
         return redirect()
             ->route('admin.inventaris.index')
             ->with('success', 'Inventaris dan gambarnya berhasil dihapus.');
@@ -123,14 +123,14 @@ class InventarisController extends Controller
             });
         }
 
-        
+
         if ($request->has('kategori_id') && $request->kategori_id != '') {
             $query->where('kategori_id', $request->kategori_id);
         }
 
         $inventaris = $query->latest()->get();
         $kategoris = KategoriInventaris::all();
-        
+
         return view('mahasiswa.katalog.inventaris.index', compact('inventaris', 'kategoris'));
     }
 

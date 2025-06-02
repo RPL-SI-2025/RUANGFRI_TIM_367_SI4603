@@ -72,13 +72,13 @@ class AdminLogistikController extends Controller
 
         $recentRoomBorrowings = PinjamRuangan::with('mahasiswa', 'ruangan')
             ->latest()
-            ->take(50) // Take more to ensure we get enough groups
+            ->take(50)   
             ->get()
             ->groupBy(function($item) {
                 return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
                     $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan . '-' . $item->id_mahasiswa;
             })
-            ->take(3) // Only take 3 groups
+            ->take(3)   
             ->map(function($group) {
                 $firstItem = $group->first();
                 $roomNames = $group->pluck('ruangan.nama_ruangan')->filter()->implode(', ');
@@ -94,13 +94,13 @@ class AdminLogistikController extends Controller
 
         $recentInventoryBorrowings = PinjamInventaris::with('mahasiswa', 'inventaris')
             ->latest()
-            ->take(50) // Take more to ensure we get enough groups
+            ->take(50)   
             ->get()
             ->groupBy(function($item) {
                 return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
                     $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan . '-' . $item->id_mahasiswa;
             })
-            ->take(2) // Only take 2 groups
+            ->take(2)   
             ->map(function($group) {
                 $firstItem = $group->first();
                 $inventoryNames = $group->pluck('inventaris.nama_inventaris')->filter();

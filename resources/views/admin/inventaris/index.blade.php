@@ -32,7 +32,7 @@
                 <td>{{ $loop->iteration }}</td>
                 <td>
                     @if ($item->gambar_inventaris)
-                        <img src="{{ asset('storage/katalog_inventaris/' . $item->gambar_inventaris) }}" 
+                        <img src="{{ asset('storage/katalog_inventaris/' . $item->gambar_inventaris) }}"
                              alt="{{ $item->nama_inventaris }}" width="100" class="img-thumbnail">
                     @else
                         <span class="text-muted">Tidak ada gambar</span>
@@ -66,4 +66,3 @@
     </table>
 </div>
 @endsection
-

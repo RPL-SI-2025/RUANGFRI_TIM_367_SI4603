@@ -129,7 +129,7 @@
                 <div class="card-header-glow"></div>
             </div>
         </div>
-        
+
         <div class="card-body p-0">
             @if($paginatedPinjamRuangan->count() > 0)
                 <div class="table-responsive">
@@ -221,36 +221,36 @@
                                     </td>
                                     <td class="px-4 py-3">
                                         <div class="action-buttons d-flex justify-content-center gap-1">
-                                            <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.show', $firstItem->id) }}" 
-                                               class="btn-link-action text-primary text-decoration-none fw-medium" 
+                                            <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.show', $firstItem->id) }}"
+                                               class="btn-link-action text-primary text-decoration-none fw-medium"
                                                data-bs-toggle="tooltip" title="Lihat Detail">
                                                 Detail
                                             </a>
-                                            
+
                                             @if($firstItem->status == 0)
                                                 <span class="text-muted mx-1">/</span>
-                                                <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.edit', $firstItem->id) }}" 
+                                                <a href="{{ route('mahasiswa.peminjaman.pinjam-ruangan.edit', $firstItem->id) }}"
                                                    class="btn-link-action text-success text-decoration-none fw-medium"
                                                    data-bs-toggle="tooltip" title="Edit Peminjaman">
                                                     Edit
                                                 </a>
                                                 <span class="text-muted mx-1">/</span>
-                                                <form action="{{ route('mahasiswa.peminjaman.pinjam-ruangan.cancel', $firstItem->id) }}" 
-                                                      method="POST" class="d-inline" 
+                                                <form action="{{ route('mahasiswa.peminjaman.pinjam-ruangan.cancel', $firstItem->id) }}"
+                                                      method="POST" class="d-inline"
                                                       onsubmit="return confirm('Apakah Anda yakin ingin membatalkan peminjaman ini?')">
                                                     @csrf
                                                     @method('PUT')
-                                                    <button type="submit" 
+                                                    <button type="submit"
                                                             class="btn-link-action text-danger border-0 bg-transparent p-0 fw-medium"
                                                             data-bs-toggle="tooltip" title="Batalkan Peminjaman">
                                                         Hapus
                                                     </button>
                                                 </form>
                                             @endif
-                                            
+
                                             @if($firstItem->status == 1)
                                                 <span class="text-muted mx-1">/</span>
-                                                <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.create', ['id' => $firstItem->id]) }}" 
+                                                <a href="{{ route('mahasiswa.pelaporan.lapor_ruangan.create', ['id' => $firstItem->id]) }}"
                                                    class="btn-link-action text-warning text-decoration-none fw-medium"
                                                    data-bs-toggle="tooltip" title="Buat Laporan">
                                                     Lapor
@@ -263,7 +263,7 @@
                         </tbody>
                     </table>
                 </div>
-                
+
                 <!-- Pagination -->
                 <div class="d-flex justify-content-center py-4 border-top pagination-wrapper">
                     <div class="pagination-container">
@@ -282,7 +282,7 @@
                             Mulai pinjam ruangan untuk kebutuhan akademik Anda
                         </p>
                         <div class="empty-state-actions">
-                            <a href="{{ route('mahasiswa.katalog.ruangan.index') }}" 
+                            <a href="{{ route('mahasiswa.katalog.ruangan.index') }}"
                                class="btn btn-primary rounded-pill px-4 py-2 shadow-sm">
                                 <i class="fa fa-plus me-2"></i> Mulai Peminjaman Ruangan
                             </a>
