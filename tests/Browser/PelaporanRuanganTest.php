@@ -18,7 +18,7 @@ class PelaporanRuanganTest extends DuskTestCase
     {
         parent::setUp();
 
-        // Buat admin logistik (jika dibutuhkan)
+        // Buat admin logistik 
         AdminLogistik::firstOrCreate(
             ['email' => 'admin@test.com'],
             [
@@ -73,7 +73,7 @@ class PelaporanRuanganTest extends DuskTestCase
 
     public function testShowLaporanRuanganPagePass()
     {
-        // Buat dummy laporan ruangan di database
+       
         $mahasiswa = Mahasiswa::where('email', 'mahasiswa@student.univ.ac.id')->first();
         $ruangan = Ruangan::first();
 
@@ -105,7 +105,7 @@ class PelaporanRuanganTest extends DuskTestCase
             $browser->visit('/mahasiswa/pelaporan/lapor-ruangan/create')
                     ->press('Kirim Laporan')
                     ->pause(1000)
-                    ->assertSee('error'); // Sesuaikan dengan pesan error validasi di aplikasi
+                    ->assertSee('error'); 
         });
     }
 
@@ -115,10 +115,10 @@ class PelaporanRuanganTest extends DuskTestCase
             $this->login($browser);
 
             $browser->visit('/mahasiswa/pelaporan/lapor-ruangan/create')
-                    ->attach('foto_awal', __DIR__.'/files/test.txt') // File txt, bukan gambar
+                    ->attach('foto_awal', __DIR__.'/files/test.txt') 
                     ->press('Kirim Laporan')
                     ->pause(1000)
-                    ->assertSee('Format salah'); // Sesuaikan dengan pesan error validasi di aplikasi
+                    ->assertSee('Format salah'); 
         });
     }
 }
