@@ -18,7 +18,8 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>ID Laporan</th>
+                            <th>ID Peminjaman</th>
                             <th>Tanggal</th>
                             <th>Mahasiswa</th>
                             <th>Deskripsi</th>
@@ -29,6 +30,7 @@
                         @forelse($laporan as $item)
                         <tr>
                             <td>{{ $item->id_lapor_inventaris }}</td>
+                            <td><strong> {{ $item->peminjaman->id  }}</strong></td>
                             <td>{{ \Carbon\Carbon::parse($item->datetime)->format('d/m/Y H:i') }}</td>
                             <td>{{ $item->mahasiswa->nama_mahasiswa ?? 'N/A' }}</td>
                             <td>{{ \Str::limit($item->deskripsi, 50) }}</td>

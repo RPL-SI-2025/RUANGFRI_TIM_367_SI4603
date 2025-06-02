@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Ruangan extends Model
 {
     protected $table = 'ruangan';
-    // protected $primaryKey = 'id_ruangan';
+
 
     protected $fillable = [
         'id_logistik',
@@ -18,4 +18,13 @@ class Ruangan extends Model
         'status',
         'gambar'
     ];
+
+    public function jadwals()
+    {
+        return $this->hasMany(Jadwal::class, 'id_ruangan');
+    }
+    public function availableJadwals()
+    {
+        return $this->jadwals()->where('status', 'tersedia');
+    }
 }

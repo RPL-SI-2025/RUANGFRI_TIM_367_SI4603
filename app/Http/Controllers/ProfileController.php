@@ -2,101 +2,171 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = Auth::guard('mahasiswa')->user();
+        // Ambil tab aktif dari session, default ke 'profile'
+        $activeTab = $request->session()->get('active_tab', 'profile');
+
+        return view('profile.edit', compact('user', 'activeTab'));
     }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $mahasiswa = Auth::guard('mahasiswa')->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $validated = $this->validateProfile($request, $mahasiswa);
+
+        $this->handleKTMUpload($request, $mahasiswa, $validated);
+
+        $mahasiswa->update($validated);
+
+        return Redirect::route('mahasiswa.profile.edit')
+            ->with('status', 'Profil berhasil diperbarui!')
+            ->with('active_tab', 'profile');
+    }
+
+    public function updateBorrowingInfo(Request $request): RedirectResponse
+    {
+        $mahasiswa = Auth::guard('mahasiswa')->user();
+
+        $validated = $this->validateBorrowingInfo($request);
+
+        $this->handleKTMUpload($request, $mahasiswa, $validated);
+
+        $mahasiswa->update($validated);
+
+        return redirect()->route('mahasiswa.profile.edit')
+            ->with('status', 'Informasi peminjaman berhasil diperbarui!')
+            ->with('active_tab', 'peminjaman');
+    }
+
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password' => ['required', 'confirmed', 'min:8'],
+        ], [], [], 'updatePassword');
+
+        $mahasiswa = Auth::guard('mahasiswa')->user();
+
+        if (!Hash::check($request->current_password, $mahasiswa->password)) {
+            return back()->withErrors(['current_password' => 'Password saat ini tidak valid.'], 'updatePassword');
         }
 
-        $request->user()->save();
+        $mahasiswa->password = Hash::make($request->password);
+        $mahasiswa->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->route('mahasiswa.profile.edit')
+            ->with('success', 'Password berhasil diperbarui!')
+            ->with('active_tab', 'password');
     }
 
-    /**
-     * Delete the user's account.
-     */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+        $user = Auth::guard('mahasiswa')->user();
+
+        $request->validate([
+            'password' => ['required']
         ]);
 
-        $user = $request->user();
+        if (!Hash::check($request->password, $user->password)) {
+            return back()->withErrors(['password' => 'Password yang Anda masukkan salah.']);
+        }
 
-        Auth::logout();
+        Auth::guard('mahasiswa')->logout();
 
         $user->delete();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        return redirect('/')->with('success', 'Akun Anda telah berhasil dihapus.');
     }
 
-     public function updateProfile(Request $request)
-    {
-        $mahasiswa = Auth::guard('mahasiswa')->user();
-
-        $request->validate([
-            'nama_mahasiswa' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:mahasiswa,email,' . $mahasiswa->id,
-        ]);
-
-        $mahasiswa->nama_mahasiswa = $request->nama_mahasiswa;
-        $mahasiswa->email = $request->email;
-        $mahasiswa->save();
-
-        return redirect()->route('profile.edit')->with('status', 'Profil berhasil diperbarui!');
-    }
-
-    public function updatePassword(Request $request)
-    {
-        $request->validate([
-            'current_password' => 'required',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-
-        $mahasiswa = Auth::guard('mahasiswa')->user();
-
-        if (!Hash::check($request->current_password, $mahasiswa->password)) {
-            return back()->withErrors(['current_password' => 'Password saat ini tidak valid.']);
-        }
-
-        $mahasiswa->password = Hash::make($request->password);
-        $mahasiswa->save();
-
-        return redirect()->route('profile.edit')->with('status', 'Password berhasil diperbarui!');
-    }
-
-    public function showProfile()
+    public function showProfile(): View
     {
         $mahasiswa = Auth::guard('mahasiswa')->user();
         return view('profile.show', compact('mahasiswa'));
     }
+
+    private function validateProfile(Request $request, $mahasiswa): array
+    {
+        $minBirthDate = now()->subYears(17)->format('Y-m-d');
+
+        return $request->validate([
+            'nim' => 'required|string|max:20|unique:mahasiswa,nim,' . $mahasiswa->id,
+            'nama_mahasiswa' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:mahasiswa,email,' . $mahasiswa->id,
+
+            'tempat_lahir' => [
+                'nullable',
+                'string',
+                'max:100',
+                'regex:/^[a-zA-Z\s\.\,\'\-]+$/'
+            ],
+
+            'tanggal_lahir' => [
+                'nullable',
+                'date',
+                'before_or_equal:' . $minBirthDate,
+                'before_or_equal:today',
+            ],
+
+            'wa' => [
+                'nullable',
+                'regex:/^\d+$/',
+                'max:20'
+            ],
+
+            'alamat' => [
+                'nullable',
+                'string',
+                'max:255',
+                'regex:/^[a-zA-Z\s\.\,\'\-]+$/'
+            ],
+
+            'angkatan' => 'nullable|string|max:10',
+            'tujuan' => 'nullable|string|max:255',
+            'instansi' => 'nullable|string|max:255',
+
+            //Error handling
+            'tempat_lahir.regex' => 'Tempat lahir hanya boleh berisi huruf, spasi, titik, koma, dan tanda hubung.',
+            'tanggal_lahir.before_or_equal' => 'Tanggal lahir harus membuat Anda minimal berusia 17 tahun dan tidak boleh tanggal di masa depan.',
+            'wa.regex' => 'No. WhatsApp hanya boleh berisi angka tanpa spasi atau simbol.',
+            'alamat.regex' => 'Alamat hanya boleh berisi huruf, spasi, titik, koma, dan tanda hubung tanpa angka atau simbol aneh.',
+        ]);
+    }
+
+    private function validateBorrowingInfo(Request $request): array
+    {
+        return $request->validate([
+            'jurusan' => 'required|string|max:255',
+            'angkatan' => 'required|string|max:10',
+            'instansi' => 'required|string|max:255',
+            'tujuan' => 'required|string|max:255',
+            'ktm' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048',
+        ]);
+    }
+
+    private function handleKTMUpload(Request $request, $user, array &$validated): void
+    {
+
+        if ($request->hasFile('ktm')) {
+            $ktmPath = $request->file('ktm')->store('ktm', 'public');
+            $user->ktm = $ktmPath;
+            $user->save();
+        }
+    }
+
 }

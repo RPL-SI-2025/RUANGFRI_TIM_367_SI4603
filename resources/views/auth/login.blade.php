@@ -33,7 +33,8 @@
 
         <div class="mt-3 text-center">
             <span>Belum punya akun?</span>
-            <a href="{{ route('register') }}" class="btn btn-link p-0 align-baseline">Daftar sebagai Mahasiswa</a>
+
+      <a href="{{ route('register') }}" class="btn btn-link p-0 align-baseline">Daftar sebagai Mahasiswa</a>
         </div>
     </div>
 </div>

@@ -35,13 +35,16 @@ class PinjamRuangan extends Model
         return $this->belongsTo(Mahasiswa::class, 'id_mahasiswa', 'id');
     }
     
-    // Relationship to laporan (if exists)
     public function laporan()
     {
         return $this->hasOne(Pelaporan::class, 'id_peminjaman', 'id');
     }
+    public function jadwals()
+    {
+        return $this->hasMany(Jadwal::class, 'id_pinjam_ruangan');
+    }
     
-    // Helper for status text
+
     public function getStatusTextAttribute()
     {
         return match($this->status) {

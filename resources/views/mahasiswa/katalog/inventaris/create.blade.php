@@ -39,7 +39,7 @@
                         </tbody>
                     </table>
 
-                    <form action="{{ route('pinjam-inventaris.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('mahasiswa.peminjaman.pinjam-inventaris.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
                         <div class="row mb-3">

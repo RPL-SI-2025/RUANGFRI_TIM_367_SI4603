@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Pelaporan;
 use App\Models\PinjamRuangan;
 use App\Models\AdminLogistik;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
@@ -20,7 +22,7 @@ class PelaporanController extends Controller
 
     public function show($id)
     {
-        $pelaporan = Pelaporan::with(['mahasiswa', 'logistik', 'ruangan'])->find($id);
+        $pelaporan = Pelaporan::with(['mahasiswa', 'logistik', 'ruangan','peminjaman'])->find($id);
         
         if (!$pelaporan) {
             return redirect()->back()->with('error', 'Data tidak ditemukan');
@@ -30,12 +32,12 @@ class PelaporanController extends Controller
     }
     public function update(Request $request, $id)
     {
-        // Validate the input
+
         $request->validate([
             'keterangan' => 'required|string',
         ]);
         
-        // Find the pelaporan record
+ 
         $pelaporan = Pelaporan::find($id);
         
         if (!$pelaporan) {
@@ -43,7 +45,7 @@ class PelaporanController extends Controller
                 ->with('error', 'Laporan tidak ditemukan.');
         }
         
-        // Update the keterangan field
+ 
         $pelaporan->keterangan = $request->keterangan;
         $pelaporan->save();
         
@@ -60,7 +62,7 @@ class PelaporanController extends Controller
         }
         
         $laporan = Pelaporan::where('id_mahasiswa', $mahasiswaId)
-                    ->with(['logistik', 'ruangan']) // Tambahkan relasi ruangan
+                    ->with(['logistik', 'ruangan', 'peminjaman']) 
                     ->latest('datetime')
                     ->get();
                     
@@ -80,7 +82,7 @@ class PelaporanController extends Controller
         $relatedItems = null;
         
         if ($peminjamanId) {
-            // Get the first item of the peminjaman group with the same details
+   
             $peminjaman = PinjamRuangan::with('ruangan')
                             ->where('id', $peminjamanId)
                             ->where('id_mahasiswa', $mahasiswaId)
@@ -96,7 +98,7 @@ class PelaporanController extends Controller
                     ->with('error', 'Hanya peminjaman yang sudah disetujui yang dapat dilaporkan selesai.');
             }
             
-            // Get all related items with the same request details
+
             $relatedItems = PinjamRuangan::where('tanggal_pengajuan', $peminjaman->tanggal_pengajuan)
                 ->where('tanggal_selesai', $peminjaman->tanggal_selesai)
                 ->where('waktu_mulai', $peminjaman->waktu_mulai)
@@ -107,10 +109,10 @@ class PelaporanController extends Controller
                 ->get();
         }
         
-        // Get admin users for the dropdown
+
         $adminLogistik = AdminLogistik::all();
         
-        // Get all ruangan for the dropdown
+
         $ruangan = \App\Models\Ruangan::all();
         
         return view('mahasiswa.pelaporan.lapor_ruangan.create', compact('peminjaman', 'relatedItems', 'adminLogistik', 'ruangan'));
@@ -133,7 +135,7 @@ class PelaporanController extends Controller
             'id_peminjaman' => 'required|integer',
         ]);
         
-        // Upload foto awal
+
         $fotoAwalPath = null;
         if ($request->hasFile('foto_awal')) {
             $fotoAwal = $request->file('foto_awal');
@@ -141,7 +143,7 @@ class PelaporanController extends Controller
             $fotoAwalPath = $fotoAwal->storeAs('foto_laporan', $fotoAwalFilename, 'public');
         }
         
-        // Upload foto akhir
+
         $fotoAkhirPath = null;
         if ($request->hasFile('foto_akhir')) {
             $fotoAkhir = $request->file('foto_akhir');
@@ -160,13 +162,54 @@ class PelaporanController extends Controller
                     ->where('waktu_selesai', $peminjaman->waktu_selesai)
                     ->where('file_scan', $peminjaman->file_scan)
                     ->where('id_mahasiswa', $mahasiswaId)
-                    ->update(['status' => 3]); // Status selesai
+                    ->update(['status' => 3]); 
+                    
+
+                $affectedJadwals = \App\Models\Jadwal::whereIn('id_pinjam_ruangan', function($query) use ($peminjaman, $mahasiswaId) {
+                    $query->select('id')
+                        ->from('pinjam_ruangan')
+                        ->where('tanggal_pengajuan', $peminjaman->tanggal_pengajuan)
+                        ->where('tanggal_selesai', $peminjaman->tanggal_selesai)
+                        ->where('waktu_mulai', $peminjaman->waktu_mulai)
+                        ->where('waktu_selesai', $peminjaman->waktu_selesai)
+                        ->where('file_scan', $peminjaman->file_scan)
+                        ->where('id_mahasiswa', $mahasiswaId);
+                })->get();
+                
+                foreach ($affectedJadwals as $jadwal) {
+                    $jadwal->status = 'tersedia';
+                    $jadwal->id_pinjam_ruangan = null;
+                    $jadwal->save();
+                }
+                
+
+                $affectedRoomIds = PinjamRuangan::where('tanggal_pengajuan', $peminjaman->tanggal_pengajuan)
+                    ->where('tanggal_selesai', $peminjaman->tanggal_selesai)
+                    ->where('waktu_mulai', $peminjaman->waktu_mulai)
+                    ->where('waktu_selesai', $peminjaman->waktu_selesai)
+                    ->where('file_scan', $peminjaman->file_scan)
+                    ->where('id_mahasiswa', $mahasiswaId)
+                    ->pluck('id_ruangan');
+                
+                foreach ($affectedRoomIds as $roomId) {
+
+                    $bookedJadwals = \App\Models\Jadwal::where('id_ruangan', $roomId)
+                        ->whereIn('status', ['booked', 'proses'])
+                        ->count();
+                    
+
+                    if ($bookedJadwals == 0) {
+                        \App\Models\Ruangan::where('id', $roomId)->update(['status' => 'Tersedia']);
+                    }
+                }
             }
         }
+        
         $laporan = Pelaporan::create([
             'id_logistik' => $request->id_logistik,
             'id_mahasiswa' => $mahasiswaId,
             'id_ruangan' => $peminjaman->id_ruangan,
+            'id_pinjam_ruangan' => $request->id_peminjaman,
             'datetime' => $request->datetime,
             'foto_awal' => $fotoAwalPath,
             'foto_akhir' => $fotoAkhirPath,
@@ -196,7 +239,7 @@ class PelaporanController extends Controller
                 ->with('error', 'Laporan tidak ditemukan atau Anda tidak memiliki akses.');
         }
         
-        // Get all ruangan for the dropdown
+
         $ruangan = \App\Models\Ruangan::all();
         
         return view('mahasiswa.pelaporan.lapor_ruangan.edit', compact('laporan', 'ruangan'));
@@ -224,9 +267,9 @@ class PelaporanController extends Controller
             'foto_akhir' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
         
-        // Update foto awal jika ada
+
         if ($request->hasFile('foto_awal')) {
-            // Hapus foto lama jika ada
+
             if ($laporan->foto_awal) {
                 Storage::disk('public')->delete($laporan->foto_awal);
             }
@@ -236,9 +279,9 @@ class PelaporanController extends Controller
             $laporan->foto_awal = $fotoAwal->storeAs('foto_laporan', $fotoAwalFilename, 'public');
         }
         
-        // Update foto akhir jika ada
+
         if ($request->hasFile('foto_akhir')) {
-            // Hapus foto lama jika ada
+
             if ($laporan->foto_akhir) {
                 Storage::disk('public')->delete($laporan->foto_akhir);
             }
@@ -265,7 +308,7 @@ class PelaporanController extends Controller
         
         $laporan = Pelaporan::where('id_lapor_ruangan', $id)
                     ->where('id_mahasiswa', $mahasiswaId)
-                    ->with('logistik')
+                    ->with('logistik', 'ruangan', 'peminjaman')
                     ->first();
                     
         if (!$laporan) {
@@ -274,5 +317,28 @@ class PelaporanController extends Controller
         }
         
         return view('mahasiswa.pelaporan.lapor_ruangan.show', compact('laporan'));
+    }
+
+    public function downloadPdf($id)
+    {
+        $mahasiswaId = Session::get('mahasiswa_id');
+        $pelaporan = Pelaporan::where('id_lapor_ruangan', $id)
+        ->where('id_mahasiswa', $mahasiswaId)
+        ->firstOrFail();
+
+
+        $pdf = PDF::loadView('mahasiswa.pelaporan.lapor_ruangan.pdf', compact('pelaporan'));
+
+        return $pdf->download('laporan_' . $pelaporan->id_lapor_ruangan . '.pdf');
+    }
+
+    public function downloadPdfAdmin($id)
+    {
+        $pelaporan = Pelaporan::with(['mahasiswa', 'logistik', 'ruangan', 'peminjaman'])
+                        ->findOrFail($id);
+
+        $pdf = PDF::loadView('mahasiswa.pelaporan.lapor_ruangan.pdf', compact('pelaporan'));
+
+        return $pdf->download('laporan_' . $pelaporan->id_lapor_ruangan . '.pdf');
     }
 }

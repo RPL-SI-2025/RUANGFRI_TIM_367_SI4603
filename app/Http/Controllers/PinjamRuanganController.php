@@ -5,14 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\PinjamRuangan;
 use App\Models\Ruangan;
 use App\Models\Mahasiswa;
+use App\Models\Jadwal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class PinjamRuanganController extends Controller
 {
-    // Daftar peminjaman ruangan untuk mahasiswa
+
+
     public function mahasiswaIndex()
     {
         $mahasiswaId = Session::get('mahasiswa_id');
@@ -21,15 +25,34 @@ class PinjamRuanganController extends Controller
             return redirect()->route('mahasiswa.login')->with('error', 'Silakan login terlebih dahulu.');
         }
         
+
         $pinjamRuangan = PinjamRuangan::with('ruangan')
                     ->where('id_mahasiswa', $mahasiswaId)
                     ->latest()
-                    ->paginate(10);
+                    ->get();
                     
-        return view('mahasiswa.peminjaman.pinjam_ruangan.index', compact('pinjamRuangan'));
+
+        $groupedPinjamRuangan = $pinjamRuangan->groupBy(function($item) {
+            return $item->id;
+        });
+        
+
+        $perPage = 10;
+        $currentPage = request()->input('page', 1);
+        $pagedData = $groupedPinjamRuangan->forPage($currentPage, $perPage);
+        
+        $paginatedPinjamRuangan = new \Illuminate\Pagination\LengthAwarePaginator(
+            $pagedData,
+            $groupedPinjamRuangan->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+                    
+        return view('mahasiswa.peminjaman.pinjam_ruangan.index', compact('paginatedPinjamRuangan'));
     }
     
-    // Buat formulir permintaan pinjam ruangan baru
+
     public function create()
     {
         $cartItems = Session::get('cart_ruangan', []);
@@ -40,15 +63,14 @@ class PinjamRuanganController extends Controller
         
         return view('mahasiswa.peminjaman.pinjam_ruangan.create', compact('cartItems'));
     }
-    
-    // Simpan permintaan pinjam ruangan baru
+
+
     public function store(Request $request)
     {
         $request->validate([
             'tanggal_pengajuan' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_pengajuan',
-            'waktu_mulai' => 'required',
-            'waktu_selesai' => 'required',
+
             'tujuan_peminjaman' => 'required|string',
             'file_scan' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
@@ -65,38 +87,140 @@ class PinjamRuanganController extends Controller
             return redirect()->route('mahasiswa.cart.keranjang_ruangan.index')
                 ->with('error', 'Keranjang ruangan Anda kosong!');
         }
+
+        DB::beginTransaction();
         
-        // Handle file upload once for all ruangan
-        $fileName = null;
-        if ($request->hasFile('file_scan')) {
-            $file = $request->file('file_scan');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('uploads/file_scan', $fileName, 'public');
+        try {
+            $fileName = null;
+            if ($request->hasFile('file_scan')) {
+                $file = $request->file('file_scan');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('uploads/file_scan', $fileName, 'public');
+            }
+            
+
+            foreach ($cartItems as $key => $item) {
+
+                if (!isset($item['waktu_mulai']) || !isset($item['waktu_selesai'])) {
+                    DB::rollBack();
+                    return redirect()->back()->with('error', 'Waktu peminjaman tidak valid untuk ruangan ' . $item['nama_ruangan']);
+                }
+                
+
+                $tanggalPeminjaman = $item['tanggal_booking'] ?? $request->tanggal_pengajuan;
+                
+                $pinjamRuangan = PinjamRuangan::create([
+                    'id_ruangan' => $item['id'],
+                    'id_mahasiswa' => $mahasiswaId,
+                    'tanggal_pengajuan' => $tanggalPeminjaman,
+                    'tanggal_selesai' => $tanggalPeminjaman, 
+                    'waktu_mulai' => $item['waktu_mulai'],
+                    'waktu_selesai' => $item['waktu_selesai'],
+                    'tujuan_peminjaman' => $request->tujuan_peminjaman,
+                    'file_scan' => $fileName,
+                    'status' => 0 
+                ]);
+
+
+                if (isset($item['selected_slots']) && !empty($item['selected_slots']) && is_array($item['selected_slots'])) {
+
+                    foreach ($item['selected_slots'] as $slot) {
+                        $slotStart = Carbon::parse($slot['start'])->format('H:i:s');
+                        $slotEnd = Carbon::parse($slot['end'])->format('H:i:s');
+                        
+
+                        $jadwal = Jadwal::where('id_ruangan', $item['id'])
+                            ->where('tanggal', $tanggalPeminjaman)
+                            ->where('jam_mulai', $slotStart)
+                            ->where('jam_selesai', $slotEnd)
+                            ->where('status', 'tersedia')
+                            ->first();
+                            
+                        if ($jadwal) {
+                            $jadwal->status = 'proses';
+                            $jadwal->id_pinjam_ruangan = $pinjamRuangan->id;
+                            $jadwal->save();
+                        } else {
+                            DB::rollBack();
+                            return redirect()->back()->with('error', 'Slot waktu ' . $slotStart . '-' . $slotEnd . ' untuk ruangan ' . $item['nama_ruangan'] . ' tidak tersedia.');
+                        }
+                    }
+                } else {
+
+                    $startTime = Carbon::parse($item['waktu_mulai'])->format('H:i:s');
+                    $endTime = Carbon::parse($item['waktu_selesai'])->format('H:i:s');
+                    $bookingDate = Carbon::parse($tanggalPeminjaman);
+                    
+
+                    $availableJadwals = Jadwal::where('id_ruangan', $item['id'])
+                        ->where('tanggal', $bookingDate)
+                        ->where('status', 'tersedia')
+                        ->where(function($query) use ($startTime, $endTime) {
+                            $query->where(function($q) use ($startTime, $endTime) {
+
+
+                                $q->where('jam_mulai', '<=', $startTime)
+                                ->where('jam_selesai', '>', $startTime);
+                            })->orWhere(function($q) use ($startTime, $endTime) {
+
+
+                                $q->where('jam_mulai', '<', $endTime)
+                                ->where('jam_selesai', '>=', $endTime);
+                            })->orWhere(function($q) use ($startTime, $endTime) {
+
+                                $q->where('jam_mulai', '>=', $startTime)
+                                ->where('jam_selesai', '<=', $endTime);
+                            });
+                        })
+                        ->get();
+                    
+                    if ($availableJadwals->isEmpty()) {
+                        DB::rollBack();
+                        return redirect()->back()->with('error', 'Jadwal waktu ' . $startTime . '-' . $endTime . ' untuk ruangan ' . $item['nama_ruangan'] . ' tidak tersedia.');
+                    }
+                    
+
+                    foreach ($availableJadwals as $jadwal) {
+                        $jadwal->status = 'proses';
+                        $jadwal->id_pinjam_ruangan = $pinjamRuangan->id;
+                        $jadwal->save();
+                    }
+                }
+                
+
+                $this->updateRoomStatusIfFullyBooked($item['id']);
+            }
+            
+
+            Session::forget('cart_ruangan');
+            
+            DB::commit();
+            
+            return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
+                ->with('success', 'Pengajuan peminjaman ruangan berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan saat memproses peminjaman: ' . $e->getMessage());
         }
-        
-        // Tambahkan peminjaman ruangan untuk setiap ruangan di keranjang
-        foreach ($cartItems as $key => $item) {
-            PinjamRuangan::create([
-                'id_ruangan' => $item['id'],
-                'id_mahasiswa' => $mahasiswaId,
-                'tanggal_pengajuan' => $request->tanggal_pengajuan,
-                'tanggal_selesai' => $request->tanggal_selesai,
-                'waktu_mulai' => $request->waktu_mulai,
-                'waktu_selesai' => $request->waktu_selesai,
-                'tujuan_peminjaman' => $request->tujuan_peminjaman,
-                'file_scan' => $fileName,
-                'status' => 0 // Menunggu persetujuan
-            ]);
-        }
-        
-        // Bersihkan keranjang setelah berhasil submit
-        Session::forget('cart_ruangan');
-        
-        return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
-            ->with('success', 'Pengajuan peminjaman ruangan berhasil ditambahkan.');
     }
 
-    // Tampilkan detail peminjaman ruangan
+
+    private function updateRoomStatusIfFullyBooked($ruanganId)
+    {
+        $totalJadwals = Jadwal::where('id_ruangan', $ruanganId)->count();
+        
+        $bookedJadwals = Jadwal::where('id_ruangan', $ruanganId)
+            ->whereIn('status', ['booked', 'proses'])
+            ->count();
+        
+        if ($totalJadwals > 0 && $totalJadwals == $bookedJadwals) {
+            Ruangan::where('id', $ruanganId)->update(['status' => 'Tidak Tersedia']);
+        }
+    }
+
+
     public function show(PinjamRuangan $pinjamRuangan)
         {
             $mahasiswaId = Session::get('mahasiswa_id');
@@ -107,19 +231,14 @@ class PinjamRuanganController extends Controller
             }
             
 
-            $relatedRooms = PinjamRuangan::where('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan)
-                ->where('tanggal_selesai', $pinjamRuangan->tanggal_selesai)
-                ->where('waktu_mulai', $pinjamRuangan->waktu_mulai)
-                ->where('waktu_selesai', $pinjamRuangan->waktu_selesai)
-                ->where('file_scan', $pinjamRuangan->file_scan)
-                ->where('id_mahasiswa', $mahasiswaId)
+            $relatedRooms = PinjamRuangan::where('id', $pinjamRuangan->id)
                 ->with('ruangan')
                 ->get();
             
             return view('mahasiswa.peminjaman.pinjam_ruangan.show', compact('pinjamRuangan', 'relatedRooms'));
         }
 
-    // Form edit peminjaman ruangan
+
     public function edit(PinjamRuangan $pinjamRuangan)
     {
         $mahasiswaId = Session::get('mahasiswa_id');
@@ -129,26 +248,21 @@ class PinjamRuanganController extends Controller
                 ->with('error', 'Anda tidak memiliki akses untuk mengedit peminjaman ini.');
         }
         
-        // Cek apakah status sudah disetujui atau selesai
+
         if (in_array($pinjamRuangan->status, [1, 3])) {
             return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
                 ->with('error', 'Peminjaman yang sudah disetujui atau selesai tidak dapat diedit.');
         }
         
-        // Get all related bookings with the same request details
-        $relatedBookings = PinjamRuangan::where('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan)
-            ->where('tanggal_selesai', $pinjamRuangan->tanggal_selesai)
-            ->where('waktu_mulai', $pinjamRuangan->waktu_mulai)
-            ->where('waktu_selesai', $pinjamRuangan->waktu_selesai)
-            ->where('file_scan', $pinjamRuangan->file_scan)
-            ->where('id_mahasiswa', $mahasiswaId)
+
+        $relatedBookings = PinjamRuangan::where('id', $pinjamRuangan->id)
             ->with('ruangan')
             ->get();
         
         return view('mahasiswa.peminjaman.pinjam_ruangan.edit', compact('pinjamRuangan', 'relatedBookings'));
     }
 
-    // Update peminjaman ruangan
+
     public function update(Request $request, PinjamRuangan $pinjamRuangan)
     {
         $mahasiswaId = Session::get('mahasiswa_id');
@@ -157,69 +271,170 @@ class PinjamRuanganController extends Controller
             return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
                 ->with('error', 'Anda tidak memiliki akses untuk mengubah peminjaman ini.');
         }
+    
         
-        // Cek jika status peminjaman sudah disetujui atau selesai
         if (in_array($pinjamRuangan->status, [1, 3])) {
             return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
                 ->with('error', 'Peminjaman yang sudah disetujui atau selesai tidak dapat diubah.');
         }
+        if ($pinjamRuangan->tanggal_pengajuan == $pinjamRuangan->tanggal_selesai) {
+            $request->merge([
+                'tanggal_selesai' => $request->input('tanggal_pengajuan')
+            ]);
+        }
 
-        // Validasi input
         $request->validate([
             'tanggal_pengajuan' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_pengajuan',
             'waktu_mulai' => 'required',
-            'waktu_selesai' => 'required',
+            'waktu_selesai' => 'required|after:waktu_mulai',
             'tujuan_peminjaman' => 'required|string',
             'file_scan' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
         
-        // Menangani unggahan file
-        // Jika ada file baru yang diunggah, hapus file lama
-        if ($request->hasFile('file_scan')) {
-            if ($pinjamRuangan->file_scan) {
-                Storage::disk('public')->delete('uploads/file_scan/' . $pinjamRuangan->file_scan);
+        DB::beginTransaction();
+        
+        try {
+
+            $fileName = $pinjamRuangan->file_scan;
+            if ($request->hasFile('file_scan')) {
+
+                if ($pinjamRuangan->file_scan) {
+                    Storage::disk('public')->delete('uploads/file_scan/' . $pinjamRuangan->file_scan);
+                }
+                
+                $file = $request->file('file_scan');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                Storage::disk('public')->putFileAs('uploads/file_scan', $file, $fileName);
             }
-            
-            $file = $request->file('file_scan');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('uploads/file_scan', $fileName, 'public');
-            
-            $pinjamRuangan->file_scan = $fileName;
-            
-            $pinjamRuangan->save();
-        }
-        
-        // Dapatkan semua booking terkait dengan detail yang sama
-        $relatedBookings = PinjamRuangan::where('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan)
-            ->where('tanggal_selesai', $pinjamRuangan->tanggal_selesai)
-            ->where('waktu_mulai', $pinjamRuangan->waktu_mulai)
-            ->where('waktu_selesai', $pinjamRuangan->waktu_selesai)
-            ->where('file_scan', $pinjamRuangan->file_scan)
-            ->where('id_mahasiswa', $mahasiswaId)
-            ->get();
-        
-        // Update semua booking terkait dengan data baru
-        foreach ($relatedBookings as $booking) {
-            $booking->tanggal_pengajuan = $request->tanggal_pengajuan;
-            $booking->tanggal_selesai = $request->tanggal_selesai;
-            $booking->waktu_mulai = $request->waktu_mulai;
-            $booking->waktu_selesai = $request->waktu_selesai;
-            $booking->tujuan_peminjaman = $request->tujuan_peminjaman;
+
+
+            $oldStartTime = $pinjamRuangan->waktu_mulai;
+            $oldEndTime = $pinjamRuangan->waktu_selesai;
+            $oldStartDate = $pinjamRuangan->tanggal_pengajuan;
+            $oldEndDate = $pinjamRuangan->tanggal_selesai;
+            $sameDay = $oldStartDate == $oldEndDate;
             
 
-            if ($request->hasFile('file_scan')) {
-                $booking->file_scan = $fileName;
+            $relatedBookings = PinjamRuangan::where('tanggal_pengajuan', $oldStartDate)
+                ->where('tanggal_selesai', $oldEndDate)
+                ->where('waktu_mulai', $oldStartTime)
+                ->where('waktu_selesai', $oldEndTime)
+                ->where('file_scan', $pinjamRuangan->file_scan)
+                ->where('id_mahasiswa', $mahasiswaId)
+                ->get();
+                
+
+            foreach ($relatedBookings as $booking) {
+
+                Jadwal::where('id_pinjam_ruangan', $booking->id)
+                    ->update([
+                        'status' => 'tersedia',
+                        'id_pinjam_ruangan' => null
+                    ]);
             }
             
-            $booking->save();
+
+
+            $newEndDate = $sameDay ? $request->tanggal_pengajuan : $request->tanggal_selesai;
+            
+
+            foreach ($relatedBookings as $booking) {
+                $booking->tanggal_pengajuan = $request->tanggal_pengajuan;
+                $booking->tanggal_selesai = $newEndDate;
+                $booking->waktu_mulai = $request->waktu_mulai;
+                $booking->waktu_selesai = $request->waktu_selesai;
+                $booking->tujuan_peminjaman = $request->tujuan_peminjaman;
+                
+                if ($request->hasFile('file_scan')) {
+                    $booking->file_scan = $fileName;
+                }
+                
+                $booking->save();
+            }
+
+
+            if ($request->has('selected_slots_json') && !empty($request->selected_slots_json)) {
+                $selectedSlots = json_decode($request->selected_slots_json, true);
+                
+                if (!empty($selectedSlots) && is_array($selectedSlots)) {
+
+                    foreach ($relatedBookings as $booking) {
+                        $ruanganId = $booking->id_ruangan;
+                        
+                        foreach ($selectedSlots as $slot) {
+                            $slotStart = Carbon::parse($slot['start'])->format('H:i:s');
+                            $slotEnd = Carbon::parse($slot['end'])->format('H:i:s');
+                            
+
+                            $jadwal = Jadwal::where('id_ruangan', $ruanganId)
+                                ->where('tanggal', $request->tanggal_pengajuan)
+                                ->where('jam_mulai', $slotStart)
+                                ->where('jam_selesai', $slotEnd)
+                                ->first();
+                                
+                            if ($jadwal) {
+                                $jadwal->status = 'proses';
+                                $jadwal->id_pinjam_ruangan = $booking->id;
+                                $jadwal->save();
+                            }
+                        }
+                    }
+                }
+            } else {
+
+                $startTime = Carbon::parse($request->waktu_mulai)->format('H:i:s');
+                $endTime = Carbon::parse($request->waktu_selesai)->format('H:i:s');
+                $startDate = Carbon::parse($request->tanggal_pengajuan);
+                $endDate = Carbon::parse($newEndDate);
+                
+                foreach ($relatedBookings as $booking) {
+                    $ruanganId = $booking->id_ruangan;
+                    
+
+                    $availableJadwals = Jadwal::where('id_ruangan', $ruanganId)
+                        ->whereBetween('tanggal', [$startDate, $endDate])
+                        ->where('status', 'tersedia')
+                        ->where(function($query) use ($startTime, $endTime) {
+                            $query->where(function($q) use ($startTime, $endTime) {
+                                $q->where('jam_mulai', '<=', $startTime)
+                                    ->where('jam_selesai', '>', $startTime);
+                            })->orWhere(function($q) use ($startTime, $endTime) {
+                                $q->where('jam_mulai', '<', $endTime)
+                                    ->where('jam_selesai', '>=', $endTime);
+                            })->orWhere(function($q) use ($startTime, $endTime) {
+                                $q->where('jam_mulai', '>=', $startTime)
+                                    ->where('jam_selesai', '<=', $endTime);
+                            });
+                        })
+                        ->get();
+                    
+                    if ($availableJadwals->isEmpty()) {
+                        DB::rollBack();
+                        return redirect()->back()
+                            ->with('error', 'Jadwal yang dipilih untuk ruangan ini tidak tersedia. Silakan pilih tanggal atau waktu lain.');
+                    }
+                    
+
+                    foreach ($availableJadwals as $jadwal) {
+                        $jadwal->status = 'proses';
+                        $jadwal->id_pinjam_ruangan = $booking->id;
+                        $jadwal->save();
+                    }
+                }
+            }
+            
+            DB::commit();
+            return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
+                ->with('success', 'Pengajuan peminjaman ruangan berhasil diperbarui.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-        
-        return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
-            ->with('success', 'Pengajuan peminjaman ruangan berhasil diperbarui.');
     }
     
-    // Update status peminjaman ruangan
+
+
     public function updateStatus(Request $request, PinjamRuangan $pinjamRuangan)
     {
         $request->validate([
@@ -227,42 +442,119 @@ class PinjamRuanganController extends Controller
             'catatan' => 'nullable|string',
         ]);
         
-        // Update status
-        $pinjamRuangan->status = $request->status;
+        DB::beginTransaction();
         
-        // Tambahkan catatan jika ada
-        if ($request->filled('catatan')) {
+        try {
+            $pinjamRuangan->status = $request->status;
             $pinjamRuangan->catatan = $request->catatan;
+            $pinjamRuangan->save();
+            
+
+            PinjamRuangan::where('id', $pinjamRuangan->id)
+                ->update(['status' => $request->status]);
+
+
+            if ($request->status == 1) { 
+
+                $this->updateJadwalStatus($pinjamRuangan, 'booked');
+                
+
+                $affectedRoomIds = PinjamRuangan::where('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan)
+                    ->where('tanggal_selesai', $pinjamRuangan->tanggal_selesai)
+                    ->where('waktu_mulai', $pinjamRuangan->waktu_mulai)
+                    ->where('waktu_selesai', $pinjamRuangan->waktu_selesai)
+                    ->where('file_scan', $pinjamRuangan->file_scan)
+                    ->where('id_mahasiswa', $pinjamRuangan->id_mahasiswa)
+                    ->pluck('id_ruangan');
+                
+
+                foreach ($affectedRoomIds as $roomId) {
+
+                    $totalJadwals = Jadwal::where('id_ruangan', $roomId)->count();
+                    
+
+                    $bookedJadwals = Jadwal::where('id_ruangan', $roomId)
+                        ->whereIn('status', ['booked', 'proses'])
+                        ->count();
+                    
+
+                    if ($totalJadwals > 0 && $totalJadwals == $bookedJadwals) {
+                        Ruangan::where('id', $roomId)->update(['status' => 'Tidak Tersedia']);
+                    } else {
+
+                        Ruangan::where('id', $roomId)->update(['status' => 'Tersedia']);
+                    }
+                }
+            } elseif ($request->status == 2 || $request->status == 4) { 
+                $this->updateJadwalStatus($pinjamRuangan, 'tersedia');
+                
+
+                $affectedRoomIds = PinjamRuangan::where('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan)
+                    ->where('tanggal_selesai', $pinjamRuangan->tanggal_selesai)
+                    ->where('waktu_mulai', $pinjamRuangan->waktu_mulai)
+                    ->where('waktu_selesai', $pinjamRuangan->waktu_selesai)
+                    ->where('file_scan', $pinjamRuangan->file_scan)
+                    ->where('id_mahasiswa', $pinjamRuangan->id_mahasiswa)
+                    ->pluck('id_ruangan');
+                    
+                Ruangan::whereIn('id', $affectedRoomIds)
+                    ->update(['status' => 'Tersedia']);
+                    
+            } elseif ($request->status == 3) { 
+                $this->updateJadwalStatus($pinjamRuangan, 'tersedia');
+                
+
+                $affectedRoomIds = PinjamRuangan::where('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan)
+                    ->where('tanggal_selesai', $pinjamRuangan->tanggal_selesai)
+                    ->where('waktu_mulai', $pinjamRuangan->waktu_mulai)
+                    ->where('waktu_selesai', $pinjamRuangan->waktu_selesai)
+                    ->where('file_scan', $pinjamRuangan->file_scan)
+                    ->where('id_mahasiswa', $pinjamRuangan->id_mahasiswa)
+                    ->pluck('id_ruangan');
+                    
+                Ruangan::whereIn('id', $affectedRoomIds)
+                    ->update(['status' => 'Tersedia']);
+            }
+            
+            DB::commit();
+            
+            $statusText = match($request->status) {
+                0 => 'menunggu persetujuan',
+                1 => 'disetujui',
+                2 => 'ditolak',
+                3 => 'selesai',
+                4 => 'dibatalkan',
+                default => 'diperbarui'
+            };
+            
+            return back()->with('success', "Status peminjaman ruangan berhasil $statusText.");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+    public function updateNotes(Request $request, PinjamRuangan $pinjamRuangan)
+    {
+        $request->validate([
+            'catatan' => 'nullable|string|max:500',
+        ]);
         
+        $pinjamRuangan->catatan = $request->catatan;
         $pinjamRuangan->save();
         
-        $statusText = match($request->status) {
-            0 => 'menunggu persetujuan',
-            1 => 'disetujui',
-            2 => 'ditolak',
-            3 => 'selesai',
-            4 => 'dibatalkan',
-            default => 'diperbarui'
-        };
-        
-        return back()->with('success', "Status peminjaman ruangan berhasil $statusText.");
+        return back()->with('success', 'Catatan berhasil diperbarui.');
     }
-    
-    // Admin interface - daftar semua peminjaman
+
+
     public function adminIndex()
     {
-        $peminjaman = PinjamRuangan::with(['ruangan', 'mahasiswa'])
-                        ->latest()
-                        ->get();
-        
-        // Kelompokkan peminjaman berdasarkan tanggal, waktu, file, dan mahasiswa
-        $groupedPeminjaman = $peminjaman->groupBy(function($item) {
-            return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
-                  $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan . '-' . $item->id_mahasiswa;
+       $peminjaman = PinjamRuangan::with(['ruangan','mahasiswa'])->latest()->get();
+
+       $groupedPeminjaman = $peminjaman->groupBy(function($item) {
+            return $item->id;
         });
-        
-        // Konversi ke kumpulan pagination
+
+
         $perPage = 10;
         $currentPage = request()->input('page', 1);
         $pagedData = $groupedPeminjaman->forPage($currentPage, $perPage);
@@ -274,86 +566,173 @@ class PinjamRuanganController extends Controller
             $currentPage,
             ['path' => request()->url(), 'query' => request()->query()]
         );
-                        
+
         return view('admin.pinjam_ruangan.index', compact('paginatedGroupedPeminjaman'));
     }
     
-    // Admin interface - halaman persetujuan
-    public function adminApproval()
-    {
-        $pendingRequests = PinjamRuangan::with(['ruangan', 'mahasiswa'])
-                ->where('status', 0)
-                ->latest()
-                ->get();
-                
-        // Kelompokkan permintaan tertunda berdasarkan kriteria yang sama
-        $groupedPending = $pendingRequests->groupBy(function($item) {
-            return $item->tanggal_pengajuan . '-' . $item->tanggal_selesai . '-' . 
-                  $item->waktu_mulai . '-' . $item->waktu_selesai . '-' . $item->file_scan . '-' . $item->id_mahasiswa;
-        });
-        
-        // Konversi ke kumpulan pagination
-        $perPage = 10;
-        $currentPage = request()->input('page', 1);
-        $pagedData = $groupedPending->forPage($currentPage, $perPage);
-        
-        $paginatedGroupedPending = new \Illuminate\Pagination\LengthAwarePaginator(
-            $pagedData,
-            $groupedPending->count(),
-            $perPage,
-            $currentPage,
-            ['path' => request()->url(), 'query' => request()->query()]
-        );
-                
-        return view('admin.pinjam_ruangan.admin_approval', compact('paginatedGroupedPending'));
-    }
 
-    // Admin interface - detail peminjaman
     public function adminShow(PinjamRuangan $pinjamRuangan)
     {
-        $relatedItems = PinjamRuangan::where('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan)
-            ->where('tanggal_selesai', $pinjamRuangan->tanggal_selesai)
-            ->where('waktu_mulai', $pinjamRuangan->waktu_mulai)
-            ->where('waktu_selesai', $pinjamRuangan->waktu_selesai)
-            ->where('file_scan', $pinjamRuangan->file_scan)
-            ->where('id_mahasiswa', $pinjamRuangan->id_mahasiswa)
+        $relatedItems = PinjamRuangan::where('id', $pinjamRuangan->id)
             ->with(['ruangan', 'mahasiswa'])
             ->get();
             
         return view('admin.pinjam_ruangan.show', compact('pinjamRuangan', 'relatedItems'));
     }
 
-    // Batalkan peminjaman ruangan (untuk mahasiswa)
+
     public function cancel(PinjamRuangan $pinjamRuangan)
     {
         $mahasiswaId = Session::get('mahasiswa_id');
         
-        // Cek apakah pengguna yang terautentikasi memiliki permintaan ini
+
         if (!$mahasiswaId || $pinjamRuangan->id_mahasiswa != $mahasiswaId) {
             return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
                 ->with('error', 'Anda tidak memiliki akses untuk membatalkan peminjaman ini.');
         }
         
-        // Cek apakah status sudah disetujui atau selesai
+        
         if (in_array($pinjamRuangan->status, [1, 3])) {
             return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
                 ->with('error', 'Peminjaman yang sudah disetujui atau selesai tidak dapat dibatalkan.');
         }
         
-        // Update status menjadi dibatalkan (status 4 untuk dibatalkan)
-        $pinjamRuangan->status = 4;
-        $pinjamRuangan->save();
+        DB::beginTransaction();
         
-        // Temukan dan update semua item terkait dengan detail yang sama
-        PinjamRuangan::where('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan)
-            ->where('tanggal_selesai', $pinjamRuangan->tanggal_selesai)
-            ->where('waktu_mulai', $pinjamRuangan->waktu_mulai)
-            ->where('waktu_selesai', $pinjamRuangan->waktu_selesai)
-            ->where('file_scan', $pinjamRuangan->file_scan)
-            ->where('id_mahasiswa', $pinjamRuangan->id_mahasiswa)
-            ->update(['status' => 4]);
-        
-        return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
-            ->with('success', 'Peminjaman ruangan berhasil dibatalkan.');
+        try {
+
+            $pinjamRuangan->status = 4;
+            $pinjamRuangan->save();
+            
+
+            PinjamRuangan::where('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan)
+                ->where('tanggal_selesai', $pinjamRuangan->tanggal_selesai)
+                ->where('waktu_mulai', $pinjamRuangan->waktu_mulai)
+                ->where('waktu_selesai', $pinjamRuangan->waktu_selesai)
+                ->where('file_scan', $pinjamRuangan->file_scan)
+                ->where('id_mahasiswa', $pinjamRuangan->id_mahasiswa)
+                ->update(['status' => 4]);
+
+
+            $this->updateJadwalStatus($pinjamRuangan, 'tersedia');
+
+
+            $affectedRoomIds = PinjamRuangan::where('tanggal_pengajuan', $pinjamRuangan->tanggal_pengajuan)
+                ->where('tanggal_selesai', $pinjamRuangan->tanggal_selesai)
+                ->where('waktu_mulai', $pinjamRuangan->waktu_mulai)
+                ->where('waktu_selesai', $pinjamRuangan->waktu_selesai)
+                ->where('file_scan', $pinjamRuangan->file_scan)
+                ->where('id_mahasiswa', $pinjamRuangan->id_mahasiswa)
+                ->pluck('id_ruangan');
+            
+            foreach ($affectedRoomIds as $roomId) {
+
+                $bookedJadwals = Jadwal::where('id_ruangan', $roomId)
+                    ->whereIn('status', ['booked', 'proses'])
+                    ->count();
+
+
+                if ($bookedJadwals == 0) {
+                    Ruangan::where('id', $roomId)->update(['status' => 'Tersedia']);
+                }
+            }
+            
+            DB::commit();
+            return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
+                ->with('success', 'Peminjaman ruangan berhasil dibatalkan.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('mahasiswa.peminjaman.pinjam-ruangan.index')
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
+
+  
+    public function updateJadwalStatus($pinjamRuangan, $status)
+    {
+
+        $affectedJadwals = Jadwal::where('id_ruangan', $pinjamRuangan->id_ruangan)
+            ->where(function($query) use ($pinjamRuangan) {
+
+                $query->where('id_pinjam_ruangan', $pinjamRuangan->id)
+                    ->orWhere(function($q) use ($pinjamRuangan) {
+                        $q->whereBetween('tanggal', [$pinjamRuangan->tanggal_pengajuan, $pinjamRuangan->tanggal_selesai])
+                            ->where(function($innerQ) use ($pinjamRuangan) {
+
+                                $startTime = Carbon::parse($pinjamRuangan->waktu_mulai)->format('H:i:s');
+                                $endTime = Carbon::parse($pinjamRuangan->waktu_selesai)->format('H:i:s');
+                                
+                                $innerQ->where(function($timeQ) use ($startTime, $endTime) {
+                                    $timeQ->where('jam_mulai', '<=', $startTime)
+                                        ->where('jam_selesai', '>', $startTime);
+                                })->orWhere(function($timeQ) use ($startTime, $endTime) {
+                                    $timeQ->where('jam_mulai', '<', $endTime)
+                                        ->where('jam_selesai', '>=', $endTime);
+                                })->orWhere(function($timeQ) use ($startTime, $endTime) {
+                                    $timeQ->where('jam_mulai', '>=', $startTime)
+                                        ->where('jam_selesai', '<=', $endTime);
+                                });
+                            });
+                    });
+            })
+            ->get();
+            
+        foreach ($affectedJadwals as $jadwal) {
+
+            $jadwal->status = $status;
+            
+
+            if ($status === 'tersedia') {
+                $jadwal->id_pinjam_ruangan = null;
+            } else {
+                $jadwal->id_pinjam_ruangan = $pinjamRuangan->id;
+            }
+            
+            $jadwal->save();
+        }
+        
+
+
+        if ($status === 'tersedia') {
+            $pendingBookings = PinjamRuangan::where('id_ruangan', $pinjamRuangan->id_ruangan)
+                ->where('status', 0) 
+                ->where('id', '!=', $pinjamRuangan->id) 
+                ->where(function($q) use ($pinjamRuangan) {
+
+                    $q->whereBetween('tanggal_pengajuan', [$pinjamRuangan->tanggal_pengajuan, $pinjamRuangan->tanggal_selesai])
+                    ->orWhereBetween('tanggal_selesai', [$pinjamRuangan->tanggal_pengajuan, $pinjamRuangan->tanggal_selesai]);
+                })
+                ->get();
+            
+            foreach ($pendingBookings as $booking) {
+                $bookingStartTime = Carbon::parse($booking->waktu_mulai);
+                $bookingEndTime = Carbon::parse($booking->waktu_selesai);
+                
+
+                $jadwals = Jadwal::where('id_ruangan', $booking->id_ruangan)
+                    ->where('tanggal', '>=', $booking->tanggal_pengajuan)
+                    ->where('tanggal', '<=', $booking->tanggal_selesai)
+                    ->where('status', 'tersedia')
+                    ->get();
+                
+                foreach ($jadwals as $jadwal) {
+                    $jadwalStartTime = Carbon::parse($jadwal->jam_mulai);
+                    $jadwalEndTime = Carbon::parse($jadwal->jam_selesai);
+                    
+
+                    if (
+                        ($bookingStartTime <= $jadwalStartTime && $bookingEndTime > $jadwalStartTime) ||
+                        ($bookingStartTime < $jadwalEndTime && $bookingEndTime >= $jadwalEndTime) ||
+                        ($bookingStartTime >= $jadwalStartTime && $bookingEndTime <= $jadwalEndTime)
+                    ) {
+
+                        $jadwal->status = 'proses';
+                        $jadwal->id_pinjam_ruangan = $booking->id;
+                        $jadwal->save();
+                    }
+                }
+            }
+        }
+    }
+
 }
