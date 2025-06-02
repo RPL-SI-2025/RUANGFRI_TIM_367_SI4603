@@ -16,7 +16,7 @@ class Mahasiswa extends Authenticatable
 
     protected $fillable = [
         'nim',
-        'nama_mahasiswa', 
+        'nama_mahasiswa',
         'email',
         'tempat_lahir',
         'tanggal_lahir',
@@ -52,9 +52,21 @@ class Mahasiswa extends Authenticatable
         return $this->hasMany(PinjamInventaris::class, 'id_mahasiswa');
     }
 
-    public function pelaporan()
+    // Relasi ke status peminjaman
+    public function statusPeminjaman()
     {
-        return $this->hasMany(Pelaporan::class, 'id_mahasiswa');
+        return $this->hasMany(StatusPeminjaman::class, 'id_mahasiswa');
+    }
+
+    // Relasi ke laporan ruangan
+    public function laporanRuangan()
+    {
+        return $this->hasMany(LaporanRuangan::class, 'id_mahasiswa');
+    }
+
+    // Relasi ke lapor inventaris
+    public function laporInventaris()
+    {
+        return $this->hasMany(LaporInventaris::class, 'id_mahasiswa');
     }
 }
-

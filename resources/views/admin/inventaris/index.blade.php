@@ -5,44 +5,7 @@
 @section('content')
 <div class="d-flex justify-content-between mb-3">
     <h4>Data Inventaris</h4>
-    <a href="{{ route('admin.inventaris.create') }}"
-       class="btn btn-success d-inline-flex align-items-center gap-2 px-3 py-2 rounded-bg hover-transition shadow-sm"
-       style="transition: 0.3s ease; transform: scale(1);"
-       onmouseover="this.style.transform='scale(1.05)';"
-       onmouseout="this.style.transform='scale(1)';">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" width="18" height="18">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                d="M12 4v16m8-8H4"/>
-        </svg>
-        <span class="fs-6">Tambah Inventaris</span>
-    </a>
-</div>
-
-<div class="card mb-4">
-    <div class="card-header bg-light">
-        <h5 class="mb-0">Filter Inventaris</h5>
-    </div>
-    <div class="card-body">
-        <form method="GET" action="{{ route('admin.inventaris.index') }}" class="row g-2 align-items-center">
-            <div class="col-md-4">
-                <input type="text" name="search" class="form-control" placeholder="Cari nama inventaris..." value="{{ request('search') }}">
-            </div>
-            <div class="col-md-3">
-                <select name="status" class="form-select">
-                    <option value="">Status</option>
-                    <option value="Tersedia" {{ request('status') == 'Tersedia' ? 'selected' : '' }}>Tersedia</option>
-                    <option value="Tidak Tersedia" {{ request('status') == 'Tidak Tersedia' ? 'selected' : '' }}>Tidak Tersedia</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Filter</button>
-            </div>
-            <div class="col-md-2">
-                <a href="{{ route('admin.inventaris.index') }}" class="btn btn-secondary w-100">Reset</a>
-            </div>
-        </form>
-    </div>
+    <a href="{{ route('admin.inventaris.create') }}" class="btn btn-success">Tambah Inventaris</a>
 </div>
 
 @if (session('success'))
@@ -69,7 +32,7 @@
                 <td>{{ $loop->iteration }}</td>
                 <td>
                     @if ($item->gambar_inventaris)
-                        <img src="{{ asset('storage/katalog_inventaris/' . $item->gambar_inventaris) }}" 
+                        <img src="{{ asset('storage/katalog_inventaris/' . $item->gambar_inventaris) }}"
                              alt="{{ $item->nama_inventaris }}" width="100" class="img-thumbnail">
                     @else
                         <span class="text-muted">Tidak ada gambar</span>
@@ -103,4 +66,3 @@
     </table>
 </div>
 @endsection
-

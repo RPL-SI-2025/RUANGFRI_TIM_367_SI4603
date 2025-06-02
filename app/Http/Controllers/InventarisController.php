@@ -55,7 +55,7 @@ class InventarisController extends Controller
             ->with('success', 'Inventaris berhasil ditambahkan.');
     }
 
-    
+
     public function edit(Inventaris $inventaris)
     {
         $kategoris = KategoriInventaris::all();
@@ -78,7 +78,7 @@ class InventarisController extends Controller
             $filename = time() . '_' . $file->getClientOriginalName();
 
             Storage::disk('public')->makeDirectory('katalog_inventaris');
-            
+
             Storage::disk('public')->putFileAs('katalog_inventaris', $file, $filename);
 
             if ($inventaris->gambar_inventaris) {
@@ -95,7 +95,7 @@ class InventarisController extends Controller
             ->with('success', 'Inventaris berhasil diperbarui.');
     }
 
-    
+
 
     public function destroy(Inventaris $inventaris)
     {
@@ -123,14 +123,14 @@ class InventarisController extends Controller
             });
         }
 
-        
+
         if ($request->has('kategori_id') && $request->kategori_id != '') {
             $query->where('kategori_id', $request->kategori_id);
         }
 
         $inventaris = $query->latest()->get();
         $kategoris = KategoriInventaris::all();
-        
+
         return view('mahasiswa.katalog.inventaris.index', compact('inventaris', 'kategoris'));
     }
 
