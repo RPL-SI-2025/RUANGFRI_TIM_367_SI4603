@@ -88,7 +88,7 @@
                             </div>
                             <span class="nav-text">Approval Ruangan</span>
                         </a>
-                        <a href="#" class="nav-link {{ request()->routeIs('admin.history_ruangan.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.history_ruangan.index')}}" class="nav-link {{ request()->routeIs('admin.history_ruangan.*') ? 'active' : '' }}">
                             <div class="nav-icon">
                                 <i class="fas fa-history"></i>
                             </div>

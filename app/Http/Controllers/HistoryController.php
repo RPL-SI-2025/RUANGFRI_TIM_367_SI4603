@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\laporinventaris;
-use App\Models\Pelaporan;
 use App\Models\PinjamInventaris;
-use App\Models\PinjamRuangan;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -81,8 +79,9 @@ class HistoryController extends Controller
         
         } elseif ($type === 'inventaris') {}
         
-        return redirect()->route('mahasiswa.history.history_inventaris.index')
+        return redirect()->route('mahasiswa.history.mahasiswa.history.history_inventaris.index')
             ->with('error', 'Tipe laporan tidak valid.');
+            
     }
         public function adminindex()
     {

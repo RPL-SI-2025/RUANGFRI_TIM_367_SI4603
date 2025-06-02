@@ -262,7 +262,7 @@
 
 @push('styles')
 <style>
-/* Modal Styles */
+  
 .modal {
     z-index: 1060 !important;
 }
@@ -281,7 +281,7 @@
     filter: invert(1) grayscale(100%) brightness(200%);
 }
 
-/* Responsive modal */
+  
 @media (max-width: 576px) {
     .modal-dialog {
         margin: 0.5rem;
@@ -289,7 +289,7 @@
     }
 }
 
-/* Form validation */
+  
 .is-invalid {
     border-color: #dc3545;
 }
@@ -298,13 +298,13 @@
     display: block;
 }
 
-/* Modal content */
+  
 .modal-content {
     border-radius: 0.5rem;
     overflow: hidden;
 }
 
-/* Ensure modal is clickable */
+  
 .modal-dialog {
     z-index: 1061;
 }

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->time('waktu_selesai');
             $table->text('tujuan_peminjaman');
             $table->string('file_scan', 255)->nullable();
-            $table->integer('status')->default(0); // 0: Menunggu Persetujuan, 1: Disetujui, 2: Ditolak, 3: Selesai, 4: Dibatalkan
+            $table->integer('status')->default(0);   
             $table->text('catatan')->nullable();
             $table->timestamps();
             
