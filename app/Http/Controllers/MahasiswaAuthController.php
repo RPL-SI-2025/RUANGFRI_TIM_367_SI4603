@@ -12,6 +12,7 @@ use App\Models\Inventaris;
 use App\Models\Peminjaman;
 use App\Models\PinjamRuangan;
 use App\Models\PinjamInventaris;
+use Illuminate\View\View;
 
 class MahasiswaAuthController extends Controller
 {
