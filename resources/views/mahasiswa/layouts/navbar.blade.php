@@ -1,5 +1,21 @@
 
 <!-- Top Navbar -->
+
+<style>
+    .top-navbar {
+        background-color: #ffffff;
+    }
+    .top-navbar h5 {
+        color: #2ecc71; =
+    }
+    .top-navbar small {
+        color: #6c757d;=
+    }
+    .top-navbar .text-secondary {
+        color: #2ecc71;
+    }
+</style>
+
 <nav class="top-navbar d-flex justify-content-between align-items-center sticky-top">
     <div class="d-flex align-items-center">
         <button class="btn text-secondary border-0" id="sidebarToggle">
@@ -10,7 +26,7 @@
             <small class="text-muted">Selamat datang, {{ Session::get('mahasiswa_name') }}</small>
         </div>
     </div>
-    
+
     <div class="d-flex align-items-center">
 
         <div class="position-relative me-3">
@@ -24,7 +40,7 @@
                 @endif
             </a>
         </div>
-        
+
         <div class="user-dropdown dropdown">
             <a class="dropdown-toggle d-flex align-items-center text-decoration-none" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="user-avatar-simple">{{ substr(Session::get('mahasiswa_name') ?? 'MA', 0, 2) }}</div>
@@ -74,12 +90,12 @@
     color: var(--accent-blue);
 }
 
-  
+
 .user-avatar-simple {
     width: 50px;
     height: 50px;
     border-radius: 12px;
-    background: #1e293b;   
+    background: #1e293b;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -97,7 +113,7 @@
     box-shadow: 0 4px 12px rgba(30, 41, 59, 0.25);
 }
 
-  
+
 .dropdown-simple {
     background: #ffffff !important;
     border: 1px solid #e9ecef;
@@ -107,7 +123,7 @@
     margin-top: 0.5rem;
 }
 
-  
+
 .dropdown-item-simple {
     color: #333 !important;
     border-radius: 8px;
@@ -134,7 +150,7 @@
     color: #dc3545 !important;
 }
 
-  
+
 .dropdown-profile {
     background: #f8f9fa;
     border-radius: 8px;
@@ -146,13 +162,13 @@
     color: #333 !important;
 }
 
-  
+
 .dropdown-divider {
     border-color: #e9ecef;
     margin: 0.5rem 0;
 }
 
-  
+
 .dropdown-item-simple .text-primary {
     color: #1e293b !important;
 }

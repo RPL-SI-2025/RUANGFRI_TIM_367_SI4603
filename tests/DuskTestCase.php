@@ -22,42 +22,44 @@ abstract class DuskTestCase extends BaseTestCase
         if (! static::runningInSail()) {
             static::startChromeDriver();
         }
-        
-   
+
+        // Setup testing database
+
+
         static::setupTestingDatabase();
     }
 
     /**
-     * Setup testing database with persistent data
+     * Setup testing database with persistent data.
      */
     protected static function setupTestingDatabase(): void
     {
         try {
-   
+
             config(['database.default' => 'mysql_testing']);
-            
-   
+
+
             DB::connection()->getPdo();
-            
-   
+
+
             $tables = DB::select("SHOW TABLES LIKE 'migrations'");
-            
+
             if (empty($tables)) {
-   
+
                 Artisan::call('migrate:fresh', [
                     '--seed' => true,
                     '--force' => true
                 ]);
-                
-                echo "Database testing berhasil di-setup dengan data awal.\n";
+
+                echo "Testing database successfully set up with initial data.\n";
             } else {
-                echo "Database testing sudah ada, menggunakan data yang tersimpan.\n";
+                echo "Testing database already exists, using stored data.\n";
             }
-            
+
         } catch (\Exception $e) {
             echo "Error setting up testing database: " . $e->getMessage() . "\n";
-            
-   
+
+
             try {
                 $connection = config('database.connections.mysql');
                 $pdo = new \PDO(
@@ -65,20 +67,20 @@ abstract class DuskTestCase extends BaseTestCase
                     $connection['username'],
                     $connection['password']
                 );
-                
+
                 $pdo->exec("CREATE DATABASE IF NOT EXISTS ruangfri_testing");
-                
-   
+
+
                 config(['database.default' => 'mysql_testing']);
-                
-   
+
+
                 Artisan::call('migrate:fresh', [
                     '--seed' => true,
                     '--force' => true
                 ]);
-                
-                echo "Database testing berhasil dibuat dan di-setup.\n";
-                
+
+                echo "Testing database created and set up successfully.\n";
+
             } catch (\Exception $e2) {
                 echo "Error creating testing database: " . $e2->getMessage() . "\n";
                 throw $e2;
@@ -89,19 +91,19 @@ abstract class DuskTestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
-   
+
+
         $this->setupTestData();
-        
-   
+
+
         $this->cleanupSessionData();
     }
 
     protected function tearDown(): void
     {
-   
+
         $this->resetTransactionData();
-        
+
         parent::tearDown();
     }
 

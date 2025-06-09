@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        
+
         Schema::create('kategori_inventaris', function (Blueprint $table) {
             $table->id();
             $table->string('nama_kategori');
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->integer('jumlah');
             $table->enum('status', ['Tersedia', 'Tidak Tersedia'])->default('Tersedia');
             $table->timestamps();
-    
+
             $table->foreign('id_logistik')->references('id')->on('admin_logistik');
             $table->foreign('kategori_id')->references('id')->on('kategori_inventaris');
         });

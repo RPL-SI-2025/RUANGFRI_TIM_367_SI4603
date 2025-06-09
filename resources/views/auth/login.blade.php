@@ -15,7 +15,7 @@
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
 
-        <form action="{{ route('login.submit') }}" method="POST">
+        <form action="{{ route('admin.login.submit') }}" method="POST">
             @csrf
 
             <div class="mb-3">
@@ -32,8 +32,9 @@
         </form>
 
         <div class="mt-3 text-center">
-            <span>Belum punya akun?</span> 
-            <a href="{{ route('register') }}" class="btn btn-link p-0 align-baseline">Daftar sebagai Mahasiswa</a>
+            <span>Belum punya akun?</span>
+
+      <a href="{{ route('register') }}" class="btn btn-link p-0 align-baseline">Daftar sebagai Mahasiswa</a>
         </div>
     </div>
 </div>
