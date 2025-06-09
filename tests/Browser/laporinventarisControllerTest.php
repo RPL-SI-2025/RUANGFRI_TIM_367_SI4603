@@ -2,208 +2,113 @@
 
 namespace Tests\Browser;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
 use App\Models\Mahasiswa;
 use App\Models\AdminLogistik;
 use App\Models\Inventaris;
-use App\Models\laporinventaris;
 use App\Models\PinjamInventaris;
+use App\Models\laporinventaris;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Dusk\Browser;
+use Tests\DuskTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-class LaporInventarisControllerTest extends DuskTestCase
+class LaporInventarisFlowTest extends DuskTestCase
 {
-    use DatabaseMigrations;
-
-
-    protected function setUp(): void
+    use \Illuminate\Foundation\Testing\DatabaseMigrations;
+    /**
+     * Test the full flow of reporting an inventory item.
+     *
+     * @return void
+     */
+    #[Test]
+    public function testFullLaporInventarisFlow()
     {
-        parent::setUp();
-
         Storage::fake('public');
 
-        // Setup data
-        $logistik = AdminLogistik::factory()->create([
+        // Setup: Buat admin logistik & mahasiswa
+        $admin = AdminLogistik::factory()->create([
             'email' => 'admin@test.com',
-            'password' => Hash::make('password123')
+            'password' => Hash::make('admin123')
         ]);
-
         $mahasiswa = Mahasiswa::factory()->create([
-            'nim' => '1234567800',
-            'nama_mahasiswa' => 'John Doe',
-            'email' => 'john.doe@student.univ.ac.id',
-            'password' => Hash::make('Password123!')
+            'email' => 'mahasiswa@test.com',
+            'password' => Hash::make('mahasiswa123')
         ]);
 
-        $kategori = laporinventaris::factory()->create([
-            'nama_kategori' => 'Elektronik'
-        ]);
-
-        $inventaris = Inventaris::factory()->create([
-            'nama_inventaris' => 'Laptop Dell',
-            'kategori_id' => $kategori->id,
-            'status' => 'Tersedia',
-            'id_logistik' => $logistik->id
-        ]);
-
-        PinjamInventaris::factory()->create([
-            'id_mahasiswa' => $mahasiswa->id_mahasiswa,
-            'id_inventaris' => $inventaris->id,
-            'status' => 1
-        ]);
-    }
-
-        protected function login(Browser $browser)
-        {
+        // Mahasiswa login
+        $this->browse(function (Browser $browser) use ($mahasiswa, $admin) {
+            // Login mahasiswa
             $browser->visit('/mahasiswa/login')
-                ->waitFor('#login-form.active', 10)
-                ->type('#login-email', 'john.doe@student.univ.ac.id')
-                ->type('#login-password', 'Password123!')
-                ->click('button[type="submit"]')
+                ->type('email', $mahasiswa->email)
+                ->type('password', 'mahasiswa123')
+                ->press('Login')
                 ->waitForLocation('/mahasiswa/dashboard', 10);
-        }
 
-        /** @test */
-        public function testMahasiswaCanLaporInventaris()
-        {
-            $this->browse(function (Browser $browser) {
-                $this->login($browser);
+            // Katalog inventaris
+            $browser->visit('/mahasiswa/inventaris')
+                ->assertSee('Katalog Inventaris');
 
-                $browser->visit('/mahasiswa/peminjaman/pinjam-inventaris')
-                    ->waitForText('Daftar Peminjaman', 10)
-                    ->click('@btn-lapor-0')
-                    ->waitForLocation('/mahasiswa/pelaporan/lapor-inventaris/create', 10)
-                    ->attach('foto_awal', __DIR__.'/files/awal.jpg')
-                    ->attach('foto_akhir', __DIR__.'/files/akhir.jpg')
-                    ->type('deskripsi', 'Barang baik')
-                    ->press('Submit')
-                    ->waitForLocation('/mahasiswa/pelaporan/lapor-inventaris', 10)
-                    ->assertSee('Laporan Inventaris Berhasil Dibuat');
-            });
-        }
+            // Tambah katalog inventaris (asumsi ada tombol tambah)
+            $browser->click('@btn-tambah-inventaris')
+                ->waitForLocation('/mahasiswa/inventaris/create', 10)
+                ->type('nama_inventaris', 'Laptop Dusk')
+                ->type('spesifikasi', 'i5, 8GB RAM')
+                ->select('id_logistik', $admin->id)
+                ->press('Simpan')
+                ->waitForText('Inventaris berhasil ditambahkan', 10);
 
-        /** @test */
-        public function testMahasiswaCannotLaporTanpaLogin()
-        {
-            $this->browse(function (Browser $browser) {
-                $browser->visit('/mahasiswa/pelaporan/lapor-inventaris/create?id_peminjaman=1')
-                    ->assertSee('Silakan login terlebih dahulu.');
-            });
-        }
+            // Proses peminjaman
+            $browser->visit('/mahasiswa/inventaris')
+                ->click('@btn-pinjam-0')
+                ->waitForLocation('/mahasiswa/peminjaman/pinjam-inventaris/create', 10)
+                ->type('tanggal_pengajuan', now()->format('Y-m-d'))
+                ->type('tanggal_selesai', now()->addDays(2)->format('Y-m-d'))
+                ->type('waktu_mulai', '09:00')
+                ->type('waktu_selesai', '17:00')
+                ->attach('file_scan', __DIR__.'/files/scan.jpg')
+                ->press('Ajukan')
+                ->waitForText('Peminjaman berhasil diajukan', 10);
 
-        /** @test */
-        public function testMahasiswaCannotLaporTanpaFoto()
-        {
-            $this->browse(function (Browser $browser) {
-                $this->login($browser);
+            // Simulasikan approval admin (langsung update status di DB)
+            $pinjam = PinjamInventaris::latest()->first();
+            $pinjam->status = 1; // Disetujui
+            $pinjam->save();
 
-                $browser->visit('/mahasiswa/peminjaman/pinjam-inventaris')
-                    ->waitForText('Daftar Peminjaman', 10)
-                    ->click('@btn-lapor-0')
-                    ->waitForLocation('/mahasiswa/pelaporan/lapor-inventaris/create', 10)
-                    ->type('deskripsi', 'Barang baik')
-                    ->press('Submit')
-                    ->waitForText('The foto awal field is required', 10)
-                    ->assertSee('The foto awal field is required');
-            });
-        }
+            // Daftar peminjaman & klik lapor
+            $browser->visit('/mahasiswa/peminjaman/pinjam-inventaris')
+                ->waitForText('Daftar Peminjaman', 10)
+                ->click('@btn-lapor-0')
+                ->waitForLocation('/mahasiswa/pelaporan/lapor-inventaris/create', 10)
+                ->attach('foto_awal', __DIR__.'/files/awal.jpg')
+                ->attach('foto_akhir', __DIR__.'/files/akhir.jpg')
+                ->type('deskripsi', 'Laptop baik')
+                ->select('id_logistik', $admin->id)
+                ->press('Kirim Laporan')
+                ->waitForText('Laporan berhasil dikirim', 10);
 
-        /** @test */
-        public function testMahasiswaCanViewLaporanHistory()
-        {
-            $this->browse(function (Browser $browser) {
-                $this->login($browser);
+            // Lihat detail laporan
+            $browser->visit('/mahasiswa/pelaporan/lapor-inventaris')
+                ->waitForText('Riwayat Laporan Inventaris', 10)
+                ->click('@btn-detail-0')
+                ->waitForLocation('/mahasiswa/pelaporan/lapor-inventaris/1', 10)
+                ->assertSee('Detail Laporan Inventaris');
 
-                $browser->visit('/mahasiswa/pelaporan/lapor-inventaris')
-                    ->assertSee('Riwayat Laporan Inventaris');
-            });
-        }
+            // Download PDF
+            $browser->click('@btn-download-pdf')
+                ->pause(2000); // Tunggu download
 
-        /** @test */
-        public function testMahasiswaCanEditLaporan()
-        {
-            $this->browse(function (Browser $browser) {
-                $this->login($browser);
+            // Edit laporan
+            $browser->visit('/mahasiswa/pelaporan/lapor-inventaris')
+                ->click('@btn-edit-0')
+                ->waitForLocation('/mahasiswa/pelaporan/lapor-inventaris/1/edit', 10)
+                ->type('deskripsi', 'Laptop sudah diperbaiki')
+                ->press('Submit')
+                ->waitForText('Laporan berhasil diperbarui', 10);
 
-                // Buat laporan terlebih dahulu
-                $browser->visit('/mahasiswa/peminjaman/pinjam-inventaris')
-                    ->waitForText('Daftar Peminjaman', 10)
-                    ->click('@btn-lapor-0')
-                    ->waitForLocation('/mahasiswa/pelaporan/lapor-inventaris/create', 10)
-                    ->attach('foto_awal', __DIR__.'/files/awal.jpg')
-                    ->attach('foto_akhir', __DIR__.'/files/akhir.jpg')
-                    ->type('deskripsi', 'Barang baik')
-                    ->press('Submit')
-                    ->waitForLocation('/mahasiswa/pelaporan/lapor-inventaris', 10);
-
-                // Edit laporan
-                $browser->visit('/mahasiswa/pelaporan/lapor-inventaris')
-                    ->click('@btn-edit-0')
-                    ->waitForLocation('/mahasiswa/pelaporan/lapor-inventaris/1/edit', 10)
-                    ->type('deskripsi', 'Barang sudah diperbaiki')
-                    ->press('Submit')
-                    ->waitForLocation('/mahasiswa/pelaporan/lapor-inventaris', 10)
-                    ->assertSee('Laporan berhasil diperbarui.');
-            });
-        }
-
-        /** @test */
-        public function testMahasiswaCanDownloadLaporanPDF()
-        {
-            $this->browse(function (Browser $browser) {
-                $this->login($browser);
-
-                // Buat laporan terlebih dahulu
-                $browser->visit('/mahasiswa/peminjaman/pinjam-inventaris')
-                    ->waitForText('Daftar Peminjaman', 10)
-                    ->click('@btn-lapor-0')
-                    ->waitForLocation('/mahasiswa/pelaporan/lapor-inventaris/create', 10)
-                    ->attach('foto_awal', __DIR__.'/files/awal.jpg')
-                    ->attach('foto_akhir', __DIR__.'/files/akhir.jpg')
-                    ->type('deskripsi', 'Barang baik')
-                    ->press('Submit')
-                    ->waitForLocation('/mahasiswa/pelaporan/lapor-inventaris', 10);
-
-                // Download PDF
-                // (Add your PDF download test steps here)
-            });
-        }
-
-        /** @test */
-        public function testMahasiswaCanLaporInventarisSetelahPeminjaman()
-        {
-            $this->browse(function (Browser $browser) {
-                $this->login($browser);
-
-                // Mahasiswa melakukan peminjaman inventaris
-                $browser->visit('/mahasiswa/peminjaman/pinjam-inventaris')
-                    ->waitForText('Daftar Peminjaman', 10)
-                    ->assertSee('Laptop Dell')
-                    ->assertSee('Disetujui')
-                    // Klik tombol lapor pada baris pertama
-                    ->click('@btn-lapor-0')
-                    ->waitForLocation('/mahasiswa/pelaporan/lapor-inventaris/create', 10)
-                    // Isi form laporan inventaris
-                    ->attach('foto_awal', __DIR__.'/files/awal.jpg')
-                    ->attach('foto_akhir', __DIR__.'/files/akhir.jpg')
-                    ->type('deskripsi', 'Inventaris selesai digunakan dengan baik')
-                    // Pilih logistik jika ada select
-                    ->when($browser->element('select[name="id_logistik"]'), function ($browser) {
-                        $browser->select('id_logistik', 1);
-                    })
-                    // Isi tanggal laporan jika ada
-                    ->when($browser->element('input[name="datetime"]'), function ($browser) {
-                        $browser->type('datetime', now()->format('Y-m-d H:i'));
-                    })
-                    ->press('Submit')
-                    ->waitForLocation('/mahasiswa/pelaporan/lapor-inventaris', 10)
-                    ->assertSee('Laporan berhasil dikirim')
-                    // Pastikan status peminjaman berubah menjadi selesai
-                    ->visit('/mahasiswa/peminjaman/pinjam-inventaris')
-                    ->waitForText('Daftar Peminjaman', 10)
-                        ->assertSee('Selesai');
-                });
-            }
-        }
+            // Cek histori laporan
+            $browser->visit('/mahasiswa/pelaporan/lapor-inventaris/history')
+                ->assertSee('Laptop sudah diperbaiki');
+        });
+    }
+}

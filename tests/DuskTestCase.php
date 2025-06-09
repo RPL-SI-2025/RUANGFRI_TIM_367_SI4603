@@ -5,23 +5,6 @@ namespace Tests;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
-<<<<<<< HEAD
-use Illuminate\Support\Collection;
-use Laravel\Dusk\TestCase as BaseTestCase;
-use PHPUnit\Framework\Attributes\BeforeClass;
-
-abstract class DuskTestCase extends BaseTestCase
-{
-    /**
-     * Prepare for Dusk test execution.
-     */
-    #[BeforeClass]
-    public static function prepare(): void
-    {
-        if (! static::runningInSail()) {
-            static::startChromeDriver(['--port=9515']);
-        }
-=======
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Laravel\Dusk\TestCase as BaseTestCase;
@@ -120,7 +103,6 @@ abstract class DuskTestCase extends BaseTestCase
         $this->resetTransactionData();
         
         parent::tearDown();
->>>>>>> be3ea6703e56698f8d541c4164b429821f305820
     }
 
     /**
@@ -130,13 +112,7 @@ abstract class DuskTestCase extends BaseTestCase
     {
         $options = (new ChromeOptions)->addArguments(collect([
             $this->shouldStartMaximized() ? '--start-maximized' : '--window-size=1920,1080',
-<<<<<<< HEAD
-            '--disable-search-engine-choice-screen',
-            '--disable-smooth-scrolling',
-        ])->unless($this->hasHeadlessDisabled(), function (Collection $items) {
-=======
         ])->unless($this->hasHeadlessDisabled(), function ($items) {
->>>>>>> be3ea6703e56698f8d541c4164b429821f305820
             return $items->merge([
                 '--disable-gpu',
                 '--headless=new',
@@ -144,19 +120,12 @@ abstract class DuskTestCase extends BaseTestCase
         })->all());
 
         return RemoteWebDriver::create(
-<<<<<<< HEAD
-            $_ENV['DUSK_DRIVER_URL'] ?? env('DUSK_DRIVER_URL') ?? 'http://localhost:9515',
-=======
-            $_ENV['DUSK_DRIVER_URL'] ?? 'http:   
->>>>>>> be3ea6703e56698f8d541c4164b429821f305820
+            $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515',
             DesiredCapabilities::chrome()->setCapability(
                 ChromeOptions::CAPABILITY, $options
             )
         );
     }
-<<<<<<< HEAD
-}
-=======
 
     /**
      * Determine whether the Dusk command has disabled headless mode.
@@ -176,4 +145,3 @@ abstract class DuskTestCase extends BaseTestCase
                isset($_SERVER['DUSK_START_MAXIMIZED']);
     }
 }
->>>>>>> be3ea6703e56698f8d541c4164b429821f305820
