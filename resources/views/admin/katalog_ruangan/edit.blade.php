@@ -26,14 +26,41 @@
             </div>
 
             <div class="mb-3">
-                <label for="fasilitas" class="form-label">Fasilitas</label>
-                <textarea name="fasilitas" class="form-control" rows="3" required>{{ $ruangan->fasilitas }}</textarea>
+                <label class="form-label">Fasilitas</label>
+                    <div id="fasilitas-wrapper">
+                        @php
+                            $fasilitasList = explode(',', $ruangan->fasilitas); // asumsikan fasilitas dipisah koma
+                        @endphp
+
+                        @foreach ($fasilitasList as $index => $fasilitasItem)
+                            <div class="input-group mb-2">
+                                <input type="text" name="fasilitas[]" class="form-control" placeholder="Fasilitas" value="{{ trim($fasilitasItem) }}" required>
+                                @if ($index == 0)
+                                    <button type="button" class="btn btn-success add-fasilitas">+</button>
+                                @else
+                                    <button type="button" class="btn btn-danger remove-fasilitas">-</button>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @error('fasilitas')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label for="lokasi" class="form-label">Lokasi</label>
-                <input type="text" class="form-control" name="lokasi" value="{{ $ruangan->lokasi }}" required>
+                <select name="lokasi" class="form-select" required>
+                    <option value="">-- Pilih Lokasi --</option>
+                    <option value="Gedung B (Cacuk)" {{ (old('lokasi', $ruangan->lokasi) == 'Gedung B (Cacuk)') ? 'selected' : '' }}>Gedung B (Cacuk)</option>
+                    <option value="Telkom University Landmark Tower (TULT)" {{ (old('lokasi', $ruangan->lokasi) == 'Telkom University Landmark Tower (TULT)') ? 'selected' : '' }}>Telkom University Landmark Tower (TULT)</option>
+                    <option value="Gedung Kuliah Umum (GKU)" {{ (old('lokasi', $ruangan->lokasi) == 'Gedung Kuliah Umum (GKU)') ? 'selected' : '' }}>Gedung Kuliah Umum (GKU)</option>
+                </select>
+                @error('lokasi')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
+
 
             <div class="mb-3">
                 <label for="status" class="form-label">Status</label>
@@ -46,7 +73,9 @@
             <div class="mb-3">
                 <label for="gambar" class="form-label">Gambar Ruangan</label><br>
                 @if ($ruangan->gambar)
-                    <img src="{{ asset('storage/katalog_ruangan/' . $ruangan->gambar) }}" alt="{{ $ruangan->nama_ruangan }}">
+                    <img src="{{ asset('storage/katalog_ruangan/' . $ruangan->gambar) }}"
+                    alt="{{ $ruangan->nama_ruangan }}"
+                    style="max-width: 200px; height: auto; margin-bottom: 10px;">
                 @endif
                 <input type="file" class="form-control" name="gambar">
                 <small class="text-muted">Biarkan kosong jika tidak ingin mengubah gambar</small>
@@ -55,6 +84,29 @@
             <button type="submit" class="btn btn-warning">Perbarui</button>
             <a href="{{ route('admin.katalog_ruangan.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const fasilitasWrapper = document.getElementById('fasilitas-wrapper');
+
+                fasilitasWrapper.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('add-fasilitas')) {
+                        // buat input baru dengan tombol remove
+                        const newInputGroup = document.createElement('div');
+                        newInputGroup.classList.add('input-group', 'mb-2');
+                        newInputGroup.innerHTML = `
+                            <input type="text" name="fasilitas[]" class="form-control" placeholder="Fasilitas" required>
+                            <button type="button" class="btn btn-danger remove-fasilitas">-</button>
+                        `;
+                        fasilitasWrapper.appendChild(newInputGroup);
+                    }
+
+                    if (e.target.classList.contains('remove-fasilitas')) {
+                        e.target.parentElement.remove();
+                    }
+                });
+            });
+        </script>
     </div>
 </div>
 @endsection

@@ -13,7 +13,7 @@ class Inventaris extends Model
 
     protected $fillable = [
         'nama_inventaris',
-        'kategori_id', 
+        'kategori_id',
         'deskripsi',
         'jumlah',
         'status',
@@ -35,6 +35,11 @@ class Inventaris extends Model
     public function peminjaman()
     {
         return $this->hasMany(PinjamInventaris::class, 'id_inventaris');
+    }
+
+     public function laporan()
+    {
+        return $this->hasMany(LaporInventaris::class, 'id_inventaris');
     }
 
 }
