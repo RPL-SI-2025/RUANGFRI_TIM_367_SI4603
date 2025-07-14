@@ -19,17 +19,18 @@ class AdminAuthController extends Controller
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+            
         ]);
 
         if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
-
             $admin = Auth::guard('admin')->user();
             // Store admin information in the session
             Session::put('admin_id', $admin->id);
             Session::put('admin_name', $admin->name);
             Session::put('admin_email', $admin->email);
-            return redirect('admin/dashboard');
+            Session::put('is_logged_in', true);
+            return redirect()->route('admin.dashboard');
         }
 
         return back()->withErrors([

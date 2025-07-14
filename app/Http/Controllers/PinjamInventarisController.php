@@ -408,6 +408,42 @@ class PinjamInventarisController extends Controller
     return view('admin.pinjam_inventaris.show', compact('pinjamInventaris', 'relatedItems'));
 }
 
+public function updateNotes(Request $request, PinjamInventaris $pinjamInventaris)
+    {
+        $request->validate([
+            'notes' => 'nullable|string|max:500',
+        ]);
+        
+        DB::beginTransaction();
+        
+        try {
+            // Update notes for the main item
+            $pinjamInventaris->notes = $request->notes;
+            $pinjamInventaris->save();
+            
+            // Update notes for all related items in the same booking group
+            $relatedItems = PinjamInventaris::where('tanggal_pengajuan', $pinjamInventaris->tanggal_pengajuan)
+                ->where('tanggal_selesai', $pinjamInventaris->tanggal_selesai)
+                ->where('waktu_mulai', $pinjamInventaris->waktu_mulai)
+                ->where('waktu_selesai', $pinjamInventaris->waktu_selesai)
+                ->where('file_scan', $pinjamInventaris->file_scan)
+                ->where('id_mahasiswa', $pinjamInventaris->id_mahasiswa)
+                ->get();
+
+            foreach ($relatedItems as $item) {
+                $item->notes = $request->notes;
+                $item->save();
+            }
+            
+            DB::commit();
+            
+            return back()->with('success', 'Catatan berhasil diperbarui.');
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 
     public function destroy(PinjamInventaris $pinjamInventaris)
     {

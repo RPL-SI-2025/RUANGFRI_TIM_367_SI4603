@@ -182,12 +182,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('catalogSearchInput');
     const statusFilter = document.getElementById('catalogStatusFilter');
+    const lokasiFilter = document.getElementById('catalogLokasiFilter'); // perbaiki ID di sini
     const catalogGrid = document.getElementById('catalogGrid');
     const resultsCount = document.getElementById('resultsCount');
 
     function filterCatalog() {
         const searchTerm = searchInput.value.toLowerCase();
         const selectedStatus = statusFilter.value;
+        const selectedLokasi = lokasiFilter.value; // ambil lokasi
         const cards = catalogGrid.querySelectorAll('.catalog-card');
         let visibleCount = 0;
 
@@ -195,14 +197,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const name = card.dataset.name;
             const description = card.dataset.description;
             const status = card.dataset.status;
-
+            const lokasi = card.querySelector('.badge').textContent.trim();
             const matchesSearch = !searchTerm ||
                 name.includes(searchTerm) ||
                 description.includes(searchTerm);
 
             const matchesStatus = !selectedStatus || status === selectedStatus;
+            const matchesLokasi = !selectedLokasi || lokasi === selectedLokasi;
 
-            if (matchesSearch && matchesStatus) {
+            if (matchesSearch && matchesStatus && matchesLokasi) {
                 card.style.display = 'block';
                 visibleCount++;
             } else {
@@ -215,6 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     searchInput.addEventListener('input', filterCatalog);
     statusFilter.addEventListener('change', filterCatalog);
+    lokasiFilter.addEventListener('change', filterCatalog); 
 
     const successAlert = document.getElementById('successAlert');
     const errorAlert = document.getElementById('errorAlert');
@@ -232,6 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
             bsAlert.close();
         }, 4000);
     }
+
 });
 </script>
 @endpush

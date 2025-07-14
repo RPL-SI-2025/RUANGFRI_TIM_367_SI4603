@@ -74,10 +74,14 @@ Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
 */
 Route::prefix('admin')->name('admin.')->group(function () {
     // Dashboard
+    Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('login.submit');
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+
     Route::get('/dashboard', [AdminLogistikController::class, 'index'])->name('dashboard');
     Route::get('/create', [RuanganController::class, 'create'])->name('admin.katalog_ruangan.create');
     Route::get('/pinjam-approval', [PinjamRuanganController::class, 'approval'])->name('admin.pinjam.approval');
-
+    
     // Inventaris Management
     Route::prefix('inventaris')->name('inventaris.')->group(function () {
         Route::get('/', [InventarisController::class, 'index'])->name('index');

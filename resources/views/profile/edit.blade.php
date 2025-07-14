@@ -1,3 +1,4 @@
+C:\Users\PUTRI\RUANGFRI_FIX\resources\views\profile\edit.blade.php
 @extends('mahasiswa.layouts.app')
 
 @section('content')
@@ -93,7 +94,7 @@
 
     .header-icon {
         font-size: 2rem;
-        color: #007bff;
+        color: #1e293b; /* Ubah warna ikon header */
     }
 
     .header-title {
@@ -121,16 +122,16 @@
     }
 
     .nav-tabs .nav-link.active {
-        background: linear-gradient(90deg, #007bff, #0056b3); /* Active tab background */
+        background: linear-gradient(90deg, #1e293b, #334155); /* Ubah warna aktif ke #1e293b */
         color: white; /* Active tab text color */
     }
 
     .nav-tabs .nav-link:not(.active) {
-        color: #007bff; /* Inactive tab text color */
+        color: #1e293b; /* Ubah warna teks tab non-aktif */
     }
 
     .nav-tabs .nav-link:hover {
-        color: #0056b3; /* Hover text color */
+        color: #334155; /* Ubah warna hover */
     }
 
     .nav-tabs .nav-link::after {

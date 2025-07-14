@@ -147,16 +147,17 @@
                                     @endif
                                 </td>
                                 <td class="px-3 py-3">
-                                    <div class="d-flex gap-1">
-                                        <a href="{{ route('admin.jadwal.edit', $jadwal->id) }}" class="btn btn-sm btn-warning">
-                                            <i class="bi bi-pencil-square"></i>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="{{ route('admin.jadwal.edit', $jadwal->id) }}" class="btn btn-warning me-2"data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Jadwal">
+                                            <i class="bi bi-pencil-square me-1"></i>
+                                            <span class="d-none d-lg-inline">Edit</span>
                                         </a>
-                                        <form action="{{ route('admin.jadwal.destroy', $jadwal->id) }}" method="POST" 
-                                              onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')">
+                                        <form action="{{ route('admin.jadwal.destroy', $jadwal->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')"class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                <i class="bi bi-trash"></i>
+                                            <button type="submit" class="btn btn-danger"data-bs-toggle="tooltip" data-bs-placement="top" title="Hapus Jadwal">
+                                                <i class="bi bi-trash me-1"></i>
+                                                <span class="d-none d-lg-inline">Hapus</span>
                                             </button>
                                         </form>
                                     </div>

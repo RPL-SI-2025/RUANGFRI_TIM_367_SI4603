@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\Storage;
 class InventarisController extends Controller
 {
     public function index(Request $request)
-    {
-        $inventaris = Inventaris::with('kategori')->get();
-        return view('admin.inventaris.index', compact('inventaris'));
-    }
+{
+    $inventaris = Inventaris::with('kategori')->get();
+    $kategoris = KategoriInventaris::all(); // Tambahkan ini
+    return view('admin.inventaris.index', compact('inventaris', 'kategoris'));
+}
 
     public function create()
     {

@@ -1,4 +1,3 @@
-
 @extends('mahasiswa.layouts.app')
 
 @section('content')
@@ -400,8 +399,11 @@ document.addEventListener('DOMContentLoaded', function() {
    
     const dateInput = document.getElementById('datetime');
     if (dateInput) {
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.max = today;   
+        const today = new Date(new Date().getTime() + (7 * 60 * 60 * 1000)) 
+        .toISOString()
+        .split('T')[0];
+        dateInput.min = today;
+        dateInput.max = today;
     }
     
    

@@ -9,10 +9,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Models\Ruangan;
 use App\Models\Inventaris;
-use App\Models\Peminjaman;
+use App\Models\Peminjaman;  
 use App\Models\PinjamRuangan;
 use App\Models\PinjamInventaris;
-use Illuminate\View\View;
 
 class MahasiswaAuthController extends Controller
 {
@@ -42,31 +41,17 @@ class MahasiswaAuthController extends Controller
 
    
         Auth::guard('mahasiswa')->login($mahasiswa);
-
-
-        // Regenerate session untuk keamanan
-        $request->session()->regenerate();
-
-        // Set session data
-
         
    
         $request->session()->regenerate();
         
    
-
         Session::put('mahasiswa_id', $mahasiswa->id);
         Session::put('mahasiswa_name', $mahasiswa->nama_mahasiswa);
         Session::put('mahasiswa_nim', $mahasiswa->nim);
         Session::put('mahasiswa_email', $mahasiswa->email);
         Session::put('is_logged_in', true);
-
-
-        // Redirect ke dashboard dengan pesan sukses
-
         
-   
-
         return redirect()->route('mahasiswa.dashboard')
             ->with('success', 'Akun berhasil dibuat! Selamat datang di Sistem Peminjaman Inventaris.');
     }
@@ -287,13 +272,7 @@ class MahasiswaAuthController extends Controller
         $ruanganTersedia = \App\Models\Ruangan::where('status', 'Tersedia')->count();
         $totalInventaris = \App\Models\Inventaris::count();
         $inventarisTersedia = \App\Models\Inventaris::where('status', 'Tersedia')->count();
-
-
         // Ambil data untuk katalog
-
-        
-   
-
         $ruangans = \App\Models\Ruangan::latest()->take(6)->get();
         $inventaris = \App\Models\Inventaris::latest()->take(6)->get();
 
@@ -307,10 +286,8 @@ class MahasiswaAuthController extends Controller
         ));
     }
 
-    public function edit(Request $request): View
-    {
-        $mahasiswa = Auth::guard('mahasiswa')->user();
-        return view('profile.edit', compact('mahasiswa'));
-    }
+
+
+
 
 }

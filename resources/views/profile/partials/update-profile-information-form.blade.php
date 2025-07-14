@@ -7,7 +7,7 @@
 
 <div class="card border-0 shadow-lg main-card mb-4">
     <div class="card-header text-white py-3 border-0 card-header-futuristic"
-        style="background: linear-gradient(90deg, #0069d9 0%, #0056b3 100%);">
+        style="background: linear-gradient(90deg, #1e293b 0%, #1e293b 100%);">
         <div class="d-flex align-items-center">
             <i class="fa fa-user me-3 fs-4 text-white"></i>
             <h5 class="mb-0 fw-bold">Informasi Profil</h5>

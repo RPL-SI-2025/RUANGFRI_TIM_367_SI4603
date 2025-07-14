@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Tambah Jadwal</h2>
+        <h2 class="mb-0 text-dark">Tambah Jadwal</h2>
         <a href="{{ route('admin.jadwal.index') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left me-1"></i> Kembali
         </a>
@@ -19,18 +19,18 @@
     @endif
 
     <div class="card shadow-sm">
-        <div class="card-header bg-light">
+        <div class="card-header bg-light p-0">
             <ul class="nav nav-tabs card-header-tabs" id="jadwalTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="single-tab" data-bs-toggle="tab" data-bs-target="#single-content" 
+                    <button class="nav-link active fw-bold text-primary" id="single-tab" data-bs-toggle="tab" data-bs-target="#single-content" 
                             type="button" role="tab" aria-controls="single-content" aria-selected="true">
-                        Jadwal Tunggal
+                        <i class="bi bi-calendar-plus me-2"></i>Jadwal Tunggal
                     </button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="bulk-tab" data-bs-toggle="tab" data-bs-target="#bulk-content" 
+                    <button class="nav-link fw-bold text-secondary" id="bulk-tab" data-bs-toggle="tab" data-bs-target="#bulk-content" 
                             type="button" role="tab" aria-controls="bulk-content" aria-selected="false">
-                        Generate Jadwal
+                        <i class="bi bi-calendar-range me-2"></i>Generate Jadwal
                     </button>
                 </li>
             </ul>
