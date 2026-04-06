@@ -187,12 +187,13 @@
                 <i class="fas fa-bell"></i>
                 <span class="notification-badge">3</span>
             </button>
+            @php($adminUser = Auth::guard('admin')->user())
             <div class="user-profile dropdown" data-bs-toggle="dropdown">
                 <div class="user-avatar">
-                    {{ substr(Auth::user()->nama ?? 'A', 0, 2) }}
+                    {{ substr($adminUser?->nama ?? 'AD', 0, 2) }}
                 </div>
                 <div class="user-info d-none d-sm-block">
-                    <h6>{{ Auth::user()->nama ?? 'Admin' }}</h6>
+                    <h6>{{ $adminUser?->nama ?? 'Admin' }}</h6>
                     <small>Administrator</small>
                 </div>
                 <div class="dropdown-menu dropdown-menu-end">
@@ -200,7 +201,7 @@
                     <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="fas fa-sign-out-alt me-2"></i> Logout
                     </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">
                         @csrf
                     </form>
                 </div>

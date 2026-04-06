@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -23,6 +22,9 @@ class ProfileController extends Controller
 
     public function update(Request $request): RedirectResponse
     {
+        // Pastikan tab yang benar tetap aktif walaupun validasi gagal
+        $request->session()->put('active_tab', 'profile');
+
         $mahasiswa = Auth::guard('mahasiswa')->user();
 
         $validated = $this->validateProfile($request, $mahasiswa);
@@ -38,6 +40,9 @@ class ProfileController extends Controller
 
     public function updateBorrowingInfo(Request $request): RedirectResponse
     {
+        // Pastikan tab yang benar tetap aktif walaupun validasi gagal
+        $request->session()->put('active_tab', 'peminjaman');
+
         $mahasiswa = Auth::guard('mahasiswa')->user();
 
         $validated = $this->validateBorrowingInfo($request);
@@ -53,15 +58,20 @@ class ProfileController extends Controller
 
     public function updatePassword(Request $request): RedirectResponse
     {
-        $request->validate([
-            'current_password' => 'required',
+        // Pastikan tab yang benar tetap aktif walaupun validasi gagal
+        $request->session()->put('active_tab', 'password');
+
+        $request->validateWithBag('updatePassword', [
+            'current_password' => ['required'],
             'password' => ['required', 'confirmed', 'min:8'],
-        ], [], [], 'updatePassword');
+        ]);
 
         $mahasiswa = Auth::guard('mahasiswa')->user();
 
         if (!Hash::check($request->current_password, $mahasiswa->password)) {
-            return back()->withErrors(['current_password' => 'Password saat ini tidak valid.'], 'updatePassword');
+            return back()
+                ->withErrors(['current_password' => 'Password saat ini tidak valid.'], 'updatePassword')
+                ->with('active_tab', 'password');
         }
 
         $mahasiswa->password = Hash::make($request->password);
@@ -74,6 +84,9 @@ class ProfileController extends Controller
 
     public function destroy(Request $request): RedirectResponse
     {
+        // Pastikan tab yang benar tetap aktif walaupun validasi gagal
+        $request->session()->put('active_tab', 'delete-account');
+
         $user = Auth::guard('mahasiswa')->user();
 
         $request->validate([
@@ -104,7 +117,7 @@ class ProfileController extends Controller
     {
         $minBirthDate = now()->subYears(17)->format('Y-m-d');
 
-        return $request->validate([
+        $rules = [
             'nim' => 'required|string|max:20|unique:mahasiswa,nim,' . $mahasiswa->id,
             'nama_mahasiswa' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:mahasiswa,email,' . $mahasiswa->id,
@@ -135,23 +148,21 @@ class ProfileController extends Controller
                 'max:255',
                 'regex:/^[a-zA-Z\s\.\,\'\-]+$/'
             ],
+        ];
 
-            'angkatan' => 'nullable|string|max:10',
-            'tujuan' => 'nullable|string|max:255',
-            'instansi' => 'nullable|string|max:255',
-
-            //Error handling
+        $messages = [
             'tempat_lahir.regex' => 'Tempat lahir hanya boleh berisi huruf, spasi, titik, koma, dan tanda hubung.',
             'tanggal_lahir.before_or_equal' => 'Tanggal lahir harus membuat Anda minimal berusia 17 tahun dan tidak boleh tanggal di masa depan.',
             'wa.regex' => 'No. WhatsApp hanya boleh berisi angka tanpa spasi atau simbol.',
             'alamat.regex' => 'Alamat hanya boleh berisi huruf, spasi, titik, koma, dan tanda hubung tanpa angka atau simbol aneh.',
-        ]);
+        ];
+
+        return $request->validate($rules, $messages);
     }
 
     private function validateBorrowingInfo(Request $request): array
     {
         return $request->validate([
-            'jurusan' => 'required|string|max:255',
             'angkatan' => 'required|string|max:10',
             'instansi' => 'required|string|max:255',
             'tujuan' => 'required|string|max:255',
@@ -161,11 +172,8 @@ class ProfileController extends Controller
 
     private function handleKTMUpload(Request $request, $user, array &$validated): void
     {
-
         if ($request->hasFile('ktm')) {
-            $ktmPath = $request->file('ktm')->store('ktm', 'public');
-            $user->ktm = $ktmPath;
-            $user->save();
+            $validated['ktm'] = $request->file('ktm')->store('ktm', 'public');
         }
     }
 

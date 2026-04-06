@@ -17,6 +17,7 @@ use App\Http\Controllers\PelaporanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PinjamRuanganController;
 use App\Http\Middleware\MahasiswaAuth;
+use App\Http\Middleware\AdminAuth;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
@@ -73,10 +74,16 @@ Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('admin')->name('admin.')->group(function () {
+    // Admin Authentication (login only, no register)
+    Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('login.submit');
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+
+    Route::middleware([AdminAuth::class])->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminLogistikController::class, 'index'])->name('dashboard');
-    Route::get('/create', [RuanganController::class, 'create'])->name('admin.katalog_ruangan.create');
-    Route::get('/pinjam-approval', [PinjamRuanganController::class, 'approval'])->name('admin.pinjam.approval');
+    Route::get('/create', [RuanganController::class, 'create'])->name('create');
+    Route::get('/pinjam-approval', [PinjamRuanganController::class, 'approval'])->name('pinjam.approval');
 
     // Inventaris Management
     Route::prefix('inventaris')->name('inventaris.')->group(function () {
@@ -159,6 +166,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     });
 
+    });
 });
 /*
 |--------------------------------------------------------------------------
